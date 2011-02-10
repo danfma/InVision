@@ -62,7 +62,7 @@
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PreBuildEvent>copy "$(SolutionDir)Platform\Build\Bin\$(Configuration)\*.*" $(TargetDir)
+    <PreBuildEvent>copy "$(SolutionDir)\Build\Bin\$(Configuration)\Platform\*.*" $(TargetDir)
 copy "$(OGRE_VC_SDK)bin\debug\*.dll" $(TargetDir)</PreBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

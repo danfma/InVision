@@ -2,7 +2,8 @@ config = {
 	defines = {},
 	includes = {},
 	libdirs = {},
-	links = {}
+	debugLinks = {},
+	ndebugLinks = {}
 }
 
 if os.is("windows") then
@@ -13,7 +14,7 @@ if os.is("windows") then
 	config.defines = { "WIN32" }
 	
 	config.includes = {
-		"InVisionWrap_Ogre3D/src/",
+		"../Platform/InVisionWrap_Ogre3D/src/",
 		ogredir .. "include\\OGRE\\",
 		ogredir .. "include\\OIS\\",
 		boostdir,
@@ -38,7 +39,7 @@ if os.is("windows") then
 end
 
 -- Solution description
-solution "InVision"
+solution "InVisionWrap"
 	configurations { "Debug", "Release" }
 	location "projects/"
 	
@@ -47,8 +48,8 @@ solution "InVision"
 		kind "SharedLib"
 		language "C++"
 		files {
-			"InVisionWrap_Ogre3D/src/**.h",
-			"InVisionWrap_Ogre3D/src/**.cpp"
+			"../Platform/InVisionWrap_Ogre3D/src/**.h",
+			"../Platform/InVisionWrap_Ogre3D/src/**.cpp"
 		}
 		
 		includedirs(config.includes)
@@ -57,7 +58,7 @@ solution "InVision"
 		configuration "Debug"
 			defines { "DEBUG" }
 			flags { "Symbols" }
-			targetdir "Build/Bin/Debug"
+			targetdir "Bin/Debug/Platform/"
 			
 			libdirs(config.libdirs)
 			links(config.debugLinks)
@@ -65,7 +66,7 @@ solution "InVision"
 		configuration "Release"
 			defines { "NDEBUG" }
 			flags { "Optimize" }
-			targetdir "Build/Bin/Release"
+			targetdir "Bin/Release/Platform/"
 			
 			libdirs(config.libdirs)
 			links(config.ndebugLinks)
