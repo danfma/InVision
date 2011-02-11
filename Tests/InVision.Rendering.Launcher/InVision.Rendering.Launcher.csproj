@@ -15,14 +15,14 @@
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
-    <Optimize>true</Optimize>
+    <Optimize>false</Optimize>
     <OutputPath>bin\Debug</OutputPath>
     <DefineConstants>DEBUG</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <Externalconsole>true</Externalconsole>
     <PlatformTarget>x86</PlatformTarget>
-    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>none</DebugType>
@@ -35,14 +35,7 @@
   <ItemGroup>
     <Reference Include="Mono.GameMath, Version=0.1.0.0, Culture=neutral, PublicKeyToken=565248a7de28f663, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\Libs\Mono\Safe\Mono.GameMath.dll</HintPath>
-    </Reference>
-    <Reference Include="Mono.Simd">
-      <HintPath>..\..\Libs\Mono\Simd\Mono.Simd.dll</HintPath>
-    </Reference>
-    <Reference Include="OpenTK, Version=1.0.0.0, Culture=neutral, PublicKeyToken=bad199fe84eb3df4, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\Libs\OpenTK\OpenTK.dll</HintPath>
+      <HintPath>..\..\Libs\Mono\Mono.GameMath.dll</HintPath>
     </Reference>
     <Reference Include="System" />
   </ItemGroup>

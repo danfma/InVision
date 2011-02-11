@@ -9,11 +9,11 @@ extern "C"
 	 * Support
 	 */
 
-	__EXPORT HFrameListener __ENTRY FrmListenerNew(
+	__EXPORT HFrameListener __ENTRY framelistener_new(
 		FrameEventHandler frameStartedHandler,
 		FrameEventHandler frameEndedHandler);
 
-	__EXPORT void __ENTRY FrmListenerDelete(HFrameListener handle);
+	__EXPORT void __ENTRY framelistener_delete(HFrameListener handle);
 }
 
 #endif // FRAMELISTENER_H

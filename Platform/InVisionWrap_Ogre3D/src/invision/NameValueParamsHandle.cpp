@@ -31,33 +31,33 @@ void deletePairList(Any data)
  * Implementations
  */
 
-__EXPORT HNameValuePairList __ENTRY NvplConvert(
+__EXPORT HNameValuePairList __ENTRY namevaluepairlist_convert(
 	const PNameValuePair pairs,
 	Int32 count)
 {
-	HNameValuePairList pairList = NvplNew();
+	HNameValuePairList pairList = namevaluepairlist_new();
 	
 	for (int i = 0; i < count; i++) {
 		NameValuePair& pair = pairs[i];
 		
-		NvplAdd(pairList, pair.key, pair.value);
+		namevaluepairlist_add(pairList, pair.key, pair.value);
 	}
 	
 	return pairList;
 }
 
-__EXPORT HNameValuePairList __ENTRY NvplNew()
+__EXPORT HNameValuePairList __ENTRY namevaluepairlist_new()
 {
 	return new Ogre::NameValuePairList();
 }
 
-__EXPORT void __ENTRY NvplDelete(
+__EXPORT void __ENTRY namevaluepairlist_delete(
 	HNameValuePairList self)
 {
 	delete asNameValuePairList(self);
 }
 
-__EXPORT void __ENTRY NvplAdd(
+__EXPORT void __ENTRY namevaluepairlist_add(
 	HNameValuePairList self,
 	const char *key,
 	const char *value)
@@ -69,7 +69,7 @@ __EXPORT void __ENTRY NvplAdd(
 	pairList->insert(std::pair<Ogre::String, Ogre::String>(_key, _value));
 }
 
-__EXPORT void __ENTRY NvplRemove(
+__EXPORT void __ENTRY namevaluepairlist_remove(
 	HNameValuePairList self,
 	const char *key)
 {
@@ -79,19 +79,19 @@ __EXPORT void __ENTRY NvplRemove(
 	pairList->erase(key);
 }
 
-__EXPORT void __ENTRY NvplClear(
+__EXPORT void __ENTRY namevaluepairlist_clear(
 	HNameValuePairList self)
 {
 	asNameValuePairList(self)->clear();
 }
 
-__EXPORT Int32 __ENTRY NvplCount(
+__EXPORT Int32 __ENTRY namevaluepairlist_count(
 	HNameValuePairList self)
 {
 	return asNameValuePairList(self)->size();
 }
 
-__EXPORT const HNameValuePairEnumerator __ENTRY NvplGetPairs(
+__EXPORT const HNameValuePairEnumerator __ENTRY namevaluepairlist_get_pairs(
 	HNameValuePairList self)
 {
 	Ogre::NameValuePairList *list = asNameValuePairList(self);
@@ -100,7 +100,7 @@ __EXPORT const HNameValuePairEnumerator __ENTRY NvplGetPairs(
 	return e;
 }
 
-__EXPORT HNameValuePairList __ENTRY NvplCopy(
+__EXPORT HNameValuePairList __ENTRY namevaluepairlist_copy(
 	HNameValuePairList self)
 {
 	Ogre::NameValuePairList *list = asNameValuePairList(self);

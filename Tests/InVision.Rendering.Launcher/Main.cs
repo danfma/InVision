@@ -2,8 +2,7 @@ using System;
 using System.Collections.Generic;
 using InVision.Ogre3D;
 using InVision.Ogre3D.Util;
-using Mono.Simd;
-using OpenTK;
+using Mono.GameMath;
 
 namespace InVision.Rendering.Launcher
 {
@@ -47,7 +46,7 @@ namespace InVision.Rendering.Launcher
 				camera.NearClipDistance = 5f;
 				camera.FarClipDistance = 1000f;
 				camera.PolygonMode = PolygonMode.Solid;
-				camera.Position = new Vector3(0, 2, 0);
+				camera.Position = new Vector3(1.5f, 2.5f, 3.5f);
 
 				float counter = 0;
 

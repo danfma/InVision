@@ -5,16 +5,16 @@ namespace InVision.Ogre3D.Native
 {
 	internal sealed class NativeEnumerator : PlatformInvoke
 	{
-		[DllImport(Library, EntryPoint = "EnumrGetCurrent")]
+		[DllImport(Library, EntryPoint = "enumerator_get_current")]
 		public static extern IntPtr GetCurrent(IntPtr self);
 
-		[DllImport(Library, EntryPoint = "EnumrMoveNext")]
+		[DllImport(Library, EntryPoint = "enumerator_move_next")]
 		public static extern bool MoveNext(IntPtr self);
 
-		[DllImport(Library, EntryPoint = "EnumrReset")]
+		[DllImport(Library, EntryPoint = "enumerator_reset")]
 		public static extern void Reset(IntPtr self);
 
-		[DllImport(Library, EntryPoint = "EnumrDelete")]
+		[DllImport(Library, EntryPoint = "enumerator_delete")]
 		public static extern void Delete(IntPtr self);
 	}
 }

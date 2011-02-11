@@ -10,17 +10,17 @@ using namespace invision;
  * Creation and destruction
  */
 
-__EXPORT HRoot __ENTRY RootNew(const char* pluginFilename, const char* configFilename)
+__EXPORT HRoot __ENTRY root_new(const char* pluginFilename, const char* configFilename)
 {
 	return new Ogre::Root(pluginFilename, configFilename);
 }
 
-__EXPORT HRoot __ENTRY RootNewWithLog(const char* pluginFilename, const char* configFilename, const char* logFilename)
+__EXPORT HRoot __ENTRY root_new_with_log(const char* pluginFilename, const char* configFilename, const char* logFilename)
 {
 	return new Ogre::Root(pluginFilename, configFilename, logFilename);
 }
 
-__EXPORT void __ENTRY RootDelete(HRoot self)
+__EXPORT void __ENTRY root_delete(HRoot self)
 {
 	delete asRoot(self);
 }
@@ -30,29 +30,29 @@ __EXPORT void __ENTRY RootDelete(HRoot self)
  * Methods
  */
 
-__EXPORT void __ENTRY RootSaveConfig(HRoot self)
+__EXPORT void __ENTRY root_save_config(HRoot self)
 {
 	asRoot(self)->saveConfig();
 }
 
-__EXPORT Bool __ENTRY RootRestoreConfig(HRoot self)
+__EXPORT Bool __ENTRY root_restore_config(HRoot self)
 {
 	return asRoot(self)->restoreConfig() ? TRUE : FALSE;
 }
 
-__EXPORT Bool __ENTRY RootShowConfigDialog(HRoot self)
+__EXPORT Bool __ENTRY root_show_config_dialog(HRoot self)
 {
 	return asRoot(self)->showConfigDialog() ? TRUE : FALSE;
 }
 
-__EXPORT HRenderSystem __ENTRY RootGetRenderSystemByName(
+__EXPORT HRenderSystem __ENTRY root_get_rendersystem_by_name(
 	HRoot self,
 	const char* name)
 {
 	return asRoot(self)->getRenderSystemByName(name);
 }
 
-__EXPORT HRenderWindow __ENTRY RootInitialiseWithTitleAndCap(
+__EXPORT HRenderWindow __ENTRY root_initialise_with_title_and_cap(
 	HRoot self,
 	Bool autoCreateWindow,
 	const char* title,
@@ -61,85 +61,85 @@ __EXPORT HRenderWindow __ENTRY RootInitialiseWithTitleAndCap(
 	return asRoot(self)->initialise(autoCreateWindow == TRUE, title, capabilitiesConfig);
 }
 
-__EXPORT HRenderWindow __ENTRY RootInitialiseWithTitle(HRoot self, Bool autoCreateWindow, const char* title)
+__EXPORT HRenderWindow __ENTRY root_initialise_with_title(HRoot self, Bool autoCreateWindow, const char* title)
 {
 	return asRoot(self)->initialise(autoCreateWindow == TRUE, title);
 }
 
-__EXPORT HRenderWindow __ENTRY RootInitialise(HRoot self, Bool autoCreateWindow)
+__EXPORT HRenderWindow __ENTRY root_initialise(HRoot self, Bool autoCreateWindow)
 {
 	return asRoot(self)->initialise(autoCreateWindow == TRUE);
 }
 
-__EXPORT void __ENTRY RootDestroySceneManager(
+__EXPORT void __ENTRY root_destroy_scenemanager(
 	HRoot self,
 	HSceneManager sceneManager)
 {
 	asRoot(self)->destroySceneManager((Ogre::SceneManager*)sceneManager);
 }
 
-__EXPORT HSceneManager __ENTRY RootGetSceneManager(
+__EXPORT HSceneManager __ENTRY root_get_scenemanager(
 	HRoot self,
 	const char* instanceName)
 {
 	return asRoot(self)->getSceneManager(instanceName);
 }
 
-__EXPORT Bool __ENTRY RootHasSceneManager(
+__EXPORT Bool __ENTRY root_has_scenemanager(
 	HRoot self,
 	const char* instanceName)
 {
 	return toBool(asRoot(self)->hasSceneManager(instanceName));
 }
 
-__EXPORT HTextureManager __ENTRY RootGetTextureManager(
+__EXPORT HTextureManager __ENTRY root_get_texturemanager(
 	HRoot self)
 {
 	return asRoot(self)->getTextureManager();
 }
 
-__EXPORT HMeshManager __ENTRY RootGetMeshManager(
+__EXPORT HMeshManager __ENTRY root_get_meshmanager(
 	HRoot self)
 {
 	return asRoot(self)->getMeshManager();
 }
 
-__EXPORT HRenderWindow __ENTRY RootGetAutoCreatedWindow(HRoot self)
+__EXPORT HRenderWindow __ENTRY root_get_auto_created_window(HRoot self)
 {
 	return asRoot(self)->getAutoCreatedWindow();
 }
 
-__EXPORT Bool __ENTRY RootIsInitialised(HRoot self)
+__EXPORT Bool __ENTRY root_is_initialised(HRoot self)
 {
 	return asRoot(self)->isInitialised();
 }
 
-__EXPORT void __ENTRY RootStartRendering(HRoot self)
+__EXPORT void __ENTRY root_start_rendering(HRoot self)
 {
 	asRoot(self)->startRendering();
 }
 
-__EXPORT void __ENTRY RootAddFrameListener(HRoot self, HFrameListener listener)
+__EXPORT void __ENTRY root_add_framelistener(HRoot self, HFrameListener listener)
 {
 	asRoot(self)->addFrameListener(asCustomFrameListener(listener));
 }
 
-__EXPORT void __ENTRY RootRemoveFrameListener(HRoot self, HFrameListener listener)
+__EXPORT void __ENTRY root_remove_framelistener(HRoot self, HFrameListener listener)
 {
 	asRoot(self)->removeFrameListener(asCustomFrameListener(listener));
 }
 
-__EXPORT void __ENTRY RootLoadPlugin(HRoot self, const char *pluginName)
+__EXPORT void __ENTRY root_load_plugin(HRoot self, const char *pluginName)
 {
 	asRoot(self)->loadPlugin(pluginName);
 }
 
-__EXPORT void __ENTRY RootUnloadPlugin(HRoot self, const char *pluginName)
+__EXPORT void __ENTRY root_unload_plugin(HRoot self, const char *pluginName)
 {
 	asRoot(self)->unloadPlugin(pluginName);
 }
 
-__EXPORT HEnumerator __ENTRY RootGetAvailableRenderers(HRoot self)
+__EXPORT HEnumerator __ENTRY root_get_available_renderers(HRoot self)
 {
 	Ogre::RenderSystemList list = asRoot(self)->getAvailableRenderers();
 
@@ -148,37 +148,37 @@ __EXPORT HEnumerator __ENTRY RootGetAvailableRenderers(HRoot self)
 
 /* NEW ********************************************************************************************/
 
-__EXPORT Bool __ENTRY RootGetRemoveRenderQueueStructuresOnClear(HRoot self)
+__EXPORT Bool __ENTRY root_get_remove_render_queue_structures_on_clear(HRoot self)
 {
 	bool result = asRoot(self)->getRemoveRenderQueueStructuresOnClear();
 
 	return toBool(result);
 }
 
-__EXPORT void __ENTRY RootSetRemoveRenderQueueStructuresOnClear(HRoot self, Bool value)
+__EXPORT void __ENTRY root_set_remove_render_queue_structures_on_clear(HRoot self, Bool value)
 {
 	asRoot(self)->setRemoveRenderQueueStructuresOnClear(fromBool(value));
 }
 
-__EXPORT void __ENTRY RootShutdown(HRoot self)
+__EXPORT void __ENTRY root_shutdown(HRoot self)
 {
 	asRoot(self)->shutdown();
 }
 
-__EXPORT Bool __ENTRY RootRenderOneFrame(HRoot self)
+__EXPORT Bool __ENTRY root_render_one_frame(HRoot self)
 {
 	bool result = asRoot(self)->renderOneFrame();
 	
 	return toBool(result);
 }
-__EXPORT Bool __ENTRY RootRenderOneFrameWithTime(HRoot self, float timeSinceLastFrame)
+__EXPORT Bool __ENTRY root_render_one_frame_with_time(HRoot self, float timeSinceLastFrame)
 {
 	bool result = asRoot(self)->renderOneFrame(timeSinceLastFrame);
 	
 	return toBool(result);
 }
 
-__EXPORT HRenderWindow __ENTRY RootCreateRenderWindow(
+__EXPORT HRenderWindow __ENTRY root_create_renderwindow(
 	HRoot self,
 	const char* name,
 	UInt32 width, UInt32 height,
@@ -187,7 +187,7 @@ __EXPORT HRenderWindow __ENTRY RootCreateRenderWindow(
 	return asRoot(self)->createRenderWindow(name, width, height, fromBool(fullscreen));
 }
 
-__EXPORT HRenderWindow __ENTRY RootCreateRenderWindow2(
+__EXPORT HRenderWindow __ENTRY root_create_renderwindow_with_params(
 	HRoot self,
 	const char* name,
 	UInt32 width, UInt32 height,
@@ -201,19 +201,19 @@ __EXPORT HRenderWindow __ENTRY RootCreateRenderWindow2(
 		asNameValuePairList(pairList));
 }
 
-__EXPORT UInt64 __ENTRY RootGetNextFrameNumber(HRoot self)
+__EXPORT UInt64 __ENTRY root_get_next_frame_number(HRoot self)
 {
 	return asRoot(self)->getNextFrameNumber();
 }
 
-__EXPORT HSceneManager __ENTRY RootCreateSceneManagerByTypeName(
+__EXPORT HSceneManager __ENTRY root_create_scenemanager_by_typename(
 	HRoot self, 
 	const char* typeName)
 {
 	return asRoot(self)->createSceneManager(typeName);
 }
 
-__EXPORT HSceneManager __ENTRY RootCreateSceneManagerByTypeName2(
+__EXPORT HSceneManager __ENTRY root_create_scenemanager_by_typename2(
 	HRoot self, 
 	const char* typeName, 
 	const char* instanceName)
@@ -221,14 +221,14 @@ __EXPORT HSceneManager __ENTRY RootCreateSceneManagerByTypeName2(
 	return asRoot(self)->createSceneManager(typeName, instanceName);
 }
 
-__EXPORT HSceneManager __ENTRY RootCreateSceneManagerByType(
+__EXPORT HSceneManager __ENTRY root_create_scenemanager_by_type(
 	HRoot self, 
 	UInt32 type)
 {
 	return asRoot(self)->createSceneManager(type);
 }
 
-__EXPORT HSceneManager __ENTRY RootCreateSceneManagerByType2(
+__EXPORT HSceneManager __ENTRY root_create_scenemanager_by_type2(
 	HRoot self, 
 	UInt32 type, 
 	const char* instanceName)
@@ -236,39 +236,39 @@ __EXPORT HSceneManager __ENTRY RootCreateSceneManagerByType2(
 	return asRoot(self)->createSceneManager(type, instanceName);
 }
 
-__EXPORT const char* __ENTRY RootGetErrorDescription(HRoot self, Int64 errorNumber)
+__EXPORT const char* __ENTRY root_get_error_description(HRoot self, Int64 errorNumber)
 {
 	return asRoot(self)->getErrorDescription((long)errorNumber).c_str();
 }
 
-__EXPORT void __ENTRY RootQueueEndRendering(HRoot self)
+__EXPORT void __ENTRY root_queue_end_rendering(HRoot self)
 {
 	asRoot(self)->queueEndRendering();
 }
 
-__EXPORT void __ENTRY RootClearEventTimes(HRoot self)
+__EXPORT void __ENTRY root_clear_event_times(HRoot self)
 {
 	asRoot(self)->clearEventTimes();
 }
 
-__EXPORT void __ENTRY RootSetFrameSmoothingPeriod(HRoot self, float period)
+__EXPORT void __ENTRY root_set_frame_smoothing_period(HRoot self, float period)
 {
 	asRoot(self)->setFrameSmoothingPeriod(period);
 }
 
-__EXPORT float __ENTRY RootGetFrameSmoothingPeriod(HRoot self)
+__EXPORT float __ENTRY root_get_frame_smoothing_period(HRoot self)
 {
 	return asRoot(self)->getFrameSmoothingPeriod();
 }
 
-__EXPORT Bool __ENTRY RootHasMovableObjectFactory(HRoot self, const char* typeName)
+__EXPORT Bool __ENTRY root_has_movable_object_factory(HRoot self, const char* typeName)
 {
 	bool result = asRoot(self)->hasMovableObjectFactory(typeName);
 	
 	return toBool(result);
 }
 
-__EXPORT UInt32 __ENTRY RootGetDisplayMonitorCount(HRoot self)
+__EXPORT UInt32 __ENTRY root_get_display_monitor_count(HRoot self)
 {
 	return asRoot(self)->getDisplayMonitorCount();
 }
@@ -278,7 +278,7 @@ __EXPORT UInt32 __ENTRY RootGetDisplayMonitorCount(HRoot self)
  * Static methods
  */
 
-__EXPORT HRoot __ENTRY RootGetSingleton()
+__EXPORT HRoot __ENTRY root_get_singleton()
 {
 	return Ogre::Root::getSingletonPtr();
 }

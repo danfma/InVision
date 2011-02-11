@@ -10,11 +10,11 @@ extern "C"
 	extern const AngleUnit AngleUnitDegree;
 	extern const AngleUnit AngleUnitRadians;
 
-	__EXPORT AngleUnit __ENTRY MathGetAngleUnit();
-	__EXPORT void __ENTRY MathSetAngleUnit(AngleUnit unit);
+	__EXPORT AngleUnit __ENTRY math_get_angle_unit();
+	__EXPORT void __ENTRY math_set_angle_unit(AngleUnit unit);
 
-	__EXPORT float __ENTRY MathRadianToAngleUnit(float radians);
-	__EXPORT float __ENTRY MathDegreeToAngleUnit(float degrees);
+	__EXPORT float __ENTRY math_radian_to_angle_unit(float radians);
+	__EXPORT float __ENTRY math_degree_to_angle_unit(float degrees);
 }
 
 #endif // INVISION_MATH_H

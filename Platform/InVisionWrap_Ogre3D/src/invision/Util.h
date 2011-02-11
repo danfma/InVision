@@ -7,8 +7,8 @@
 
 extern "C"
 {
-	__EXPORT void __ENTRY UDeleteString(const char* data);
-	__EXPORT void __ENTRY UDeleteNameValuePair(PNameValuePair data);
+	__EXPORT void __ENTRY util_delete_string(const char* data);
+	__EXPORT void __ENTRY util_delete_namevaluepair(PNameValuePair data);
 }
 
 #ifdef __cplusplus
@@ -33,17 +33,44 @@ namespace invision
 	inline Vector3f toVector3f(Ogre::Vector3& v)
 	{
 		Vector3f r;
+#if USE_SIMD
+		r.vdata.x = v.x;
+		r.vdata.y = v.y;
+		r.vdata.z = v.z;
+#else
 		r.x = v.x;
 		r.y = v.y;
 		r.z = v.z;
+#endif
 
 		return r;
 	}
 
 	inline Ogre::Vector3 fromVector3f(Vector3f& v)
 	{
+#if USE_SIMD
+		return Ogre::Vector3(v.vdata.x, v.vdata.y, v.vdata.z);
+#else
 		return Ogre::Vector3(v.x, v.y, v.z);
+#endif
 	}
+
+	inline Quaternion toQuaternion(Ogre::Quaternion& v)
+	{
+		Quaternion q;
+		q.w = v.w;
+		q.x = v.x;
+		q.y = v.y;
+		q.z = v.z;
+
+		return q;
+	}
+
+	inline Ogre::Quaternion fromQuaternion(Quaternion& q)
+	{
+		return Ogre::Quaternion(q.w, q.x, q.y, q.z);
+	}
+
 
 	inline Ogre::Root* asRoot(HRoot handle)
 	{
@@ -73,6 +100,11 @@ namespace invision
 	inline Ogre::SceneManager* asSceneManager(HSceneManager handle)
 	{
 		return (Ogre::SceneManager*)handle;
+	}
+
+	inline Ogre::SceneNode* asSceneNode(HSceneNode handle)
+	{
+		return (Ogre::SceneNode*)handle;
 	}
 
 	inline Ogre::Camera* asCamera(HCamera handle)

@@ -5,7 +5,7 @@
 
 extern "C"
 {
-	__EXPORT const char* __ENTRY RndrSysGetName(HRenderSystem self);
+	__EXPORT const char* __ENTRY rendersystem_get_name(HRenderSystem self);
 }
 
 #endif // OGRESYSTEMSYSTEM_H

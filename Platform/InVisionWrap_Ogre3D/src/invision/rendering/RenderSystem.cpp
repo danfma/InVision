@@ -5,7 +5,7 @@ using namespace invision;
 
 typedef Deleter<char*> CharArrayDeleter;
 
-__EXPORT const char* __ENTRY RndrSysGetName(HRenderSystem self)
+__EXPORT const char* __ENTRY rendersystem_get_name(HRenderSystem self)
 {
 	const Ogre::String& name = asRenderSystem(self)->getName();
 

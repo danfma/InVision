@@ -5,8 +5,8 @@
 
 extern "C"
 {
-	__EXPORT void __ENTRY ScnMngrDelete(HSceneManager self);
-	__EXPORT HCamera __ENTRY ScnMngrCreateCamera(HSceneManager self, const char* name);
+	__EXPORT void __ENTRY scenemanager_delete(HSceneManager self);
+	__EXPORT HCamera __ENTRY scenemanager_create_camera(HSceneManager self, const char* name);
 }
 
 #endif // SCENEMANAGER_H

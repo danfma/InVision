@@ -33,8 +33,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="OpenTK">
-      <HintPath>..\Libs\OpenTK\OpenTK.dll</HintPath>
+    <Reference Include="Mono.GameMath, Version=0.1.0.0, Culture=neutral, PublicKeyToken=565248a7de28f663, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Libs\Mono\Mono.GameMath.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -54,6 +55,7 @@
     <Compile Include="Native\NativeFrameListener.cs" />
     <Compile Include="Native\NativeMath.cs" />
     <Compile Include="Native\NativeNameValuePairList.cs" />
+    <Compile Include="Native\NativeNode.cs" />
     <Compile Include="Native\NativeRenderWindow.cs" />
     <Compile Include="Native\NativeSceneManager.cs" />
     <Compile Include="Native\PlatformInvoke.cs" />
@@ -64,10 +66,13 @@
     <Compile Include="ColourValues.cs" />
     <Compile Include="Listeners\FrameEventDispatcherHandler.cs" />
     <Compile Include="Listeners\IEventDispatcher.cs" />
+    <Compile Include="Node.cs" />
     <Compile Include="PolygonMode.cs" />
     <Compile Include="SceneManager.cs" />
+    <Compile Include="SceneNode.cs" />
     <Compile Include="SceneType.cs" />
     <Compile Include="AngleUnit.cs" />
+    <Compile Include="TransformSpace.cs" />
     <Compile Include="Util\BigEndianColourRepresentation.cs" />
     <Compile Include="Util\ColourRepresentation.cs" />
     <Compile Include="Degree.cs" />

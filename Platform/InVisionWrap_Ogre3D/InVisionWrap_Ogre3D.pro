@@ -9,7 +9,7 @@ QT       -= core gui
 TARGET = InVisionWrap_Ogre3D
 TEMPLATE = lib
 
-DEFINES += INVISIONPLATFORM_LIBRARY
+DEFINES += INVISIONPLATFORM_LIBRARY USE_SIMD
 
 SOURCES += \
 	src/invision/Collections.cpp \
@@ -44,8 +44,8 @@ HEADERS += \
     src/invision/rendering/Camera.h \
     src/invision/Math.h \
     src/invision/rendering/RenderWindow.h \
-    src/invision/Ogre3D.h \
-    src/invision/rendering/AnimableObject.h
+    src/invision/rendering/AnimableObject.h \
+    src/invision/COgre3D.h
 
 
 Release:DESTDIR = Bin/Release

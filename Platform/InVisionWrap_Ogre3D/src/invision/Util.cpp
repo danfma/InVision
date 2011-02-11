@@ -7,7 +7,7 @@ using namespace std;
 using namespace invision;
 
 
-__EXPORT void __ENTRY UDeleteString(const char* data)
+__EXPORT void __ENTRY util_delete_string(const char* data)
 {
 #ifdef DEBUG
 	cout << "Destroying char*" << endl;
@@ -19,7 +19,7 @@ __EXPORT void __ENTRY UDeleteString(const char* data)
 	delete[] data;
 }
 
-__EXPORT void __ENTRY UDeleteNameValuePair(PNameValuePair data)
+__EXPORT void __ENTRY util_delete_namevaluepair(PNameValuePair data)
 {
 #ifdef DEBUG
 	cout << "Destroying NameValuePair" << endl;

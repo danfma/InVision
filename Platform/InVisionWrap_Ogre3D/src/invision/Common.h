@@ -25,6 +25,7 @@ extern "C"
 	typedef Handle HTextureManager;
 	typedef Handle HMeshManager;
 	typedef Handle HCamera;
+	typedef Handle HSceneNode;
 	
 	typedef int32_t Bool;
 #define TRUE 1
@@ -76,14 +77,58 @@ extern "C"
 	extern const PolygonModeEnum PME_Solid;
 
 
+
+	/* Mono.Simd Structures ***********************************************************************/
+
+	/**
+	 * Mono.Simd.Vector4f Structure
+	 */
 	typedef struct
 	{
 		float x;
 		float y;
 		float z;
-	} Vector3f;
+		float w;
+	} MonoSimdVector4f;
 
-	typedef Vector3f* NVector3f;
+	/* Mono.GameMath Structures *******************************************************************/
+
+	#if USE_SIMD
+
+	typedef struct
+	{
+		MonoSimdVector4f vdata;
+	} MonoGMVector3;
+
+	typedef struct
+	{
+		MonoSimdVector4f vdata;
+	} MonoGMVector4;
+
+	#else
+
+	typedef struct
+	{
+		float x;
+		float y;
+		float z;
+	} MonoGMVector3;
+
+	typedef struct
+	{
+		float x;
+		float y;
+		float z;
+		float w;
+	} MonoGMVector3;
+
+	#endif
+
+	typedef MonoGMVector3 Vector3f;
+	typedef Vector3f* PVector3f;
+
+	typedef MonoSimdVector4f Quaternion;
+	typedef Quaternion* PQuaternion;
 }
 
 #endif // INVISIONPLATFORM_COMMON_H

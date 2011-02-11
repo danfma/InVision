@@ -11,7 +11,7 @@ if os.is("windows") then
 	local boostdir = "C:\\boost_1_45_0\\"
 	local qtsdk = "C:\\Qt\\2010.05\\qt\\include\\"
 	
-	config.defines = { "WIN32" }
+	config.defines = { "WIN32", "USE_SIMD" }
 	
 	config.includes = {
 		"../Platform/InVisionWrap_Ogre3D/src/",
@@ -36,6 +36,9 @@ if os.is("windows") then
 		"OgreMain",
 		"OIS"
 	}
+	
+	os.copyfile("..\\Libs\\Mono\\Simd\\Mono.GameMath.dll", "..\\Libs\\Mono\\")
+	os.copyfile("..\\Libs\\Mono\\Simd\\Mono.Simd.dll", "..\\Libs\\Mono\\")
 end
 
 -- Solution description

@@ -5,10 +5,10 @@
 
 extern "C"
 {
-	__EXPORT void __ENTRY EnumrDelete(HEnumerator self);
-	__EXPORT Any __ENTRY EnumrGetCurrent(HEnumerator self);
-	__EXPORT Bool __ENTRY EnumrMoveNext(HEnumerator self);
-	__EXPORT void __ENTRY EnumrReset(HEnumerator self);
+	__EXPORT void __ENTRY enumerator_delete(HEnumerator self);
+	__EXPORT Any __ENTRY enumerator_get_current(HEnumerator self);
+	__EXPORT Bool __ENTRY enumerator_move_next(HEnumerator self);
+	__EXPORT void __ENTRY enumerator_reset(HEnumerator self);
 }
 
 

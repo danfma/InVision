@@ -5,7 +5,7 @@ namespace InVision.Ogre3D.Native
 {
 	internal sealed class NativeRenderSystem : PlatformInvoke
 	{
-		[DllImport(Library, EntryPoint = "RndrSysGetName")]
+		[DllImport(Library, EntryPoint = "rendersystem_get_name")]
 		public static extern IntPtr _GetName(IntPtr pRenderSystem);
 
 		/// <summary>
