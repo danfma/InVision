@@ -11,6 +11,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InVision", "InVision\InVisi
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InVision.Ogre3D", "InVision.Ogre3D\InVision.Ogre3D.csproj", "{EEDE9A66-40F3-4936-ACDC-7543DB9BC0BF}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InVision.Tests", "Tests\InVision.Tests\InVision.Tests.csproj", "{C4B3A350-0B2F-41C7-A430-22FEBC74E397}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InVision.Ogre3D.Tutorial", "InVision.Ogre3D.Tutorial\InVision.Ogre3D.Tutorial.csproj", "{8BC10E6C-8107-4514-84AB-7AB81A98C34F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -73,6 +77,30 @@ Global
 		{EEDE9A66-40F3-4936-ACDC-7543DB9BC0BF}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{EEDE9A66-40F3-4936-ACDC-7543DB9BC0BF}.Release|Win32.ActiveCfg = Release|Any CPU
 		{EEDE9A66-40F3-4936-ACDC-7543DB9BC0BF}.Release|x86.ActiveCfg = Release|Any CPU
+		{C4B3A350-0B2F-41C7-A430-22FEBC74E397}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C4B3A350-0B2F-41C7-A430-22FEBC74E397}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C4B3A350-0B2F-41C7-A430-22FEBC74E397}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{C4B3A350-0B2F-41C7-A430-22FEBC74E397}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{C4B3A350-0B2F-41C7-A430-22FEBC74E397}.Debug|Win32.ActiveCfg = Debug|Any CPU
+		{C4B3A350-0B2F-41C7-A430-22FEBC74E397}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{C4B3A350-0B2F-41C7-A430-22FEBC74E397}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C4B3A350-0B2F-41C7-A430-22FEBC74E397}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C4B3A350-0B2F-41C7-A430-22FEBC74E397}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{C4B3A350-0B2F-41C7-A430-22FEBC74E397}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{C4B3A350-0B2F-41C7-A430-22FEBC74E397}.Release|Win32.ActiveCfg = Release|Any CPU
+		{C4B3A350-0B2F-41C7-A430-22FEBC74E397}.Release|x86.ActiveCfg = Release|Any CPU
+		{8BC10E6C-8107-4514-84AB-7AB81A98C34F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8BC10E6C-8107-4514-84AB-7AB81A98C34F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8BC10E6C-8107-4514-84AB-7AB81A98C34F}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{8BC10E6C-8107-4514-84AB-7AB81A98C34F}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{8BC10E6C-8107-4514-84AB-7AB81A98C34F}.Debug|Win32.ActiveCfg = Debug|Any CPU
+		{8BC10E6C-8107-4514-84AB-7AB81A98C34F}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{8BC10E6C-8107-4514-84AB-7AB81A98C34F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8BC10E6C-8107-4514-84AB-7AB81A98C34F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8BC10E6C-8107-4514-84AB-7AB81A98C34F}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{8BC10E6C-8107-4514-84AB-7AB81A98C34F}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{8BC10E6C-8107-4514-84AB-7AB81A98C34F}.Release|Win32.ActiveCfg = Release|Any CPU
+		{8BC10E6C-8107-4514-84AB-7AB81A98C34F}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -80,6 +108,7 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{CCC21438-9ED3-4D77-B19D-4166AD3C7E8C} = {23B9B64F-7A1C-433B-A16B-10395BAA390E}
 		{48D815AC-EA7E-4569-8F67-976E5372804C} = {23B9B64F-7A1C-433B-A16B-10395BAA390E}
+		{C4B3A350-0B2F-41C7-A430-22FEBC74E397} = {23B9B64F-7A1C-433B-A16B-10395BAA390E}
 	EndGlobalSection
 	GlobalSection(MonoDevelopProperties) = preSolution
 		StartupItem = Tests\InVision.Rendering.Launcher\InVision.Rendering.Launcher.csproj

@@ -28,7 +28,6 @@ extern "C"
 	__EXPORT void __ENTRY camera_move(HCamera camera, Vector3f position);
 	__EXPORT void __ENTRY camera_move_relative(HCamera camera, Vector3f position);
 
-	/* NEW BELOW */
 	__EXPORT void __ENTRY camera_set_auto_aspect_ratio(HCamera camera, Bool autoRatio);
 
 	__EXPORT Vector3f __ENTRY camera_get_direction(HCamera camera);

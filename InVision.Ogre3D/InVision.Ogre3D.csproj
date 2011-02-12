@@ -32,11 +32,13 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+  <PropertyGroup>
+    <SignAssembly>true</SignAssembly>
+  </PropertyGroup>
+  <PropertyGroup>
+    <AssemblyOriginatorKeyFile>InVision.pfx</AssemblyOriginatorKeyFile>
+  </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Mono.GameMath, Version=0.1.0.0, Culture=neutral, PublicKeyToken=565248a7de28f663, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\Libs\Mono\Mono.GameMath.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -45,10 +47,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Bone.cs" />
     <Compile Include="Enumerator.cs" />
     <Compile Include="IAnimableObject.cs" />
     <Compile Include="IMovableObject.cs" />
     <Compile Include="IShadowCaster.cs" />
+    <Compile Include="ITextureManager.cs" />
     <Compile Include="Native\MarshallExtensions.cs" />
     <Compile Include="Native\NativeCamera.cs" />
     <Compile Include="Native\NativeEnumerator.cs" />
@@ -58,6 +62,8 @@
     <Compile Include="Native\NativeNode.cs" />
     <Compile Include="Native\NativeRenderWindow.cs" />
     <Compile Include="Native\NativeSceneManager.cs" />
+    <Compile Include="Native\NativeTextureManager.cs" />
+    <Compile Include="Native\NativeViewport.cs" />
     <Compile Include="Native\PlatformInvoke.cs" />
     <Compile Include="Native\NativeRenderSystem.cs" />
     <Compile Include="Native\NativeUtilities.cs" />
@@ -72,6 +78,7 @@
     <Compile Include="SceneNode.cs" />
     <Compile Include="SceneType.cs" />
     <Compile Include="AngleUnit.cs" />
+    <Compile Include="TextureManager.cs" />
     <Compile Include="TransformSpace.cs" />
     <Compile Include="Util\BigEndianColourRepresentation.cs" />
     <Compile Include="Util\ColourRepresentation.cs" />
@@ -91,11 +98,13 @@
     <Compile Include="Root.cs" />
     <Compile Include="RenderSystem.cs" />
     <Compile Include="Radian.cs" />
+    <Compile Include="Viewport.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="InVision.Ogre3D.dll.config">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Include="InVision.pfx" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\InVision\InVision.csproj">
@@ -103,6 +112,7 @@
       <Name>InVision</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -26,6 +26,8 @@ extern "C"
 	typedef Handle HMeshManager;
 	typedef Handle HCamera;
 	typedef Handle HSceneNode;
+	typedef Handle HNode;
+	typedef Handle HViewport;
 	
 	typedef int32_t Bool;
 #define TRUE 1
@@ -129,6 +131,15 @@ extern "C"
 
 	typedef MonoSimdVector4f Quaternion;
 	typedef Quaternion* PQuaternion;
+
+
+	typedef struct
+	{
+		float red;
+		float green;
+		float blue;
+		float alpha;
+	} ColorValue;
 }
 
 #endif // INVISIONPLATFORM_COMMON_H

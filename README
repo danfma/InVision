@@ -1,0 +1,17 @@
+A mixed managed / unmanaged game framework for .net / mono
+
+# THIRD-PARTY:
+- The library Mono.GameMath was merged into the code so no other assembly reference is needed. 
+Anyway, bit thanks for the Mono guys, specially Michael Hutchinson which wrote this library.
+Any changes to it will be merged again into the code.
+
+- The rendering engine is provided by the OGRE3D, a really great rendering library in C++.
+
+
+# ASEMBLIES
+
+- InVision
+- InVision.Ogre3D
+
+# BUILD:
+

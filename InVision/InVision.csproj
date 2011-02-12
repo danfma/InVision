@@ -19,9 +19,10 @@
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
     <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DefineConstants>TRACE;DEBUG;SIMD</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -31,7 +32,16 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+  <PropertyGroup>
+    <SignAssembly>true</SignAssembly>
+  </PropertyGroup>
+  <PropertyGroup>
+    <AssemblyOriginatorKeyFile>InVision.pfx</AssemblyOriginatorKeyFile>
+  </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Mono.Simd">
+      <HintPath>..\Libs\Mono\Mono.Simd.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -40,9 +50,26 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="GameMath\BoundingBox.cs" />
+    <Compile Include="GameMath\BoundingFrustum.cs" />
+    <Compile Include="GameMath\BoundingSphere.cs" />
+    <Compile Include="GameMath\Color.cs" />
+    <Compile Include="GameMath\Enums.cs" />
+    <Compile Include="GameMath\MathHelper.cs" />
+    <Compile Include="GameMath\Matrix.cs" />
+    <Compile Include="GameMath\Plane.cs" />
+    <Compile Include="GameMath\Point.cs" />
+    <Compile Include="GameMath\Quaternion.cs" />
+    <Compile Include="GameMath\Ray.cs" />
+    <Compile Include="GameMath\Rectangle.cs" />
+    <Compile Include="GameMath\Vector2.cs" />
+    <Compile Include="GameMath\Vector3.cs" />
+    <Compile Include="GameMath\Vector4.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <None Include="InVision.pfx" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

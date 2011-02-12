@@ -1,18 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
-using InVision.Ogre3D.Util;
 
 namespace InVision.Ogre3D.Native
 {
 	internal static class MarshallExtensions
 	{
 		/// <summary>
-		/// Marshals as handle.
+		/// 	Marshals as handle.
 		/// </summary>
-		/// <typeparam name="T"></typeparam>
-		/// <param name="pHandle">The p handle.</param>
-		/// <param name="creator">The creator.</param>
+		/// <typeparam name = "T"></typeparam>
+		/// <param name = "pHandle">The p handle.</param>
+		/// <param name = "creator">The creator.</param>
 		/// <returns></returns>
 		public static T AsHandle<T>(this IntPtr pHandle, Func<IntPtr, T> creator)
 			where T : Handle
@@ -24,9 +23,9 @@ namespace InVision.Ogre3D.Native
 		}
 
 		/// <summary>
-		/// Marshals as string.
+		/// 	Marshals as string.
 		/// </summary>
-		/// <param name="pString">The p string.</param>
+		/// <param name = "pString">The p string.</param>
 		/// <returns></returns>
 		public static string AsString(this IntPtr pString)
 		{
@@ -34,10 +33,10 @@ namespace InVision.Ogre3D.Native
 		}
 
 		/// <summary>
-		/// Marshals as structure.
+		/// 	Marshals as structure.
 		/// </summary>
-		/// <typeparam name="T"></typeparam>
-		/// <param name="pStruct">The p struct.</param>
+		/// <typeparam name = "T"></typeparam>
+		/// <param name = "pStruct">The p struct.</param>
 		/// <returns></returns>
 		public static T AsStructure<T>(this IntPtr pStruct)
 		{
@@ -45,14 +44,15 @@ namespace InVision.Ogre3D.Native
 		}
 
 		/// <summary>
-		/// Marshals as enumeration.
+		/// 	Marshals as enumeration.
 		/// </summary>
-		/// <typeparam name="T"></typeparam>
-		/// <param name="pEnumerator">The p enumerator.</param>
-		/// <param name="converter">The converter.</param>
-		/// <param name="cleaner">The cleaner.</param>
+		/// <typeparam name = "T"></typeparam>
+		/// <param name = "pEnumerator">The p enumerator.</param>
+		/// <param name = "converter">The converter.</param>
+		/// <param name = "cleaner">The cleaner.</param>
 		/// <returns></returns>
-		public static IEnumerable<T> AsEnumeration<T>(this IntPtr pEnumerator, Func<IntPtr, T> converter, Action<IntPtr> cleaner = null)
+		public static IEnumerable<T> AsEnumeration<T>(this IntPtr pEnumerator, Func<IntPtr, T> converter,
+													  Action<IntPtr> cleaner = null)
 		{
 			using (var enumerator = new Enumerator<T>(pEnumerator))
 			{
@@ -78,11 +78,11 @@ namespace InVision.Ogre3D.Native
 		}
 
 		/// <summary>
-		/// Marshals as enumeration.
+		/// 	Marshals as enumeration.
 		/// </summary>
-		/// <typeparam name="T"></typeparam>
-		/// <param name="pEnumerator">The p enumerator.</param>
-		/// <param name="cleaner">The cleaner.</param>
+		/// <typeparam name = "T"></typeparam>
+		/// <param name = "pEnumerator">The p enumerator.</param>
+		/// <param name = "cleaner">The cleaner.</param>
 		/// <returns></returns>
 		public static IEnumerable<T> AsEnumeration<T>(this IntPtr pEnumerator, Action<IntPtr> cleaner = null)
 		{

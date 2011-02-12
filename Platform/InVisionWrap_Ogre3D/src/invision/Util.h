@@ -71,6 +71,22 @@ namespace invision
 		return Ogre::Quaternion(q.w, q.x, q.y, q.z);
 	}
 
+	inline Ogre::ColourValue fromColorValue(const ColorValue& c)
+	{
+		return Ogre::ColourValue(c.red, c.green, c.blue, c.alpha);
+	}
+
+	inline ColorValue toColorValue(const Ogre::ColourValue& c)
+	{
+		ColorValue color;
+		color.red = c.r;
+		color.green = c.g;
+		color.blue = c.b;
+		color.alpha = c.a;
+
+		return color;
+	}
+
 
 	inline Ogre::Root* asRoot(HRoot handle)
 	{
@@ -110,6 +126,21 @@ namespace invision
 	inline Ogre::Camera* asCamera(HCamera handle)
 	{
 		return (Ogre::Camera*)handle;
+	}
+
+	inline Ogre::Node* asNode(HNode handle)
+	{
+		return (Ogre::Node*)handle;
+	}
+
+	inline Ogre::TextureManager* asTextureManager(HTextureManager handle)
+	{
+		return (Ogre::TextureManager*)handle;
+	}
+
+	inline Ogre::Viewport* asViewport(HViewport handle)
+	{
+		return (Ogre::Viewport*)handle;
 	}
 
 	inline IEnumerator* asEnumerator(HEnumerator self)

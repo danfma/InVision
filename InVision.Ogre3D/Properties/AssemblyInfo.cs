@@ -34,4 +34,4 @@ using System.Runtime.InteropServices;
 // [assembly: AssemblyVersion("1.0.*")]
 [assembly: AssemblyVersion("1.0.0.0")]
 [assembly: AssemblyFileVersion("1.0.0.0")]
-[assembly: InternalsVisibleTo("InVision.Platform.Tests")]
+[assembly: InternalsVisibleTo("InVision.Platform.Tests, PublicKey=0024000004800000940000000602000000240000525341310004000001000100dbec844a75928a8164e35bae38b9c5d22de962c1697087a8146c023c4bdffa4848799d0a567565b428c3f880d2430b3f797c6316c20bd8bd8e04fea2a4a34095efa11196124993e3d677de675f52340461540041b8d6b3cfa595e5a315198dae99f9206e1238502beeb9462aa82c5bde5ca03e21b61130aebd60c99d82f0878e")]

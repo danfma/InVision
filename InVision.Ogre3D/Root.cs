@@ -9,20 +9,12 @@ namespace InVision.Ogre3D
 	public sealed class Root : Handle
 	{
 		/// <summary>
-		/// 	Initializes a new instance of the <see cref = "Root" /> class.
+		/// Initializes a new instance of the <see cref="Root"/> class.
 		/// </summary>
-		public Root()
-			: this("Config/plugins.cfg", "Config/ogre.cfg")
-		{
-		}
-
-		/// <summary>
-		/// 	Initializes a new instance of the <see cref = "Root" /> class.
-		/// </summary>
-		/// <param name = "pluginFilename">The plugin filename.</param>
-		/// <param name = "configFilename">The config filename.</param>
-		/// <param name = "logFilename">The log filename.</param>
-		public Root(string pluginFilename, string configFilename, string logFilename = null)
+		/// <param name="pluginFilename">The plugin filename.</param>
+		/// <param name="configFilename">The config filename.</param>
+		/// <param name="logFilename">The log filename.</param>
+		public Root(string pluginFilename = "plugins.cfg", string configFilename = "ogre.cfg", string logFilename = null)
 		{
 			if (Instance != null)
 				throw new InvalidOperationException("Only one instance is allowed");

@@ -1,6 +1,6 @@
 ﻿using System;
+using InVision.GameMath;
 using InVision.Ogre3D.Native;
-using Mono.GameMath;
 
 namespace InVision.Ogre3D
 {

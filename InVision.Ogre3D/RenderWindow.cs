@@ -51,5 +51,25 @@ namespace InVision.Ogre3D
 		{
 			get { return NativeRenderWindow.GetHeight(handle); }
 		}
+
+		/// <summary>
+		/// Adds the viewport.
+		/// </summary>
+		/// <param name="camera">The camera.</param>
+		/// <param name="zOrder">The z order.</param>
+		/// <param name="left">The left.</param>
+		/// <param name="top">The top.</param>
+		/// <param name="width">The width.</param>
+		/// <param name="height">The height.</param>
+		/// <returns></returns>
+		public Viewport AddViewport(Camera camera, int zOrder = 0, float left = 0, float top = 0, float width = 0, float height = 0)
+		{
+			return NativeRenderWindow.AddViewport(
+				handle,
+				camera.DangerousGetHandle(),
+				zOrder,
+				left, top,
+				width, height);
+		}
 	}
 }

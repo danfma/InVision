@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Runtime.InteropServices;
-using Mono.GameMath;
+using InVision.GameMath;
 
 namespace InVision.Ogre3D.Native
 {
@@ -21,16 +21,16 @@ namespace InVision.Ogre3D.Native
 		[DllImport(Library, EntryPoint = "camera_set_fovy")]
 		public static extern void SetFOVy(IntPtr pCamera, float aspectRatio);
 
-		[DllImport(Library, EntryPoint = "camera_get_near_distance")]
+		[DllImport(Library, EntryPoint = "camera_get_near_clip_distance")]
 		public static extern float GetNearClipDistance(IntPtr pCamera);
 
-		[DllImport(Library, EntryPoint = "camera_set_near_distance")]
+		[DllImport(Library, EntryPoint = "camera_set_near_clip_distance")]
 		public static extern void SetNearClipDistance(IntPtr pCamera, float radians);
 
-		[DllImport(Library, EntryPoint = "camera_get_far_distance")]
+		[DllImport(Library, EntryPoint = "camera_get_far_clip_distance")]
 		public static extern float GetFarClipDistance(IntPtr pCamera);
 
-		[DllImport(Library, EntryPoint = "camera_set_far_distance")]
+		[DllImport(Library, EntryPoint = "camera_set_far_clip_distance")]
 		public static extern void SetFarClipDistance(IntPtr pCamera, float radians);
 
 		[DllImport(Library, EntryPoint = "camera_get_polyon_mode")]

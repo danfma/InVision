@@ -26,7 +26,10 @@ SOURCES += \
     src/invision/Math.cpp \
     src/invision/rendering/RenderWindow.cpp \
     src/invision/Common.cpp \
-    src/invision/rendering/AnimableObject.cpp
+    src/invision/rendering/AnimableObject.cpp \
+    src/invision/rendering/Node.cpp \
+    src/invision/rendering/TextureManager.cpp \
+    src/invision/rendering/Viewport.cpp
 
 
 HEADERS += \
@@ -45,7 +48,10 @@ HEADERS += \
     src/invision/Math.h \
     src/invision/rendering/RenderWindow.h \
     src/invision/rendering/AnimableObject.h \
-    src/invision/COgre3D.h
+    src/invision/COgre3D.h \
+    src/invision/rendering/Node.h \
+    src/invision/rendering/TextureManager.h \
+    src/invision/rendering/Viewport.h
 
 
 Release:DESTDIR = Bin/Release
