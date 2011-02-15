@@ -28,3 +28,13 @@ __EXPORT HViewport __ENTRY renderwindow_add_viewport(
 				left, top,
 				width, height);
 }
+
+__EXPORT String __ENTRY renderwindow_write_contents_to_timestamped_file(
+	HRenderWindow self,
+	ConstString prefix,
+	ConstString suffix)
+{
+	Ogre::String s = asRenderWindow(self)->writeContentsToTimestampedFile(prefix, suffix);
+
+	return copyString(s);
+}

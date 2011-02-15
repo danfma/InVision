@@ -8,7 +8,10 @@
 extern "C"
 {
 	__EXPORT void __ENTRY util_delete_string(const char* data);
+	__EXPORT void __ENTRY util_delete_stringarray(PStringArray strArray);
+
 	__EXPORT void __ENTRY util_delete_namevaluepair(PNameValuePair data);
+	__EXPORT void __ENTRY util_delete_namehandlepair(PNameHandlePair data);
 }
 
 #ifdef __cplusplus
@@ -141,6 +144,21 @@ namespace invision
 	inline Ogre::Viewport* asViewport(HViewport handle)
 	{
 		return (Ogre::Viewport*)handle;
+	}
+
+	inline Ogre::ConfigFile* asConfigFile(HConfigFile handle)
+	{
+		return (Ogre::ConfigFile*)handle;
+	}
+
+	inline Ogre::ResourceGroupManager* asResGroupManager(HResourceGroupManager handle)
+	{
+		return (Ogre::ResourceGroupManager*)handle;
+	}
+
+	inline Ogre::MaterialManager* asMaterialManager(HMaterialManager handle)
+	{
+		return (Ogre::MaterialManager*)handle;
 	}
 
 	inline IEnumerator* asEnumerator(HEnumerator self)

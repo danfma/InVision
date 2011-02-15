@@ -12,7 +12,6 @@ TEMPLATE = lib
 DEFINES += INVISIONPLATFORM_LIBRARY USE_SIMD
 
 SOURCES += \
-	src/invision/Collections.cpp \
 	src/invision/NameValueParamsHandle.cpp \
 	src/invision/Util.cpp \
 	src/invision/rendering/Root.cpp \
@@ -29,11 +28,13 @@ SOURCES += \
     src/invision/rendering/AnimableObject.cpp \
     src/invision/rendering/Node.cpp \
     src/invision/rendering/TextureManager.cpp \
-    src/invision/rendering/Viewport.cpp
+    src/invision/rendering/Viewport.cpp \
+    src/invision/rendering/ConfigFile.cpp \
+    src/invision/rendering/ResourceGroupManager.cpp \
+    src/invision/rendering/MaterialManager.cpp
 
 
 HEADERS += \
-	src/invision/Collections.h \
 	src/invision/NameValueParamsHandle.h \
 	src/invision/Common.h \
 	src/invision/Util.h \
@@ -51,7 +52,10 @@ HEADERS += \
     src/invision/COgre3D.h \
     src/invision/rendering/Node.h \
     src/invision/rendering/TextureManager.h \
-    src/invision/rendering/Viewport.h
+    src/invision/rendering/Viewport.h \
+    src/invision/rendering/ConfigFile.h \
+    src/invision/rendering/ResourceGroupManager.h \
+    src/invision/rendering/MaterialManager.h
 
 
 Release:DESTDIR = Bin/Release

@@ -9,27 +9,43 @@ using namespace invision;
 
 __EXPORT void __ENTRY util_delete_string(const char* data)
 {
-#ifdef DEBUG
-	cout << "Destroying char*" << endl;
-#endif
-
 	if (data == NULL)
 		return;
 
 	delete[] data;
 }
 
+__EXPORT void __ENTRY util_delete_stringarray(PStringArray strArray)
+{
+	if (strArray == NULL)
+		return;
+
+	for (int i = 0; i < strArray->count; i++) {
+		delete[] strArray->strings[i];
+	}
+
+	delete strArray;
+}
+
 __EXPORT void __ENTRY util_delete_namevaluepair(PNameValuePair data)
 {
-#ifdef DEBUG
-	cout << "Destroying NameValuePair" << endl;
-#endif
-
 	if (data == NULL)
 		return;
 
 	delete[] data->key;
 	delete[] data->value;
+	delete data;
+}
+
+__EXPORT void __ENTRY util_delete_namehandlepair(PNameHandlePair data)
+{
+	if (data == NULL)
+		return;
+
+	if (data->value != NULL)
+		delete asEnumerator(data->value);
+
+	delete[] data->key;
 	delete data;
 }
 

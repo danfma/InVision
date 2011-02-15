@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Runtime.InteropServices;
 using InVision.GameMath;
 using InVision.Ogre3D.Listeners;
@@ -61,7 +62,7 @@ namespace InVision.Ogre3D.Tutorial
 			CreateCamera();
 			CreateViewports();
 
-			TextureManager.Singleton.DefaultNumMipmaps = 5;
+			TextureManager.Instance.DefaultNumMipmaps = 5;
 
 			CreateResourceListener();
 			LoadResources();
@@ -128,22 +129,23 @@ namespace InVision.Ogre3D.Tutorial
 			cf.Load(mResourcesCfg, "\t:=", true);
 
 			// Go through all sections & settings in the file
-			var seci = cf.GetSectionIterator();
-			while (seci.MoveNext())
+			var settings =
+				from section in cf.GetSections()
+				from setting in section.Value
+				select new { Section = section.Key, Setting = setting.Key, setting.Value };
+
+			foreach (var setting in settings)
 			{
-				foreach (var pair in seci.Current)
-				{
-					ResourceGroupManager.Singleton.AddResourceLocation(
-						pair.Value, pair.Key, seci.CurrentKey);
-				}
+				ResourceGroupManager.Instance.AddResourceLocation(
+					setting.Value, setting.Setting, setting.Section);
 			}
 
-			ResourceGroupManager.Singleton.InitialiseAllResourceGroups();
+			ResourceGroupManager.Instance.InitialiseAllResourceGroups();
 		}
 
 		protected void ReloadAllTextures()
 		{
-			TextureManager.Singleton.ReloadAll();
+			TextureManager.Instance.ReloadAll();
 		}
 
 		protected void CycleTextureFilteringMode()
@@ -152,24 +154,24 @@ namespace InVision.Ogre3D.Tutorial
 			switch (mTextureMode)
 			{
 				case 0:
-					MaterialManager.Singleton.SetDefaultTextureFiltering(TextureFilterOptions.TFO_BILINEAR);
+					MaterialManager.Instance.SetDefaultTextureFiltering(TextureFilterOption.Bilinear);
 					mDebugOverlay.AdditionalInfo = "BiLinear";
 					break;
 
 				case 1:
-					MaterialManager.Singleton.SetDefaultTextureFiltering(TextureFilterOptions.TFO_TRILINEAR);
+					MaterialManager.Instance.SetDefaultTextureFiltering(TextureFilterOption.Trilinear);
 					mDebugOverlay.AdditionalInfo = "TriLinear";
 					break;
 
 				case 2:
-					MaterialManager.Singleton.SetDefaultTextureFiltering(TextureFilterOptions.TFO_ANISOTROPIC);
-					MaterialManager.Singleton.DefaultAnisotropy = 8;
+					MaterialManager.Instance.SetDefaultTextureFiltering(TextureFilterOption.Anisotropic);
+					MaterialManager.Instance.DefaultAnisotropy = 8;
 					mDebugOverlay.AdditionalInfo = "Anisotropic";
 					break;
 
 				case 3:
-					MaterialManager.Singleton.SetDefaultTextureFiltering(TextureFilterOptions.TFO_NONE);
-					MaterialManager.Singleton.DefaultAnisotropy = 1;
+					MaterialManager.Instance.SetDefaultTextureFiltering(TextureFilterOption.None);
+					MaterialManager.Instance.DefaultAnisotropy = 1;
 					mDebugOverlay.AdditionalInfo = "None";
 					break;
 			}
@@ -202,7 +204,7 @@ namespace InVision.Ogre3D.Tutorial
 
 		protected virtual void CreateFrameListeners()
 		{
-			mRoot.FrameRenderingQueued += new FrameListener.FrameRenderingQueuedHandler(OnFrameRenderingQueued);
+			mRoot.FrameEvent.FrameStarted += OnFrameRenderingQueued;
 		}
 
 		protected virtual bool OnFrameRenderingQueued(FrameEvent evt)
@@ -219,9 +221,8 @@ namespace InVision.Ogre3D.Tutorial
 
 				UpdateScene(evt);
 
-				mCameraMan.UpdateCamera(evt.timeSinceLastFrame);
-
-				mDebugOverlay.Update(evt.timeSinceLastFrame);
+				mCameraMan.UpdateCamera(evt.TimeSinceLastFrame);
+				mDebugOverlay.Update(evt.TimeSinceLastFrame);
 
 				return true;
 			}

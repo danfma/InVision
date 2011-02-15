@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Runtime.InteropServices;
 
 namespace InVision.Ogre3D.Native
@@ -79,7 +80,8 @@ namespace InVision.Ogre3D.Native
 		public static IEnumerable<RenderSystem> GetAvailableRenderers(IntPtr pRoot)
 		{
 			return _GetAvailableRenderers(pRoot).
-				AsEnumeration(pRenderSystem => new RenderSystem(pRenderSystem, false));
+				AsEnumeration(pRenderSystem => new RenderSystem(pRenderSystem, false)).
+				Select(p => p.Value);
 		}
 
 		[DllImport(Library, EntryPoint = "root_get_rendersystem_by_name")]

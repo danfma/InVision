@@ -1,23 +1,24 @@
-﻿using System.Runtime.InteropServices;
+﻿using System;
+using System.Runtime.InteropServices;
 
 namespace InVision.Ogre3D.Util
 {
-	[StructLayout(LayoutKind.Sequential)]
-	public struct NameValuePair
+	[StructLayout(LayoutKind.Explicit)]
+	public struct NameHandlePair
 	{
+		[FieldOffset(0)]
 		[MarshalAs(UnmanagedType.LPStr)]
 		private readonly string key;
 
-		[MarshalAs(UnmanagedType.LPStr)]
-		private readonly string value;
+		[FieldOffset(4)]
+		private readonly IntPtr value;
 
 		/// <summary>
-		/// Initializes a new instance of the <see cref="NameValuePair"/> struct.
+		/// Initializes a new instance of the <see cref="NameHandlePair"/> struct.
 		/// </summary>
 		/// <param name="key">The key.</param>
 		/// <param name="value">The value.</param>
-		public NameValuePair(string key, string value)
-			: this()
+		public NameHandlePair(string key, IntPtr value) : this()
 		{
 			this.key = key;
 			this.value = value;
@@ -36,7 +37,7 @@ namespace InVision.Ogre3D.Util
 		/// Gets the value.
 		/// </summary>
 		/// <value>The value.</value>
-		public string Value
+		public IntPtr Value
 		{
 			get { return value; }
 		}

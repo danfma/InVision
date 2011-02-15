@@ -17,7 +17,7 @@ namespace InVision.Ogre3D.Native
 		/// <returns></returns>
 		public static string GetName(IntPtr pNode)
 		{
-			return _GetName(pNode).AsString();
+			return _GetName(pNode).AsConstString();
 		}
 
 		[DllImport(Library, EntryPoint = "node_get_parent")]

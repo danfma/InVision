@@ -28,6 +28,14 @@ extern "C"
 	typedef Handle HSceneNode;
 	typedef Handle HNode;
 	typedef Handle HViewport;
+	typedef Handle HConfigFile;
+	typedef Handle HStringEnumerator;
+	typedef Handle HNameValuePairEnumerator;
+	typedef Handle HNameValuePairList;
+	typedef Handle HSectionEnumerator;
+	typedef Handle HSettingsEnumerator;
+	typedef Handle HResourceGroupManager;
+	typedef Handle HMaterialManager;
 	
 	typedef int32_t Bool;
 #define TRUE 1
@@ -49,29 +57,43 @@ extern "C"
 	typedef int64_t Int64;	
 	typedef uint64_t UInt64;
 
-	typedef struct {
+	struct  FrameEvent
+	{
 		float timeSinceLastEvent;
 		float timeSinceLastFrame;
-	} FrameEvent;
+	};
 
-	typedef void (*ExceptionHandler)(UInt32 errorCode);
-	typedef Bool (*FrameEventHandler)(const FrameEvent*);
+	struct StringArray
+	{
+		int count;
+		char** strings;
+	};
 
-	typedef struct _NameValuePair
+	struct NameValuePair
 	{
 		const char* key;
 		const char* value;
-	} NameValuePair, * PNameValuePair;
+	};
 
-	typedef struct _NameValuePairList
+	struct NameHandlePair
+	{
+		const char* key;
+		Handle value;
+	};
+
+	struct NameValuePairList
 	{
 		int count;
-		PNameValuePair pairs;
-	} NameValuePairList, *PNameValuePairList;
+		NameValuePair* pairs;
+	};
 
-	typedef Any HStringEnumerator;
-	typedef Any HNameValuePairEnumerator;
-	typedef Any HNameValuePairList;
+	typedef StringArray* PStringArray;
+	typedef NameValuePair* PNameValuePair;
+	typedef NameHandlePair* PNameHandlePair;
+	typedef NameValuePairList* PNameValuePairList;
+
+	typedef void (*ExceptionHandler)(UInt32 errorCode);
+	typedef Bool (*FrameEventHandler)(const FrameEvent*);
 
 	typedef UInt32 PolygonModeEnum;
 	extern const PolygonModeEnum PME_Points;
@@ -85,8 +107,7 @@ extern "C"
 	/**
 	 * Mono.Simd.Vector4f Structure
 	 */
-	typedef struct
-	{
+	typedef struct {
 		float x;
 		float y;
 		float z;
@@ -97,27 +118,23 @@ extern "C"
 
 	#if USE_SIMD
 
-	typedef struct
-	{
+	typedef struct {
 		MonoSimdVector4f vdata;
 	} MonoGMVector3;
 
-	typedef struct
-	{
+	typedef struct {
 		MonoSimdVector4f vdata;
 	} MonoGMVector4;
 
 	#else
 
-	typedef struct
-	{
+	typedef struct {
 		float x;
 		float y;
 		float z;
 	} MonoGMVector3;
 
-	typedef struct
-	{
+	typedef struct {
 		float x;
 		float y;
 		float z;
@@ -133,8 +150,7 @@ extern "C"
 	typedef Quaternion* PQuaternion;
 
 
-	typedef struct
-	{
+	typedef struct {
 		float red;
 		float green;
 		float blue;

@@ -15,7 +15,7 @@ namespace InVision.Ogre3D.Native
 		/// <returns></returns>
 		public static string GetName(IntPtr pRenderSystem)
 		{
-			return _GetName(pRenderSystem).AsString();
+			return _GetName(pRenderSystem).AsConstString();
 		}
 	}
 }

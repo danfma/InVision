@@ -24,3 +24,4 @@ __EXPORT void __ENTRY enumerator_reset(HEnumerator self)
 {
 	asEnumerator(self)->reset();
 }
+

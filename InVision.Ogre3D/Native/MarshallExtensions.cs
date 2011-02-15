@@ -27,9 +27,27 @@ namespace InVision.Ogre3D.Native
 		/// </summary>
 		/// <param name = "pString">The p string.</param>
 		/// <returns></returns>
-		public static string AsString(this IntPtr pString)
+		public static string AsConstString(this IntPtr pString)
 		{
 			return Marshal.PtrToStringAnsi(pString);
+		}
+
+		/// <summary>
+		/// Ases the string.
+		/// </summary>
+		/// <param name="pString">The p string.</param>
+		/// <returns></returns>
+		public static string AsString(this IntPtr pString)
+		{
+			try
+			{
+				return Marshal.PtrToStringAnsi(pString);
+			}
+			finally
+			{
+				if (pString != IntPtr.Zero)
+					NativeUtilities.DeleteString(pString);
+			}
 		}
 
 		/// <summary>
@@ -44,17 +62,19 @@ namespace InVision.Ogre3D.Native
 		}
 
 		/// <summary>
-		/// 	Marshals as enumeration.
+		///  Converts the pEnumerator into an automatic enumeration.
 		/// </summary>
-		/// <typeparam name = "T"></typeparam>
-		/// <param name = "pEnumerator">The p enumerator.</param>
-		/// <param name = "converter">The converter.</param>
-		/// <param name = "cleaner">The cleaner.</param>
+		/// <remarks>
+		/// Automatic enumerations deletes the resource automatically for each data item, using the deleter method specified.
+		/// </remarks>
+		/// <typeparam name="T"></typeparam>
+		/// <param name="pEnumerator">The p enumerator.</param>
+		/// <param name="converter">The converter.</param>
+		/// <param name="deleter">The deleter.</param>
 		/// <returns></returns>
-		public static IEnumerable<T> AsEnumeration<T>(this IntPtr pEnumerator, Func<IntPtr, T> converter,
-													  Action<IntPtr> cleaner = null)
+		public static IEnumerable<T> AsAutoEnumeration<T>(this IntPtr pEnumerator, Func<IntPtr, T> converter, Action<IntPtr> deleter)
 		{
-			using (var enumerator = new Enumerator<T>(pEnumerator))
+			using (var enumerator = new NativeEnumerator<T>(pEnumerator))
 			{
 				enumerator.SetConverter(
 					ptr =>
@@ -65,10 +85,48 @@ namespace InVision.Ogre3D.Native
 						}
 						finally
 						{
-							if (cleaner != null)
-								cleaner(ptr);
+							if (deleter != null)
+								deleter(ptr);
 						}
 					});
+
+				while (enumerator.MoveNext())
+				{
+					yield return enumerator.Current.Value;
+				}
+			}
+		}
+
+		/// <summary>
+		/// Converts the pEnumerator into an automatic enumeration.
+		/// </summary>
+		/// <remarks>
+		/// Automatic enumerations deletes the resource automatically for each data item, using the deleter method specified.
+		/// </remarks>
+		/// <typeparam name="T"></typeparam>
+		/// <param name="pEnumerator">The p enumerator.</param>
+		/// <param name="deleter">The deleter.</param>
+		/// <returns></returns>
+		public static IEnumerable<T> AsAutoEnumeration<T>(this IntPtr pEnumerator, Action<IntPtr> deleter)
+		{
+			return AsAutoEnumeration(pEnumerator, AsStructure<T>, deleter);
+		}
+
+		/// <summary>
+		///  Converts the pEnumerator into an enumeration.
+		/// </summary>
+		/// <remarks>
+		/// Non automatic enumerations must delete manually the resource data for each item.
+		/// </remarks>
+		/// <typeparam name="T"></typeparam>
+		/// <param name="pEnumerator">The p enumerator.</param>
+		/// <param name="converter">The converter.</param>
+		/// <returns></returns>
+		public static IEnumerable<KeyValuePair<IntPtr, T>> AsEnumeration<T>(this IntPtr pEnumerator, Func<IntPtr, T> converter)
+		{
+			using (var enumerator = new NativeEnumerator<T>(pEnumerator))
+			{
+				enumerator.SetConverter(converter);
 
 				while (enumerator.MoveNext())
 				{
@@ -78,15 +136,17 @@ namespace InVision.Ogre3D.Native
 		}
 
 		/// <summary>
-		/// 	Marshals as enumeration.
+		///  Converts the pEnumerator into an enumeration.
 		/// </summary>
-		/// <typeparam name = "T"></typeparam>
-		/// <param name = "pEnumerator">The p enumerator.</param>
-		/// <param name = "cleaner">The cleaner.</param>
+		/// <remarks>
+		/// Non automatic enumerations must delete manually the resource data for each item.
+		/// </remarks>
+		/// <typeparam name="T"></typeparam>
+		/// <param name="pEnumerator">The p enumerator.</param>
 		/// <returns></returns>
-		public static IEnumerable<T> AsEnumeration<T>(this IntPtr pEnumerator, Action<IntPtr> cleaner = null)
+		public static IEnumerable<KeyValuePair<IntPtr, T>> AsEnumeration<T>(this IntPtr pEnumerator)
 		{
-			return AsEnumeration(pEnumerator, AsStructure<T>, cleaner);
+			return AsEnumeration(pEnumerator, AsStructure<T>);
 		}
 	}
 }

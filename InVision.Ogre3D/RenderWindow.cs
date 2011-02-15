@@ -71,5 +71,16 @@ namespace InVision.Ogre3D
 				left, top,
 				width, height);
 		}
+
+		/// <summary>
+		/// Writes the contents to timestamped file.
+		/// </summary>
+		/// <param name="filenamePrefix">The filename prefix.</param>
+		/// <param name="filenameSuffix">The filename suffix.</param>
+		/// <returns></returns>
+		public string WriteContentsToTimestampedFile(string filenamePrefix, string filenameSuffix)
+		{
+			return NativeRenderWindow.WriteContentsToTimestampedFile(handle, filenamePrefix, filenameSuffix);
+		}
 	}
 }

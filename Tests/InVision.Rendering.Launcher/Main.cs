@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using InVision.GameMath;
 using InVision.Ogre3D;
 using InVision.Ogre3D.Util;
@@ -10,7 +11,23 @@ namespace InVision.Rendering.Launcher
 	{
 		public static void Main(string[] args)
 		{
-			StartOgre();
+			var configFile = new ConfigFile();
+			configFile.Load("Config/resources.cfg");
+
+			var settings =
+				from section in configFile.GetSections()
+				from setting in section.Value
+				select new { Section = section.Key, Setting = setting.Key, setting.Value };
+
+			foreach (var setting in settings)
+			{
+				Console.WriteLine("Section: {0} Setting: {1} Value: {2}",
+					setting.Section, setting.Setting, setting.Value);
+			}
+
+			Console.Read();
+
+			//StartOgre();
 		}
 
 		private static void StartOgre()

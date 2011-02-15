@@ -38,7 +38,7 @@ namespace InVision.Ogre3D
 		/// 	Gets the singleton.
 		/// </summary>
 		/// <value>The singleton.</value>
-		public static TextureManager Singleton
+		public static TextureManager Instance
 		{
 			get { return NativeTextureManager.GetInstance(); }
 		}
@@ -51,6 +51,15 @@ namespace InVision.Ogre3D
 		protected override bool Release(IntPtr pSelf)
 		{
 			return true;
+		}
+
+		/// <summary>
+		/// 	Reloads all.
+		/// </summary>
+		/// <param name = "reloadableOnly">if set to <c>true</c> [reloadable only].</param>
+		public void ReloadAll(bool reloadableOnly = true)
+		{
+			NativeTextureManager.ReloadAll(handle, reloadableOnly);
 		}
 	}
 }

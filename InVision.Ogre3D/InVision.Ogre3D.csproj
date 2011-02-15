@@ -48,19 +48,24 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Bone.cs" />
-    <Compile Include="Enumerator.cs" />
+    <Compile Include="ConfigFile.cs" />
+    <Compile Include="MaterialManager.cs" />
+    <Compile Include="NativeEnumerator.cs" />
     <Compile Include="IAnimableObject.cs" />
     <Compile Include="IMovableObject.cs" />
     <Compile Include="IShadowCaster.cs" />
     <Compile Include="ITextureManager.cs" />
     <Compile Include="Native\MarshallExtensions.cs" />
     <Compile Include="Native\NativeCamera.cs" />
+    <Compile Include="Native\NativeConfigFile.cs" />
     <Compile Include="Native\NativeEnumerator.cs" />
     <Compile Include="Native\NativeFrameListener.cs" />
+    <Compile Include="Native\NativeMaterialManager.cs" />
     <Compile Include="Native\NativeMath.cs" />
     <Compile Include="Native\NativeNameValuePairList.cs" />
     <Compile Include="Native\NativeNode.cs" />
     <Compile Include="Native\NativeRenderWindow.cs" />
+    <Compile Include="Native\NativeResourceGroupManager.cs" />
     <Compile Include="Native\NativeSceneManager.cs" />
     <Compile Include="Native\NativeTextureManager.cs" />
     <Compile Include="Native\NativeViewport.cs" />
@@ -72,12 +77,15 @@
     <Compile Include="ColourValues.cs" />
     <Compile Include="Listeners\FrameEventDispatcherHandler.cs" />
     <Compile Include="Listeners\IEventDispatcher.cs" />
+    <Compile Include="Native\StringArray.cs" />
     <Compile Include="Node.cs" />
     <Compile Include="PolygonMode.cs" />
+    <Compile Include="ResourceGroupManager.cs" />
     <Compile Include="SceneManager.cs" />
     <Compile Include="SceneNode.cs" />
     <Compile Include="SceneType.cs" />
     <Compile Include="AngleUnit.cs" />
+    <Compile Include="TextureFilterOption.cs" />
     <Compile Include="TextureManager.cs" />
     <Compile Include="TransformSpace.cs" />
     <Compile Include="Util\BigEndianColourRepresentation.cs" />
@@ -85,6 +93,7 @@
     <Compile Include="Degree.cs" />
     <Compile Include="Util\LittleEndianColourRepresentation.cs" />
     <Compile Include="Util\MathUtility.cs" />
+    <Compile Include="Util\NameHandlePair.cs" />
     <Compile Include="Util\NameValueDictionary.cs" />
     <Compile Include="Util\NameValuePair.cs" />
     <Compile Include="Listeners\FrameEvent.cs" />

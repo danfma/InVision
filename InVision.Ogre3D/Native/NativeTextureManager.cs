@@ -8,6 +8,20 @@ namespace InVision.Ogre3D.Native
 		[DllImport(Library, EntryPoint = "texmanager_get_instance")]
 		public static extern IntPtr _GetInstance();
 
+
+
+		[DllImport(Library, EntryPoint = "texmanager_get_default_num_mipmaps")]
+		public static extern int GetDefaultNumMipmaps(IntPtr handle);
+
+		[DllImport(Library, EntryPoint = "texmanager_set_default_num_mipmaps")]
+		public static extern void SetDefaultNumMipmaps(IntPtr handle, int numMipmaps);
+
+		[DllImport(Library, EntryPoint = "texmanager_reload_all")]
+		public static extern void ReloadAll(IntPtr handle, bool reloadableOnly);
+
+
+		#region Helpers
+
 		/// <summary>
 		/// Gets the instance.
 		/// </summary>
@@ -17,10 +31,6 @@ namespace InVision.Ogre3D.Native
 			return _GetInstance().AsHandle(ptr => new TextureManager(ptr, false));
 		}
 
-		[DllImport(Library, EntryPoint = "texmanager_get_default_num_mipmaps")]
-		public static extern int GetDefaultNumMipmaps(IntPtr handle);
-
-		[DllImport(Library, EntryPoint = "texmanager_set_default_num_mipmaps")]
-		public static extern void SetDefaultNumMipmaps(IntPtr handle, int numMipmaps);
+		#endregion
 	}
 }

@@ -122,7 +122,7 @@ namespace InVision.Ogre3D.Util
 				get
 				{
 					return NativeNameValuePairList.GetPairs(handle).
-						AsEnumeration<NameValuePair>(NativeUtilities.DeleteNameValuePair);
+						AsAutoEnumeration<NameValuePair>(new Action<IntPtr>(NativeUtilities.DeleteNameValuePair));
 				}
 			}
 

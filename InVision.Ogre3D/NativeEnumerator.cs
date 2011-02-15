@@ -5,16 +5,16 @@ using InVision.Ogre3D.Native;
 
 namespace InVision.Ogre3D
 {
-	public class Enumerator<T> : Handle, IEnumerator<T>
+	public class NativeEnumerator<T> : Handle, IEnumerator<KeyValuePair<IntPtr, T>>
 	{
 		private Func<IntPtr, T> converter;
 
 		/// <summary>
-		/// Initializes a new instance of the <see cref="Enumerator&lt;T&gt;"/> class.
+		/// Initializes a new instance of the <see cref="NativeEnumerator{T}"/> class.
 		/// </summary>
 		/// <param name="pSelf">The p self.</param>
 		/// <param name="ownsHandle">if set to <c>true</c> [owns handle].</param>
-		public Enumerator(IntPtr pSelf, bool ownsHandle = true)
+		public NativeEnumerator(IntPtr pSelf, bool ownsHandle = true)
 			: base(pSelf, ownsHandle)
 		{
 		}
@@ -48,13 +48,13 @@ namespace InVision.Ogre3D
 		/// <returns>
 		/// The element in the collection at the current position of the enumerator.
 		/// </returns>
-		public T Current
+		public KeyValuePair<IntPtr, T> Current
 		{
 			get
 			{
-				IntPtr data = NativeEnumerator.GetCurrent(handle);
+				IntPtr pData = NativeEnumerator.GetCurrent(handle);
 
-				return converter(data);
+				return new KeyValuePair<IntPtr, T>(pData, converter(pData));
 			}
 		}
 
