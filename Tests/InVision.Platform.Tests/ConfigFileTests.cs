@@ -1,5 +1,5 @@
 ﻿using System;
-using InVision.Ogre3D;
+using InVision.Rendering;
 using NUnit.Framework;
 
 namespace InVision.Platform.Tests
@@ -22,7 +22,7 @@ namespace InVision.Platform.Tests
 				foreach (var settingPair in sectionPair.Value)
 				{
 					Console.WriteLine("\tSetting Key: {0} Value: {1}",
-						settingPair.Key, settingPair.Value);
+					                  settingPair.Key, settingPair.Value);
 				}
 			}
 		}

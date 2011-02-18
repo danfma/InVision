@@ -1,9 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using InVision.Input;
 
-namespace InVision.Ogre3D.Tutorial
+namespace InVision.TutorialFx
 {
 	public abstract partial class BaseApplication
 	{
@@ -23,9 +20,9 @@ namespace InVision.Ogre3D.Tutorial
 
 			mKeyboard.KeyPressed += new KeyListener.KeyPressedHandler(OnKeyPressed);
 			mKeyboard.KeyReleased += new KeyListener.KeyReleasedHandler(OnKeyReleased);
-			mMouse.MouseMoved += new MouseListener.MouseMovedHandler(OnMouseMoved);
-			mMouse.MousePressed += new MouseListener.MousePressedHandler(OnMousePressed);
-			mMouse.MouseReleased += new MouseListener.MouseReleasedHandler(OnMouseReleased);
+			mMouse.MouseMoved += OnMouseMoved;
+			mMouse.MousePressed += OnMousePressed;
+			mMouse.MouseReleased += OnMouseReleased;
 		}
 
 		protected void ProcessInput()
@@ -38,58 +35,58 @@ namespace InVision.Ogre3D.Tutorial
 		{
 			switch (evt.key)
 			{
-				case KeyCode.KC_W:
-				case KeyCode.KC_UP:
+				case KeyCode.W:
+				case KeyCode.Up:
 					mCameraMan.GoingForward = true;
 					break;
 
-				case KeyCode.KC_S:
-				case KeyCode.KC_DOWN:
+				case KeyCode.S:
+				case KeyCode.Down:
 					mCameraMan.GoingBack = true;
 					break;
 
-				case KeyCode.KC_A:
-				case KeyCode.KC_LEFT:
+				case KeyCode.A:
+				case KeyCode.Left:
 					mCameraMan.GoingLeft = true;
 					break;
 
-				case KeyCode.KC_D:
-				case KeyCode.KC_RIGHT:
+				case KeyCode.D:
+				case KeyCode.Right:
 					mCameraMan.GoingRight = true;
 					break;
 
-				case KeyCode.KC_E:
-				case KeyCode.KC_PGUP:
+				case KeyCode.E:
+				case KeyCode.PgUp:
 					mCameraMan.GoingUp = true;
 					break;
 
-				case KeyCode.KC_Q:
-				case KeyCode.KC_PGDOWN:
+				case KeyCode.Q:
+				case KeyCode.PgDown:
 					mCameraMan.GoingDown = true;
 					break;
 
-				case KeyCode.KC_LSHIFT:
-				case KeyCode.KC_RSHIFT:
+				case KeyCode.LShift:
+				case KeyCode.RShift:
 					mCameraMan.FastMove = true;
 					break;
 
-				case KeyCode.KC_T:
+				case KeyCode.T:
 					CycleTextureFilteringMode();
 					break;
 
-				case KeyCode.KC_R:
+				case KeyCode.R:
 					CyclePolygonMode();
 					break;
 
-				case KeyCode.KC_F5:
+				case KeyCode.F5:
 					ReloadAllTextures();
 					break;
 
-				case KeyCode.KC_SYSRQ:
+				case KeyCode.Sysrq:
 					TakeScreenshot();
 					break;
 
-				case KeyCode.KC_ESCAPE:
+				case KeyCode.Escape:
 					Shutdown();
 					break;
 			}
@@ -140,18 +137,18 @@ namespace InVision.Ogre3D.Tutorial
 			return true;
 		}
 
-		protected virtual bool OnMouseMoved(MouseEvent evt)
+		protected virtual bool OnMouseMoved(MouseEventArgs e)
 		{
-			mCameraMan.MouseMovement(evt.state.X.rel, evt.state.Y.rel);
+			mCameraMan.MouseMovement(e.State.X.Relative, e.State.Y.Relative);
 			return true;
 		}
 
-		protected virtual bool OnMousePressed(MouseEvent evt, MouseButtonID id)
+		protected virtual bool OnMousePressed(MouseEventArgs mouseEventArgs, MouseButton button)
 		{
 			return true;
 		}
 
-		protected virtual bool OnMouseReleased(MouseEvent evt, MouseButtonID id)
+		protected virtual bool OnMouseReleased(MouseEventArgs mouseEventArgs, MouseButton button)
 		{
 			return true;
 		}

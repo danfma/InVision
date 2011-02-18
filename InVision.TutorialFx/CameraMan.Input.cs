@@ -1,20 +1,20 @@
-﻿using InVision.GameMath;
+﻿using System;
 using InVision.Rendering;
+using OpenTK;
 
-namespace InVision.Ogre3D.Tutorial
+namespace InVision.TutorialFx
 {
 	public class CameraMan
 	{
-		private Camera mCamera;
-		private bool mGoingForward;
-		private bool mGoingBack;
-		private bool mGoingRight;
-		private bool mGoingLeft;
-		private bool mGoingUp;
-		private bool mGoingDown;
+		private readonly Camera mCamera;
 		private bool mFastMove;
 		private bool mFreeze;
-
+		private bool mGoingBack;
+		private bool mGoingDown;
+		private bool mGoingForward;
+		private bool mGoingLeft;
+		private bool mGoingRight;
+		private bool mGoingUp;
 
 
 		public CameraMan(Camera camera)
@@ -76,7 +76,8 @@ namespace InVision.Ogre3D.Tutorial
 				return;
 
 			// build our acceleration vector based on keyboard input composite
-			var move = Vector3.ZERO;
+			var move = Vector3.Zero;
+
 			if (mGoingForward) move += mCamera.Direction;
 			if (mGoingBack) move -= mCamera.Direction;
 			if (mGoingRight) move += mCamera.Right;
@@ -84,12 +85,12 @@ namespace InVision.Ogre3D.Tutorial
 			if (mGoingUp) move += mCamera.Up;
 			if (mGoingDown) move -= mCamera.Up;
 
-			move.Normalise();
+			move.Normalize();
 			move *= 150; // Natural speed is 150 units/sec.
 			if (mFastMove)
 				move *= 3; // With shift button pressed, move twice as fast.
 
-			if (move != Vector3.ZERO)
+			if (move != Vector3.Zero)
 				mCamera.Move(move * timeFragment);
 		}
 
@@ -98,8 +99,8 @@ namespace InVision.Ogre3D.Tutorial
 			if (mFreeze)
 				return;
 
-			mCamera.Yaw(new Degree(-x * 0.15f));
-			mCamera.Pitch(new Degree(-y * 0.15f));
+			mCamera.Yaw(new Degree(-x * 0.15f).ValueRadians);
+			mCamera.Pitch(new Degree(-y * 0.15f).ValueRadians);
 		}
 	}
 }

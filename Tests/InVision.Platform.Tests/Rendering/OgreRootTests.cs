@@ -1,7 +1,8 @@
 ﻿using System;
+using InVision.Rendering;
 using NUnit.Framework;
 
-namespace InVision.Ogre3D.Tests.Rendering
+namespace InVision.Platform.Tests.Rendering
 {
 	[TestFixture]
 	public class OgreRootTests

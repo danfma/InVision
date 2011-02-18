@@ -1,9 +1,7 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using InVision.GameMath;
-using InVision.Ogre3D;
-using InVision.Ogre3D.Util;
+using InVision.Collections;
+using OpenTK;
 
 namespace InVision.Rendering.Launcher
 {
@@ -11,23 +9,7 @@ namespace InVision.Rendering.Launcher
 	{
 		public static void Main(string[] args)
 		{
-			var configFile = new ConfigFile();
-			configFile.Load("Config/resources.cfg");
-
-			var settings =
-				from section in configFile.GetSections()
-				from setting in section.Value
-				select new { Section = section.Key, Setting = setting.Key, setting.Value };
-
-			foreach (var setting in settings)
-			{
-				Console.WriteLine("Section: {0} Setting: {1} Value: {2}",
-					setting.Section, setting.Setting, setting.Value);
-			}
-
-			Console.Read();
-
-			//StartOgre();
+			StartOgre();
 		}
 
 		private static void StartOgre()
@@ -58,7 +40,7 @@ namespace InVision.Rendering.Launcher
 				var sceneManager = root.CreateSceneManager(SceneType.Generic, "MySceneManager");
 
 				var camera = sceneManager.CreateCamera("MainCamera");
-				camera.AspectRatio = window.Width / (float)window.Height;
+				camera.AspectRatio = window.Width/(float) window.Height;
 				camera.FOVy = Radian.FromDegrees(30f);
 				camera.NearClipDistance = 5f;
 				camera.FarClipDistance = 1000f;
@@ -70,11 +52,11 @@ namespace InVision.Rendering.Launcher
 				root.FrameEvent.EnableListeners();
 				root.FrameEvent.FrameEnded +=
 					e =>
-					{
-						counter += e.TimeSinceLastFrame;
+						{
+							counter += e.TimeSinceLastFrame;
 
-						return counter < 10;
-					};
+							return counter < 10;
+						};
 
 				root.StartRendering();
 			}

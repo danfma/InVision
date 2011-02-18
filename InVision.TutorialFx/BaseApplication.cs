@@ -1,11 +1,12 @@
 ﻿using System;
 using System.Linq;
 using System.Runtime.InteropServices;
-using InVision.GameMath;
+using System.Windows.Forms;
 using InVision.Rendering;
 using InVision.Rendering.Listeners;
+using OpenTK;
 
-namespace InVision.Ogre3D.Tutorial
+namespace InVision.TutorialFx
 {
 	public abstract partial class BaseApplication
 	{
@@ -36,19 +37,19 @@ namespace InVision.Ogre3D.Tutorial
 			{
 				Console.WriteLine(e);
 
-				System.Windows.Forms.MessageBox.Show(
+				MessageBox.Show(
 					"An Ogre error has occurred. Check the Ogre.log file for details", "Exception",
-					System.Windows.Forms.MessageBoxButtons.OK,
-					System.Windows.Forms.MessageBoxIcon.Error);
+					MessageBoxButtons.OK,
+					MessageBoxIcon.Error);
 			}
 			catch (Exception e)
 			{
 				Console.WriteLine(e);
 
-				System.Windows.Forms.MessageBox.Show(
+				MessageBox.Show(
 					e.Message, "Error",
-					System.Windows.Forms.MessageBoxButtons.OK,
-					System.Windows.Forms.MessageBoxIcon.Error);
+					MessageBoxButtons.OK,
+					MessageBoxIcon.Error);
 			}
 		}
 
@@ -86,10 +87,8 @@ namespace InVision.Ogre3D.Tutorial
 				mWindow = mRoot.Initialise(true, "TutorialApplication Render Window");
 				return true;
 			}
-			else
-			{
-				return false;
-			}
+
+			return false;
 		}
 
 		protected virtual void ChooseSceneManager()

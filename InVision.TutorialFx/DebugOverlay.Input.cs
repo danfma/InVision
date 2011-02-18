@@ -1,6 +1,6 @@
 ﻿using InVision.Rendering;
 
-namespace InVision.Ogre3D.Tutorial
+namespace InVision.TutorialFx
 {
 	public class DebugOverlay
 	{

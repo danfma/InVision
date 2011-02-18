@@ -1,8 +1,7 @@
-﻿using System;
-using InVision.Ogre3D.Util;
+﻿using InVision.Collections;
 using NUnit.Framework;
 
-namespace InVision.Ogre3D.Tests
+namespace InVision.Platform.Tests
 {
 	[TestFixture]
 	public class NameValueDictionaryTests

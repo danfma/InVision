@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace InVision.Ogre3D.Tutorial
+namespace InVision.TutorialFx
 {
 	public class ShutdownException : Exception { }
 }

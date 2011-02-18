@@ -14,7 +14,7 @@ if os.is("windows") then
 	config.defines = { "WIN32", "USE_SIMD" }
 	
 	config.includes = {
-		"../Platform/InVisionWrap_Ogre3D/src/",
+		"../Platform/InVisionWrap/",
 		ogredir .. "include\\OGRE\\",
 		ogredir .. "include\\OIS\\",
 		boostdir,
@@ -36,9 +36,6 @@ if os.is("windows") then
 		"OgreMain",
 		"OIS"
 	}
-	
-	os.copyfile("..\\Libs\\Mono\\Simd\\Mono.GameMath.dll", "..\\Libs\\Mono\\")
-	os.copyfile("..\\Libs\\Mono\\Simd\\Mono.Simd.dll", "..\\Libs\\Mono\\")
 end
 
 -- Solution description
@@ -47,12 +44,12 @@ solution "InVisionWrap"
 	location "projects/"
 	
 	-- PROJECT InVisionPlatform
-	project "InVisionWrap_Ogre3D"
+	project "InVisionWrap"
 		kind "SharedLib"
 		language "C++"
 		files {
-			"../Platform/InVisionWrap_Ogre3D/src/**.h",
-			"../Platform/InVisionWrap_Ogre3D/src/**.cpp"
+			"../Platform/InVisionWrap/invision/**.h",
+			"../Platform/InVisionWrap/invision/**.cpp"
 		}
 		
 		includedirs(config.includes)
