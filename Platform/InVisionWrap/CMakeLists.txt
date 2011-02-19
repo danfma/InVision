@@ -3,6 +3,7 @@ cmake_minimum_required(VERSION 2.8)
 project(InVisionWrap)
 
 set (SOURCES 
+  invision/ogre3d/LogManager.cpp 
   invision/Collections.cpp
   invision/Common.cpp
   invision/Enumerator.cpp

@@ -15,8 +15,11 @@
 /_ReSharper.InVision
 /Build/Bin
 *.user
+*.*~
 InVision.suo
 InVision.TutorialFx/obj/
 Platform/SWIG/
 Tests/InVision.Tests/bin/
 Tests/InVision.Tests/obj/
+/Platform/InVisionWrap/build/
+

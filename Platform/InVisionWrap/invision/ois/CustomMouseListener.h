@@ -48,7 +48,9 @@ namespace invision
 
 				if (mouseMoveHandler != NULL) {
 					OIS::MouseEvent cp = e;
-					result = toBool(mouseMoveHandler(MouseEventArgs(cp)));
+					MouseEventArgs event = MouseEventArgs(cp);
+					
+					result = toBool(mouseMoveHandler(event));
 				}
 
 				return result;
@@ -60,7 +62,9 @@ namespace invision
 
 				if (mousePressedHandler != NULL) {
 					OIS::MouseEvent cp = e;
-					result = toBool(mousePressedHandler(MouseEventArgs(cp), id));
+					MouseEventArgs event = MouseEventArgs(cp);
+					
+					result = toBool(mousePressedHandler(event, id));
 				}
 
 				return result;
@@ -72,7 +76,9 @@ namespace invision
 
 				if (mouseReleasedHandler != NULL) {
 					OIS::MouseEvent cp = e;
-					result = toBool(mouseReleasedHandler(MouseEventArgs(cp), id));
+					MouseEventArgs event = MouseEventArgs(cp);
+					
+					result = toBool(mouseReleasedHandler(event, id));
 				}
 
 				return result;
