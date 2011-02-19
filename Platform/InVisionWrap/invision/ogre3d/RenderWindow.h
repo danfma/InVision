@@ -5,10 +5,10 @@
 
 extern "C"
 {
-	__export UInt32 __entry renderwindow_get_width(HRenderWindow self);
-	__export UInt32 __entry renderwindow_get_height(HRenderWindow self);
+	__export UInt32 __entry ogre_renderwindow_get_width(HRenderWindow self);
+	__export UInt32 __entry ogre_renderwindow_get_height(HRenderWindow self);
 
-	__export HViewport __entry renderwindow_add_viewport(
+	__export HViewport __entry ogre_renderwindow_add_viewport(
 		HRenderWindow self,
 		HCamera camera,
 		int zOrder,
@@ -17,10 +17,15 @@ extern "C"
 		float width,
 		float height);
 
-	__export String __entry renderwindow_write_contents_to_timestamped_file(
+	__export String __entry ogre_renderwindow_write_contents_to_timestamped_file(
 		HRenderWindow self,
 		ConstString prefix,
 		ConstString suffix);
+	
+	__export void __entry ogre_renderwindow_get_custom_attrib(
+		HRenderWindow self,
+		ConstString name,
+		Any data);
 }
 
 #endif // RENDERWINDOW_H
