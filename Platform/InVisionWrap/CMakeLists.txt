@@ -44,11 +44,11 @@ if (WIN32)
 elseif (OSX)
 
 else()
-  set(INCLUDES . /usr/include/OGRE /usr/include/OIS)
-  set(LIBRARIES OgreMain OIS)
-
+	set(INCLUDES . /usr/include/OGRE /usr/include/OIS)
+	set(LIBRARIES OgreMain OIS)
+	set(CMAKE_CXX_FLAGS "-g -Wall")
+	
 endif (WIN32)
-
 
 include_directories(${INCLUDES})
 add_library(InVisionWrap SHARED ${SOURCES})

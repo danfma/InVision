@@ -1,7 +1,7 @@
 #ifndef LOGMANAGER_H
 #define LOGMANAGER_H
 
-#include "Common.h"
+#include "invision/ogre3d/Common.h"
 
 extern "C"
 {
