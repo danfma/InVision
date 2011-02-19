@@ -24,12 +24,15 @@ extern "C"
 	typedef Handle HMouseState;
 	typedef Handle HEventArgs;
 	typedef Handle HMouseEventArgs;
+	
 	typedef Handle HInputManager;
+	typedef Handle HKeyboard;
 
 	//
 	// custom classes
 	//
 	typedef Handle HCustomMouseListener;
+	typedef Handle HCustomKeyListener;
 
 	//
 	// Enumerators
@@ -164,6 +167,25 @@ extern "C"
 		{
 		}
 
+#endif
+	};
+	
+	
+	struct KeyEventArgs
+	{
+		Int32 deviceType;
+		Handle device;
+		Int32 keyCode;
+		UInt32 textCode;
+		
+#ifdef __cplusplus
+		KeyEventArgs(OIS::KeyEvent& e)
+			:	deviceType(e.device->type()),
+				device( &(e.device) ),
+				keyCode( e.key ),
+				textCode( e.text )
+		{
+		}
 #endif
 	};
 }

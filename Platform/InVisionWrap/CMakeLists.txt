@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 2.8)
 
 project(InVisionWrap)
 
-set (SOURCES 
+set (SOURCES invision/ois/Keyboard.cpp 
   invision/ogre3d/LogManager.cpp 
   invision/Collections.cpp
   invision/Common.cpp
