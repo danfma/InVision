@@ -8,6 +8,20 @@ const PolygonModeEnum PME_Solid = Ogre::PM_SOLID;
 
 using namespace invision;
 
+
+RaiseExceptionHandler exceptionHandler = NULL;
+
+__export void __entry register_exception_raiser(RaiseExceptionHandler exceptionHandler)
+{
+	::exceptionHandler = exceptionHandler;
+}
+
+__export void __entry raise_exception(ConstString message)
+{
+	if (exceptionHandler != NULL)
+		exceptionHandler(message);
+}
+
 __export void __entry util_delete_string(const char* data)
 {
 	if (data == NULL)

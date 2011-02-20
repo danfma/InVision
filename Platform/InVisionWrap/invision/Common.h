@@ -18,6 +18,7 @@ extern "C"
 
 	// COLLECTIONS
 	typedef Handle HNameValueCollection;
+	typedef Handle HVectorList;
 
 	//
 	// OGRE
@@ -156,6 +157,27 @@ extern "C"
 
 	__export void __entry util_delete_namevaluepair(PNameValuePair data);
 	__export void __entry util_delete_namehandlepair(PNameHandlePair data);
+	
+	/*
+	 * Internal use
+	 */
+	typedef void (*RaiseExceptionHandler)(ConstString message);
+	
+	/**
+	 * Should be called by the wrapper to register a delegate to raise exceptions on the
+	 * managed side.
+	 * 
+	 * @param exceptionHandler The function to raise exception
+	 */
+	__export void __entry register_exception_raiser(RaiseExceptionHandler exceptionHandler);
+	
+	/**
+	 * Raise an exception by invoking the exception raiser function defined by the 
+	 * register_exception_raiser function.
+	 * 
+	 * @param message the exception message
+	 */
+	__export void __entry raise_exception(ConstString message);
 
 }
 
