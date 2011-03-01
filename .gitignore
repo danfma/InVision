@@ -16,6 +16,7 @@
 /Build/Bin
 *.user
 *.*~
+.DS_Store
 InVision.suo
 InVision.TutorialFx/obj/
 Platform/SWIG/
