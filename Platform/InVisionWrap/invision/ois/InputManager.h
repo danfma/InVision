@@ -8,7 +8,7 @@ extern "C"
 	//
 	// InputManager members
 	//
-	__export HInputManager __entry ois_inputmanager_new_with_winhandle(Handle winHandle);
+	__export HInputManager __entry ois_inputmanager_new_with_winhandle(InVisionHandle winHandle);
 	__export HInputManager __entry ois_inputmanager_new_with_paramlist(HNameValueCollection paramList);
 
 	__export void __entry ois_inputmanager_delete(HInputManager self);

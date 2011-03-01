@@ -6,7 +6,7 @@
 using namespace invision;
 using namespace invision::ois;
 
-__export HInputManager __entry ois_inputmanager_new_with_winhandle(Handle winHandle)
+__export HInputManager __entry ois_inputmanager_new_with_winhandle(InVisionHandle winHandle)
 {
 	return OIS::InputManager::createInputSystem((std::size_t)winHandle);
 }

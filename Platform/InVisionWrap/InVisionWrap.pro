@@ -51,7 +51,7 @@ win32 {
 
 macx {
 	DEFINES += DEBUG
-	
 	INCLUDEPATH += $$(OGRE_FRAMEWORK_DIR)/Headers
 	LIBS += -framework Ogre
 }
+

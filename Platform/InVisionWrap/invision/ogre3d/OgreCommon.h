@@ -9,10 +9,10 @@
 
 extern "C"
 {
-	typedef Handle HLogManager;
-	typedef Handle HOverlayManager;
-	typedef Handle HOverlay;
-	typedef Handle HOverlayElement;
+	typedef InVisionHandle HLogManager;
+	typedef InVisionHandle HOverlayManager;
+	typedef InVisionHandle HOverlay;
+	typedef InVisionHandle HOverlayElement;
 
 
 	struct FrameStats

@@ -1,7 +1,7 @@
 #ifndef ENUMERATORS_H
 #define ENUMERATORS_H
 
-#include "invision/Common.h"
+#include "Common.h"
 
 extern "C"
 {
