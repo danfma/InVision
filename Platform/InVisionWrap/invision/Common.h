@@ -12,42 +12,47 @@
 #include <stdint.h>
 
 #ifdef __cplusplus
-#include <Ogre.h>
-#include <OgreUTFString.h>
+#	ifdef MACOSX
+#		include <Ogre/Ogre.h>
+#		include <Ogre/OgreUTFString.h>
+#	else
+#		include <Ogre.h>
+#		include <OgreUTFString.h>
+#	endif
 #endif
 
 extern "C"
 {
 	typedef void* Any;
-	typedef Any Handle;
+	typedef Any InVisionHandle;
 
 	// COLLECTIONS
-	typedef Handle HNameValueCollection;
-	typedef Handle HVectorList;
+	typedef InVisionHandle HNameValueCollection;
+	typedef InVisionHandle HVectorList;
 
 	//
 	// OGRE
 	//
-	typedef Handle HRoot;
-	typedef Handle HRenderWindow;
-	typedef Handle HFrameListener;
-	typedef Handle HEnumerator;
-	typedef Handle HRenderSystem;
-	typedef Handle HSceneManager;
-	typedef Handle HTextureManager;
-	typedef Handle HMeshManager;
-	typedef Handle HCamera;
-	typedef Handle HSceneNode;
-	typedef Handle HNode;
-	typedef Handle HViewport;
-	typedef Handle HConfigFile;
-	typedef Handle HStringEnumerator;
-	typedef const Handle HNameValuePairEnumerator;
-	typedef Handle HNameValuePairList;
-	typedef Handle HSectionEnumerator;
-	typedef Handle HSettingsEnumerator;
-	typedef Handle HResourceGroupManager;
-	typedef Handle HMaterialManager;
+	typedef InVisionHandle HRoot;
+	typedef InVisionHandle HRenderWindow;
+	typedef InVisionHandle HFrameListener;
+	typedef InVisionHandle HEnumerator;
+	typedef InVisionHandle HRenderSystem;
+	typedef InVisionHandle HSceneManager;
+	typedef InVisionHandle HTextureManager;
+	typedef InVisionHandle HMeshManager;
+	typedef InVisionHandle HCamera;
+	typedef InVisionHandle HSceneNode;
+	typedef InVisionHandle HNode;
+	typedef InVisionHandle HViewport;
+	typedef InVisionHandle HConfigFile;
+	typedef InVisionHandle HStringEnumerator;
+	typedef const InVisionHandle HNameValuePairEnumerator;
+	typedef InVisionHandle HNameValuePairList;
+	typedef InVisionHandle HSectionEnumerator;
+	typedef InVisionHandle HSettingsEnumerator;
+	typedef InVisionHandle HResourceGroupManager;
+	typedef InVisionHandle HMaterialManager;
 	
 	//
 	// .NET DATA TYPES
@@ -99,7 +104,7 @@ extern "C"
 	struct NameHandlePair
 	{
 		const char* key;
-		Handle value;
+		InVisionHandle value;
 	};
 
 	struct NameValuePairList

@@ -4,8 +4,8 @@
 #include "invision/Common.h"
 
 #ifdef __cplusplus
-#include <string>
-#include <OIS.h>
+#	include <string>
+#	include <OIS.h>
 #endif
 
 extern "C"
@@ -13,31 +13,31 @@ extern "C"
 	//
 	// handles
 	//
-	typedef Handle HInputAxis;
-	typedef Handle HInputVector3;
-	typedef Handle HInputAxis;
-	typedef Handle HInputButton;
-	typedef Handle HInputComponent;
-	typedef Handle HInputObject;
-	typedef Handle HInputManager;
-	typedef Handle HInterface;
-	typedef Handle HMouseState;
-	typedef Handle HEventArgs;
-	typedef Handle HMouseEventArgs;
+	typedef InVisionHandle HInputAxis;
+	typedef InVisionHandle HInputVector3;
+	typedef InVisionHandle HInputAxis;
+	typedef InVisionHandle HInputButton;
+	typedef InVisionHandle HInputComponent;
+	typedef InVisionHandle HInputObject;
+	typedef InVisionHandle HInputManager;
+	typedef InVisionHandle HInterface;
+	typedef InVisionHandle HMouseState;
+	typedef InVisionHandle HEventArgs;
+	typedef InVisionHandle HMouseEventArgs;
 	
-	typedef Handle HInputManager;
-	typedef Handle HKeyboard;
+	typedef InVisionHandle HInputManager;
+	typedef InVisionHandle HKeyboard;
 
 	//
 	// custom classes
 	//
-	typedef Handle HCustomMouseListener;
-	typedef Handle HCustomKeyListener;
+	typedef InVisionHandle HCustomMouseListener;
+	typedef InVisionHandle HCustomKeyListener;
 
 	//
 	// Enumerators
 	//
-	typedef Handle HDeviceInfoEnumerator;
+	typedef InVisionHandle HDeviceInfoEnumerator;
 
 	//
 	// Data types
@@ -63,7 +63,7 @@ extern "C"
 
 	struct AxisComponent
 	{
-		Handle handle;
+		InVisionHandle handle;
 		Int32 componentType;
 		Int32 absolute;
 		Int32 relative;
@@ -79,7 +79,7 @@ extern "C"
 			absoluteOnly = axis->absOnly;
 		}
 
-		AxisComponent(Handle handle, OIS::ComponentType cType, int abs, int rel, bool absOnly)
+		AxisComponent(InVisionHandle handle, OIS::ComponentType cType, int abs, int rel, bool absOnly)
 			: handle(handle), componentType(cType), absolute(abs), relative(rel), absoluteOnly(toBool(absOnly))
 		{
 
@@ -90,12 +90,12 @@ extern "C"
 
 	struct ButtonComponent
 	{
-		Handle handle;
+		InVisionHandle handle;
 		Int32 componentType;
 		Bool isPushed;
 
 #ifdef __cplusplus
-		ButtonComponent(Handle handle, OIS::ComponentType cType, bool isPushed)
+		ButtonComponent(InVisionHandle handle, OIS::ComponentType cType, bool isPushed)
 			: handle(handle), componentType(cType), isPushed(toBool(isPushed))
 		{
 
@@ -106,12 +106,12 @@ extern "C"
 
 	struct Vector3Component
 	{
-		Handle handle;
+		InVisionHandle handle;
 		Int32 componentType;
 		float x, y, z;
 
 #if __cplusplus
-		Vector3Component(Handle handle, OIS::ComponentType cType, float x, float y, float z)
+		Vector3Component(InVisionHandle handle, OIS::ComponentType cType, float x, float y, float z)
 			: handle(handle), componentType(cType), x(x), y(y), z(z)
 		{ }
 #endif
@@ -119,7 +119,7 @@ extern "C"
 
 	struct MouseState
 	{
-		Handle handle;
+		InVisionHandle handle;
 		Int32 width;
 		Int32 height;
 		AxisComponent x, y, z;
@@ -137,7 +137,7 @@ extern "C"
 		{
 		}
 
-		MouseState(Handle handle,
+		MouseState(InVisionHandle handle,
 				   int width, int height,
 				   OIS::Axis& x, OIS::Axis& y, OIS::Axis& z,
 				   int buttons)
@@ -156,7 +156,7 @@ extern "C"
 	struct MouseEventArgs
 	{
 		Int32 deviceType;
-		Handle device;
+		InVisionHandle device;
 		MouseState state;
 
 #ifdef __cplusplus
@@ -174,7 +174,7 @@ extern "C"
 	struct KeyEventArgs
 	{
 		Int32 deviceType;
-		Handle device;
+		InVisionHandle device;
 		Int32 keyCode;
 		UInt32 textCode;
 		
