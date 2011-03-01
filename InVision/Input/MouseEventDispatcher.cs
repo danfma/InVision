@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using InVision.Native;
 using InVision.Native.OIS;
 
 namespace InVision.Input
@@ -23,7 +22,7 @@ namespace InVision.Input
 			mousePressed = OnMousePressed;
 			mouseReleased = OnMouseReleased;
 
-			SetHandle(NativeCustomMouseListener.New(mouseMoved, mousePressed, mouseReleased));
+			SetHandle(NativeMouseListener.New(mouseMoved, mousePressed, mouseReleased));
 		}
 
 		/// <summary>
@@ -40,12 +39,10 @@ namespace InVision.Input
 		/// <summary>
 		/// 	Releases the specified pointer to the unmanaged object.
 		/// </summary>
-		/// <param name = "pSelf">The pointer to the unmanaged object.</param>
 		/// <returns></returns>
-		protected override bool Release(IntPtr pSelf)
+		protected override void ReleaseValidHandle()
 		{
-			NativeCustomMouseListener.Delete(pSelf);
-			return true;
+			NativeMouseListener.Delete(handle);
 		}
 
 		/// <summary>
@@ -82,14 +79,14 @@ namespace InVision.Input
 		}
 
 		/// <summary>
-		/// 	Called when [mouse moved].
+		/// 	Raises the <see cref = "E:MouseMoved" /> event.
 		/// </summary>
-		/// <param name = "mouseEventHandler">The mouse event handler.</param>
+		/// <param name = "e">The <see cref = "InVision.Input.UMouseEventArgs" /> instance containing the event data.</param>
 		/// <returns></returns>
-		private bool OnMouseMoved(IntPtr mouseEventHandler)
+		private bool OnMouseMoved(UMouseEventArgs e)
 		{
 			bool result = true;
-			MouseEventArgs mouseEventArgs = mouseEventHandler.AsHandle(ptr => new MouseEventArgs(ptr));
+			var mouseEventArgs = new MouseEventArgs(ref e);
 
 			if (MouseMoved != null)
 				result = MouseMoved(mouseEventArgs);
@@ -98,41 +95,41 @@ namespace InVision.Input
 		}
 
 		/// <summary>
-		/// 	Called when [mouse pressed].
+		/// 	Raises the <see cref = "E:MousePressed" /> event.
 		/// </summary>
-		/// <param name = "mouseEventHandler">The mouse event handler.</param>
+		/// <param name = "e">The <see cref = "InVision.Input.UMouseEventArgs" /> instance containing the event data.</param>
 		/// <param name = "button">The button.</param>
 		/// <returns></returns>
-		private bool OnMousePressed(IntPtr mouseEventHandler, MouseButton button)
+		private bool OnMousePressed(UMouseEventArgs e, MouseButton button)
 		{
 			bool result = true;
-			MouseEventArgs mouseEventArgs = mouseEventHandler.AsHandle(ptr => new MouseEventArgs(ptr));
+			var mouseEventArgs = new MouseEventArgs(ref e);
 
 			if (MousePressed != null)
 				result = MousePressed(mouseEventArgs, button);
 
 			return listeners.Aggregate(result,
-			                           (current, mouseListener) =>
-			                           current && mouseListener.OnMousePressed(mouseEventArgs, button));
+									   (current, mouseListener) =>
+									   current && mouseListener.OnMousePressed(mouseEventArgs, button));
 		}
 
 		/// <summary>
-		/// 	Called when [mouse released].
+		/// 	Raises the <see cref = "E:MouseReleased" /> event.
 		/// </summary>
-		/// <param name = "mouseEventHandler">The mouse event handler.</param>
+		/// <param name = "e">The <see cref = "InVision.Input.UMouseEventArgs" /> instance containing the event data.</param>
 		/// <param name = "button">The button.</param>
 		/// <returns></returns>
-		private bool OnMouseReleased(IntPtr mouseEventHandler, MouseButton button)
+		private bool OnMouseReleased(UMouseEventArgs e, MouseButton button)
 		{
 			bool result = true;
-			MouseEventArgs mouseEventArgs = mouseEventHandler.AsHandle(ptr => new MouseEventArgs(ptr));
+			var mouseEventArgs = new MouseEventArgs(ref e);
 
 			if (MouseReleased != null)
 				result = MouseReleased(mouseEventArgs, button);
 
 			return listeners.Aggregate(result,
-			                           (current, mouseListener) =>
-			                           current && mouseListener.OnMouseReleased(mouseEventArgs, button));
+									   (current, mouseListener) =>
+									   current && mouseListener.OnMouseReleased(mouseEventArgs, button));
 		}
 	}
 }

@@ -1,5 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Globalization;
+using System.Reflection;
 using System.Runtime.InteropServices;
+using InVision.Extensions;
 using InVision.Input;
 
 namespace InVision.Native.OIS
@@ -36,6 +40,13 @@ namespace InVision.Native.OIS
 
 		#region Helpers
 
+		public static readonly Dictionary<InputType, Type> InputObjectTypeMapping =
+			new Dictionary<InputType, Type>
+				{
+					{InputType.Mouse, typeof (Mouse)},
+					{InputType.Keyboard, typeof(Keyboard)}
+				};
+
 		public static string GetVendor(IntPtr self)
 		{
 			return _GetVendor(self).AsConstString();
@@ -52,5 +63,22 @@ namespace InVision.Native.OIS
 		}
 
 		#endregion
+
+		/// <summary>
+		/// Creates the specified input type.
+		/// </summary>
+		/// <param name="inputType">Type of the input.</param>
+		/// <param name="handle">The handle.</param>
+		/// <param name="isReference">if set to <c>true</c> [is reference].</param>
+		/// <returns></returns>
+		public static InputObject Create(InputType inputType, IntPtr handle, bool isReference)
+		{
+			Type type;
+
+			if (!InputObjectTypeMapping.TryGetValue(inputType, out type))
+				type = typeof(UnknownInputObject);
+
+			return handle.AsHandle(ptr => (InputObject)type.CreateInstance(handle, !isReference));
+		}
 	}
 }

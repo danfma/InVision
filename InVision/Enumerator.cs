@@ -79,12 +79,10 @@ namespace InVision
 		/// <summary>
 		/// 	Releases the specified handle.
 		/// </summary>
-		/// <param name = "pSelf">The handle.</param>
 		/// <returns></returns>
-		protected override bool Release(IntPtr pSelf)
+		protected override void ReleaseValidHandle()
 		{
-			NativeEnumerator.Delete(pSelf);
-			return true;
+			NativeEnumerator.Delete(handle);
 		}
 
 		/// <summary>

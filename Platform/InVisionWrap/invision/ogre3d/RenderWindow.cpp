@@ -46,3 +46,10 @@ __export void __entry ogre_renderwindow_get_custom_attrib(
 {
 	asRenderWindow(self)->getCustomAttribute(name, data);
 }
+
+__export FrameStats* __entry ogre_get_statistics(HRenderWindow self)
+{
+	Ogre::RenderTarget::FrameStats f = asRenderWindow(self)->getStatistics();
+
+	return new FrameStats(f);
+}

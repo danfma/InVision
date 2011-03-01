@@ -73,16 +73,13 @@ namespace InVision.Input
 		/// <summary>
 		/// 	Releases the specified pointer to the unmanaged object.
 		/// </summary>
-		/// <param name = "pSelf">The pointer to the unmanaged object.</param>
 		/// <returns></returns>
-		protected override bool Release(IntPtr pSelf)
+		protected override void ReleaseValidHandle()
 		{
 			if (Creator != null)
 				Creator.DestroyInputObject(this);
 			else
-				NativeObject.Delete(pSelf);
-
-			return true;
+				NativeObject.Delete(handle);
 		}
 
 		/// <summary>

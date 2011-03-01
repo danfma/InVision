@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Runtime.InteropServices;
 using InVision.Native.Ogre;
 
 namespace InVision.Rendering
@@ -27,11 +28,9 @@ namespace InVision.Rendering
 		/// <summary>
 		/// 	Releases the specified handle.
 		/// </summary>
-		/// <param name = "pSelf">The handle.</param>
 		/// <returns></returns>
-		protected override bool Release(IntPtr pSelf)
+		protected override void ReleaseValidHandle()
 		{
-			return true;
 		}
 
 		/// <summary>
@@ -40,7 +39,7 @@ namespace InVision.Rendering
 		/// <value>The width.</value>
 		public uint Width
 		{
-			get { return NativeOgreRenderWindow.GetWidth(handle); }
+			get { return NativeRenderWindow.GetWidth(handle); }
 		}
 
 		/// <summary>
@@ -49,7 +48,7 @@ namespace InVision.Rendering
 		/// <value>The height.</value>
 		public uint Height
 		{
-			get { return NativeOgreRenderWindow.GetHeight(handle); }
+			get { return NativeRenderWindow.GetHeight(handle); }
 		}
 
 		/// <summary>
@@ -64,7 +63,7 @@ namespace InVision.Rendering
 		/// <returns></returns>
 		public Viewport AddViewport(Camera camera, int zOrder = 0, float left = 0, float top = 0, float width = 0, float height = 0)
 		{
-			return NativeOgreRenderWindow.AddViewport(
+			return NativeRenderWindow.AddViewport(
 				handle,
 				camera.DangerousGetHandle(),
 				zOrder,
@@ -80,7 +79,41 @@ namespace InVision.Rendering
 		/// <returns></returns>
 		public string WriteContentsToTimestampedFile(string filenamePrefix, string filenameSuffix)
 		{
-			return NativeOgreRenderWindow.WriteContentsToTimestampedFile(handle, filenamePrefix, filenameSuffix);
+			return NativeRenderWindow.WriteContentsToTimestampedFile(handle, filenamePrefix, filenameSuffix);
+		}
+
+		/// <summary>
+		/// Gets the custom attribute.
+		/// </summary>
+		/// <param name="name">The name.</param>
+		/// <param name="data">The data.</param>
+		public void GetCustomAttribute(string name, out IntPtr data)
+		{
+			NativeRenderWindow.GetCustomAttribute(handle, name, out data);
+		}
+
+		/// <summary>
+		/// Gets the custom attribute.
+		/// </summary>
+		/// <typeparam name="T"></typeparam>
+		/// <param name="name">The name.</param>
+		/// <returns></returns>
+		public T GetCustomAttribute<T>(string name)
+		{
+			IntPtr result;
+
+			GetCustomAttribute(name, out result);
+
+			return (T)Marshal.PtrToStructure(result, typeof(T));
+		}
+
+		/// <summary>
+		/// Gets the statistics.
+		/// </summary>
+		/// <returns></returns>
+		public FrameStats GetStatistics()
+		{
+			return NativeRenderWindow.GetStatistics(handle);
 		}
 	}
 }

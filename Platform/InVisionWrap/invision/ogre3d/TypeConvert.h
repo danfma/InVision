@@ -41,22 +41,6 @@ namespace invision
 		return Ogre::Quaternion(q.w, q.x, q.y, q.z);
 	}
 
-	inline Ogre::ColourValue fromColorValue(const ColorValue& c)
-	{
-		return Ogre::ColourValue(c.red, c.green, c.blue, c.alpha);
-	}
-
-	inline ColorValue toColorValue(const Ogre::ColourValue& c)
-	{
-		ColorValue color;
-		color.red = c.r;
-		color.green = c.g;
-		color.blue = c.b;
-		color.alpha = c.a;
-
-		return color;
-	}
-
 	inline Ogre::Root* asRoot(HRoot handle)
 	{
 		return (Ogre::Root*)handle;

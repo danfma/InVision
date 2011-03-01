@@ -10,70 +10,14 @@ TARGET = InVisionWrap
 TEMPLATE = lib
 
 SOURCES += \
-	invision/Common.cpp \
-	invision/Enumerator.cpp \
-	invision/ogre3d/NameValueParamsHandle.cpp \
-	invision/ogre3d/Root.cpp \
-	invision/ogre3d/RenderingEnumerators.cpp \
-	invision/ogre3d/RenderSystem.cpp \
-	invision/ogre3d/CustomFrameListener.cpp \
-	invision/ogre3d/SceneManager.cpp \
-	invision/ogre3d/FrameListener.cpp \
-	invision/ogre3d/Camera.cpp \
-	invision/ogre3d/Math.cpp \
-	invision/ogre3d/RenderWindow.cpp \
-	invision/ogre3d/AnimableObject.cpp \
-	invision/ogre3d/Node.cpp \
-	invision/ogre3d/TextureManager.cpp \
-	invision/ogre3d/Viewport.cpp \
-	invision/ogre3d/ConfigFile.cpp \
-	invision/ogre3d/ResourceGroupManager.cpp \
-	invision/ogre3d/MaterialManager.cpp \
-    invision/Collections.cpp \
-    invision/ois/Component.cpp \
-    invision/ois/Button.cpp \
-    invision/ois/Axis.cpp \
-    invision/ois/Vector3.cpp \
-    invision/ois/InputObject.cpp \
-    invision/ois/MouseState.cpp \
-    invision/ois/CustomMouseListener.cpp \
-    invision/ois/EventArgs.cpp \
-    invision/ois/MouseEvent.cpp \
-    invision/ois/InputManager.cpp
+	$$files(invision/*.cpp) \
+	$$files(invision/ogre3d/*.cpp) \
+	$$files(invision/ois/*.cpp)
 
 HEADERS += \
-	invision/Common.h \
-	invision/Enumerator.h \
-	invision/ogre3d/NameValueParamsHandle.h \
-	invision/ogre3d/CustomFrameListener.h \
-	invision/ogre3d/RenderSystem.h \
-	invision/ogre3d/RenderingEnumerators.h \
-	invision/ogre3d/Root.h \
-	invision/ogre3d/SceneManager.h \
-	invision/ogre3d/FrameListener.h \
-	invision/ogre3d/Camera.h \
-	invision/ogre3d/Math.h \
-	invision/ogre3d/RenderWindow.h \
-	invision/ogre3d/AnimableObject.h \
-	invision/ogre3d/Node.h \
-	invision/ogre3d/TextureManager.h \
-	invision/ogre3d/Viewport.h \
-	invision/ogre3d/ConfigFile.h \
-	invision/ogre3d/ResourceGroupManager.h \
-	invision/ogre3d/MaterialManager.h \
-    invision/ogre3d/TypeConvert.h \
-    invision/Collections.h \
-    invision/ois/Component.h \
-    invision/ois/Button.h \
-    invision/ois/Axis.h \
-    invision/ois/Vector3.h \
-    invision/ois/InputObject.h \
-    invision/ois/Common.h \
-    invision/ois/MouseState.h \
-    invision/ois/CustomMouseListener.h \
-    invision/ois/EventArgs.h \
-    invision/ois/MouseEvent.h \
-    invision/ois/InputManager.h
+	$$files(invision/*.h) \
+	$$files(invision/ogre3d/*.h) \
+	$$files(invision/ois/*.h)
 
 Release:DESTDIR = Bin/Release
 Release:OBJECTS_DIR = Bin/Release/.obj

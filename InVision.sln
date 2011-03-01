@@ -11,6 +11,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InVision", "InVision\InVisi
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InVision.TutorialFx", "InVision.TutorialFx\InVision.TutorialFx.csproj", "{0EE75EE2-B71D-4C7F-BB2C-A7C05E7DFEAD}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VectorTests", "Tests\VectorTests\VectorTests.csproj", "{589A360B-F43D-43C0-A49C-7F674F60888E}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -73,6 +75,18 @@ Global
 		{0EE75EE2-B71D-4C7F-BB2C-A7C05E7DFEAD}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{0EE75EE2-B71D-4C7F-BB2C-A7C05E7DFEAD}.Release|Win32.ActiveCfg = Release|Any CPU
 		{0EE75EE2-B71D-4C7F-BB2C-A7C05E7DFEAD}.Release|x86.ActiveCfg = Release|Any CPU
+		{589A360B-F43D-43C0-A49C-7F674F60888E}.Debug|Any CPU.ActiveCfg = Debug|x86
+		{589A360B-F43D-43C0-A49C-7F674F60888E}.Debug|Mixed Platforms.ActiveCfg = Debug|x86
+		{589A360B-F43D-43C0-A49C-7F674F60888E}.Debug|Mixed Platforms.Build.0 = Debug|x86
+		{589A360B-F43D-43C0-A49C-7F674F60888E}.Debug|Win32.ActiveCfg = Debug|x86
+		{589A360B-F43D-43C0-A49C-7F674F60888E}.Debug|x86.ActiveCfg = Debug|x86
+		{589A360B-F43D-43C0-A49C-7F674F60888E}.Debug|x86.Build.0 = Debug|x86
+		{589A360B-F43D-43C0-A49C-7F674F60888E}.Release|Any CPU.ActiveCfg = Release|x86
+		{589A360B-F43D-43C0-A49C-7F674F60888E}.Release|Mixed Platforms.ActiveCfg = Release|x86
+		{589A360B-F43D-43C0-A49C-7F674F60888E}.Release|Mixed Platforms.Build.0 = Release|x86
+		{589A360B-F43D-43C0-A49C-7F674F60888E}.Release|Win32.ActiveCfg = Release|x86
+		{589A360B-F43D-43C0-A49C-7F674F60888E}.Release|x86.ActiveCfg = Release|x86
+		{589A360B-F43D-43C0-A49C-7F674F60888E}.Release|x86.Build.0 = Release|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -80,10 +94,11 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{CCC21438-9ED3-4D77-B19D-4166AD3C7E8C} = {23B9B64F-7A1C-433B-A16B-10395BAA390E}
 		{48D815AC-EA7E-4569-8F67-976E5372804C} = {23B9B64F-7A1C-433B-A16B-10395BAA390E}
+		{589A360B-F43D-43C0-A49C-7F674F60888E} = {23B9B64F-7A1C-433B-A16B-10395BAA390E}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		BuildVersion_StartDate = 2011/2/18
 		BuildVersion_BuildVersioningStyle = None.None.Increment.YearDayOfYear
+		BuildVersion_StartDate = 2011/2/18
 	EndGlobalSection
 	GlobalSection(MonoDevelopProperties) = preSolution
 		StartupItem = Tests\InVision.Rendering.Launcher\InVision.Rendering.Launcher.csproj

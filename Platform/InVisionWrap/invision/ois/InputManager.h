@@ -1,8 +1,7 @@
 #ifndef INPUTMANAGER_H
 #define INPUTMANAGER_H
 
-#include "invision/Common.h"
-#include "Common.h"
+#include "OISCommon.h"
 
 extern "C"
 {

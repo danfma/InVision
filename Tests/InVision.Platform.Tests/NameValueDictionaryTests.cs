@@ -11,7 +11,7 @@ namespace InVision.Platform.Tests
 		{
 			var dic = new NameValueDictionary();
 
-			Assert.That(dic.NativeHandler, Is.Not.Null);
+			Assert.That(dic.DictionaryHandle, Is.Not.Null);
 		}
 
 		[Test]

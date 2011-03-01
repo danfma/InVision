@@ -9,9 +9,21 @@ namespace InVision.Rendering.Launcher
 	{
 		public static void Main(string[] args)
 		{
-			StartOgre();
+			StartTutorial();
+			//StartOgre();
 		}
 
+		/// <summary>
+		/// 	Starts the tutorial.
+		/// </summary>
+		private static void StartTutorial()
+		{
+			new Tutorial().Go();
+		}
+
+		/// <summary>
+		/// Starts the ogre.
+		/// </summary>
 		private static void StartOgre()
 		{
 			using (var root = new Root("Config/plugins.cfg", "Config/ogre.cfg"))
@@ -40,7 +52,7 @@ namespace InVision.Rendering.Launcher
 				var sceneManager = root.CreateSceneManager(SceneType.Generic, "MySceneManager");
 
 				var camera = sceneManager.CreateCamera("MainCamera");
-				camera.AspectRatio = window.Width/(float) window.Height;
+				camera.AspectRatio = window.Width / (float)window.Height;
 				camera.FOVy = Radian.FromDegrees(30f);
 				camera.NearClipDistance = 5f;
 				camera.FarClipDistance = 1000f;
@@ -52,11 +64,11 @@ namespace InVision.Rendering.Launcher
 				root.FrameEvent.EnableListeners();
 				root.FrameEvent.FrameEnded +=
 					e =>
-						{
-							counter += e.TimeSinceLastFrame;
+					{
+						counter += e.TimeSinceLastFrame;
 
-							return counter < 10;
-						};
+						return counter < 10;
+					};
 
 				root.StartRendering();
 			}

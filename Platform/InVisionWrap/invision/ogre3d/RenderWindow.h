@@ -1,7 +1,7 @@
 #ifndef RENDERWINDOW_H
 #define RENDERWINDOW_H
 
-#include "invision/Common.h"
+#include "OgreCommon.h"
 
 extern "C"
 {
@@ -26,6 +26,8 @@ extern "C"
 		HRenderWindow self,
 		ConstString name,
 		Any data);
+
+	__export FrameStats* __entry ogre_renderwindow_get_statistics(HRenderWindow self);
 }
 
 #endif // RENDERWINDOW_H

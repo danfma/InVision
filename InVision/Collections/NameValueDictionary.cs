@@ -133,12 +133,10 @@ namespace InVision.Collections
 			/// <summary>
 			/// 	Releases the specified handle.
 			/// </summary>
-			/// <param name = "pSelf">The handle.</param>
 			/// <returns></returns>
-			protected override bool Release(IntPtr pSelf)
+			protected override void ReleaseValidHandle()
 			{
-				NativeNameValuePairList.Delete(pSelf);
-				return true;
+				NativeNameValuePairList.Delete(handle);
 			}
 
 			/// <summary>

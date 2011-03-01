@@ -4,26 +4,35 @@ using InVision.Rendering;
 
 namespace InVision.Native.Ogre
 {
-	internal sealed class NativeOgreRenderWindow : PlatformInvoke
+	internal sealed class NativeRenderWindow : PlatformInvoke
 	{
-		[DllImport(Library, EntryPoint = "renderwindow_get_width")]
+		[DllImport(Library, EntryPoint = "ogre_renderwindow_get_width")]
 		public static extern uint GetWidth(IntPtr self);
 
-		[DllImport(Library, EntryPoint = "renderwindow_get_height")]
+		[DllImport(Library, EntryPoint = "ogre_renderwindow_get_height")]
 		public static extern uint GetHeight(IntPtr self);
 
-		[DllImport(Library, EntryPoint = "renderwindow_add_viewport")]
+		[DllImport(Library, EntryPoint = "ogre_renderwindow_add_viewport")]
 		public static extern IntPtr _AddViewport(
 			IntPtr self,
 			IntPtr pCamera,
 			int zOrder, float left, float top,
 			float width, float height);
 
-		[DllImport(Library, EntryPoint = "renderwindow_write_contents_to_timestamped_file")]
+		[DllImport(Library, EntryPoint = "ogre_renderwindow_write_contents_to_timestamped_file")]
 		public static extern IntPtr _WriteContentsToTimestampedFile(
 			IntPtr self,
 			[MarshalAs(UnmanagedType.LPStr)] string filenamePrefix,
 			[MarshalAs(UnmanagedType.LPStr)] string filenameSuffix);
+
+		[DllImport(Library, EntryPoint = "ogre_renderwindow_get_custom_attrib")]
+		public static extern void GetCustomAttribute(
+			IntPtr self,
+			[MarshalAs(UnmanagedType.LPStr)] string name,
+			out IntPtr result);
+
+		[DllImport(Library, EntryPoint = "ogre_renderwindow_get_statistics")]
+		public static extern FrameStats GetStatistics(IntPtr handle);
 
 		#region Helpers
 

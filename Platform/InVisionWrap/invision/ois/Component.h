@@ -1,8 +1,7 @@
 #ifndef COMPONENT_H
 #define COMPONENT_H
 
-#include "invision/Common.h"
-#include "Common.h"
+#include "OISCommon.h"
 
 extern "C"
 {

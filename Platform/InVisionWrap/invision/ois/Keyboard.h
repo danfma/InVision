@@ -1,7 +1,7 @@
 #ifndef KEYBOARD_H
 #define KEYBOARD_H
 
-#include "Common.h"
+#include "OISCommon.h"
 
 extern "C"
 {

@@ -1,8 +1,7 @@
 #ifndef VECTOR3_H
 #define VECTOR3_H
 
-#include "invision/Common.h"
-#include "Common.h"
+#include "OISCommon.h"
 
 extern "C"
 {

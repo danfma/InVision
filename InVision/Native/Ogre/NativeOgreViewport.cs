@@ -10,7 +10,7 @@ namespace InVision.Native.Ogre
 		public static extern ColourValue GetBackgroundColor(IntPtr handle);
 
 		[DllImport(Library, EntryPoint = "viewport_set_bgcolor")]
-		public static extern ColourValue SetBackgroundColor(IntPtr handle, ColourValue color);
+		public static extern void SetBackgroundColor(IntPtr handle, ColourValue color);
 
 
 		[DllImport(Library, EntryPoint = "viewport_get_actual_width")]

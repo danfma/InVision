@@ -30,11 +30,9 @@ namespace InVision.Rendering
 		/// <summary>
 		/// 	Releases the specified handle.
 		/// </summary>
-		/// <param name = "pSelf">The handle.</param>
 		/// <returns></returns>
-		protected override bool Release(IntPtr pSelf)
+		protected override void ReleaseValidHandle()
 		{
-			return true;
 		}
 	}
 }

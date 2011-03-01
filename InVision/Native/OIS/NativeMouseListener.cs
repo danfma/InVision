@@ -4,7 +4,7 @@ using InVision.Input;
 
 namespace InVision.Native.OIS
 {
-	internal sealed class NativeCustomMouseListener : PlatformInvoke
+	internal sealed class NativeMouseListener : PlatformInvoke
 	{
 		[DllImport(Library, EntryPoint = "ois_custommouselistener_new")]
 		public static extern IntPtr New(

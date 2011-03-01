@@ -1,9 +1,17 @@
-﻿using System;
-
-namespace InVision.Input
+﻿namespace InVision.Input
 {
 	public sealed class MouseEventArgs : EventArgs
 	{
+		/// <summary>
+		/// Initializes a new instance of the <see cref="MouseEventArgs"/> class.
+		/// </summary>
+		/// <param name="data">The <see cref="InVision.Input.UMouseEventArgs"/> instance containing the event data.</param>
+		internal MouseEventArgs(ref UMouseEventArgs data)
+			: base(data.Device)
+		{
+			State = data.MouseState;
+		}
+
 		/// <summary>
 		/// 	Initializes a new instance of the <see cref = "MouseEventArgs" /> class.
 		/// </summary>

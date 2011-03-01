@@ -1,8 +1,7 @@
 #ifndef EVENTARGS_H
 #define EVENTARGS_H
 
-#include "invision/Common.h"
-#include "Common.h"
+#include "OISCommon.h"
 
 extern "C"
 {

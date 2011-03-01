@@ -1,8 +1,7 @@
 #ifndef BUTTON_H
 #define BUTTON_H
 
-#include "invision/Common.h"
-#include "Common.h"
+#include "OISCommon.h"
 
 extern "C"
 {

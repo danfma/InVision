@@ -98,15 +98,24 @@ namespace InVision
 			if (IsInvalid)
 				return true;
 
-			return !OwnsHandle || Release(handle);
+			if (!OwnsHandle)
+				return true;
+
+			try
+			{
+				ReleaseValidHandle();
+				return true;
+			}
+			catch
+			{
+				return false;
+			}
 		}
 
 		/// <summary>
-		/// 	Releases the specified pointer to the unmanaged object.
+		/// Releases the valid handle.
 		/// </summary>
-		/// <param name = "pSelf">The pointer to the unmanaged object.</param>
-		/// <returns></returns>
-		protected abstract bool Release(IntPtr pSelf);
+		protected abstract void ReleaseValidHandle();
 
 		/// <summary>
 		/// 	Determines whether the specified <see cref = "System.Object" /> is equal to this instance.

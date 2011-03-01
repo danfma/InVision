@@ -12,7 +12,9 @@ __export ColorValue __entry viewport_get_bgcolor(HViewport self)
 
 __export void __entry viewport_set_bgcolor(HViewport self, ColorValue color)
 {
-	asViewport(self)->setBackgroundColour(fromColorValue(color));
+	Ogre::ColourValue c = fromColorValue(color);
+
+	asViewport(self)->setBackgroundColour(c);
 }
 
 __export Int32 __entry viewport_get_actual_width(HViewport self)

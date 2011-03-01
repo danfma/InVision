@@ -1,8 +1,7 @@
 #ifndef AXIS_H
 #define AXIS_H
 
-#include "invision/Common.h"
-#include "Common.h"
+#include "OISCommon.h"
 
 extern "C"
 {

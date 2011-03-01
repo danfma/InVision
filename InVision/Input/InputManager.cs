@@ -8,6 +8,16 @@ namespace InVision.Input
 	public class InputManager : Handle
 	{
 		/// <summary>
+		/// Initializes a new instance of the <see cref="InputManager"/> class.
+		/// </summary>
+		/// <param name="pSelf">The p self.</param>
+		/// <param name="ownsHandle">if set to <c>true</c> [owns handle].</param>
+		protected internal InputManager(IntPtr pSelf, bool ownsHandle)
+			: base(pSelf, ownsHandle)
+		{
+		}
+
+		/// <summary>
 		/// 	Initializes a new instance of the <see cref = "InputManager" /> class.
 		/// </summary>
 		/// <param name = "winHandle">The win handle.</param>
@@ -38,12 +48,10 @@ namespace InVision.Input
 		/// <summary>
 		/// 	Releases the specified pointer to the unmanaged object.
 		/// </summary>
-		/// <param name = "pSelf">The pointer to the unmanaged object.</param>
 		/// <returns></returns>
-		protected override bool Release(IntPtr pSelf)
+		protected override void ReleaseValidHandle()
 		{
-			NativeInputManager.Delete(pSelf);
-			return true;
+			NativeInputManager.Delete(handle);
 		}
 
 		/// <summary>

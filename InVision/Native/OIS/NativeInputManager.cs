@@ -40,13 +40,6 @@ namespace InVision.Native.OIS
 
 		#region Helpers
 
-		public static readonly Dictionary<InputType, Type> InputObjectTypeMapping =
-			new Dictionary<InputType, Type>
-				{
-					{InputType.Mouse, typeof (Mouse)},
-					{InputType.Keyboard, typeof(Keyboard)}
-				};
-
 		public static IntPtr NewWithParamList(NameValueCollection paramList)
 		{
 			paramList.Flush();
@@ -67,12 +60,8 @@ namespace InVision.Native.OIS
 		public static InputObject CreateInputObject(IntPtr self, InputType inputType, bool bufferMode, string vendor)
 		{
 			IntPtr pObject = _CreateInputObject(self, inputType, bufferMode, vendor);
-			Type type;
 
-			if (!InputObjectTypeMapping.TryGetValue(inputType, out type))
-				type = typeof(UnknownInputObject);
-
-			return pObject.AsHandle(ptr => (InputObject)Activator.CreateInstance(type, pObject, true));
+			return NativeObject.Create(inputType, pObject, true);
 		}
 
 		public static void DestroyInputObject(IntPtr self, InputObject inputObject)

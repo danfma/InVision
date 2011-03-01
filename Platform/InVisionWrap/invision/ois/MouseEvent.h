@@ -1,8 +1,7 @@
 #ifndef MOUSEEVENT_H
 #define MOUSEEVENT_H
 
-#include "invision/Common.h"
-#include "Common.h"
+#include "OISCommon.h"
 
 extern "C"
 {

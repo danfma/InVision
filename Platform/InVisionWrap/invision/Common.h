@@ -11,6 +11,11 @@
 
 #include <stdint.h>
 
+#ifdef __cplusplus
+#include <Ogre.h>
+#include <OgreUTFString.h>
+#endif
+
 extern "C"
 {
 	typedef void* Any;
@@ -37,7 +42,7 @@ extern "C"
 	typedef Handle HViewport;
 	typedef Handle HConfigFile;
 	typedef Handle HStringEnumerator;
-	typedef Handle HNameValuePairEnumerator;
+	typedef const Handle HNameValuePairEnumerator;
 	typedef Handle HNameValuePairList;
 	typedef Handle HSectionEnumerator;
 	typedef Handle HSettingsEnumerator;
@@ -66,6 +71,12 @@ extern "C"
 	
 	typedef int64_t Int64;	
 	typedef uint64_t UInt64;
+
+#ifdef OGRE_UNICODE_SUPPORT
+	typedef const Char* ConstDisplayString;
+#else
+	typedef ConstString ConstDisplayString;
+#endif
 
 	struct  FrameEvent
 	{
@@ -157,34 +168,17 @@ extern "C"
 
 	__export void __entry util_delete_namevaluepair(PNameValuePair data);
 	__export void __entry util_delete_namehandlepair(PNameHandlePair data);
-	
-	/*
-	 * Internal use
-	 */
+
+
 	typedef void (*RaiseExceptionHandler)(ConstString message);
-	
-	/**
-	 * Should be called by the wrapper to register a delegate to raise exceptions on the
-	 * managed side.
-	 * 
-	 * @param exceptionHandler The function to raise exception
-	 */
-	__export void __entry register_exception_raiser(RaiseExceptionHandler exceptionHandler);
-	
-	/**
-	 * Raise an exception by invoking the exception raiser function defined by the 
-	 * register_exception_raiser function.
-	 * 
-	 * @param message the exception message
-	 */
-	__export void __entry raise_exception(ConstString message);
 
+	__export void __entry register_exception_raise_handler(RaiseExceptionHandler handler);
 }
-
 
 #ifdef __cplusplus
 #include <string>
 #include <string.h>
+#include <iostream>
 
 	inline Bool toBool(bool value)
 	{
@@ -194,6 +188,25 @@ extern "C"
 	inline bool fromBool(Bool value)
 	{
 		return value == TRUE;
+	}
+
+	/*
+	 * ColourValue
+	 */
+	inline Ogre::ColourValue fromColorValue(const ColorValue& c)
+	{
+		return Ogre::ColourValue(c.red, c.green, c.blue, c.alpha);
+	}
+
+	inline ColorValue toColorValue(const Ogre::ColourValue& c)
+	{
+		ColorValue color;
+		color.red = c.r;
+		color.green = c.g;
+		color.blue = c.b;
+		color.alpha = c.a;
+
+		return color;
 	}
 
 	/*
@@ -219,6 +232,16 @@ extern "C"
 		data[length] = NULL;
 
 		return data;
+	}
+
+	extern RaiseExceptionHandler exceptionHandler;
+
+	inline void raiseException(ConstString message)
+	{
+		if (exceptionHandler != NULL)
+			exceptionHandler(message);
+
+		std::cerr << "Exception omitted: " << message << std::endl;
 	}
 
 #endif

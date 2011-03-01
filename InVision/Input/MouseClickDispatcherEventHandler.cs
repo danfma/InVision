@@ -1,6 +1,9 @@
 ﻿using System;
+using System.Runtime.InteropServices;
 
 namespace InVision.Input
 {
-	internal delegate bool MouseClickDispatcherEventHandler(IntPtr mouseEventHandler, MouseButton button);
+	[UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+	[return: MarshalAs(UnmanagedType.Bool)]
+	internal delegate bool MouseClickDispatcherEventHandler(UMouseEventArgs e, MouseButton button);
 }

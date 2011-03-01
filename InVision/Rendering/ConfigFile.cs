@@ -37,12 +37,10 @@ namespace InVision.Rendering
 		/// <summary>
 		/// 	Releases the specified pointer to the unmanaged object.
 		/// </summary>
-		/// <param name = "pSelf">The pointer to the unmanaged object.</param>
 		/// <returns></returns>
-		protected override bool Release(IntPtr pSelf)
+		protected override void ReleaseValidHandle()
 		{
-			NativeOgreConfigFile.Delete(pSelf);
-			return true;
+			NativeOgreConfigFile.Delete(handle);
 		}
 
 		/// <summary>

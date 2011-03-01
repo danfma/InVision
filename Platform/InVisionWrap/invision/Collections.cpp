@@ -38,7 +38,7 @@ __export Int32 __entry namevaluecollection_count(HNameValuePairList self)
 	return asNameValueCollection(self)->size();
 }
 
-__export const HNameValuePairEnumerator __entry namevaluecollection_get_pairs(HNameValuePairList self)
+__export HNameValuePairEnumerator __entry namevaluecollection_get_pairs(HNameValuePairList self)
 {
 	NameValueMap* list = asNameValueCollection(self);
 

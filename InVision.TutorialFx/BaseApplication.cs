@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
@@ -22,6 +23,15 @@ namespace InVision.TutorialFx
 		protected int mTextureMode;
 		protected RenderWindow mWindow;
 
+		/// <summary>
+		/// Gets or sets the plugin directory.
+		/// </summary>
+		/// <value>The plugin directory.</value>
+		public string ConfigDirectory { get; set; }
+
+		/// <summary>
+		/// Goes this instance.
+		/// </summary>
 		public void Go()
 		{
 			try
@@ -53,8 +63,15 @@ namespace InVision.TutorialFx
 			}
 		}
 
+		/// <summary>
+		/// Setups this instance.
+		/// </summary>
+		/// <returns></returns>
 		protected virtual bool Setup()
 		{
+			if (!string.IsNullOrEmpty(ConfigDirectory))
+				mPluginsCfg = Path.Combine(ConfigDirectory, mPluginsCfg);
+
 			mRoot = new Root(mPluginsCfg);
 
 			if (!Configure())
@@ -115,7 +132,12 @@ namespace InVision.TutorialFx
 			vp.BackgroundColour = ColourValues.Black;
 
 			// Alter the camera aspect ratio to match the viewport
-			mCamera.AspectRatio = (vp.ActualWidth / (float)vp.ActualHeight);
+			float aspectRatio = vp.ActualWidth / (float)vp.ActualHeight;
+
+			if (float.IsNaN(aspectRatio))
+				mCamera.SetAutoAspectRatio(true);
+			else
+				mCamera.AspectRatio = aspectRatio;
 		}
 
 		protected virtual void CreateResourceListener()
@@ -124,6 +146,9 @@ namespace InVision.TutorialFx
 
 		protected virtual void LoadResources()
 		{
+			if (!string.IsNullOrEmpty(ConfigDirectory))
+				mResourcesCfg = Path.Combine(ConfigDirectory, mResourcesCfg);
+
 			// Load resource paths from config file
 			var cf = new ConfigFile();
 			cf.Load(mResourcesCfg, "\t:=", true);

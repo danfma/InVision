@@ -1,8 +1,7 @@
 #ifndef CUSTOMMOUSELISTENER_H
 #define CUSTOMMOUSELISTENER_H
 
-#include "invision/Common.h"
-#include "Common.h"
+#include "OISCommon.h"
 
 extern "C"
 {
@@ -50,7 +49,7 @@ namespace invision
 					OIS::MouseEvent cp = e;
 					MouseEventArgs event = MouseEventArgs(cp);
 					
-					result = toBool(mouseMoveHandler(event));
+					result = fromBool(mouseMoveHandler(event));
 				}
 
 				return result;
@@ -64,7 +63,7 @@ namespace invision
 					OIS::MouseEvent cp = e;
 					MouseEventArgs event = MouseEventArgs(cp);
 					
-					result = toBool(mousePressedHandler(event, id));
+					result = fromBool(mousePressedHandler(event, id));
 				}
 
 				return result;
@@ -78,7 +77,7 @@ namespace invision
 					OIS::MouseEvent cp = e;
 					MouseEventArgs event = MouseEventArgs(cp);
 					
-					result = toBool(mouseReleasedHandler(event, id));
+					result = fromBool(mouseReleasedHandler(event, id));
 				}
 
 				return result;

@@ -13,14 +13,14 @@ namespace InVision.Input
 		protected internal Mouse(IntPtr pSelf, bool ownsHandle)
 			: base(pSelf, ownsHandle)
 		{
-			Events = new MouseEventDispatcher();
+			EventDispatcher = new MouseEventDispatcher();
 		}
 
 		/// <summary>
 		/// 	Gets or sets the events.
 		/// </summary>
 		/// <value>The events.</value>
-		private MouseEventDispatcher Events { get; set; }
+		private MouseEventDispatcher EventDispatcher { get; set; }
 
 		/// <summary>
 		/// 	Gets or sets a value indicating whether this instance has events enabled.
@@ -36,19 +36,19 @@ namespace InVision.Input
 		/// <value>The state of the mouse.</value>
 		public MouseState MouseState
 		{
-			get { return NativeMouse.GetMouseState(handle); }
+			get { throw new NotImplementedException(); }
 		}
 
 		public event MouseMoveEventHandler MouseMoved
 		{
 			add
 			{
-				Events.MouseMoved += value;
+				EventDispatcher.MouseMoved += value;
 				EnableEvents();
 			}
 			remove
 			{
-				Events.MouseMoved -= value;
+				EventDispatcher.MouseMoved -= value;
 				DisableEvents();
 			}
 		}
@@ -57,12 +57,12 @@ namespace InVision.Input
 		{
 			add
 			{
-				Events.MousePressed += value;
+				EventDispatcher.MousePressed += value;
 				EnableEvents();
 			}
 			remove
 			{
-				Events.MousePressed -= value;
+				EventDispatcher.MousePressed -= value;
 				DisableEvents();
 			}
 		}
@@ -71,12 +71,12 @@ namespace InVision.Input
 		{
 			add
 			{
-				Events.MouseReleased += value;
+				EventDispatcher.MouseReleased += value;
 				EnableEvents();
 			}
 			remove
 			{
-				Events.MouseReleased -= value;
+				EventDispatcher.MouseReleased -= value;
 				DisableEvents();
 			}
 		}
@@ -87,7 +87,7 @@ namespace InVision.Input
 		/// <param name = "listener">The listener.</param>
 		public void AddListener(IMouseListener listener)
 		{
-			Events.AddListener(listener);
+			EventDispatcher.AddListener(listener);
 			EnableEvents();
 		}
 
@@ -97,7 +97,7 @@ namespace InVision.Input
 		/// <param name = "listener">The listener.</param>
 		public void RemoveListener(IMouseListener listener)
 		{
-			Events.RemoveListener(listener);
+			EventDispatcher.RemoveListener(listener);
 			DisableEvents();
 		}
 
@@ -107,13 +107,13 @@ namespace InVision.Input
 		/// <param name = "disposing">true for a normal dispose operation; false to finalize the handle.</param>
 		protected override void Dispose(bool disposing)
 		{
-			if (Events != null)
+			if (EventDispatcher != null)
 				DisableEvents(true);
 
 			base.Dispose(disposing);
 
 			if (disposing)
-				Events = null;
+				EventDispatcher = null;
 		}
 
 		/// <summary>
@@ -124,7 +124,7 @@ namespace InVision.Input
 			if (HasEventsEnabled)
 				return;
 
-			NativeMouse.SetEventCallback(handle, Events.DangerousGetHandle());
+			NativeMouse.SetEventCallback(handle, EventDispatcher.DangerousGetHandle());
 			HasEventsEnabled = true;
 		}
 
@@ -137,15 +137,11 @@ namespace InVision.Input
 			if (!HasEventsEnabled)
 				return;
 
-			if (Events.HasListeners && !force)
+			if (EventDispatcher.HasListeners && !force)
 				return;
 
 			NativeMouse.SetEventCallback(handle, IntPtr.Zero);
 			HasEventsEnabled = false;
 		}
-
-		#region Nested type: MouseEventDispatcher
-
-		#endregion
 	}
 }

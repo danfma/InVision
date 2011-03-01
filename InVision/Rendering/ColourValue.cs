@@ -12,7 +12,7 @@ namespace InVision.Rendering
 	/// 		The 3 'normal' colour components are red, green and blue, a higher number indicating greater amounts of that component in the colour. The forth component is the 'alpha' value, which represents transparency. In this case, 0.0 is completely transparent and 1.0 is fully opaque.
 	/// 	</remarks>
 	/// </summary>
-	[StructLayout(LayoutKind.Explicit, Size = 16)]
+	[Serializable, StructLayout(LayoutKind.Explicit, Size = 16)]
 	public struct ColourValue : IEquatable<ColourValue>
 	{
 		[FieldOffset(0)]
@@ -96,23 +96,6 @@ namespace InVision.Rendering
 		}
 
 		/// <summary>
-		/// 	Gets or sets the HSB.
-		/// </summary>
-		/// <value>The HSB.</value>
-		public float[] HSB
-		{
-			get
-			{
-				float h, s, b;
-
-				GetHSB(out h, out s, out b);
-
-				return new[] { h, s, b };
-			}
-			set { SetHSB(value[0], value[1], value[2]); }
-		}
-
-		/// <summary>
 		/// 	Gets or sets the <see cref = "System.Single" /> at the specified index.
 		/// </summary>
 		/// <value></value>
@@ -162,6 +145,28 @@ namespace InVision.Rendering
 						throw new IndexOutOfRangeException();
 				}
 			}
+		}
+
+		/// <summary>
+		/// Toes the HSB.
+		/// </summary>
+		/// <returns></returns>
+		public float[] ToHSB()
+		{
+			float h, s, b;
+
+			GetHSB(out h, out s, out b);
+
+			return new[] { h, s, b };
+		}
+
+		/// <summary>
+		/// Froms the HSB.
+		/// </summary>
+		/// <param name="value">The value.</param>
+		public void FromHSB(float[] value)
+		{
+			SetHSB(value[0], value[1], value[2]);
 		}
 
 		/// <summary>

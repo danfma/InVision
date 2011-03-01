@@ -108,12 +108,10 @@ namespace InVision.Rendering.Listeners
 		/// <summary>
 		/// 	Releases the specified handle.
 		/// </summary>
-		/// <param name = "pSelf">The handle.</param>
 		/// <returns></returns>
-		protected override bool Release(IntPtr pSelf)
+		protected override void ReleaseValidHandle()
 		{
-			NativeOgreFrameListener.Delete(pSelf);
-			return true;
+			NativeOgreFrameListener.Delete(handle);
 		}
 
 		/// <summary>

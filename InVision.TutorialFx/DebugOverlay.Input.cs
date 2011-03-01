@@ -20,15 +20,15 @@ namespace InVision.TutorialFx
 		{
 			mWindow = window;
 
-			var debugOverlay = OverlayManager.Singleton.GetByName("Core/DebugOverlay");
+			var debugOverlay = OverlayManager.Instance.GetByName("Core/DebugOverlay");
 			debugOverlay.Show();
 
-			mGuiAvg = OverlayManager.Singleton.GetOverlayElement("Core/AverageFps");
-			mGuiCurr = OverlayManager.Singleton.GetOverlayElement("Core/CurrFps");
-			mGuiBest = OverlayManager.Singleton.GetOverlayElement("Core/BestFps");
-			mGuiWorst = OverlayManager.Singleton.GetOverlayElement("Core/WorstFps");
-			mGuiTris = OverlayManager.Singleton.GetOverlayElement("Core/NumTris");
-			mModesText = OverlayManager.Singleton.GetOverlayElement("Core/NumBatches");
+			mGuiAvg = OverlayManager.Instance.GetOverlayElement("Core/AverageFps");
+			mGuiCurr = OverlayManager.Instance.GetOverlayElement("Core/CurrFps");
+			mGuiBest = OverlayManager.Instance.GetOverlayElement("Core/BestFps");
+			mGuiWorst = OverlayManager.Instance.GetOverlayElement("Core/WorstFps");
+			mGuiTris = OverlayManager.Instance.GetOverlayElement("Core/NumTris");
+			mModesText = OverlayManager.Instance.GetOverlayElement("Core/NumBatches");
 		}
 
 		public string AdditionalInfo

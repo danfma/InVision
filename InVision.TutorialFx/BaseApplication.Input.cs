@@ -1,25 +1,30 @@
-﻿using InVision.Input;
+﻿using System;
+using InVision.Input;
+using InVision.Rendering;
 
 namespace InVision.TutorialFx
 {
 	public abstract partial class BaseApplication
 	{
+		protected InputManager inputManager;
 		protected Keyboard mKeyboard;
 		protected Mouse mMouse;
 
 		protected virtual void InitializeInput()
 		{
-			LogManager.Singleton.LogMessage("*** Initializing OIS ***");
+			LogManager.Instance.LogMessage("*** Initializing OIS ***");
 
-			int windowHnd;
+			IntPtr windowHnd;
+
 			mWindow.GetCustomAttribute("WINDOW", out windowHnd);
-			var inputMgr = MOIS.InputManager.CreateInputSystem((uint)windowHnd);
+			
+			var inputMgr = new InputManager(windowHnd);
 
-			mKeyboard = (MOIS.Keyboard)inputMgr.CreateInputObject(MOIS.Type.OISKeyboard, true);
-			mMouse = (MOIS.Mouse)inputMgr.CreateInputObject(MOIS.Type.OISMouse, true);
+			mKeyboard = (Keyboard)inputMgr.CreateInputObject(InputType.Keyboard, true);
+			mMouse = (Mouse)inputMgr.CreateInputObject(InputType.Mouse, true);
 
-			mKeyboard.KeyPressed += new KeyListener.KeyPressedHandler(OnKeyPressed);
-			mKeyboard.KeyReleased += new KeyListener.KeyReleasedHandler(OnKeyReleased);
+			mKeyboard.KeyPressed += OnKeyPressed;
+			mKeyboard.KeyReleased += OnKeyReleased;
 			mMouse.MouseMoved += OnMouseMoved;
 			mMouse.MousePressed += OnMousePressed;
 			mMouse.MouseReleased += OnMouseReleased;
@@ -31,9 +36,9 @@ namespace InVision.TutorialFx
 			mMouse.Capture();
 		}
 
-		protected virtual bool OnKeyPressed(KeyEvent evt)
+		protected virtual bool OnKeyPressed(KeyEventArgs e)
 		{
-			switch (evt.key)
+			switch (e.Key)
 			{
 				case KeyCode.W:
 				case KeyCode.Up:
@@ -94,42 +99,42 @@ namespace InVision.TutorialFx
 			return true;
 		}
 
-		protected virtual bool OnKeyReleased(KeyEvent evt)
+		protected virtual bool OnKeyReleased(KeyEventArgs e)
 		{
-			switch (evt.key)
+			switch (e.Key)
 			{
-				case KeyCode.KC_W:
-				case KeyCode.KC_UP:
+				case KeyCode.W:
+				case KeyCode.Up:
 					mCameraMan.GoingForward = false;
 					break;
 
-				case KeyCode.KC_S:
-				case KeyCode.KC_DOWN:
+				case KeyCode.S:
+				case KeyCode.Down:
 					mCameraMan.GoingBack = false;
 					break;
 
-				case KeyCode.KC_A:
-				case KeyCode.KC_LEFT:
+				case KeyCode.A:
+				case KeyCode.Left:
 					mCameraMan.GoingLeft = false;
 					break;
 
-				case KeyCode.KC_D:
-				case KeyCode.KC_RIGHT:
+				case KeyCode.D:
+				case KeyCode.Right:
 					mCameraMan.GoingRight = false;
 					break;
 
-				case KeyCode.KC_E:
-				case KeyCode.KC_PGUP:
+				case KeyCode.E:
+				case KeyCode.PgUp:
 					mCameraMan.GoingUp = false;
 					break;
 
-				case KeyCode.KC_Q:
-				case KeyCode.KC_PGDOWN:
+				case KeyCode.Q:
+				case KeyCode.PgDown:
 					mCameraMan.GoingDown = false;
 					break;
 
-				case KeyCode.KC_LSHIFT:
-				case KeyCode.KC_RSHIFT:
+				case KeyCode.LShift:
+				case KeyCode.RShift:
 					mCameraMan.FastMove = false;
 					break;
 			}
