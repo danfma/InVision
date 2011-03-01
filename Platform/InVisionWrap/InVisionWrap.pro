@@ -32,12 +32,12 @@ Debug:RCC_DIR = Bin/Debug/.rcc
 Debug:UI_DIR = Bin/Debug/.ui
 Debug:DEFINES += DEBUG
 
+INCLUDEPATH += .
 
 win32 {
 	DEFINES += WIN32 DEBUG
 
 	INCLUDEPATH +=  \
-		. \
 		$$(OGRE_SDK)include\OGRE \
 		$$(OGRE_SDK)include\OIS \
 		$$(BOOST_SDK)
@@ -47,4 +47,11 @@ win32 {
 		-L$$(OGRE_SDK)lib\debug\opt \
 		-L$$(BOOST_SDK)lib \
 		-lOgreMain_d -lOIS_d
+}
+
+macx {
+	DEFINES += DEBUG
+	
+	INCLUDEPATH += $$(OGRE_FRAMEWORK_DIR)/Headers
+	LIBS += -framework Ogre
 }
