@@ -1,7 +1,7 @@
 #ifndef MOUSEEVENT_H
 #define MOUSEEVENT_H
 
-#include "OISCommon.h"
+#include "cOIS.h"
 
 extern "C"
 {

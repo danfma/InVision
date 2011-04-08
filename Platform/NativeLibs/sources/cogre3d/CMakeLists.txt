@@ -1,12 +1,8 @@
 set (SOURCES 
-	common/Collections.cpp
-	common/Common.cpp
-	common/Enumerator.cpp
-	invision/ois/Keyboard.cpp 
+	common/cCollections.cpp
+	common/cCommon.cpp
+	common/cEnumerator.cpp
 	cLogManager.cpp 
-	cCollections.cpp
-	cCommon.cpp
-	cEnumerator.cpp
 	cAnimableObject.cpp
 	cCamera.cpp
 	cConfigFile.cpp
@@ -35,7 +31,7 @@ if (WIN32)
 elseif (OSX)
 
 else()
-	set(INCLUDES . /usr/include/OGRE)
+	set(INCLUDES /usr/include/OGRE)
 	set(LIBRARIES OgreMain OIS)
 	set(CMAKE_CXX_FLAGS "-g -Wall")	
 endif (WIN32)

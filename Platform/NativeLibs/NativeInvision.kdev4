@@ -1,0 +1,4 @@
+[Project]
+Manager=KDevCMakeManager
+Name=NativeLibs
+VersionControl=kdevgit

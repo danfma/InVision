@@ -1,4 +1,4 @@
-#include "MouseEvent.h"
+#include "cMouseEvent.h"
 
 using namespace invision::ois;
 

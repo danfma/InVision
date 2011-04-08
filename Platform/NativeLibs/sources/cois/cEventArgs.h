@@ -1,7 +1,7 @@
 #ifndef EVENTARGS_H
 #define EVENTARGS_H
 
-#include "OISCommon.h"
+#include "cOIS.h"
 
 extern "C"
 {

@@ -1,7 +1,7 @@
 #ifndef INPUTOBJECT_H
 #define INPUTOBJECT_H
 
-#include "OISCommon.h"
+#include "cOIS.h"
 
 extern "C"
 {

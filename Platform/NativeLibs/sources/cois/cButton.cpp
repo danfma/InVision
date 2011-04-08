@@ -1,4 +1,4 @@
-#include "Button.h"
+#include "cButton.h"
 
 using namespace invision::ois;
 
@@ -12,14 +12,14 @@ __export void __entry ois_button_delete(HInputButton button)
 	delete asButton(button);
 }
 
-__export Bool __entry ois_button_get_pushed(HInputButton button)
+__export _bool __entry ois_button_get_pushed(HInputButton button)
 {
 	bool pushed = asButton(button)->pushed;
 
 	return toBool(pushed);
 }
 
-__export void __entry ois_button_set_pushed(HInputButton button, Bool value)
+__export void __entry ois_button_set_pushed(HInputButton button, _bool value)
 {
 	asButton(button)->pushed = fromBool(value);
 }

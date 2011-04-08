@@ -1,4 +1,4 @@
-#include "InputObject.h"
+#include "cInputObject.h"
 
 using namespace invision::ois;
 

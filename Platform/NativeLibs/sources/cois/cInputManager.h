@@ -1,7 +1,7 @@
 #ifndef INPUTMANAGER_H
 #define INPUTMANAGER_H
 
-#include "OISCommon.h"
+#include "cOIS.h"
 
 extern "C"
 {

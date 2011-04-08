@@ -1,12 +1,12 @@
 #ifndef CUSTOMMOUSELISTENER_H
 #define CUSTOMMOUSELISTENER_H
 
-#include "OISCommon.h"
+#include "cOIS.h"
 
 extern "C"
 {
-	typedef Bool (*MouseMoveEventHandler)(MouseEventArgs e);
-	typedef Bool (*MouseClickEventHandler)(MouseEventArgs e, Int32 button);
+	typedef _bool (*MouseMoveEventHandler)(MouseEventArgs e);
+	typedef _bool (*MouseClickEventHandler)(MouseEventArgs e, _int button);
 
 	__export HCustomMouseListener __entry ois_custommouselistener_new(
 		MouseMoveEventHandler mouseMove,

@@ -1,7 +1,7 @@
 #ifndef MOUSESTATE_H
 #define MOUSESTATE_H
 
-#include "OISCommon.h"
+#include "cOIS.h"
 
 extern "C"
 {

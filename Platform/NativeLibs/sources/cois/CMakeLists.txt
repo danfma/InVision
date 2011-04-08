@@ -1,4 +1,6 @@
 set (SOURCES 
+	../common/cWrapper.cpp
+	cOIS.cpp
 	cAxis.cpp
 	cButton.cpp
 	cComponent.cpp

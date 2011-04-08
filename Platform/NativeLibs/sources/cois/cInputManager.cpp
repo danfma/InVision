@@ -1,6 +1,5 @@
-#include "InputManager.h"
-#include "InputObject.h"
-#include "invision/Collections.h"
+#include "cInputManager.h"
+#include "cInputObject.h"
 #include <cstddef>
 
 using namespace invision;

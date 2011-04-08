@@ -1,21 +1,21 @@
 #ifndef AXIS_H
 #define AXIS_H
 
-#include "OISCommon.h"
+#include "cOIS.h"
 
 extern "C"
 {
 	__export HInputAxis __entry ois_axis_new();
 	__export void __entry ois_axis_delete(HInputAxis axis);
 
-	__export Int32 __entry ois_axis_get_absolute(HInputAxis axis);
-	__export void __entry ois_axis_set_absolute(HInputAxis axis, Int32 value);
+	__export _int __entry ois_axis_get_absolute(HInputAxis axis);
+	__export void __entry ois_axis_set_absolute(HInputAxis axis, _int value);
 
-	__export Int32 __entry ois_axis_get_relative(HInputAxis axis);
-	__export void __entry ois_axis_set_relative(HInputAxis axis, Int32 value);
+	__export _int __entry ois_axis_get_relative(HInputAxis axis);
+	__export void __entry ois_axis_set_relative(HInputAxis axis, _int value);
 
-	__export Bool __entry ois_axis_get_absolute_only(HInputAxis axis);
-	__export void __entry ois_axis_set_absolute_only(HInputAxis axis, Bool value);
+	__export _bool __entry ois_axis_get_absolute_only(HInputAxis axis);
+	__export void __entry ois_axis_set_absolute_only(HInputAxis axis, _bool value);
 }
 
 #ifdef __cplusplus

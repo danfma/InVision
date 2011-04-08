@@ -1,11 +1,11 @@
 #ifndef COMPONENT_H
 #define COMPONENT_H
 
-#include "OISCommon.h"
+#include "cOIS.h"
 
 extern "C"
 {
-	__export Int32 __entry ois_component_get_ctype(HInputComponent self);
+	__export _int __entry ois_component_get_ctype(HInputComponent self);
 }
 
 #ifdef __cplusplus
