@@ -2,36 +2,24 @@
 #define AXIS_H
 
 #include "cOIS.h"
+#include "cComponent.h"
 
 extern "C"
 {
-	__export HInputAxis __entry ois_axis_new();
-	__export void __entry ois_axis_delete(HInputAxis axis);
-
-	__export _int __entry ois_axis_get_absolute(HInputAxis axis);
-	__export void __entry ois_axis_set_absolute(HInputAxis axis, _int value);
-
-	__export _int __entry ois_axis_get_relative(HInputAxis axis);
-	__export void __entry ois_axis_set_relative(HInputAxis axis, _int value);
-
-	__export _bool __entry ois_axis_get_absolute_only(HInputAxis axis);
-	__export void __entry ois_axis_set_absolute_only(HInputAxis axis, _bool value);
-}
-
-#ifdef __cplusplus
-#include <OIS.h>
-
-namespace invision
-{
-	namespace ois
+	/*
+	 * OIS::Axis
+	 */
+	struct OISAxis
 	{
-		inline OIS::Axis* asAxis(HInputAxis handle)
-		{
-			return (OIS::Axis*)handle;
-		}
-	}
+		OISComponent base;
+		_int abs;
+		_int rel;
+		_bool absOnly;
+	};
+	
+	__export OISAxis* __entry newOISAxis();
+	__export void __entry deleteOISAxis(OISAxis* self);
+	__export void __entry refreshOISAxis(OISAxis* self);
 }
-
-#endif
 
 #endif // AXIS_H

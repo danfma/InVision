@@ -1,43 +1,37 @@
 #include "cVector3.h"
 
-using namespace invision::ois;
+using namespace invision;
 
-__export HInputVector3 __entry ois_vector3_new()
+__export OISVector3* __entry newOISVector()
 {
-	return new OIS::Vector3();
+	OIS::Vector3* vector = new OIS::Vector3();
+	
+	OISVector3* self = new OISVector3();
+	self->base.handle = vector;
+	refreshOISVector(self);
+	
+	return self;
 }
 
-__export void __entry ois_vector3_delete(HInputVector3 vector)
+__export void __entry deleteOISVector(OISVector3* self)
 {
-	delete asVector3(vector);
+	if (self == NULL)
+		return;
+	
+	delete (OIS::Vector3*)self->base.handle;
+	delete self;
 }
 
-__export float __entry ois_vector3_get_x(HInputVector3 vector)
+__export void __entry refreshOISAxis(OISVector3* self)
 {
-	return asVector3(vector)->x;
+	if (!ensureNotNull(self) || !ensureNotNull(self->base.handle))
+		return;
+	
+	OIS::Vector3* vector = (OIS::Vector3*)self->base.handle;
+	
+	self->x = vector->x;
+	self->y = vector->y;
+	self->z = vector->z;
+	refreshOISComponent(&self->base);
 }
 
-__export void __entry ois_vector3_set_x(HInputVector3 vector, float value)
-{
-	asVector3(vector)->x = value;
-}
-
-__export float __entry ois_vector3_get_y(HInputVector3 vector)
-{
-	return asVector3(vector)->y;
-}
-
-__export void __entry ois_vector3_set_y(HInputVector3 vector, float value)
-{
-	asVector3(vector)->y = value;
-}
-
-__export float __entry ois_vector3_get_z(HInputVector3 vector)
-{
-	return asVector3(vector)->z;
-}
-
-__export void __entry ois_vector3_set_z(HInputVector3 vector, float value)
-{
-	asVector3(vector)->z = value;
-}

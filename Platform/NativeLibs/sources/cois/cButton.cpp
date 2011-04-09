@@ -1,25 +1,39 @@
 #include "cButton.h"
+#include "cComponent.h"
 
-using namespace invision::ois;
+using namespace invision;
 
-__export HInputButton __entry ois_button_new()
+
+/*
+ * OIS::Button
+ */
+__export OISButton* __entry newOISButton()
 {
-	return new OIS::Button();
+	OIS::Button* button = new OIS::Button();
+	
+	OISButton* self = new OISButton();
+	self->base.handle = button;
+	self->pushed = fromBool(button->pushed);
+	self->base.cType = button->cType;
+	
+	return self;
 }
 
-__export void __entry ois_button_delete(HInputButton button)
+__export void __entry deleteOISButton(OISButton* self)
 {
-	delete asButton(button);
+	if (self == NULL)
+		return;
+	
+	delete (OIS::Button*)self->base.handle;
+	delete self;
 }
 
-__export _bool __entry ois_button_get_pushed(HInputButton button)
+__export void __entry refreshOISButton(OISButton* self)
 {
-	bool pushed = asButton(button)->pushed;
-
-	return toBool(pushed);
-}
-
-__export void __entry ois_button_set_pushed(HInputButton button, _bool value)
-{
-	asButton(button)->pushed = fromBool(value);
+	if (!ensureNotNull(self) || !ensureNotNull(self->base.handle))
+		return;
+	
+	OIS::Button* aux = (OIS::Button*)self->base.handle;
+	self->pushed = fromBool(aux->pushed);
+	refreshOISComponent(&self->base);
 }

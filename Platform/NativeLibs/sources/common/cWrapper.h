@@ -103,12 +103,15 @@ extern "C"
 
 	extern RaiseExceptionHandler exceptionHandler;
 
-	inline void raiseException(const _string message)
+	inline void raiseException(std::string message)
 	{
-		if (exceptionHandler != NULL)
-			exceptionHandler(message);
-
-		std::cerr << "Exception omitted: " << message << std::endl;
+		if (exceptionHandler != NULL) 
+		{
+			const _string str = (const _string)message.c_str();
+			exceptionHandler(str);
+		} 
+		else
+			std::cerr << "Exception omitted: " << message << std::endl;
 	}
 
 #endif
