@@ -1,17 +1,23 @@
 A mixed managed / unmanaged game framework for .net / mono
 
+There is a lot to do, but the first step is to create the wrappers and bindings.
+
+Support for Windows, Linux, MacOSX, iOS and Android are aimed.
+
 # THIRD-PARTY:
-- The library Mono.GameMath was merged into the code so no other assembly reference is needed. 
-Anyway, bit thanks for the Mono guys, specially Michael Hutchinson which wrote this library.
-Any changes to it will be merged again into the code.
-
-- The rendering engine is provided by the OGRE3D, a really great rendering library in C++.
-
+- Mono.GameMath;
+- OGRE3D;
+- OIS;
+- Bullet;
 
 # ASEMBLIES
 
-- InVision
-- InVision.Ogre3D
+- InVision (common stuff and framework organization)
+- InVision.Ogre3D (bindings for the Ogre3D library by a wrapper called cOgre)
+- InVision.OIS (bindings for the OIS library by a wrapper called cOIS)
+- InVision.Bullet (bindings for the Bullet library by a wrapper called cBullet)
+- InVision.Collections (Native communication support for collections)
 
 # BUILD:
+TODO 
 
