@@ -5,27 +5,18 @@
 
 extern "C"
 {
-	__export HInputButton __entry ois_button_new();
-	__export void __entry ois_button_delete(HInputButton button);
-
-	__export _bool __entry ois_button_get_pushed(HInputButton button);
-	__export void __entry ois_button_set_pushed(HInputButton button, _bool value);
-}
-
-#ifdef __cplusplus
-#include <OIS.h>
-
-namespace invision
-{
-	namespace ois
+	/*
+	 * OIS::Button
+	 */
+	struct OISButton
 	{
-		inline OIS::Button* asButton(HInputButton handle)
-		{
-			return (OIS::Button*)handle;
-		}
-	}
+		OISComponent base;
+		_bool pushed;
+	};
+	
+	__export OISButton* __entry newOISButton();
+	__export void __entry deleteOISButton(OISButton* self);
+	__export void __entry refreshOISButton(OISButton* self);
 }
-
-#endif
 
 #endif // BUTTON_H

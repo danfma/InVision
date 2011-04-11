@@ -1,4 +1,7 @@
 #include "cOIS.h"
+#include "cOIS.h"
+
+using namespace invision;
 
 /*
 * OIS::Type
@@ -19,44 +22,3 @@ _int OIS_COMPONENT_TYPE_SLIDER = OIS::OIS_Slider;
 _int OIS_COMPONENT_TYPE_POV = OIS::OIS_POV;
 _int OIS_COMPONENT_TYPE_VECTOR3 = OIS::OIS_Vector3;
 
-/*
-* OIS::Component
-*/
-OISComponent* newOISComponent()
-{
-	OIS::Component* component = new OIS::Component();
-	
-	OISComponent* result = new OISComponent();
-	result->cType = component->cType;
-	result->handle = component;
-	
-	return result;
-}
-
-void deleteOISComponent(OISComponent* component)
-{
-	if (component == NULL)
-		return;
-	
-	delete component->handle;
-	delete component;
-}
-
-/*
- * OIS::Button
- */
-OISButton* newOISButton()
-{
-	OIS::Button* button = new OIS::Button();
-	
-	OISButton* result = new OISButton();
-	result->base.handle = button;
-	result->base.cType = button->cType;
-	result->pushed = button->pushed;
-	
-	return result;
-}
-
-void deleteOISButton(OISButton* button)
-{
-}

@@ -2,6 +2,7 @@
 #define OIS_H
 
 #include "cWrapper.h"
+#include "cAxis.h"
 
 #ifdef __cplusplus
 #	include <string>
@@ -28,58 +29,23 @@ extern "C"
 	extern _int OIS_COMPONENT_TYPE_SLIDER;
 	extern _int OIS_COMPONENT_TYPE_POV;
 	extern _int OIS_COMPONENT_TYPE_VECTOR3;
-	
-	/*
-	 * OIS::Component
-	 */
-	struct OISComponent 
-	{
-		_handle handle;
-		_int cType;
-	};
-	
-	OISComponent* newOISComponent();
-	void deleteOISComponent(OISComponent* component);
-	
-	/*
-	 * OIS::Button
-	 */
-	struct OISButton
-	{
-		OISComponent base;
-		_bool pushed;
-	};
-	
-	OISButton* newOISButton();
-	void deleteOISButton(OISButton* button);
-	
-	/*
-	 * OIS::Axis
-	 */
-	struct OISAxis
-	{
-		OISComponent base;
-		_int abs;
-		_int rel;
-		_bool absOnly;
-	};
-	
-	OISAxis* newOISAxis();
-	void deleteOISAxis(OISAxis* axis);
-	
-	/*
-	 * OIS::Vector3
-	 */
-	struct OISVector3
-	{
-		OISComponent base;
-		_float x;
-		_float y;
-		_float z;
-	};
-	
-	OISVector3 newOISVector();
-	void deleteOISVector(OISVector3* vector);
 }
+
+#ifdef __cplusplus
+
+namespace invision
+{
+	inline bool ensureNotNull(_handle handle)
+	{
+		bool isNull = handle == NULL;
+		
+		if (isNull)
+			raiseException("Parameter is null");
+		
+		return !isNull;
+	}
+}
+
+#endif
 
 #endif // OIS_H

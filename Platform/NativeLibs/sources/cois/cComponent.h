@@ -1,27 +1,22 @@
-#ifndef COMPONENT_H
-#define COMPONENT_H
+#ifndef CCOMPONENT_H
+#define CCOMPONENT_H
 
 #include "cOIS.h"
 
 extern "C"
 {
-	__export _int __entry ois_component_get_ctype(HInputComponent self);
-}
-
-#ifdef __cplusplus
-#include <OIS.h>
-
-namespace invision
-{
-	namespace ois
+	/*
+	 * OIS::Component
+	 */
+	struct OISComponent 
 	{
-		inline OIS::Component* asComponent(HInputComponent self)
-		{
-			return (OIS::Component*)self;
-		}
-	}
+		_any handle;
+		_int cType;
+	};
+	
+	__export OISComponent* __entry newOISComponent();
+	__export void __entry deleteOISComponent(OISComponent* self);
+	__export void __entry refreshOISComponent(OISComponent* self);
 }
 
-#endif
-
-#endif // COMPONENT_H
+#endif // CCOMPONENT_H
