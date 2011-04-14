@@ -54,11 +54,6 @@ extern "C"
 	 */
 
 	__export void __entry util_delete_string(const _byte* data);
-	
-
-	typedef void (*RaiseExceptionHandler)(const _string message);
-
-	__export void __entry register_exception_raise_handler(RaiseExceptionHandler handler);
 }
 
 #ifdef __cplusplus
@@ -99,19 +94,6 @@ extern "C"
 		data[length] = NULL;
 
 		return data;
-	}
-
-	extern RaiseExceptionHandler exceptionHandler;
-
-	inline void raiseException(std::string message)
-	{
-		if (exceptionHandler != NULL) 
-		{
-			const _string str = (const _string)message.c_str();
-			exceptionHandler(str);
-		} 
-		else
-			std::cerr << "Exception omitted: " << message << std::endl;
 	}
 
 #endif

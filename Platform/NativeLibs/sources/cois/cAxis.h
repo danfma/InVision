@@ -1,5 +1,5 @@
-#ifndef AXIS_H
-#define AXIS_H
+#ifndef CAXIS_H
+#define CAXIS_H
 
 #include "cOIS.h"
 #include "cComponent.h"
@@ -17,9 +17,9 @@ extern "C"
 		_bool absOnly;
 	};
 	
-	__export OISAxis* __entry newOISAxis();
-	__export void __entry deleteOISAxis(OISAxis* self);
-	__export void __entry refreshOISAxis(OISAxis* self);
+	__export OISAxis* __entry oisNewAxis();
+	__export void __entry oisDeleteAxis(OISAxis* self);
+	__export void __entry oisRefreshAxis(OISAxis* self);
 }
 
-#endif // AXIS_H
+#endif // CAXIS_H

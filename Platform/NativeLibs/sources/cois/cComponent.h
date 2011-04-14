@@ -8,15 +8,15 @@ extern "C"
 	/*
 	 * OIS::Component
 	 */
-	struct OISComponent 
+	typedef struct _OISComponent
 	{
 		_any handle;
 		_int cType;
-	};
+	} OISComponent;
 	
-	__export OISComponent* __entry newOISComponent();
-	__export void __entry deleteOISComponent(OISComponent* self);
-	__export void __entry refreshOISComponent(OISComponent* self);
+	__export OISComponent* __entry oisNewComponent();
+	__export void __entry oisDeleteComponent(OISComponent* self);
+	__export void __entry oisRefreshComponent(OISComponent* self);
 }
 
 #endif // CCOMPONENT_H

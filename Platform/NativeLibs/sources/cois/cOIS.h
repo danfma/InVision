@@ -1,16 +1,17 @@
-#ifndef OIS_H
-#define OIS_H
+#ifndef COIS_H
+#define COIS_H
 
 #include "cWrapper.h"
-#include "cAxis.h"
-
-#ifdef __cplusplus
-#	include <string>
-#	include <OIS.h>
-#endif
 
 extern "C"
 {
+	/*
+	 * Handle types
+	 */
+	typedef _handle OISObjectHandle;
+	typedef _handle OISInputManagerHandle;
+	typedef _handle OISInterfaceHandle;
+
 	/*
 	 * OIS::Type
 	 */
@@ -29,12 +30,52 @@ extern "C"
 	extern _int OIS_COMPONENT_TYPE_SLIDER;
 	extern _int OIS_COMPONENT_TYPE_POV;
 	extern _int OIS_COMPONENT_TYPE_VECTOR3;
+
+	/*
+	 * OIS::OIS_ERROR
+	 */
+	extern _int OIS_ERROR_INPUT_DISCONNECTED;
+	extern _int OIS_ERROR_INPUT_DEVICE_NON_EXISTENT;
+	extern _int OIS_ERROR_INPUT_DEVICE_NOT_SUPPORTED;
+	extern _int OIS_ERROR_DEVICE_FULL;
+	extern _int OIS_ERROR_NOT_IMPLEMENTED;
+	extern _int OIS_ERROR_DUPLICATE;
+	extern _int OIS_ERROR_INVALID_PARAM;
+	extern _int OIS_ERROR_GENERAL;
+
+	/*
+	 * OIS::Interface::IType
+	 */
+	extern _int OIS_ITYPE_FORCE_FEEDBACK;
+	extern _int OIS_ITYPE_RESERVED;
+
+	/*
+	 * Exception handler
+	 */
+	typedef void (*ExceptionHandler)(const _string message, _int errorType, const _string filename, _int line);
+
+	__export void __entry _oisRegisterExceptionHandler(ExceptionHandler handler);
+	__export void __entry _oisRaiseException(const _string message, _int errorType, const _string filename, _int line);
 }
 
 #ifdef __cplusplus
+# include <string>
+# include <OIS.h>
 
 namespace invision
 {
+namespace ois
+{
+	inline void raiseException(std::string message, OIS::OIS_ERROR error, std::string filename, int line)
+	{
+		_oisRaiseException((const _string)message.c_str(), (_int)error, (const _string)filename.c_str(), (_int)line);
+	}
+
+	inline void raiseException(std::string message)
+	{
+		_oisRaiseException((const _string)message.c_str(), OIS_ERROR_GENERAL, NULL, 0);
+	}
+
 	inline bool ensureNotNull(_handle handle)
 	{
 		bool isNull = handle == NULL;
@@ -45,7 +86,8 @@ namespace invision
 		return !isNull;
 	}
 }
+}
 
 #endif
 
-#endif // OIS_H
+#endif // COIS_H
