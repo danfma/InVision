@@ -5,31 +5,21 @@ using namespace invision::ois;
 /*
 * OIS::Component
 */
-__export OISComponent* __entry oisNewComponent()
+__export OISComponentHandleInfo __entry ois_component_new(_int ctype)
 {
-	OIS::Component* component = new OIS::Component();
-	
-	OISComponent* self = new OISComponent();
-	self->handle = component;
-	oisRefreshComponent(self);
-	
-	return self;
+	OIS::Component* component = new OIS::Component((OIS::ComponentType)ctype);
+	OISComponentHandleInfo cinfo;
+	cinfo.handle = component;
+	cinfo.componentType = (_int*) &(component->cType);
+
+	return cinfo;
 }
 
-__export void __entry oisDeleteComponent(OISComponent* self)
+__export void __entry ois_component_delete(OISComponentHandle self)
 {
 	if (self == NULL)
 		return;
 	
-	delete (OIS::Component*)(self->handle);
-	delete self;
+	delete (OIS::Component*)self;
 }
 
-__export void __entry oisRefreshComponent(OISComponent* self)
-{
-	if (!ensureNotNull(self) || !ensureNotNull(self->handle))
-		return;
-	
-	const OIS::Component* aux = (OIS::Component*)self->handle;
-	self->cType = aux->cType;
-}

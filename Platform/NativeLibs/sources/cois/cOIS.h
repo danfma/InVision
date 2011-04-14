@@ -8,6 +8,11 @@ extern "C"
 	/*
 	 * Handle types
 	 */
+	typedef _handle OISComponentHandle;
+	typedef _handle OISAxisHandle;
+	typedef _handle OISButtonHandle;
+	typedef _handle OISVector3Handle;
+
 	typedef _handle OISObjectHandle;
 	typedef _handle OISInputManagerHandle;
 	typedef _handle OISInterfaceHandle;

@@ -1,5 +1,5 @@
 #include "cOIS.h"
-#include "cOIS.h"
+#include <OIS.h>
 
 using namespace invision::ois;
 using namespace std;
@@ -26,14 +26,14 @@ _int OIS_COMPONENT_TYPE_VECTOR3 = OIS::OIS_Vector3;
 /*
  * OIS::OIS_ERROR
  */
-_int OIS_ERROR_INPUT_DISCONNECTED			= (_int)E_InputDisconnected;
-_int OIS_ERROR_INPUT_DEVICE_NON_EXISTENT	= (_int)E_InputDeviceNonExistant;
-_int OIS_ERROR_INPUT_DEVICE_NOT_SUPPORTED	= (_int)E_InputDeviceNotSupported;
-_int OIS_ERROR_DEVICE_FULL					= (_int)E_DeviceFull;
-_int OIS_ERROR_NOT_IMPLEMENTED				= (_int)E_NotImplemented;
-_int OIS_ERROR_DUPLICATE					= (_int)E_Duplicate;
-_int OIS_ERROR_INVALID_PARAM				= (_int)E_InvalidParam;
-_int OIS_ERROR_GENERAL						= (_int)E_General;
+_int OIS_ERROR_INPUT_DISCONNECTED				= (_int)OIS::E_InputDisconnected;
+_int OIS_ERROR_INPUT_DEVICE_NON_EXISTENT		= (_int)OIS::E_InputDeviceNonExistant;
+_int OIS_ERROR_INPUT_DEVICE_NOT_SUPPORTED		= (_int)OIS::E_InputDeviceNotSupported;
+_int OIS_ERROR_DEVICE_FULL						= (_int)OIS::E_DeviceFull;
+_int OIS_ERROR_NOT_IMPLEMENTED					= (_int)OIS::E_NotImplemented;
+_int OIS_ERROR_DUPLICATE						= (_int)OIS::E_Duplicate;
+_int OIS_ERROR_INVALID_PARAM					= (_int)OIS::E_InvalidParam;
+_int OIS_ERROR_GENERAL							= (_int)OIS::E_General;
 
 /*
  * OIS::Interface::IType
