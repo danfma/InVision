@@ -1,22 +1,22 @@
 #include "cComponent.h"
 
-using namespace invision;
+using namespace invision::ois;
 
 /*
 * OIS::Component
 */
-__export OISComponent* __entry newOISComponent()
+__export OISComponent* __entry oisNewComponent()
 {
 	OIS::Component* component = new OIS::Component();
 	
 	OISComponent* self = new OISComponent();
 	self->handle = component;
-	refreshOISComponent(self);
+	oisRefreshComponent(self);
 	
 	return self;
 }
 
-__export void __entry deleteOISComponent(OISComponent* self)
+__export void __entry oisDeleteComponent(OISComponent* self)
 {
 	if (self == NULL)
 		return;
@@ -25,7 +25,7 @@ __export void __entry deleteOISComponent(OISComponent* self)
 	delete self;
 }
 
-__export void __entry refreshOISComponent(OISComponent* self)
+__export void __entry oisRefreshComponent(OISComponent* self)
 {
 	if (!ensureNotNull(self) || !ensureNotNull(self->handle))
 		return;

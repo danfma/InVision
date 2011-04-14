@@ -2,6 +2,7 @@
 #define BUTTON_H
 
 #include "cOIS.h"
+#include "cComponent.h"
 
 extern "C"
 {
@@ -14,9 +15,9 @@ extern "C"
 		_bool pushed;
 	};
 	
-	__export OISButton* __entry newOISButton();
-	__export void __entry deleteOISButton(OISButton* self);
-	__export void __entry refreshOISButton(OISButton* self);
+	__export OISButton* __entry oisNewButton();
+	__export void __entry oisDeleteButton(OISButton* self);
+	__export void __entry oisRefreshButton(OISButton* self);
 }
 
 #endif // BUTTON_H

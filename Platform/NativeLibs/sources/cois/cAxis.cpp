@@ -1,20 +1,20 @@
 #include "cAxis.h"
 #include "cComponent.h"
 
-using namespace invision;
+using namespace invision::ois;
 
-__export OISAxis* __entry newOISAxis()
+__export OISAxis* __entry oisNewAxis()
 {
 	OIS::Axis* axis = new OIS::Axis();
 	
 	OISAxis* self = new OISAxis();
 	self->base.handle = axis;
-	refreshOISAxis(self);
+	oisRefreshAxis(self);
 	
 	return self;
 }
 
-__export void __entry deleteOISAxis(OISAxis* self)
+__export void __entry oisDeleteAxis(OISAxis* self)
 {
 	if (self == NULL)
 		return;
@@ -23,7 +23,7 @@ __export void __entry deleteOISAxis(OISAxis* self)
 	delete self;
 }
 
-__export void __entry refreshOISAxis(OISAxis* self)
+__export void __entry oisRefreshAxis(OISAxis* self)
 {
 	if (!ensureNotNull(self) || !ensureNotNull(self->base.handle))
 		return;
@@ -32,5 +32,5 @@ __export void __entry refreshOISAxis(OISAxis* self)
 	self->abs = axis->abs;
 	self->rel = axis->rel;
 	self->absOnly = fromBool(axis->absOnly);
-	refreshOISComponent(&self->base);
+	oisRefreshComponent(&self->base);
 }

@@ -1,13 +1,12 @@
 #include "cButton.h"
-#include "cComponent.h"
 
-using namespace invision;
+using namespace invision::ois;
 
 
 /*
  * OIS::Button
  */
-__export OISButton* __entry newOISButton()
+__export OISButton* __entry oisNewButton()
 {
 	OIS::Button* button = new OIS::Button();
 	
@@ -19,7 +18,7 @@ __export OISButton* __entry newOISButton()
 	return self;
 }
 
-__export void __entry deleteOISButton(OISButton* self)
+__export void __entry oisDeleteButton(OISButton* self)
 {
 	if (self == NULL)
 		return;
@@ -28,12 +27,12 @@ __export void __entry deleteOISButton(OISButton* self)
 	delete self;
 }
 
-__export void __entry refreshOISButton(OISButton* self)
+__export void __entry oisRefreshButton(OISButton* self)
 {
 	if (!ensureNotNull(self) || !ensureNotNull(self->base.handle))
 		return;
 	
 	OIS::Button* aux = (OIS::Button*)self->base.handle;
 	self->pushed = fromBool(aux->pushed);
-	refreshOISComponent(&self->base);
+	oisRefreshComponent(&self->base);
 }

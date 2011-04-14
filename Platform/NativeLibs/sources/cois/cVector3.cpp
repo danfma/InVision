@@ -22,7 +22,7 @@ __export void __entry deleteOISVector(OISVector3* self)
 	delete self;
 }
 
-__export void __entry refreshOISAxis(OISVector3* self)
+__export void __entry oisRefreshAxis(OISVector3* self)
 {
 	if (!ensureNotNull(self) || !ensureNotNull(self->base.handle))
 		return;
