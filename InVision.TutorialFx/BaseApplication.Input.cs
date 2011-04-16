@@ -1,14 +1,14 @@
 ﻿using System;
-using InVision.Input;
+using InVision.OIS;
 using InVision.Rendering;
 
 namespace InVision.TutorialFx
 {
 	public abstract partial class BaseApplication
 	{
-		protected InputManager inputManager;
-		protected Keyboard mKeyboard;
-		protected Mouse mMouse;
+		protected InputManager InputManager;
+		protected Keyboard Keyboard;
+		protected Mouse Mouse;
 
 		protected virtual void InitializeInput()
 		{
@@ -16,63 +16,64 @@ namespace InVision.TutorialFx
 
 			IntPtr windowHnd;
 
-			mWindow.GetCustomAttribute("WINDOW", out windowHnd);
-			
-			var inputMgr = new InputManager(windowHnd);
+			Window.GetCustomAttribute("WINDOW", out windowHnd);
 
-			mKeyboard = (Keyboard)inputMgr.CreateInputObject(InputType.Keyboard, true);
-			mMouse = (Mouse)inputMgr.CreateInputObject(InputType.Mouse, true);
+			InputManager inputMgr = InputManager.Create(windowHnd);
 
-			mKeyboard.KeyPressed += OnKeyPressed;
-			mKeyboard.KeyReleased += OnKeyReleased;
-			mMouse.MouseMoved += OnMouseMoved;
-			mMouse.MousePressed += OnMousePressed;
-			mMouse.MouseReleased += OnMouseReleased;
+			Keyboard = (Keyboard)inputMgr.CreateInputObject(DeviceType.Keyboard, true);
+			Mouse = (Mouse)inputMgr.CreateInputObject(DeviceType.Mouse, true);
+
+			Keyboard.KeyPressed += OnKeyPressed;
+			Keyboard.KeyReleased += OnKeyReleased;
+
+			Mouse.MouseMoved += OnMouseMoved;
+			Mouse.MousePressed += OnMousePressed;
+			Mouse.MouseReleased += OnMouseReleased;
 		}
 
 		protected void ProcessInput()
 		{
-			mKeyboard.Capture();
-			mMouse.Capture();
+			Keyboard.Capture();
+			Mouse.Capture();
 		}
 
 		protected virtual bool OnKeyPressed(KeyEventArgs e)
 		{
-			switch (e.Key)
+			switch (e.KeyCode)
 			{
 				case KeyCode.W:
 				case KeyCode.Up:
-					mCameraMan.GoingForward = true;
+					CameraMan.GoingForward = true;
 					break;
 
 				case KeyCode.S:
 				case KeyCode.Down:
-					mCameraMan.GoingBack = true;
+					CameraMan.GoingBack = true;
 					break;
 
 				case KeyCode.A:
 				case KeyCode.Left:
-					mCameraMan.GoingLeft = true;
+					CameraMan.GoingLeft = true;
 					break;
 
 				case KeyCode.D:
 				case KeyCode.Right:
-					mCameraMan.GoingRight = true;
+					CameraMan.GoingRight = true;
 					break;
 
 				case KeyCode.E:
 				case KeyCode.PgUp:
-					mCameraMan.GoingUp = true;
+					CameraMan.GoingUp = true;
 					break;
 
 				case KeyCode.Q:
 				case KeyCode.PgDown:
-					mCameraMan.GoingDown = true;
+					CameraMan.GoingDown = true;
 					break;
 
 				case KeyCode.LShift:
 				case KeyCode.RShift:
-					mCameraMan.FastMove = true;
+					CameraMan.FastMove = true;
 					break;
 
 				case KeyCode.T:
@@ -101,41 +102,41 @@ namespace InVision.TutorialFx
 
 		protected virtual bool OnKeyReleased(KeyEventArgs e)
 		{
-			switch (e.Key)
+			switch (e.KeyCode)
 			{
 				case KeyCode.W:
 				case KeyCode.Up:
-					mCameraMan.GoingForward = false;
+					CameraMan.GoingForward = false;
 					break;
 
 				case KeyCode.S:
 				case KeyCode.Down:
-					mCameraMan.GoingBack = false;
+					CameraMan.GoingBack = false;
 					break;
 
 				case KeyCode.A:
 				case KeyCode.Left:
-					mCameraMan.GoingLeft = false;
+					CameraMan.GoingLeft = false;
 					break;
 
 				case KeyCode.D:
 				case KeyCode.Right:
-					mCameraMan.GoingRight = false;
+					CameraMan.GoingRight = false;
 					break;
 
 				case KeyCode.E:
 				case KeyCode.PgUp:
-					mCameraMan.GoingUp = false;
+					CameraMan.GoingUp = false;
 					break;
 
 				case KeyCode.Q:
 				case KeyCode.PgDown:
-					mCameraMan.GoingDown = false;
+					CameraMan.GoingDown = false;
 					break;
 
 				case KeyCode.LShift:
 				case KeyCode.RShift:
-					mCameraMan.FastMove = false;
+					CameraMan.FastMove = false;
 					break;
 			}
 
@@ -144,7 +145,7 @@ namespace InVision.TutorialFx
 
 		protected virtual bool OnMouseMoved(MouseEventArgs e)
 		{
-			mCameraMan.MouseMovement(e.State.X.Relative, e.State.Y.Relative);
+			CameraMan.MouseMovement(e.State.X.Relative, e.State.Y.Relative);
 			return true;
 		}
 

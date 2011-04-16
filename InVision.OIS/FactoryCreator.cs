@@ -18,7 +18,7 @@ namespace InVision.OIS
 		/// </summary>
 		/// <param name="type">The type.</param>
 		/// <returns></returns>
-		public int GetTotalDevices(InputType type)
+		public int GetTotalDevices(DeviceType type)
 		{
 			throw new NotImplementedException();
 		}
@@ -28,7 +28,7 @@ namespace InVision.OIS
 		/// </summary>
 		/// <param name="type">The type.</param>
 		/// <returns></returns>
-		public int FreeDevices(InputType type)
+		public int FreeDevices(DeviceType type)
 		{
 			throw new NotImplementedException();
 		}
@@ -39,7 +39,7 @@ namespace InVision.OIS
 		/// <param name="type">The type.</param>
 		/// <param name="vendor">The vendor.</param>
 		/// <returns></returns>
-		public bool VendorExists(InputType type, string vendor)
+		public bool VendorExists(DeviceType type, string vendor)
 		{
 			throw new NotImplementedException();
 		}
@@ -52,7 +52,7 @@ namespace InVision.OIS
 		/// <param name="bufferMode">if set to <c>true</c> [buffer mode].</param>
 		/// <param name="vendor">The vendor.</param>
 		/// <returns></returns>
-		public IDevice CreateObject(InputManager creator, InputType type, bool bufferMode, string vendor)
+		public IDevice CreateObject(InputManager creator, DeviceType type, bool bufferMode, string vendor)
 		{
 			throw new NotImplementedException();
 		}

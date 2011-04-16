@@ -8,4 +8,6 @@ namespace InVision.OIS
 	public interface IDevice : IDisposable
 	{
 	}
+
+
 }

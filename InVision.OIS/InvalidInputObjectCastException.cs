@@ -9,7 +9,7 @@ namespace InVision.OIS
 		/// </summary>
 		/// <param name = "actual">The actual.</param>
 		/// <param name = "target">The target.</param>
-		public InvalidInputObjectCastException(InputType actual, InputType target)
+		public InvalidInputObjectCastException(DeviceType actual, DeviceType target)
 			: base(string.Format("Can not convert from {0} to {1} input object", actual, target))
 		{
 		}

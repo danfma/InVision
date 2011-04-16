@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Runtime.InteropServices;
 using InVision.Rendering;
-using OpenTK;
+using InVision.GameMath;
 
 namespace InVision.Native.Ogre
 {

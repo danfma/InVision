@@ -31,9 +31,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="OpenTK">
-      <HintPath>..\Libs\OpenTK\OpenTK.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Windows.Forms" />
@@ -52,6 +49,18 @@
     <Compile Include="ShutdownException.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\InVision.GameMath\InVision.GameMath.csproj">
+      <Project>{19B788E7-19B6-4ECD-8AA1-DD982928DB56}</Project>
+      <Name>InVision.GameMath</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\InVision.Native\InVision.Native.csproj">
+      <Project>{24E00D97-AA09-4ECD-A75A-247697091FDE}</Project>
+      <Name>InVision.Native</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\InVision.OIS\InVision.OIS.csproj">
+      <Project>{059527B2-32AF-4983-A27F-12407C88BE0B}</Project>
+      <Name>InVision.OIS</Name>
+    </ProjectReference>
     <ProjectReference Include="..\InVision\InVision.csproj">
       <Project>{4A69EB8E-6E49-415C-ACB4-9CB904EA54DB}</Project>
       <Name>InVision</Name>

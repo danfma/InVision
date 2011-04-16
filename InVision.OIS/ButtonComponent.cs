@@ -1,74 +1,52 @@
-﻿using System;
-using System.Runtime.InteropServices;
-using InVision.Input;
+﻿using InVision.OIS.Native;
 
 namespace InVision.OIS
 {
-	[StructLayout(LayoutKind.Sequential)]
-	public struct ButtonComponent : IButtonComponent, IHandleHolder
+	public class ButtonComponent : Component, IButtonComponent
 	{
-		private readonly IntPtr handle;
-		private readonly ComponentType componentType;
-		private readonly bool pushed;
+		private ButtonExtended nativeRef;
 
 		/// <summary>
-		/// 	Initializes a new instance of the <see cref = "ButtonComponent" /> struct.
+		/// Initializes a new instance of the <see cref="ButtonComponent"/> class.
 		/// </summary>
-		/// <param name = "handle">The handle.</param>
-		/// <param name = "componentType">Type of the component.</param>
-		/// <param name = "pushed">if set to <c>true</c> [is pushed].</param>
-		internal ButtonComponent(IntPtr handle, ComponentType componentType, bool pushed)
+		/// <param name="pushed">if set to <c>true</c> [pushed].</param>
+		public ButtonComponent(bool pushed)
+			: this(NativeButton.New(pushed), true)
 		{
-			this.handle = handle;
-			this.componentType = componentType;
-			this.pushed = pushed;
+			
 		}
 
 		/// <summary>
-		/// 	Initializes a new instance of the <see cref = "ButtonComponent" /> struct.
+		/// Initializes a new instance of the <see cref="ButtonComponent"/> class.
 		/// </summary>
-		/// <param name = "pushed">if set to <c>true</c> [is pushed].</param>
-		/// <param name = "componentType">Type of the component.</param>
-		public ButtonComponent(ComponentType componentType, bool pushed)
+		/// <param name="nativeRef">The native ref.</param>
+		/// <param name="ownsHandle">if set to <c>true</c> [owns handle].</param>
+		internal ButtonComponent(ButtonExtended nativeRef, bool ownsHandle = false) 
+			: base(nativeRef.BaseInfo, ownsHandle)
 		{
-			handle = IntPtr.Zero;
-			this.componentType = componentType;
-			this.pushed = pushed;
+			this.nativeRef = nativeRef;
 		}
 
-		#region IButton Members
+		#region IButtonComponent Members
 
 		/// <summary>
-		/// 	Gets the type of the component.
+		/// Gets a value indicating whether this <see cref="ButtonExtended"/> is pushed.
 		/// </summary>
-		/// <value>The type of the component.</value>
-		public ComponentType ComponentType
-		{
-			get { return componentType; }
-		}
-
-		/// <summary>
-		/// 	Gets a value indicating whether this instance is pushed.
-		/// </summary>
-		/// <value><c>true</c> if this instance is pushed; otherwise, <c>false</c>.</value>
+		/// <value><c>true</c> if pushed; otherwise, <c>false</c>.</value>
 		public bool Pushed
 		{
-			get { return pushed; }
+			get { return nativeRef.Pushed; }
 		}
 
 		#endregion
-
-		#region IHandleHolder Members
 
 		/// <summary>
-		/// 	Gets the handle.
+		/// Releases the valid handle.
 		/// </summary>
-		/// <value>The handle.</value>
-		IntPtr IHandleHolder.Handle
+		protected override void ReleaseValidHandle()
 		{
-			get { return handle; }
+			NativeButton.Delete(handle);
+			nativeRef = default(ButtonExtended);
 		}
-
-		#endregion
 	}
 }

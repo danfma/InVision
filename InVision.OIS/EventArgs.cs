@@ -1,20 +1,23 @@
-﻿namespace InVision.OIS
+﻿using System;
+using InVision.OIS.Native;
+
+namespace InVision.OIS
 {
-	public abstract class EventArgs
+	public class EventArgs : System.EventArgs
 	{
 		/// <summary>
-		/// 	Initializes a new instance of the <see cref = "InVision.OIS.EventArgs" /> class.
+		/// Initializes a new instance of the <see cref="EventArgs"/> class.
 		/// </summary>
-		/// <param name = "device">The device.</param>
-		protected EventArgs(Device device)
+		/// <param name="eventArgExtended">The event arg extended.</param>
+		internal EventArgs(EventArgExtended eventArgExtended)
 		{
-			Device = device;
+			Device = eventArgExtended.Device;
 		}
 
 		/// <summary>
-		/// 	Gets the device.
+		/// Gets or sets the device.
 		/// </summary>
 		/// <value>The device.</value>
-		public Device Device { get; private set; }
+		public IntPtr Device { get; private set; }
 	}
 }

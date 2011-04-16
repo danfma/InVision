@@ -19,4 +19,4 @@ InVision.suo
 
 /Platform/projects
 /Platform/*-build-desktop/
-/Platform/InVisionWrap/build/
+/Platform/NativeLibs/*.pro.user*

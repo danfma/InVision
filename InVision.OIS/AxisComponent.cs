@@ -1,97 +1,66 @@
 ﻿using System;
-using System.Runtime.InteropServices;
-using InVision.Input;
+using InVision.OIS.Native;
 
 namespace InVision.OIS
 {
-	/// <summary>
-	/// </summary>
-	[StructLayout(LayoutKind.Sequential)]
-	public struct AxisComponent : IAxisComponent, IHandleHolder
+	public class AxisComponent : Component, IAxisComponent
 	{
-		private readonly IntPtr handle;
-		private readonly ComponentType componentType;
-		private readonly int absolute;
-		private readonly int relative;
-		private readonly bool absoluteOnly;
+		private AxisExtended nativeRef;
 
 		/// <summary>
-		/// 	Initializes a new instance of the <see cref = "AxisComponent" /> struct.
+		/// Initializes a new instance of the <see cref="AxisComponent"/> class.
 		/// </summary>
-		/// <param name = "handle">The handle.</param>
-		/// <param name = "componentType">Type of the component.</param>
-		/// <param name = "absolute">The absolute.</param>
-		/// <param name = "relative">The relative.</param>
-		/// <param name = "absoluteOnly">if set to <c>true</c> [absolute only].</param>
-		internal AxisComponent(IntPtr handle, ComponentType componentType, int absolute, int relative, bool absoluteOnly)
+		public AxisComponent()
+			: this(NativeAxis.New(), true)
 		{
-			this.handle = handle;
-			this.componentType = componentType;
-			this.absolute = absolute;
-			this.relative = relative;
-			this.absoluteOnly = absoluteOnly;
+			
 		}
 
 		/// <summary>
-		/// 	Initializes a new instance of the <see cref = "AxisComponent" /> struct.
+		/// Initializes a new instance of the <see cref="AxisComponent"/> class.
 		/// </summary>
-		/// <param name = "componentType">Type of the component.</param>
-		/// <param name = "absolute">The absolute.</param>
-		/// <param name = "relative">The relative.</param>
-		/// <param name = "absoluteOnly">if set to <c>true</c> [absolute only].</param>
-		public AxisComponent(ComponentType componentType, int absolute, int relative, bool absoluteOnly)
-			: this()
+		/// <param name="pSelf">The p self.</param>
+		/// <param name="ownsHandle">if set to <c>true</c> [owns handle].</param>
+		internal AxisComponent(AxisExtended pSelf, bool ownsHandle = false)
+			: base(pSelf.BaseInfo, ownsHandle)
 		{
-			handle = IntPtr.Zero;
-			this.componentType = componentType;
-			this.absolute = absolute;
-			this.relative = relative;
-			this.absoluteOnly = absoluteOnly;
+			nativeRef = pSelf;
 		}
 
 		/// <summary>
-		/// 	Gets the type of the component.
-		/// </summary>
-		/// <value>The type of the component.</value>
-		public ComponentType ComponentType
-		{
-			get { return componentType; }
-		}
-
-		/// <summary>
-		/// 	Gets the absolute.
+		/// Gets the absolute.
 		/// </summary>
 		/// <value>The absolute.</value>
 		public int Absolute
 		{
-			get { return absolute; }
+			get { return nativeRef.Abs; }
 		}
 
 		/// <summary>
-		/// 	Gets the relative.
+		/// Gets the relative.
 		/// </summary>
 		/// <value>The relative.</value>
 		public int Relative
 		{
-			get { return relative; }
+			get { return nativeRef.Rel; }
 		}
 
 		/// <summary>
-		/// 	Gets a value indicating whether [absolute only].
+		/// Gets a value indicating whether [absolute only].
 		/// </summary>
 		/// <value><c>true</c> if [absolute only]; otherwise, <c>false</c>.</value>
 		public bool AbsoluteOnly
 		{
-			get { return absoluteOnly; }
+			get { return nativeRef.AbsOnly; }
 		}
 
 		/// <summary>
-		/// 	Gets the handle.
+		/// Releases the valid handle.
 		/// </summary>
-		/// <value>The handle.</value>
-		IntPtr IHandleHolder.Handle
+		protected override void ReleaseValidHandle()
 		{
-			get { return handle; }
+			NativeAxis.Delete(handle);
+			nativeRef = default(AxisExtended);
 		}
 	}
 }

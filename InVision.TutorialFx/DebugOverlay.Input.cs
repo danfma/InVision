@@ -4,57 +4,55 @@ namespace InVision.TutorialFx
 {
 	public class DebugOverlay
 	{
-		protected RenderWindow mWindow;
-		protected float timeSinceLastDebugUpdate = 1;
-		protected OverlayElement mGuiAvg;
-		protected OverlayElement mGuiCurr;
-		protected OverlayElement mGuiBest;
-		protected OverlayElement mGuiWorst;
-		protected OverlayElement mGuiTris;
-		protected OverlayElement mModesText;
-		protected string mAdditionalInfo = "";
-
-
+		protected RenderWindow Window;
+		protected float TimeSinceLastDebugUpdate = 1;
+		protected OverlayElement GuiAvg;
+		protected OverlayElement GuiCurr;
+		protected OverlayElement GuiBest;
+		protected OverlayElement GuiWorst;
+		protected OverlayElement GuiTris;
+		protected OverlayElement ModesText;
+		private string additionalInfo = "";
 
 		public DebugOverlay(RenderWindow window)
 		{
-			mWindow = window;
+			Window = window;
 
 			var debugOverlay = OverlayManager.Instance.GetByName("Core/DebugOverlay");
 			debugOverlay.Show();
 
-			mGuiAvg = OverlayManager.Instance.GetOverlayElement("Core/AverageFps");
-			mGuiCurr = OverlayManager.Instance.GetOverlayElement("Core/CurrFps");
-			mGuiBest = OverlayManager.Instance.GetOverlayElement("Core/BestFps");
-			mGuiWorst = OverlayManager.Instance.GetOverlayElement("Core/WorstFps");
-			mGuiTris = OverlayManager.Instance.GetOverlayElement("Core/NumTris");
-			mModesText = OverlayManager.Instance.GetOverlayElement("Core/NumBatches");
+			GuiAvg = OverlayManager.Instance.GetOverlayElement("Core/AverageFps");
+			GuiCurr = OverlayManager.Instance.GetOverlayElement("Core/CurrFps");
+			GuiBest = OverlayManager.Instance.GetOverlayElement("Core/BestFps");
+			GuiWorst = OverlayManager.Instance.GetOverlayElement("Core/WorstFps");
+			GuiTris = OverlayManager.Instance.GetOverlayElement("Core/NumTris");
+			ModesText = OverlayManager.Instance.GetOverlayElement("Core/NumBatches");
 		}
 
 		public string AdditionalInfo
 		{
-			set { mAdditionalInfo = value; }
-			get { return mAdditionalInfo; }
+			set { additionalInfo = value; }
+			get { return additionalInfo; }
 		}
 
 		public void Update(float timeFragment)
 		{
-			if (timeSinceLastDebugUpdate > 0.5f)
+			if (TimeSinceLastDebugUpdate > 0.5f)
 			{
-				var stats = mWindow.GetStatistics();
+				var stats = Window.GetStatistics();
 
-				mGuiAvg.Caption = "Average FPS: " + stats.AvgFPS;
-				mGuiCurr.Caption = "Current FPS: " + stats.LastFPS;
-				mGuiBest.Caption = "Best FPS: " + stats.BestFPS + " " + stats.BestFrameTime + " ms";
-				mGuiWorst.Caption = "Worst FPS: " + stats.WorstFPS + " " + stats.WorstFrameTime + " ms";
-				mGuiTris.Caption = "Triangle Count: " + stats.TriangleCount;
-				mModesText.Caption = mAdditionalInfo;
+				GuiAvg.Caption = "Average FPS: " + stats.AvgFPS;
+				GuiCurr.Caption = "Current FPS: " + stats.LastFPS;
+				GuiBest.Caption = "Best FPS: " + stats.BestFPS + " " + stats.BestFrameTime + " ms";
+				GuiWorst.Caption = "Worst FPS: " + stats.WorstFPS + " " + stats.WorstFrameTime + " ms";
+				GuiTris.Caption = "Triangle Count: " + stats.TriangleCount;
+				ModesText.Caption = additionalInfo;
 
-				timeSinceLastDebugUpdate = 0;
+				TimeSinceLastDebugUpdate = 0;
 			}
 			else
 			{
-				timeSinceLastDebugUpdate += timeFragment;
+				TimeSinceLastDebugUpdate += timeFragment;
 			}
 		}
 	}

@@ -20,6 +20,7 @@ extern "C"
 	// COLLECTIONS
 	typedef _handle HNameValueCollection;
 	typedef _handle HVectorList;
+	typedef _handle HEnumerator;
 	
 	//
 	// .NET DATA TYPES
@@ -53,7 +54,15 @@ extern "C"
 	 * Utilities
 	 */
 
-	__export void __entry util_delete_string(const _byte* data);
+	__export void __entry util_string_delete(const _string data);
+
+	/*
+	 * Exception handler
+	 */
+	typedef void (*ExceptionHandler)(const _string message, const _string filename, _int line);
+
+	__export void __entry _register_exception_handler(ExceptionHandler handler);
+	__export void __entry _raise_exception(const _string message, const _string filename, _int line);
 }
 
 #ifdef __cplusplus
@@ -74,7 +83,7 @@ extern "C"
 	/*
 	 * Utilities
 	 */
-	inline _char* copyString(const std::string* str)
+	inline _string copyString(const std::string* str)
 	{
 		int length = str->size();
 		_char* data = new _char[length + 1];
@@ -85,7 +94,7 @@ extern "C"
 		return data;
 	}
 
-	inline _char* copyString(std::string& str)
+	inline _string copyString(std::string& str)
 	{
 		int length = str.size();
 		_char* data = new _char[length + 1];

@@ -1,5 +1,4 @@
 ﻿using System.Runtime.InteropServices;
-using InVision.Input;
 
 namespace InVision.OIS
 {
@@ -7,7 +6,7 @@ namespace InVision.OIS
 	public struct DeviceInfo
 	{
 		[MarshalAs(UnmanagedType.I4)]
-		private readonly InputType type;
+		private readonly DeviceType type;
 
 		[MarshalAs(UnmanagedType.LPStr)]
 		private readonly string name;
@@ -17,7 +16,7 @@ namespace InVision.OIS
 		/// </summary>
 		/// <param name="type">The type.</param>
 		/// <param name="name">The name.</param>
-		public DeviceInfo(InputType type, string name)
+		public DeviceInfo(DeviceType type, string name)
 		{
 			this.type = type;
 			this.name = name;
@@ -27,7 +26,7 @@ namespace InVision.OIS
 		/// Gets the type.
 		/// </summary>
 		/// <value>The type.</value>
-		public InputType Type
+		public DeviceType Type
 		{
 			get { return type; }
 		}

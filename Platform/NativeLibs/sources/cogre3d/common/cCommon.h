@@ -36,7 +36,6 @@ extern "C"
 	typedef InVisionHandle HRoot;
 	typedef InVisionHandle HRenderWindow;
 	typedef InVisionHandle HFrameListener;
-	typedef InVisionHandle HEnumerator;
 	typedef InVisionHandle HRenderSystem;
 	typedef InVisionHandle HSceneManager;
 	typedef InVisionHandle HTextureManager;

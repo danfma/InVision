@@ -58,18 +58,4 @@ namespace InVision.Framework.Config
 			InvokePropertyChanged(new PropertyChangedEventArgs(propertyName));
 		}
 	}
-
-	public sealed class Configuration : IConfigurationSection
-	{
-		#region IConfigurationSection Members
-
-		/// <summary>
-		/// 	Flushes this instance.
-		/// </summary>
-		public void Flush()
-		{
-		}
-
-		#endregion
-	}
 }

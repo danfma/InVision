@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using InVision.Collections;
+using InVision.Native.Collections;
 
 namespace InVision.OIS
 {
-	public class FactoryList : Collections.List<IFactoryCreator>
+	public class FactoryList : InVision.Native.Collections.List<IFactoryCreator>
 	{
 		/// <summary>
 		/// Initializes a new instance of the <see cref="FactoryList"/> class.

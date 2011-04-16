@@ -1,6 +1,4 @@
-﻿using InVision.Input;
-
-namespace InVision.OIS
+﻿namespace InVision.OIS
 {
 	public interface IComponent
 	{

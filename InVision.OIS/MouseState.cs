@@ -1,136 +1,44 @@
-﻿using System;
-using System.Runtime.InteropServices;
-using InVision.OIS;
+﻿using InVision.Native;
+using InVision.OIS.Native;
 
-namespace InVision.Input
+namespace InVision.OIS
 {
-	[StructLayout(LayoutKind.Sequential)]
-	public struct MouseState : IMouseState, IHandleHolder
+	public class MouseState : ReferenceHandle
 	{
-		private readonly IntPtr handle;
-		private readonly int width;
-		private readonly int height;
-		private readonly AxisComponent x;
-		private readonly AxisComponent y;
-		private readonly AxisComponent z;
-		private readonly int buttons;
+		private MouseStateExtended state;
 
 		/// <summary>
-		/// Initializes a new instance of the <see cref="MouseState"/> struct.
+		/// Initializes a new instance of the <see cref="MouseState"/> class.
 		/// </summary>
-		/// <param name="handle">The handle.</param>
-		/// <param name="width">The width.</param>
-		/// <param name="height">The height.</param>
-		/// <param name="x">The x.</param>
-		/// <param name="y">The y.</param>
-		/// <param name="z">The z.</param>
-		/// <param name="buttons">The buttons.</param>
-		internal MouseState(IntPtr handle, int width, int height, AxisComponent x,
-		                    AxisComponent y, AxisComponent z, int buttons)
+		/// <param name="state">The state.</param>
+		internal MouseState(MouseStateExtended state)
+			: base(state.Self)
 		{
-			this.handle = handle;
-			this.width = width;
-			this.height = height;
-			this.x = x;
-			this.y = y;
-			this.z = z;
-			this.buttons = buttons;
+			this.state = state;
+			X = new AxisComponent(state.X);
+			Y = new AxisComponent(state.Y);
+			Z = new AxisComponent(state.Z);
 		}
 
-		/// <summary>
-		/// Initializes a new instance of the <see cref="MouseState"/> struct.
-		/// </summary>
-		/// <param name="width">The width.</param>
-		/// <param name="height">The height.</param>
-		/// <param name="x">The x.</param>
-		/// <param name="y">The y.</param>
-		/// <param name="z">The z.</param>
-		/// <param name="buttons">The buttons.</param>
-		public MouseState(int width, int height, AxisComponent x, AxisComponent y,
-		                  AxisComponent z, int buttons)
-		{
-			handle = IntPtr.Zero;
-			this.width = width;
-			this.height = height;
-			this.x = x;
-			this.y = y;
-			this.z = z;
-			this.buttons = buttons;
-		}
-
-		/// <summary>
-		/// 	Gets the handle.
-		/// </summary>
-		/// <value>The handle.</value>
-		IntPtr IHandleHolder.Handle
-		{
-			get { return handle; }
-		}
-
-		/// <summary>
-		/// 	Gets the width.
-		/// </summary>
-		/// <value>The width.</value>
 		public int Width
 		{
-			get { return width; }
+			get { return state.Width; }
 		}
 
-		/// <summary>
-		/// 	Gets the height.
-		/// </summary>
-		/// <value>The height.</value>
 		public int Height
 		{
-			get { return height; }
+			get { return state.Height; }
 		}
 
-		/// <summary>
-		/// 	Gets the X.
-		/// </summary>
-		/// <value>The X.</value>
-		public AxisComponent X
-		{
-			get { return x; }
-		}
+		public AxisComponent X { get; private set; }
 
-		/// <summary>
-		/// 	Gets the Y.
-		/// </summary>
-		/// <value>The Y.</value>
-		public AxisComponent Y
-		{
-			get { return y; }
-		}
+		public AxisComponent Y { get; private set; }
 
-		/// <summary>
-		/// 	Gets the Z.
-		/// </summary>
-		/// <value>The Z.</value>
-		public AxisComponent Z
-		{
-			get { return z; }
-		}
+		public AxisComponent Z { get; private set; }
 
-		/// <summary>
-		/// 	Gets the buttons.
-		/// </summary>
-		/// <value>The buttons.</value>
 		public int Buttons
 		{
-			get { return buttons; }
-		}
-
-		/// <summary>
-		/// 	Determines whether [is button down] [the specified button].
-		/// </summary>
-		/// <param name = "button">The button.</param>
-		/// <returns>
-		/// 	<c>true</c> if [is button down] [the specified button]; otherwise, <c>false</c>.
-		/// </returns>
-		public bool IsButtonDown(MouseButton button)
-		{
-			return ((buttons & (1L << (int) button)) == 0) ? false : true;
+			get { return state.Buttons; }
 		}
 	}
 }

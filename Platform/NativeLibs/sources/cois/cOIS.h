@@ -8,14 +8,30 @@ extern "C"
 	/*
 	 * Handle types
 	 */
-	typedef _handle OISComponentHandle;
-	typedef _handle OISAxisHandle;
-	typedef _handle OISButtonHandle;
-	typedef _handle OISVector3Handle;
+	typedef _handle HComponent;
+	typedef _handle HAxis;
+	typedef _handle HButton;
+	typedef _handle HVector3;
+	typedef _handle HObject;
+	typedef _handle HInputManager;
+	typedef _handle HInterface;
+	typedef _handle HEventArg;
 
-	typedef _handle OISObjectHandle;
-	typedef _handle OISInputManagerHandle;
-	typedef _handle OISInterfaceHandle;
+	typedef _handle HMouseState;
+	typedef _handle HMouseListener;
+	typedef _handle HMouseEvent;
+	typedef _handle HMouse;
+
+	typedef _handle HKeyEvent;
+	typedef _handle HKeyListener;
+	typedef _handle HKeyboard;
+
+	typedef _handle HJoystickState;
+
+	typedef _handle HVector;
+	typedef HVector HVectorBool;
+	typedef HVector HVectorAxis;
+	typedef HVector HVectorVector3;
 
 	/*
 	 * OIS::Type
@@ -53,14 +69,6 @@ extern "C"
 	 */
 	extern _int OIS_ITYPE_FORCE_FEEDBACK;
 	extern _int OIS_ITYPE_RESERVED;
-
-	/*
-	 * Exception handler
-	 */
-	typedef void (*ExceptionHandler)(const _string message, _int errorType, const _string filename, _int line);
-
-	__export void __entry _oisRegisterExceptionHandler(ExceptionHandler handler);
-	__export void __entry _oisRaiseException(const _string message, _int errorType, const _string filename, _int line);
 }
 
 #ifdef __cplusplus
@@ -71,14 +79,14 @@ namespace invision
 {
 namespace ois
 {
-	inline void raiseException(std::string message, OIS::OIS_ERROR error, std::string filename, int line)
+	inline void raiseException(std::string message, std::string filename, int line)
 	{
-		_oisRaiseException((const _string)message.c_str(), (_int)error, (const _string)filename.c_str(), (_int)line);
+		_raise_exception((const _string)message.c_str(), (const _string)filename.c_str(), (_int)line);
 	}
 
 	inline void raiseException(std::string message)
 	{
-		_oisRaiseException((const _string)message.c_str(), OIS_ERROR_GENERAL, NULL, 0);
+		_raise_exception((const _string)message.c_str(), NULL, 0);
 	}
 
 	inline bool ensureNotNull(_handle handle)

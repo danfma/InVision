@@ -2,7 +2,7 @@
 
 namespace InVision.Framework.Config
 {
-	public sealed class WindowConfiguration : IConfigurationSection
+	public sealed class WindowConfiguration
 	{
 		/// <summary>
 		/// Gets or sets the width.

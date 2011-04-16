@@ -1,6 +1,6 @@
 ﻿using System;
 using InVision.Native.Ogre;
-using OpenTK;
+using InVision.GameMath;
 
 namespace InVision.Rendering
 {

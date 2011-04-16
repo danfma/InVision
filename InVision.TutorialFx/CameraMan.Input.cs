@@ -1,6 +1,6 @@
 ﻿using System;
+using InVision.GameMath;
 using InVision.Rendering;
-using OpenTK;
 
 namespace InVision.TutorialFx
 {

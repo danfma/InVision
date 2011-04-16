@@ -13,14 +13,14 @@
 		/// </summary>
 		/// <param name="type">The type.</param>
 		/// <returns></returns>
-		int GetTotalDevices(InputType type);
+		int GetTotalDevices(DeviceType type);
 
 		/// <summary>
 		/// Frees the devices.
 		/// </summary>
 		/// <param name="type">The type.</param>
 		/// <returns></returns>
-		int FreeDevices(InputType type);
+		int FreeDevices(DeviceType type);
 
 		/// <summary>
 		/// Vendors the exists.
@@ -28,7 +28,7 @@
 		/// <param name="type">The type.</param>
 		/// <param name="vendor">The vendor.</param>
 		/// <returns></returns>
-		bool VendorExists(InputType type, string vendor);
+		bool VendorExists(DeviceType type, string vendor);
 
 		/// <summary>
 		/// Creates the object.
@@ -38,24 +38,12 @@
 		/// <param name="bufferMode">if set to <c>true</c> [buffer mode].</param>
 		/// <param name="vendor">The vendor.</param>
 		/// <returns></returns>
-		IDevice CreateObject(InputManager creator, InputType type, bool bufferMode, string vendor = "");
+		IDevice CreateObject(InputManager creator, DeviceType type, bool bufferMode, string vendor = "");
 
 		/// <summary>
 		/// Destroys the object.
 		/// </summary>
 		/// <param name="device">The input object.</param>
 		void DestroyObject(IDevice device);
-	}
-
-	public enum MouseButton
-	{
-		Left,
-		Right,
-		Middle,
-		Button3,
-		Button4,
-		Button5,
-		Button6,
-		Button7
 	}
 }

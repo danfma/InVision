@@ -5,16 +5,16 @@
 
 extern "C"
 {
-	struct OISComponentHandleInfo {
-		OISComponentHandle handle;
+	struct ComponentExtended {
+		HComponent handle;
 		_int* componentType;
 	};
 
 	/*
 	 * OIS::Component
 	 */
-	__export OISComponentHandleInfo __entry ois_component_new(_int ctype);
-	__export void __entry ois_component_delete(OISComponentHandle self);
+	__export ComponentExtended __entry ois_component_new(_int ctype);
+	__export void __entry ois_component_delete(HComponent self);
 }
 
 #endif // CCOMPONENT_H

@@ -43,14 +43,15 @@ solution "InVisionWrap"
 	configurations { "Debug", "Release" }
 	location "projects/"
 	
-	-- PROJECT InVisionPlatform
-	project "InVisionWrap"
+	project "InVisionNative"
 		kind "SharedLib"
 		language "C++"
 		files {
-			"../Platform/InVisionWrap/invision/**.h",
-			"../Platform/InVisionWrap/invision/**.cpp"
+			"../Platform/NativeLibs/sources/common/**.h",
+			"../Platform/NativeLibs/sources/common/**.cpp"
 		}
+		
+		table.insert(config.includes, "../Platform/NativeLibs/sources/common/")
 		
 		includedirs(config.includes)
 		defines(config.defines)
@@ -58,16 +59,45 @@ solution "InVisionWrap"
 		configuration "Debug"
 			defines { "DEBUG" }
 			flags { "Symbols" }
-			targetdir "Bin/Debug/Platform/"
+			targetdir "Bin/Debug_x86/Platform/"
 			
 			libdirs(config.libdirs)
-			links(config.debugLinks)
 			
 		configuration "Release"
 			defines { "NDEBUG" }
 			flags { "Optimize" }
-			targetdir "Bin/Release/Platform/"
+			targetdir "Bin/Release_x86/Platform/"
 			
 			libdirs(config.libdirs)
-			links(config.ndebugLinks)
+			
+	project "InVisionNative_OIS"
+		kind "SharedLib"
+		language "C++"
+		files {
+			"../Platform/NativeLibs/sources/common/**.h",
+			"../Platform/NativeLibs/sources/cois/**.h",
+			"../Platform/NativeLibs/sources/cois/**.cpp"
+		}
+		
+		table.insert(config.includes, "../Platform/NativeLibs/sources/common/")
+		table.insert(config.includes, "../Platform/NativeLibs/sources/cois/")
+		
+		includedirs(config.includes)
+		defines(config.defines)
+		
+		configuration "Debug"
+			defines { "DEBUG" }
+			flags { "Symbols" }
+			targetdir "Bin/Debug_x86/Platform/"
+			
+			libdirs(config.libdirs)
+			links({ "OIS", "InVisionNative" })
+			
+		configuration "Release"
+			defines { "NDEBUG" }
+			flags { "Optimize" }
+			targetdir "Bin/Release_x86/Platform/"
+			
+			libdirs(config.libdirs)
+			links({ "OIS", "InVisionNative" })
 			

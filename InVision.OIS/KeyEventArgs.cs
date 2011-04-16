@@ -1,42 +1,37 @@
-﻿using InVision.Input;
+﻿using InVision.OIS.Native;
 
 namespace InVision.OIS
 {
-	public sealed class KeyEventArgs : EventArgs
+	public class KeyEventArgs : EventArgs
 	{
-		/// <summary>
-		/// Initializes a new instance of the <see cref="KeyEventArgs"/> class.
-		/// </summary>
-		/// <param name="data">The <see cref="UKeyEventArgs"/> instance containing the event data.</param>
-		internal KeyEventArgs(ref UKeyEventArgs data)
-			: base(data.Device)
-		{
-			Key = data.Key;
-			TextCode = data.TextCode;
-		}
+		private readonly KeyEventExtended keyEventExtended;
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="KeyEventArgs"/> class.
 		/// </summary>
-		/// <param name="device">The device.</param>
-		/// <param name="key">The key.</param>
-		/// <param name="text">The text.</param>
-		public KeyEventArgs(Device device, KeyCode key, uint text) : base(device)
+		/// <param name="keyEventExtended">The key event extended.</param>
+		internal KeyEventArgs(KeyEventExtended keyEventExtended)
+			: base(keyEventExtended.Base)
 		{
-			Key = key;
-			TextCode = text;
+			this.keyEventExtended = keyEventExtended;
 		}
 
 		/// <summary>
-		/// Gets or sets the key.
+		/// Gets the key code.
 		/// </summary>
-		/// <value>The key.</value>
-		public KeyCode Key { get; private set; }
+		/// <value>The key code.</value>
+		public KeyCode KeyCode
+		{
+			get { return keyEventExtended.Key; }
+		}
 
 		/// <summary>
-		/// Gets or sets the text code.
+		/// Gets the text value.
 		/// </summary>
-		/// <value>The text code.</value>
-		public uint TextCode { get; private set; }
+		/// <value>The text value.</value>
+		public uint TextValue
+		{
+			get { return keyEventExtended.Text; }
+		}
 	}
 }

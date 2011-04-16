@@ -3,25 +3,25 @@ using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
+using InVision.GameMath;
 using InVision.Rendering;
 using InVision.Rendering.Listeners;
-using OpenTK;
 
 namespace InVision.TutorialFx
 {
 	public abstract partial class BaseApplication
 	{
-		protected Camera mCamera;
-		protected CameraMan mCameraMan;
-		protected DebugOverlay mDebugOverlay;
-		protected string mPluginsCfg = "plugins.cfg";
-		protected int mRenderMode;
-		protected string mResourcesCfg = "resources.cfg";
-		protected Root mRoot;
-		protected SceneManager mSceneMgr;
-		protected bool mShutDown;
-		protected int mTextureMode;
-		protected RenderWindow mWindow;
+		protected Camera Camera;
+		protected CameraMan CameraMan;
+		protected DebugOverlay DebugOverlay;
+		protected string PluginsCfg = "plugins.cfg";
+		protected int RenderMode;
+		protected string ResourcesCfg = "resources.cfg";
+		protected Root Root;
+		protected SceneManager SceneMgr;
+		protected bool ShutDown;
+		protected int TextureMode;
+		protected RenderWindow Window;
 
 		/// <summary>
 		/// Gets or sets the plugin directory.
@@ -39,7 +39,7 @@ namespace InVision.TutorialFx
 				if (!Setup())
 					return;
 
-				mRoot.StartRendering();
+				Root.StartRendering();
 
 				DestroyScene();
 			}
@@ -70,9 +70,9 @@ namespace InVision.TutorialFx
 		protected virtual bool Setup()
 		{
 			if (!string.IsNullOrEmpty(ConfigDirectory))
-				mPluginsCfg = Path.Combine(ConfigDirectory, mPluginsCfg);
+				PluginsCfg = Path.Combine(ConfigDirectory, PluginsCfg);
 
-			mRoot = new Root(mPluginsCfg);
+			Root = new Root(PluginsCfg);
 
 			if (!Configure())
 				return false;
@@ -91,17 +91,17 @@ namespace InVision.TutorialFx
 			CreateFrameListeners();
 			InitializeInput();
 
-			mDebugOverlay = new DebugOverlay(mWindow);
-			mDebugOverlay.AdditionalInfo = "Bilinear";
+			DebugOverlay = new DebugOverlay(Window);
+			DebugOverlay.AdditionalInfo = "Bilinear";
 
 			return true;
 		}
 
 		protected virtual bool Configure()
 		{
-			if (mRoot.ShowConfigDialog())
+			if (Root.ShowConfigDialog())
 			{
-				mWindow = mRoot.Initialise(true, "TutorialApplication Render Window");
+				Window = Root.Initialise(true, "TutorialApplication Render Window");
 				return true;
 			}
 
@@ -110,34 +110,34 @@ namespace InVision.TutorialFx
 
 		protected virtual void ChooseSceneManager()
 		{
-			mSceneMgr = mRoot.CreateSceneManager(SceneType.Generic);
+			SceneMgr = Root.CreateSceneManager(SceneType.Generic);
 		}
 
 		protected virtual void CreateCamera()
 		{
-			mCamera = mSceneMgr.CreateCamera("PlayerCam");
+			Camera = SceneMgr.CreateCamera("PlayerCam");
 
-			mCamera.Position = new Vector3(0, 100, 250);
+			Camera.Position = new Vector3(0, 100, 250);
 
-			mCamera.LookAt(new Vector3(0, 50, 0));
-			mCamera.NearClipDistance = 5;
+			Camera.LookAt(new Vector3(0, 50, 0));
+			Camera.NearClipDistance = 5;
 
-			mCameraMan = new CameraMan(mCamera);
+			CameraMan = new CameraMan(Camera);
 		}
 
 		protected virtual void CreateViewports()
 		{
 			// Create one viewport, entire window
-			var vp = mWindow.AddViewport(mCamera);
+			Viewport vp = Window.AddViewport(Camera);
 			vp.BackgroundColour = ColourValues.Black;
 
 			// Alter the camera aspect ratio to match the viewport
 			float aspectRatio = vp.ActualWidth / (float)vp.ActualHeight;
 
 			if (float.IsNaN(aspectRatio))
-				mCamera.SetAutoAspectRatio(true);
+				Camera.SetAutoAspectRatio(true);
 			else
-				mCamera.AspectRatio = aspectRatio;
+				Camera.AspectRatio = aspectRatio;
 		}
 
 		protected virtual void CreateResourceListener()
@@ -147,11 +147,11 @@ namespace InVision.TutorialFx
 		protected virtual void LoadResources()
 		{
 			if (!string.IsNullOrEmpty(ConfigDirectory))
-				mResourcesCfg = Path.Combine(ConfigDirectory, mResourcesCfg);
+				ResourcesCfg = Path.Combine(ConfigDirectory, ResourcesCfg);
 
 			// Load resource paths from config file
 			var cf = new ConfigFile();
-			cf.Load(mResourcesCfg, "\t:=", true);
+			cf.Load(ResourcesCfg, "\t:=", true);
 
 			// Go through all sections & settings in the file
 			var settings =
@@ -175,69 +175,69 @@ namespace InVision.TutorialFx
 
 		protected void CycleTextureFilteringMode()
 		{
-			mTextureMode = (mTextureMode + 1) % 4;
-			switch (mTextureMode)
+			TextureMode = (TextureMode + 1) % 4;
+			switch (TextureMode)
 			{
 				case 0:
 					MaterialManager.Instance.SetDefaultTextureFiltering(TextureFilterOption.Bilinear);
-					mDebugOverlay.AdditionalInfo = "BiLinear";
+					DebugOverlay.AdditionalInfo = "BiLinear";
 					break;
 
 				case 1:
 					MaterialManager.Instance.SetDefaultTextureFiltering(TextureFilterOption.Trilinear);
-					mDebugOverlay.AdditionalInfo = "TriLinear";
+					DebugOverlay.AdditionalInfo = "TriLinear";
 					break;
 
 				case 2:
 					MaterialManager.Instance.SetDefaultTextureFiltering(TextureFilterOption.Anisotropic);
 					MaterialManager.Instance.DefaultAnisotropy = 8;
-					mDebugOverlay.AdditionalInfo = "Anisotropic";
+					DebugOverlay.AdditionalInfo = "Anisotropic";
 					break;
 
 				case 3:
 					MaterialManager.Instance.SetDefaultTextureFiltering(TextureFilterOption.None);
 					MaterialManager.Instance.DefaultAnisotropy = 1;
-					mDebugOverlay.AdditionalInfo = "None";
+					DebugOverlay.AdditionalInfo = "None";
 					break;
 			}
 		}
 
 		protected void CyclePolygonMode()
 		{
-			mRenderMode = (mRenderMode + 1) % 3;
+			RenderMode = (RenderMode + 1) % 3;
 
-			switch (mRenderMode)
+			switch (RenderMode)
 			{
 				case 0:
-					mCamera.PolygonMode = PolygonMode.Solid;
+					Camera.PolygonMode = PolygonMode.Solid;
 					break;
 
 				case 1:
-					mCamera.PolygonMode = PolygonMode.Wireframe;
+					Camera.PolygonMode = PolygonMode.Wireframe;
 					break;
 
 				case 2:
-					mCamera.PolygonMode = PolygonMode.Points;
+					Camera.PolygonMode = PolygonMode.Points;
 					break;
 			}
 		}
 
 		protected void TakeScreenshot()
 		{
-			mWindow.WriteContentsToTimestampedFile("screenshot", ".png");
+			Window.WriteContentsToTimestampedFile("screenshot", ".png");
 		}
 
 		protected virtual void CreateFrameListeners()
 		{
-			mRoot.FrameEvent.FrameStarted += OnFrameRenderingQueued;
+			Root.FrameEvent.FrameStarted += OnFrameRenderingQueued;
 		}
 
 		protected virtual bool OnFrameRenderingQueued(FrameEvent evt)
 		{
-			if (mWindow.IsClosed)
+			if (Window.IsClosed)
 				return false;
 
-			if (mShutDown)
+			if (ShutDown)
 				return false;
 
 			try
@@ -246,14 +246,14 @@ namespace InVision.TutorialFx
 
 				UpdateScene(evt);
 
-				mCameraMan.UpdateCamera(evt.TimeSinceLastFrame);
-				mDebugOverlay.Update(evt.TimeSinceLastFrame);
+				CameraMan.UpdateCamera(evt.TimeSinceLastFrame);
+				DebugOverlay.Update(evt.TimeSinceLastFrame);
 
 				return true;
 			}
 			catch (ShutdownException)
 			{
-				mShutDown = true;
+				ShutDown = true;
 				return false;
 			}
 		}

@@ -1,4 +1,4 @@
-﻿namespace InVision.Input
+﻿namespace InVision.OIS
 {
 	public enum Modifier
 	{

@@ -41,20 +41,3 @@ _int OIS_ERROR_GENERAL							= (_int)OIS::E_General;
 _int OIS_ITYPE_FORCE_FEEDBACK	= (_int)OIS::Interface::ForceFeedback;
 _int OIS_ITYPE_RESERVED			= (_int)OIS::Interface::Reserved;
 
-/*
- * Exception handler
- */
-ExceptionHandler exceptionHandler = NULL;
-
-__export void __entry _oisRegisterExceptionHandler(ExceptionHandler handler)
-{
-	exceptionHandler = handler;
-}
-
-__export void __entry _oisRaiseException(const _string message, _int errorType, const _string filename, _int line)
-{
-	if (exceptionHandler == NULL)
-		cerr << "Exception (" << errorType << " - file: " << filename << " line: " << line << "): " << message << endl;
-	else
-		exceptionHandler(message, errorType, filename, line);
-}

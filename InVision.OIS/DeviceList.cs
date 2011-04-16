@@ -1,9 +1,9 @@
 ﻿using System;
-using InVision.Collections;
+using InVision.Native.Collections;
 
 namespace InVision.OIS
 {
-	public class DeviceList : MultiDictionary<InputType, string>
+	public class DeviceList : MultiDictionary<DeviceType, string>
 	{
 		/// <summary>
 		/// Initializes a new instance of the <see cref="DeviceList"/> class.
