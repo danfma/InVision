@@ -1,7 +1,7 @@
 #ifndef OGREROOT_H
 #define OGREROOT_H
 
-#include "invision/Common.h"
+#include "cOgre.h"
 #include "NameValueParamsHandle.h"
 
 extern "C"
@@ -15,13 +15,13 @@ extern "C"
 	 */
 
 	__export HRoot __entry root_new(
-		const char* pluginFilename,
-		const char* configFilename);
+		const _string pluginFilename,
+		const _string configFilename);
 
 	__export HRoot __entry root_new_with_log(
-		const char* pluginFilename,
-		const char* configFilename,
-		const char* logFilename);
+		const _string pluginFilename,
+		const _string configFilename,
+		const _string logFilename);
 
 	__export void __entry root_delete(
 		HRoot self);
@@ -33,10 +33,10 @@ extern "C"
 	__export void __entry root_save_config(
 		HRoot self);
 
-	__export Bool __entry root_restore_config(
+	__export _bool __entry root_restore_config(
 		HRoot self);
 
-	__export Bool __entry root_show_config_dialog(
+	__export _bool __entry root_show_config_dialog(
 		HRoot self);
 
 	// TODO addRenderSystem
@@ -47,36 +47,36 @@ extern "C"
 	/** NEW */
 	__export HRenderSystem __entry root_get_rendersystem_by_name(
 		HRoot self,
-		const char* name);
+		const _string name);
 
 	__export HRenderWindow __entry root_initialise_with_title_and_cap(
 		HRoot self,
-		Bool autoCreateWindow,
-		const char* title,
-		const char* capabilitiesConfig);
+		_bool autoCreateWindow,
+		const _string title,
+		const _string capabilitiesConfig);
 
 	__export HRenderWindow __entry root_initialise_with_title(
 		HRoot self,
-		Bool autoCreateWindow,
-		const char* title);
+		_bool autoCreateWindow,
+		const _string title);
 
 	__export HRenderWindow __entry root_initialise(
 		HRoot self,
-		Bool autoCreateWindow);
+		_bool autoCreateWindow);
 
-	__export Bool __entry root_is_initialised(
+	__export _bool __entry root_is_initialised(
 		HRoot self);
 
 	// TODO useCustomRenderSystemCapabilities
 
 	/** NEW */
-	__export Bool __entry root_get_remove_render_queue_structures_on_clear(
+	__export _bool __entry root_get_remove_render_queue_structures_on_clear(
 		HRoot self);
 
 	/** NEW */
 	__export void __entry root_set_remove_render_queue_structures_on_clear(
 		HRoot self,
-		Bool value);
+		_bool value);
 
 	// TODO addSceneManagerFactory
 	// TODO removeSceneManagerFactory
@@ -85,21 +85,21 @@ extern "C"
 
 	__export HSceneManager __entry root_create_scenemanager_by_typename(
 		HRoot self,
-		const char* typeName);
+		const _string typeName);
 
 	__export HSceneManager __entry root_create_scenemanager_by_typename2(
 		HRoot self,
-		const char* typeName,
-		const char* instanceName);
+		const _string typeName,
+		const _string instanceName);
 
 	__export HSceneManager __entry root_create_scenemanager_by_type(
 		HRoot self,
-		UInt32 type);
+		_uint type);
 
 	__export HSceneManager __entry root_create_scenemanager_by_type2(
 		HRoot self,
-		UInt32 type,
-		const char* instanceName);
+		_uint type,
+		const _string instanceName);
 
 	/** NEW */
 	__export void __entry root_destroy_scenemanager(
@@ -109,12 +109,12 @@ extern "C"
 	/** NEW */
 	__export HSceneManager __entry root_get_scenemanager(
 		HRoot self,
-		const char* instanceName);
+		const _string instanceName);
 
 	/** NEW */
-	__export Bool __entry root_has_scenemanager(
+	__export _bool __entry root_has_scenemanager(
 		HRoot self,
-		const char* instanceName);
+		const _string instanceName);
 
 	// TODO getSceneManagerIterator
 
@@ -127,7 +127,7 @@ extern "C"
 		HRoot self);
 
 	/** NEW */
-	__export const char* __entry root_get_error_description(
+	__export const _string __entry root_get_error_description(
 		HRoot self,
 		Int64 errorNumber);
 
@@ -147,13 +147,13 @@ extern "C"
 		HRoot self);
 
 	/** NEW */
-	__export Bool __entry root_render_one_frame(
+	__export _bool __entry root_render_one_frame(
 		HRoot self);
 
 	/** NEW */
-	__export Bool __entry root_render_one_frame_with_time(
+	__export _bool __entry root_render_one_frame_with_time(
 		HRoot self,
-		float timeSinceLastFrame);
+		_float timeSinceLastFrame);
 
 	/** NEW */
 	__export void __entry root_shutdown(
@@ -170,15 +170,15 @@ extern "C"
 
 	__export HRenderWindow __entry root_create_renderwindow(
 		HRoot self,
-		const char* name,
-		UInt32 width, UInt32 height,
-		Bool fullscreen);
+		const _string name,
+		_uint width, _uint height,
+		_bool fullscreen);
 
 	__export HRenderWindow __entry root_create_renderwindow_with_params(
 		HRoot self,
-		const char* name,
-		UInt32 width, UInt32 height,
-		Bool fullscreen,
+		const _string name,
+		_uint width, _uint height,
+		_bool fullscreen,
 		HNameValuePairList pairList);
 
 	// TODO createRenderWindows
@@ -207,7 +207,7 @@ extern "C"
 	// TODO _fireFrameEnded()
 
 	/** NEW */
-	__export UInt64 __entry root_get_next_frame_number(
+	__export _ulong __entry root_get_next_frame_number(
 		HRoot self);
 
 	/** NEW */
@@ -231,26 +231,26 @@ extern "C"
 	/** NEW */
 	__export void __entry root_set_frame_smoothing_period(
 		HRoot self,
-		float period);
+		_float period);
 
 	/** NEW */
-	__export float __entry root_get_frame_smoothing_period(
+	__export _float __entry root_get_frame_smoothing_period(
 		HRoot self);
 
 	// TODO addMovableObjectFactory
 	// TODO removeMovableObjectFactory
 
 	/** NEW */
-	__export Bool __entry root_has_movable_object_factory(
+	__export _bool __entry root_has_movable_object_factory(
 		HRoot self,
-		const char* typeName);
+		const _string typeName);
 
 	// TODO getMovableObjectFactory
 	// TODO _allocateNextMovableObjectTypeFlag
 	// TODO getMovableObjectFactoryIterator
 
 	/** NEW */
-	__export UInt32 __entry root_get_display_monitor_count(
+	__export _uint __entry root_get_display_monitor_count(
 		HRoot self);
 
 	// TODO getWorkQueue

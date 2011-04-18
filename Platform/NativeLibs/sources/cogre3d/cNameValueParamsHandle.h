@@ -6,28 +6,27 @@
 #ifndef NAMEVALUEPARAMSHANDLE_H
 #define NAMEVALUEPARAMSHANDLE_H
 
-#include "invision/Common.h"
-#include "invision/Enumerator.h"
+#include "cOgre.h"
+#include "cEnumerator.h"
 
 extern "C"
 {	
 	/* NEW ****************************************************************************************/
 	
-	__export HNameValuePairList __entry namevaluepairlist_convert(const PNameValuePair pairs, Int32 count);
+	__export HNameValuePairList __entry namevaluepairlist_convert(const PNameValuePair pairs, _int count);
 	__export HNameValuePairList __entry namevaluepairlist_new();
 	__export void __entry namevaluepairlist_delete(HNameValuePairList self);
 	
 	__export void __entry namevaluepairlist_add(HNameValuePairList self, const char *key, const char *value);
 	__export void __entry namevaluepairlist_remove(HNameValuePairList self, const char *key);
 	__export void __entry namevaluepairlist_clear(HNameValuePairList self);
-	__export Int32 __entry namevaluepairlist_count(HNameValuePairList self);
+	__export _int __entry namevaluepairlist_count(HNameValuePairList self);
 	__export const HNameValuePairEnumerator __entry namevaluepairlist_get_pairs(HNameValuePairList self);
 	__export HNameValuePairList __entry namevaluepairlist_copy(HNameValuePairList self);
 }
 
 #ifdef __cplusplus
-#	include "TypeConvert.h"
-#	include "Ogre.h"
+#	include "cTypeConvert.h"
 
 namespace invision
 {
@@ -42,11 +41,11 @@ namespace invision
 		NameValuePairEnumerator(const Ogre::NameValuePairList *list);
 		~NameValuePairEnumerator();
 
-		Any getCurrent();
+		_any getCurrent();
 		bool moveNext();
 		void reset();
 
-		static void deletePairData(Any data);
+		static void deletePairData(_any data);
 	};
 }
 

@@ -8,7 +8,7 @@ typedef std::pair<Ogre::String, Ogre::String> OgreNameValuePair;
 /*
  * Support functions
  */
-void deletePairList(Any data)
+void deletePairList(_any data)
 {
 	PNameValuePairList pairList = (PNameValuePairList)data;
 
@@ -16,7 +16,7 @@ void deletePairList(Any data)
 	std::cout << "deleting NameValuePairList: " << pairList->count << " pairs" << std::endl;
 #endif
 
-	for (int i = 0; i < pairList->count; i++) {
+	for (_int i = 0; i < pairList->count; i++) {
 		NameValuePair pair = pairList->pairs[i];
 
 		delete[] pair.key;
@@ -33,11 +33,11 @@ void deletePairList(Any data)
 
 __export HNameValuePairList __entry namevaluepairlist_convert(
 	const PNameValuePair pairs,
-	Int32 count)
+	_int count)
 {
 	HNameValuePairList pairList = namevaluepairlist_new();
 	
-	for (int i = 0; i < count; i++) {
+	for (_int i = 0; i < count; i++) {
 		NameValuePair& pair = pairs[i];
 		
 		namevaluepairlist_add(pairList, pair.key, pair.value);
@@ -85,7 +85,7 @@ __export void __entry namevaluepairlist_clear(
 	asNameValuePairList(self)->clear();
 }
 
-__export Int32 __entry namevaluepairlist_count(
+__export _int __entry namevaluepairlist_count(
 	HNameValuePairList self)
 {
 	return asNameValuePairList(self)->size();
@@ -126,12 +126,12 @@ NameValuePairEnumerator::~NameValuePairEnumerator()
 #endif
 }
 
-Any NameValuePairEnumerator::getCurrent()
+_any NameValuePairEnumerator::getCurrent()
 {
 	const Ogre::NameValuePairList::value_type tuple = *it;
 	const Ogre::String* key = &(tuple.first);
 /*
-	Any data;
+	_any data;
 
 	if (MemoryMap::tryFind(this, key->c_str(), &data))
 		return (PNameValuePair)data;
@@ -163,7 +163,7 @@ void NameValuePairEnumerator::reset()
 	firstMove = true;
 }
 
-void NameValuePairEnumerator::deletePairData(Any data)
+void NameValuePairEnumerator::deletePairData(_any data)
 {
 	delete (PNameValuePair)data;
 }

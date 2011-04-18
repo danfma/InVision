@@ -17,7 +17,7 @@ __export HOverlay __entry ogre_overlaymanager_get_by_name(HOverlayManager self, 
 	return asOverlayManager(self)->getByName(name);
 }
 
-__export HOverlayElement __entry ogre_overlaymanager_get_overlayelement(HOverlayManager self, ConstString name, Bool isTemplate)
+__export HOverlayElement __entry ogre_overlaymanager_get_overlayelement(HOverlayManager self, ConstString name, _bool isTemplate)
 {
 	return asOverlayManager(self)->getOverlayElement(name, fromBool(isTemplate));
 }

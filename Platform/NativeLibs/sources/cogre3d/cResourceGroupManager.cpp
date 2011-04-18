@@ -19,7 +19,7 @@ __export void __entry resgroupmng_add_resource_location(
 	ConstString name,
 	ConstString locationType,
 	ConstString resourceGroup,
-	Bool recursive)
+	_bool recursive)
 {
 	asResGroupManager(pSelf)->addResourceLocation(
 				name,

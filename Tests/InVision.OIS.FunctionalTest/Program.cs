@@ -6,8 +6,17 @@ namespace InVision.OIS.FunctionalTest
 	{
 		private static void Main(string[] args)
 		{
+			TestWrapper();
+
 			TestComponent();
 			TestButton();
+		}
+
+		private static void TestWrapper()
+		{
+			var cwrapper = new ComponentWrapper(ComponentType.Button);
+
+			Console.WriteLine("{0} Type: {1}", cwrapper.GetType().Name, cwrapper.ComponentType);
 		}
 
 		/// <summary>

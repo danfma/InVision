@@ -6,18 +6,15 @@
 
 QT       -= core gui
 
-TARGET = InVisionWrap
+TARGET = InVisionNative_Ogre
 TEMPLATE = lib
 
 SOURCES += \
-	$$files(invision/*.cpp) \
-	$$files(invision/ogre3d/*.cpp) \
-	$$files(invision/ois/*.cpp)
+	$$files(sources/cogre3d/*.cpp)
 
 HEADERS += \
-	$$files(invision/*.h) \
-	$$files(invision/ogre3d/*.h) \
-	$$files(invision/ois/*.h)
+	$$files(sources/common/*.h) \
+	$$files(sources/cogre3d/*.h)
 
 Release:DESTDIR = Bin/Release
 Release:OBJECTS_DIR = Bin/Release/.obj
@@ -32,21 +29,13 @@ Debug:RCC_DIR = Bin/Debug/.rcc
 Debug:UI_DIR = Bin/Debug/.ui
 Debug:DEFINES += DEBUG
 
-INCLUDEPATH += .
+INCLUDEPATH += sources/common sources/cogre3d
 
 win32 {
 	DEFINES += WIN32 DEBUG
 
-	INCLUDEPATH +=  \
-		$$(OGRE_SDK)include\OGRE \
-		$$(OGRE_SDK)include\OIS \
-		$$(BOOST_SDK)
-
-	LIBS += \
-		-L$$(OGRE_SDK)lib\debug \
-		-L$$(OGRE_SDK)lib\debug\opt \
-		-L$$(BOOST_SDK)lib \
-		-lOgreMain_d -lOIS_d
+	INCLUDEPATH +=  $$(OGRE_SDK)include\OGRE $$(BOOST_SDK)
+	LIBS += -L$$(OGRE_SDK)lib\debug	-L$$(OGRE_SDK)lib\debug\opt -L$$(BOOST_SDK)lib -lOgreMain_d
 }
 
 macx {
@@ -54,4 +43,3 @@ macx {
 	INCLUDEPATH += $$(OGRE_FRAMEWORK_DIR)/Headers
 	LIBS += -framework Ogre
 }
-

@@ -1,7 +1,7 @@
 #ifndef FRAMELISTENER_H
 #define FRAMELISTENER_H
 
-#include "invision/Common.h"
+#include "cOgre.h"
 
 extern "C"
 {

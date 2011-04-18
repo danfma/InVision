@@ -1,7 +1,7 @@
 #ifndef COLLECTIONS_H
 #define COLLECTIONS_H
 
-#include "Common.h"
+#include "cOgre.h"
 
 extern "C"
 {
@@ -12,12 +12,12 @@ extern "C"
 	__export void __entry namevaluecollection_remove(HNameValuePairList self,
 													 const char *key);
 	__export void __entry namevaluecollection_clear(HNameValuePairList self);
-	__export Int32 __entry namevaluecollection_count(HNameValuePairList self);
+	__export _int __entry namevaluecollection_count(HNameValuePairList self);
 	__export HNameValuePairEnumerator __entry namevaluecollection_get_pairs(HNameValuePairList self);
 }
 
 #ifdef __cplusplus
-#include "Enumerator.h"
+#include "cEnumerator.h"
 #include <map>
 #include <iostream>
 
@@ -38,7 +38,7 @@ namespace invision
 		{
 		}
 
-		virtual Any convert(iterator& iter)
+		virtual _any convert(iterator& iter)
 		{
 			NameValueCollectionPair p = (NameValueCollectionPair) *iter;
 
@@ -62,9 +62,9 @@ namespace invision
 		typedef IterEnumerator<VectorList, VectorIterator> BaseType;
 
 	protected:
-		Any convert(VectorIterator& iter)
+		_any convert(VectorIterator& iter)
 		{
-			return (Any)*iter;
+			return (_any)*iter;
 		}
 
 	public:

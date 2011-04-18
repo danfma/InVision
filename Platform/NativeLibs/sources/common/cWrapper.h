@@ -1,5 +1,5 @@
-#ifndef INVISIONPLATFORM_COMMON_H
-#define INVISIONPLATFORM_COMMON_H
+#ifndef INVISIONPLATFORM_CWRAPPER_H
+#define INVISIONPLATFORM_CWRAPPER_H
 
 #if defined(__WIN32__) || defined(WIN32)
 #	define __entry __stdcall
@@ -49,6 +49,8 @@ extern "C"
 	
 	typedef float _float;
 	typedef double _double;
+
+
 	
 	/*
 	 * Utilities
@@ -85,7 +87,7 @@ extern "C"
 	 */
 	inline _string copyString(const std::string* str)
 	{
-		int length = str->size();
+		_int length = str->size();
 		_char* data = new _char[length + 1];
 
 		memcpy(data, str->c_str(), length);
@@ -96,7 +98,7 @@ extern "C"
 
 	inline _string copyString(std::string& str)
 	{
-		int length = str.size();
+		_int length = str.size();
 		_char* data = new _char[length + 1];
 
 		memcpy(data, str.c_str(), length);

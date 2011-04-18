@@ -13,7 +13,8 @@ SOURCES += \
 	$$files(sources/common/*.cpp)
 
 HEADERS += \
-	$$files(sources/common/*.h)
+	$$files(sources/common/*.h) \
+    sources/common/cCollections.h
 
 Release:DESTDIR = Bin/Release
 Release:OBJECTS_DIR = Bin/Release/.obj

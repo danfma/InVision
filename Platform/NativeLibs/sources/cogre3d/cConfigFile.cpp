@@ -15,19 +15,19 @@ __export void __entry cfgfile_delete(HConfigFile configFile)
 
 __export void __entry cfgfile_load(
 		HConfigFile configFile,
-		const char* filename,
-		const char* separators,
-		Bool trimWhitespace)
+		const _string filename,
+		const _string separators,
+		_bool trimWhitespace)
 {
 	asConfigFile(configFile)->load(filename, separators, fromBool(trimWhitespace));
 }
 
 __export void __entry cfgfile_load_with_resourcegroup(
 		HConfigFile configFile,
-		const char* filename,
-		const char* resourceGroup,
-		const char* separators,
-		Bool trimWhitespace)
+		const _string filename,
+		const _string resourceGroup,
+		const _string separators,
+		_bool trimWhitespace)
 {
 	asConfigFile(configFile)->load(filename, resourceGroup, separators, fromBool(trimWhitespace));
 }
@@ -36,29 +36,29 @@ __export void __entry cfgfile_load_with_resourcegroup(
 
 __export void __entry cfgfile_load_direct(
 		HConfigFile configFile,
-		const char* filename,
-		const char* separators,
-		Bool trimWhitespace)
+		const _string filename,
+		const _string separators,
+		_bool trimWhitespace)
 {
 	asConfigFile(configFile)->loadDirect(filename, separators, fromBool(trimWhitespace));
 }
 
 __export void __entry cfgfile_load_from_resource_system(
 		HConfigFile configFile,
-		const char* filename,
-		const char* resourceGroup,
-		const char* separators,
-		Bool trimWhitespace)
+		const _string filename,
+		const _string resourceGroup,
+		const _string separators,
+		_bool trimWhitespace)
 {
 	asConfigFile(configFile)->loadFromResourceSystem(
 				filename, resourceGroup, separators, fromBool(trimWhitespace));
 }
 
-__export const char* __entry cfgfile_get_setting(
+__export const _string __entry cfgfile_get_setting(
 		HConfigFile configFile,
-		const char* key,
-		const char* section,
-		const char* defaultValue)
+		const _string key,
+		const _string section,
+		const _string defaultValue)
 {
 	Ogre::String str = asConfigFile(configFile)->getSetting(
 				key,
@@ -70,17 +70,17 @@ __export const char* __entry cfgfile_get_setting(
 
 __export PStringArray __entry cfgfile_multi_setting(
 		HConfigFile configFile,
-		const char* key,
-		const char* section)
+		const _string key,
+		const _string section)
 {
 	Ogre::StringVector vstr = asConfigFile(configFile)->getMultiSetting(key, section);
 
 
 	PStringArray pStrArray = new StringArray();
 	pStrArray->count = vstr.size();
-	pStrArray->strings = new char*[pStrArray->count];
+	pStrArray->strings = new _string[pStrArray->count];
 
-	int i = 0;
+	_int i = 0;
 	Ogre::StringVector::iterator it = vstr.begin();
 
 	while (it != vstr.end()) {
@@ -105,7 +105,7 @@ __export HSectionEnumerator __entry cfgfile_get_section_iterator(
 
 __export HSettingsEnumerator __entry cfgfile_get_settings_iterator(
 		HConfigFile configFile,
-		const char* section)
+		const _string section)
 {
 	Ogre::String ssection = section == NULL ? Ogre::StringUtil::BLANK : section;
 	Ogre::ConfigFile::SettingsIterator iterator = asConfigFile(configFile)->getSettingsIterator(ssection);

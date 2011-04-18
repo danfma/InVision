@@ -3,7 +3,7 @@
 
 using namespace invision;
 
-__export const char* __entry rendersystem_get_name(HRenderSystem self)
+__export const _string __entry rendersystem_get_name(HRenderSystem self)
 {
 	const Ogre::String& name = asRenderSystem(self)->getName();
 

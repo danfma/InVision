@@ -1,4 +1,4 @@
-#include "invision/Common.h"
+#include "cOgre.h"
 #include "invision/Enumerator.h"
 #include <Ogre.h>
 
@@ -10,7 +10,7 @@ using namespace invision;
 
 RaiseExceptionHandler exceptionHandler = NULL;
 
-__export void __entry util_delete_string(const char* data)
+__export void __entry util_delete_string(const _string data)
 {
 	if (data == NULL)
 		return;
@@ -23,7 +23,7 @@ __export void __entry util_delete_stringarray(PStringArray strArray)
 	if (strArray == NULL)
 		return;
 
-	for (int i = 0; i < strArray->count; i++) {
+	for (_int i = 0; i < strArray->count; i++) {
 		delete[] strArray->strings[i];
 	}
 

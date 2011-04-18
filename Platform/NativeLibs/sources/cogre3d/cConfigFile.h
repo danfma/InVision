@@ -1,7 +1,7 @@
 #ifndef CONFIGFILE_H
 #define CONFIGFILE_H
 
-#include "invision/Common.h"
+#include "cOgre.h"
 
 extern "C"
 {
@@ -11,42 +11,42 @@ extern "C"
 
 	__export void __entry cfgfile_load(
 			HConfigFile configFile,
-			const char* filename,
-			const char* separators,
-			Bool trimWhitespace);
+			const _string filename,
+			const _string separators,
+			_bool trimWhitespace);
 
 	__export void __entry cfgfile_load_with_resourcegroup(
 			HConfigFile configFile,
-			const char* filename,
-			const char* resourceGroup,
-			const char* separators,
-			Bool trimWhitespace);
+			const _string filename,
+			const _string resourceGroup,
+			const _string separators,
+			_bool trimWhitespace);
 
 	// __export void __entry cfgfile_load_with_datastream()
 
 	__export void __entry cfgfile_load_direct(
 			HConfigFile configFile,
-			const char* filename,
-			const char* separators,
-			Bool trimWhitespace);
+			const _string filename,
+			const _string separators,
+			_bool trimWhitespace);
 
 	__export void __entry cfgfile_load_from_resource_system(
 			HConfigFile configFile,
-			const char* filename,
-			const char* resourceGroup,
-			const char* separators,
-			Bool trimWhitespace);
+			const _string filename,
+			const _string resourceGroup,
+			const _string separators,
+			_bool trimWhitespace);
 
-	__export const char* __entry cfgfile_get_setting(
+	__export const _string __entry cfgfile_get_setting(
 			HConfigFile configFile,
-			const char* key,
-			const char* section,
-			const char* defaultValue);
+			const _string key,
+			const _string section,
+			const _string defaultValue);
 
 	__export PStringArray __entry cfgfile_multi_setting(
 			HConfigFile configFile,
-			const char* key,
-			const char* section);
+			const _string key,
+			const _string section);
 
 	__export void __entry cfgfile_clear(HConfigFile configFile);
 
@@ -55,7 +55,7 @@ extern "C"
 
 	__export HSettingsEnumerator __entry cfgfile_get_settings_iterator(
 			HConfigFile configFile,
-			const char* section);
+			const _string section);
 }
 
 #ifdef __cplusplus
@@ -100,7 +100,7 @@ namespace invision
 		}
 
 	protected:
-		Any convert(IteratorType& data)
+		_any convert(IteratorType& data)
 		{
 			PairType pair = (PairType)*data;
 
@@ -124,7 +124,7 @@ namespace invision
 		{ }
 
 	protected:
-		Any convert(IteratorType& data)
+		_any convert(IteratorType& data)
 		{
 			PairType pair = (PairType)*data;
 			Ogre::String key = pair.first;

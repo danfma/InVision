@@ -1,9 +1,9 @@
 #ifndef TYPE_CONVERT_H
 #define TYPE_CONVERT_H
 
-#include "invision/Common.h"
-#include "NameValueParamsHandle.h"
-#include "CustomFrameListener.h"
+#include "cOgre.h"
+#include "cNameValueParamsHandle.h"
+#include "cCustomFrameListener.h"
 
 #ifdef __cplusplus
 #include <Ogre.h>

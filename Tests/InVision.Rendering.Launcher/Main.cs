@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 using InVision.Collections;
-using OpenTK;
+using InVision.GameMath;
 
 namespace InVision.Rendering.Launcher
 {

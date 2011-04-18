@@ -10,8 +10,8 @@ extern "C"
 	__export void __entry ogre_logmanager_log_message(
 		HLogManager self,
 		ConstString message,
-		Int32 messageLevel,
-		Bool maskDebug);
+		_int messageLevel,
+		_bool maskDebug);
 };
 
 #ifdef __cplusplus

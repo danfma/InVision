@@ -18,5 +18,9 @@ namespace InVision.OIS.Native
 
 		[DllImport(OISLibrary, EntryPoint = "ois_component_delete")]
 		public static extern void Delete(IntPtr self);
+
+		[DllImport(OISLibrary, EntryPoint = "ois_create_component_wrapper")]
+		[return: MarshalAs(UnmanagedType.Interface)]
+		public static extern IComponentWrapper NewWrapper(ComponentType componentType);
 	}
 }

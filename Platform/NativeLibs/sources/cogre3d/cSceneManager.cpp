@@ -11,7 +11,7 @@ __export void __entry scenemanager_delete(HSceneManager self)
 	delete asSceneManager(self);
 }
 
-__export HCamera __entry scenemanager_create_camera(HSceneManager self, const char* name)
+__export HCamera __entry scenemanager_create_camera(HSceneManager self, const _string name)
 {
 	return asSceneManager(self)->createCamera(name);
 }

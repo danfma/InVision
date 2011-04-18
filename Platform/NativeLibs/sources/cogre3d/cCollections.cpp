@@ -1,4 +1,4 @@
-#include "Collections.h"
+#include "cCollections.h"
 
 using namespace std;
 using namespace invision;
@@ -33,7 +33,7 @@ __export void __entry namevaluecollection_clear(HNameValuePairList self)
 	asNameValueCollection(self)->clear();
 }
 
-__export Int32 __entry namevaluecollection_count(HNameValuePairList self)
+__export _int __entry namevaluecollection_count(HNameValuePairList self)
 {
 	return asNameValueCollection(self)->size();
 }

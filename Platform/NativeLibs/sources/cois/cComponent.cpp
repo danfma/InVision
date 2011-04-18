@@ -23,3 +23,8 @@ __export void __entry ois_component_delete(HComponent self)
 	delete (OIS::Component*)self;
 }
 
+
+__export ComponentWrapper* __entry ois_create_component_wrapper(OIS::ComponentType ctype)
+{
+	return new ComponentWrapper(ctype);
+}

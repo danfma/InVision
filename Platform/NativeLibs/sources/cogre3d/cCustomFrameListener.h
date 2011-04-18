@@ -1,7 +1,7 @@
 #ifndef CUSTOMFRAMELISTENER_H
 #define CUSTOMFRAMELISTENER_H
 
-#include "invision/Common.h"
+#include "cOgre.h"
 
 #ifdef __cplusplus
 #include <Ogre.h>

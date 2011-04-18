@@ -13,7 +13,7 @@ extern "C"
 	__export HOverlay __entry ogre_overlaymanager_create(HOverlayManager self, ConstString name);
 	__export HOverlay __entry ogre_overlaymanager_get_by_name(HOverlayManager self, ConstString name);
 
-	__export HOverlayElement __entry ogre_overlaymanager_get_overlayelement(HOverlayManager self, ConstString name, Bool isTemplate);
+	__export HOverlayElement __entry ogre_overlaymanager_get_overlayelement(HOverlayManager self, ConstString name, _bool isTemplate);
 
 	__export HOverlayManager __entry ogre_overlaymanager_get_singleton();
 

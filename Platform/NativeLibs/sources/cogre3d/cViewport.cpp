@@ -17,12 +17,12 @@ __export void __entry viewport_set_bgcolor(HViewport self, ColorValue color)
 	asViewport(self)->setBackgroundColour(c);
 }
 
-__export Int32 __entry viewport_get_actual_width(HViewport self)
+__export _int __entry viewport_get_actual_width(HViewport self)
 {
 	return asViewport(self)->getActualWidth();
 }
 
-__export Int32 __entry viewport_get_actual_height(HViewport self)
+__export _int __entry viewport_get_actual_height(HViewport self)
 {
 	return asViewport(self)->getActualHeight();
 }

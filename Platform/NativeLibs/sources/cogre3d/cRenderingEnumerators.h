@@ -30,7 +30,7 @@ namespace invision
 #endif
 		}
 
-		Any getCurrent()
+		_any getCurrent()
 		{
 			return *it;
 		}

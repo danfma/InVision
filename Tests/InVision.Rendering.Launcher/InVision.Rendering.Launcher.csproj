@@ -92,9 +92,6 @@
     <CodeAnalysisFailOnMissingRules>false</CodeAnalysisFailOnMissingRules>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="OpenTK">
-      <HintPath>..\..\Libs\OpenTK\OpenTK.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
   </ItemGroup>
   <ItemGroup>
@@ -988,6 +985,10 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\InVision.GameMath\InVision.GameMath.csproj">
+      <Project>{19B788E7-19B6-4ECD-8AA1-DD982928DB56}</Project>
+      <Name>InVision.GameMath</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\InVision.TutorialFx\InVision.TutorialFx.csproj">
       <Project>{0EE75EE2-B71D-4C7F-BB2C-A7C05E7DFEAD}</Project>
       <Name>InVision.TutorialFx</Name>

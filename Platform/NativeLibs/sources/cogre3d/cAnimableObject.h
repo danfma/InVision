@@ -1,7 +1,7 @@
 #ifndef ANIMABLEOBJECT_H
 #define ANIMABLEOBJECT_H
 
-#include "invision/Common.h"
+#include "cOgre.h"
 
 extern "C"
 {

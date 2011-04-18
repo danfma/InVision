@@ -114,6 +114,7 @@
     <Compile Include="AxisComponent.cs" />
     <Compile Include="ButtonComponent.cs" />
     <Compile Include="ComponentType.cs" />
+    <Compile Include="ComponentWrapper.cs" />
     <Compile Include="DeviceInfo.cs" />
     <Compile Include="DeviceList.cs" />
     <Compile Include="ErrorType.cs" />

@@ -1,7 +1,7 @@
 #ifndef RESOURCEGROUPMANAGER_H
 #define RESOURCEGROUPMANAGER_H
 
-#include "invision/Common.h"
+#include "cOgre.h"
 
 extern "C"
 {
@@ -14,7 +14,7 @@ extern "C"
 		ConstString name,
 		ConstString locationType,
 		ConstString resourceGroup,
-		Bool recursive);
+		_bool recursive);
 }
 
 #endif // RESOURCEGROUPMANAGER_H

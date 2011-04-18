@@ -8,17 +8,17 @@ __export HTextureManager __entry texmanager_get_instance()
 	return Ogre::TextureManager::getSingletonPtr();
 }
 
-__export Int32 __entry texmanager_get_default_num_mipmaps(HTextureManager self)
+__export _int __entry texmanager_get_default_num_mipmaps(HTextureManager self)
 {
 	return asTextureManager(self)->getDefaultNumMipmaps();
 }
 
-__export void __entry texmanager_set_default_num_mipmaps(HTextureManager self, Int32 numMipmaps)
+__export void __entry texmanager_set_default_num_mipmaps(HTextureManager self, _int numMipmaps)
 {
 	asTextureManager(self)->setDefaultNumMipmaps(numMipmaps);
 }
 
-__export void __entry texmanager_reload_all(HTextureManager self, Bool reloadableOnly)
+__export void __entry texmanager_reload_all(HTextureManager self, _bool reloadableOnly)
 {
 	asTextureManager(self)->reloadAll(fromBool(reloadableOnly));
 }
