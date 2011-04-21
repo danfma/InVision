@@ -1,4 +1,5 @@
 ﻿using System;
+using InVision.Extensions;
 using InVision.OIS.Native;
 
 namespace InVision.OIS
@@ -72,9 +73,9 @@ namespace InVision.OIS
 
 	public class Vector3Proxy : ComponentProxy
 	{
-		private Vector3ProxyInfo proxyInfo;
-		private Vector3ProxyInfo.VTable oldVTable;
 		private Vector3ClearMethod clearMethod;
+		private Vector3ProxyInfo.VTable oldVTable;
+		private Vector3ProxyInfo proxyInfo;
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="Vector3Proxy"/> class.
@@ -85,24 +86,10 @@ namespace InVision.OIS
 		public Vector3Proxy(float x, float y, float z)
 			: base(true)
 		{
-			proxyInfo = NativeVector3.NewProxy(x, y, z);
-			oldVTable = proxyInfo.CreateVTable();
+			Vector3ProxyInfo proxyInfo = NativeVector3.NewProxy(x, y, z);
 
-			UpdateVTable(proxyInfo);
+			ConfigureByProxyInfo(proxyInfo);
 			SetHandle(proxyInfo.Base.Handle);
-		}
-
-		/// <summary>
-		/// Updates the VTable.
-		/// </summary>
-		/// <param name="proxyInfo">The proxy info.</param>
-		internal void UpdateVTable(Vector3ProxyInfo proxyInfo)
-		{
-			// holding local instances (preventing gc to collect them)
-			clearMethod = self => Clear();
-
-			// setting the new methods on the native side
-			proxyInfo.ClearMethod = clearMethod; // updating vtable clearMethod
 		}
 
 		/// <summary>
@@ -152,13 +139,50 @@ namespace InVision.OIS
 		}
 
 		/// <summary>
+		/// Configures this instance by the specified proxy info.
+		/// </summary>
+		/// <param name="info">The info.</param>
+		internal void ConfigureByProxyInfo(Vector3ProxyInfo info)
+		{
+			ConfigureByProxyInfo(info.Base);
+
+			proxyInfo = info;
+			oldVTable = proxyInfo.CreateVTable();
+
+			UpdateVTable(proxyInfo);
+		}
+
+		/// <summary>
+		/// Updates the VTable.
+		/// </summary>
+		/// <param name="proxyInfo">The proxy info.</param>
+		internal void UpdateVTable(Vector3ProxyInfo proxyInfo)
+		{
+			// holding local instances (preventing gc to collect them)
+			clearMethod = self => Clear();
+
+			/*
+			 * Settings the vtable with the methods that was overrided.
+			 */
+			Type targetType = GetType();
+
+			if (!NonOverridedAttribute.IsFoundOn(() => Clear(), targetType))
+				proxyInfo.ClearMethod = clearMethod; // updating vtable clearMethod
+		}
+
+		/// <summary>
 		/// Clears this instance.
 		/// </summary>
+		[NonOverrided]
 		public virtual void Clear()
 		{
 			oldVTable.ClearMethod(handle);
 		}
 
+		/// <summary>
+		/// Releases the unmanaged resources used by the <see cref="T:System.Runtime.InteropServices.SafeHandle"/> class specifying whether to perform a normal dispose operation.
+		/// </summary>
+		/// <param name="disposing">true for a normal dispose operation; false to finalize the handle.</param>
 		protected override void Dispose(bool disposing)
 		{
 			base.Dispose(disposing);
@@ -179,7 +203,7 @@ namespace InVision.OIS
 		/// </returns>
 		public override string ToString()
 		{
-			return string.Format("X: {0} Y: {1} Z: {2}", X, Y, Z);
+			return string.Format("Type: {0} X: {1} Y: {2} Z: {3}", Type, X, Y, Z);
 		}
 	}
 }

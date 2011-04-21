@@ -61,9 +61,20 @@ namespace InVision.OIS
 		/// <param name="componentType">Type of the component.</param>
 		public ComponentProxy(ComponentType componentType)
 		{
-			proxyInfo = NativeComponent.NewProxy(componentType);
+			var proxyInfo = NativeComponent.NewProxy(componentType);
+
+			ConfigureByProxyInfo(proxyInfo);
 
 			SetHandle(proxyInfo.Handle);
+		}
+
+		/// <summary>
+		/// Configures this instance by the specified proxy info.
+		/// </summary>
+		/// <param name="componentProxyInfo">The component proxy info.</param>
+		internal void ConfigureByProxyInfo(ComponentProxyInfo componentProxyInfo)
+		{
+			proxyInfo = componentProxyInfo;
 		}
 
 		/// <summary>

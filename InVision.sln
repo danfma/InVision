@@ -27,6 +27,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InVision.OIS.Tests", "Tests
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InVision.Native", "InVision.Native\InVision.Native.csproj", "{24E00D97-AA09-4ECD-A75A-247697091FDE}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InVision.Extensions", "InVision.Extensions\InVision.Extensions.csproj", "{41AF79CA-A7C1-4C02-AA66-21FA34CDA01D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug_x86|Any CPU = Debug_x86|Any CPU
@@ -327,6 +329,30 @@ Global
 		{24E00D97-AA09-4ECD-A75A-247697091FDE}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{24E00D97-AA09-4ECD-A75A-247697091FDE}.Release|Win32.ActiveCfg = Release|Any CPU
 		{24E00D97-AA09-4ECD-A75A-247697091FDE}.Release|x86.ActiveCfg = Release|Any CPU
+		{41AF79CA-A7C1-4C02-AA66-21FA34CDA01D}.Debug_x86|Any CPU.ActiveCfg = Debug|Any CPU
+		{41AF79CA-A7C1-4C02-AA66-21FA34CDA01D}.Debug_x86|Any CPU.Build.0 = Debug|Any CPU
+		{41AF79CA-A7C1-4C02-AA66-21FA34CDA01D}.Debug_x86|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{41AF79CA-A7C1-4C02-AA66-21FA34CDA01D}.Debug_x86|Mixed Platforms.Build.0 = Debug|Any CPU
+		{41AF79CA-A7C1-4C02-AA66-21FA34CDA01D}.Debug_x86|Win32.ActiveCfg = Debug|Any CPU
+		{41AF79CA-A7C1-4C02-AA66-21FA34CDA01D}.Debug_x86|x86.ActiveCfg = Debug|Any CPU
+		{41AF79CA-A7C1-4C02-AA66-21FA34CDA01D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{41AF79CA-A7C1-4C02-AA66-21FA34CDA01D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{41AF79CA-A7C1-4C02-AA66-21FA34CDA01D}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{41AF79CA-A7C1-4C02-AA66-21FA34CDA01D}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{41AF79CA-A7C1-4C02-AA66-21FA34CDA01D}.Debug|Win32.ActiveCfg = Debug|Any CPU
+		{41AF79CA-A7C1-4C02-AA66-21FA34CDA01D}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{41AF79CA-A7C1-4C02-AA66-21FA34CDA01D}.Release_x86|Any CPU.ActiveCfg = Release|Any CPU
+		{41AF79CA-A7C1-4C02-AA66-21FA34CDA01D}.Release_x86|Any CPU.Build.0 = Release|Any CPU
+		{41AF79CA-A7C1-4C02-AA66-21FA34CDA01D}.Release_x86|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{41AF79CA-A7C1-4C02-AA66-21FA34CDA01D}.Release_x86|Mixed Platforms.Build.0 = Release|Any CPU
+		{41AF79CA-A7C1-4C02-AA66-21FA34CDA01D}.Release_x86|Win32.ActiveCfg = Release|Any CPU
+		{41AF79CA-A7C1-4C02-AA66-21FA34CDA01D}.Release_x86|x86.ActiveCfg = Release|Any CPU
+		{41AF79CA-A7C1-4C02-AA66-21FA34CDA01D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{41AF79CA-A7C1-4C02-AA66-21FA34CDA01D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{41AF79CA-A7C1-4C02-AA66-21FA34CDA01D}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{41AF79CA-A7C1-4C02-AA66-21FA34CDA01D}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{41AF79CA-A7C1-4C02-AA66-21FA34CDA01D}.Release|Win32.ActiveCfg = Release|Any CPU
+		{41AF79CA-A7C1-4C02-AA66-21FA34CDA01D}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -340,8 +366,8 @@ Global
 		{A4241C70-B3AB-4A8D-AC13-9F097B3E12CC} = {23B9B64F-7A1C-433B-A16B-10395BAA390E}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		BuildVersion_BuildVersioningStyle = None.None.Increment.YearDayOfYear
 		BuildVersion_StartDate = 2011/2/18
+		BuildVersion_BuildVersioningStyle = None.None.Increment.YearDayOfYear
 	EndGlobalSection
 	GlobalSection(MonoDevelopProperties) = preSolution
 		StartupItem = Tests\InVision.Rendering.Launcher\InVision.Rendering.Launcher.csproj

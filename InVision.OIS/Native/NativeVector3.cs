@@ -21,9 +21,6 @@ namespace InVision.OIS.Native
 
 		[DllImport(OISLibrary, EntryPoint = "ois_new_vector3")]
 		public static extern Vector3ProxyInfo NewProxy(float x, float y, float z);
-
-		[DllImport(OISLibrary, EntryPoint = "ois_delete_vector3")]
-		public static extern void DeleteProxy(IntPtr self);
 	}
 
 	[UnmanagedFunctionPointer(CallingConvention.Cdecl)]

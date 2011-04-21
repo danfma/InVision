@@ -134,7 +134,6 @@
     <Compile Include="Collections\ValueTypeVectorList.cs" />
     <Compile Include="Collections\VectorList.cs" />
     <Compile Include="Collections\VectorListItem.cs" />
-    <Compile Include="Extensions\TypeExtensions.cs" />
     <Compile Include="Framework\Config\Configuration.cs" />
     <Compile Include="Framework\Config\IConfigurationSection.cs" />
     <Compile Include="Framework\Config\WindowConfiguration.cs" />
@@ -249,6 +248,10 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\InVision.Extensions\InVision.Extensions.csproj">
+      <Project>{41AF79CA-A7C1-4C02-AA66-21FA34CDA01D}</Project>
+      <Name>InVision.Extensions</Name>
+    </ProjectReference>
     <ProjectReference Include="..\InVision.GameMath\InVision.GameMath.csproj">
       <Project>{19B788E7-19B6-4ECD-8AA1-DD982928DB56}</Project>
       <Name>InVision.GameMath</Name>

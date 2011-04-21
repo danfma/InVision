@@ -188,6 +188,10 @@
     <Compile Include="Vector3Component.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\InVision.Extensions\InVision.Extensions.csproj">
+      <Project>{41AF79CA-A7C1-4C02-AA66-21FA34CDA01D}</Project>
+      <Name>InVision.Extensions</Name>
+    </ProjectReference>
     <ProjectReference Include="..\InVision.Native\InVision.Native.csproj">
       <Project>{24E00D97-AA09-4ECD-A75A-247697091FDE}</Project>
       <Name>InVision.Native</Name>
