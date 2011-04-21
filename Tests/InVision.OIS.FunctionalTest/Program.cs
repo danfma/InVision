@@ -14,9 +14,12 @@ namespace InVision.OIS.FunctionalTest
 
 		private static void TestWrapper()
 		{
-			var cwrapper = new ComponentWrapper(ComponentType.Button);
-
-			Console.WriteLine("{0} Type: {1}", cwrapper.GetType().Name, cwrapper.ComponentType);
+			using (var vector = new Vector3Proxy(1, 2, 3))
+			{
+				Console.WriteLine(vector);
+				vector.Clear();
+				Console.WriteLine(vector);
+			}
 		}
 
 		/// <summary>

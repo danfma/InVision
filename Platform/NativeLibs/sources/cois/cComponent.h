@@ -4,82 +4,34 @@
 #include "cOIS.h"
 
 #ifdef __cplusplus
-#include <iostream>
 
-class COMInterface
+struct ComponentProxyInfo
 {
-private:
-	int refCount;
-
-public:
-	COMInterface() {
-		std::cout << "COMInterface::ctr()" << std::endl;
-		refCount = 0;
-	}
-
-	virtual ~COMInterface() {
-		std::cout << "COMInterface::~ctr()" << std::endl;
-	}
-
-	virtual int QueryInterface(void* id, void** result)
-	{
-		*result = this;
-
-		std::cout << "COMInterface::QueryInterface(id, result) " << std::endl;
-
-		return 0;
-	}
-
-	virtual int AddRef() {
-		int ret = ++refCount;
-
-		std::cout << "COMInterface::AddRef() -> " << ret << std::endl;
-
-		return ret;
-	}
-
-	virtual int Release() {
-		int ret = --refCount;
-
-		std::cout << "COMInterface::Release() -> " << ret << std::endl;
-
-		if (ret == 0)
-			delete this;
-
-		return ret;
-	}
-
-	virtual void Dispose() {
-		delete this;
-	}
+	_handle handle;
+	OIS::ComponentType* ctype;
 };
 
-class ComponentWrapper : public COMInterface
+class ComponentProxy : public OIS::Component
 {
-private:
-	OIS::Component* target;
-	bool ownsHandle;
-
 public:
-	ComponentWrapper(OIS::Component* target, bool ownsHandle = false)
-		: COMInterface(), target(target), ownsHandle(ownsHandle)
-	{ }
-
-	ComponentWrapper(OIS::ComponentType ctype)
-		: COMInterface(), target(new OIS::Component(ctype)), ownsHandle(true)
-	{ }
-
-	virtual ~ComponentWrapper()
+	ComponentProxy(OIS::ComponentType ctype)
+		: OIS::Component(ctype)
 	{
-		std::cout << "ComponentWrapper::~ctor()" << std::endl;
-
-		if (ownsHandle)
-			delete target;
+		std::cout << "ComponentProxy::ctr(" << ctype << ")" << std::endl;
 	}
 
-	virtual OIS::ComponentType GetType()
+	virtual ~ComponentProxy()
 	{
-		return target->cType;
+		std::cout << "ComponentWrapper::~ctor()" << std::endl;
+	}
+
+	static ComponentProxyInfo createInfo(ComponentProxy* component)
+	{
+		ComponentProxyInfo info;
+		info.handle = component;
+		info.ctype = &component->cType;
+
+		return info;
 	}
 };
 
@@ -98,7 +50,9 @@ extern "C"
 	__export ComponentExtended __entry ois_component_new(_int ctype);
 	__export void __entry ois_component_delete(HComponent self);
 
-	__export ComponentWrapper* __entry ois_create_component_wrapper(OIS::ComponentType ctype);
+
+	__export ComponentProxyInfo __entry ois_new_component(OIS::ComponentType ctype);
+	__export void __entry ois_delete_component(OIS::Component* self);
 }
 
 #endif // CCOMPONENT_H

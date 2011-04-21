@@ -21,3 +21,13 @@ __export void __entry ois_vector3_delete(HVector3 self)
 
 	delete (OIS::Vector3*)self;
 }
+
+__export Vector3ProxyInfo __entry ois_new_vector3(float x, float y, float z)
+{
+	return Vector3Proxy::createInfo(new Vector3Proxy(x, y, z));
+}
+
+__export void __entry ois_delete_vector3(Vector3Proxy* self)
+{
+	delete self;
+}

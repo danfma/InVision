@@ -10,11 +10,7 @@ TARGET = InVisionNative_OIS
 TEMPLATE = lib
 
 SOURCES += $$files(sources/cois/*.cpp)
-HEADERS += $$files(sources/cois/*.h) \
-    sources/cois/cMouse.h \
-    sources/cois/cCustomKeyEventListener.h \
-    sources/cois/cKeyboard.h \
-    sources/cois/cJoystick.h
+HEADERS += $$files(sources/cois/*.h)
 
 Release:DESTDIR = Bin/Release
 Release:OBJECTS_DIR = Bin/Release/.obj

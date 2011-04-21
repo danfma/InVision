@@ -24,7 +24,15 @@ __export void __entry ois_component_delete(HComponent self)
 }
 
 
-__export ComponentWrapper* __entry ois_create_component_wrapper(OIS::ComponentType ctype)
+__export ComponentProxyInfo __entry ois_new_component(OIS::ComponentType ctype)
 {
-	return new ComponentWrapper(ctype);
+	return ComponentProxy::createInfo(new ComponentProxy(ctype));
+}
+
+__export void __entry ois_delete_component(OIS::Component* self)
+{
+	if (self == NULL)
+		return;
+
+	delete self;
 }
