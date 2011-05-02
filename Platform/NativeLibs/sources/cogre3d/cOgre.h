@@ -15,31 +15,31 @@
 extern "C"
 {
 // COLLECTIONS
-typedef _handle HNameValueCollection;
-typedef _handle HVectorList;
+typedef _any HNameValueCollection;
+typedef _any HVectorList;
 
 //
 // OGRE
 //
-typedef _handle HRoot;
-typedef _handle HRenderWindow;
-typedef _handle HFrameListener;
-typedef _handle HRenderSystem;
-typedef _handle HSceneManager;
-typedef _handle HTextureManager;
-typedef _handle HMeshManager;
-typedef _handle HCamera;
-typedef _handle HSceneNode;
-typedef _handle HNode;
-typedef _handle HViewport;
-typedef _handle HConfigFile;
-typedef _handle HStringEnumerator;
-typedef const _handle HNameValuePairEnumerator;
-typedef _handle HNameValuePairList;
-typedef _handle HSectionEnumerator;
-typedef _handle HSettingsEnumerator;
-typedef _handle HResourceGroupManager;
-typedef _handle HMaterialManager;
+typedef _any HRoot;
+typedef _any HRenderWindow;
+typedef _any HFrameListener;
+typedef _any HRenderSystem;
+typedef _any HSceneManager;
+typedef _any HTextureManager;
+typedef _any HMeshManager;
+typedef _any HCamera;
+typedef _any HSceneNode;
+typedef _any HNode;
+typedef _any HViewport;
+typedef _any HConfigFile;
+typedef _any HStringEnumerator;
+typedef const _any HNameValuePairEnumerator;
+typedef _any HNameValuePairList;
+typedef _any HSectionEnumerator;
+typedef _any HSettingsEnumerator;
+typedef _any HResourceGroupManager;
+typedef _any HMaterialManager;
 
 struct  FrameEvent
 {
@@ -62,7 +62,7 @@ struct NameValuePair
 struct NameHandlePair
 {
 	const _string key;
-	_handle value;
+	_any value;
 };
 
 struct NameValuePairList
@@ -121,10 +121,10 @@ struct VersionInfo
 	_int revision;
 };
 
-typedef _handle HLogManager;
-typedef _handle HOverlayManager;
-typedef _handle HOverlay;
-typedef _handle HOverlayElement;
+typedef _any HLogManager;
+typedef _any HOverlayManager;
+typedef _any HOverlay;
+typedef _any HOverlayElement;
 
 
 struct FrameStats
@@ -139,14 +139,14 @@ struct FrameStats
 	_int batchCount;
 };
 
-__export void __entry delete_framestats(FrameStats* data);
+INV_EXPORT void INV_CALL delete_framestats(FrameStats* data);
 
 /*
   * Utilities
   */
 
-__export void __entry util_delete_namevaluepair(PNameValuePair data);
-__export void __entry util_delete_namehandlepair(PNameHandlePair data);
+INV_EXPORT void INV_CALL util_delete_namevaluepair(PNameValuePair data);
+INV_EXPORT void INV_CALL util_delete_namehandlepair(PNameHandlePair data);
 
 }
 

@@ -19,7 +19,7 @@ namespace InVision.OIS.Native
 		public static extern uint GetVersionNumber();
 
 		[DllImport(OISLibrary, EntryPoint = Prefix + "create_input_system")]
-		public static extern IntPtr CreateInputSystem(IntPtr winHandle);
+		public static extern IntPtr CreateInputSystem(int winHandle);
 
 		[DllImport(OISLibrary, EntryPoint = Prefix + "create_by_param_input_system")]
 		public static extern IntPtr CreateInputSystem(NameValueItem[] values, int valuesCount);
@@ -34,10 +34,14 @@ namespace InVision.OIS.Native
 		public static extern string InputSystemName(IntPtr self);
 
 		[DllImport(OISLibrary, EntryPoint = Prefix + "get_number_of_devices")]
-		public static extern int GetNumberOfDevices(IntPtr self, InterfaceType interfaceType);
+		public static extern int GetNumberOfDevices(IntPtr self, DeviceType deviceType);
 
 		[DllImport(OISLibrary, EntryPoint = Prefix + "create_input_object")]
-		public static extern IntPtr CreateInputObject(IntPtr self, DeviceType interfaceType, bool bufferMode, string vendor);
+		public static extern IntPtr CreateInputObject(
+			IntPtr self,
+			DeviceType deviceType,
+			[MarshalAs(UnmanagedType.I1)] bool bufferMode,
+			[MarshalAs(UnmanagedType.LPStr)] string vendor);
 
 		[DllImport(OISLibrary, EntryPoint = Prefix + "destroy_input_object")]
 		public static extern void DestroyInputObject(IntPtr self, IntPtr obj);

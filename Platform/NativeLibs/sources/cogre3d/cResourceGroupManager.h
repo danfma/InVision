@@ -5,11 +5,11 @@
 
 extern "C"
 {
-	__export HResourceGroupManager __entry resgroupmng_get_singleton();
+	INV_EXPORT HResourceGroupManager INV_CALL resgroupmng_get_singleton();
 
-	__export void __entry resgroupmng_initialise_all_resource_groups(HResourceGroupManager pSelf);
+	INV_EXPORT void INV_CALL resgroupmng_initialise_all_resource_groups(HResourceGroupManager pSelf);
 
-	__export void __entry resgroupmng_add_resource_location(
+	INV_EXPORT void INV_CALL resgroupmng_add_resource_location(
 		HResourceGroupManager pSelf,
 		ConstString name,
 		ConstString locationType,

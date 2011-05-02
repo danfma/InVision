@@ -5,55 +5,55 @@
 
 extern "C"
 {
-	__export HConfigFile __entry cfgfile_new();
+	INV_EXPORT HConfigFile INV_CALL cfgfile_new();
 
-	__export void __entry cfgfile_delete(HConfigFile configFile);
+	INV_EXPORT void INV_CALL cfgfile_delete(HConfigFile configFile);
 
-	__export void __entry cfgfile_load(
+	INV_EXPORT void INV_CALL cfgfile_load(
 			HConfigFile configFile,
 			const _string filename,
 			const _string separators,
 			_bool trimWhitespace);
 
-	__export void __entry cfgfile_load_with_resourcegroup(
-			HConfigFile configFile,
-			const _string filename,
-			const _string resourceGroup,
-			const _string separators,
-			_bool trimWhitespace);
-
-	// __export void __entry cfgfile_load_with_datastream()
-
-	__export void __entry cfgfile_load_direct(
-			HConfigFile configFile,
-			const _string filename,
-			const _string separators,
-			_bool trimWhitespace);
-
-	__export void __entry cfgfile_load_from_resource_system(
+	INV_EXPORT void INV_CALL cfgfile_load_with_resourcegroup(
 			HConfigFile configFile,
 			const _string filename,
 			const _string resourceGroup,
 			const _string separators,
 			_bool trimWhitespace);
 
-	__export const _string __entry cfgfile_get_setting(
+	// INV_EXPORT void INV_CALL cfgfile_load_with_datastream()
+
+	INV_EXPORT void INV_CALL cfgfile_load_direct(
+			HConfigFile configFile,
+			const _string filename,
+			const _string separators,
+			_bool trimWhitespace);
+
+	INV_EXPORT void INV_CALL cfgfile_load_from_resource_system(
+			HConfigFile configFile,
+			const _string filename,
+			const _string resourceGroup,
+			const _string separators,
+			_bool trimWhitespace);
+
+	INV_EXPORT const _string INV_CALL cfgfile_get_setting(
 			HConfigFile configFile,
 			const _string key,
 			const _string section,
 			const _string defaultValue);
 
-	__export PStringArray __entry cfgfile_multi_setting(
+	INV_EXPORT PStringArray INV_CALL cfgfile_multi_setting(
 			HConfigFile configFile,
 			const _string key,
 			const _string section);
 
-	__export void __entry cfgfile_clear(HConfigFile configFile);
+	INV_EXPORT void INV_CALL cfgfile_clear(HConfigFile configFile);
 
-	__export HSectionEnumerator __entry cfgfile_get_section_iterator(
+	INV_EXPORT HSectionEnumerator INV_CALL cfgfile_get_section_iterator(
 			HConfigFile configFile);
 
-	__export HSettingsEnumerator __entry cfgfile_get_settings_iterator(
+	INV_EXPORT HSettingsEnumerator INV_CALL cfgfile_get_settings_iterator(
 			HConfigFile configFile,
 			const _string section);
 }

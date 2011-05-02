@@ -6,17 +6,23 @@ namespace InVision.OIS
 {
 	public class Mouse : DeviceObject
 	{
-		private MouseListenerDispatcher dispatcher;
+		private MouseListenerDispatcher _dispatcher;
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="Mouse"/> class.
 		/// </summary>
-		/// <param name="pSelf">The p self.</param>
-		public Mouse(IntPtr pSelf)
-			: base(pSelf, true)
+		/// <param name="descriptor">The _descriptor.</param>
+		internal Mouse(MouseDescriptor descriptor)
+			: base(descriptor.Self, false)
 		{
-			Initialize();
+			Initialize(descriptor);
 		}
+
+		/// <summary>
+		/// Gets or sets the state of the mouse.
+		/// </summary>
+		/// <value>The state of the mouse.</value>
+		public MouseState MouseState { get; private set; }
 
 		/// <summary>
 		/// Gets the listeners.
@@ -24,16 +30,19 @@ namespace InVision.OIS
 		/// <value>The listeners.</value>
 		public IList<IMouseListener> Listeners
 		{
-			get { return dispatcher.Listeners; }
+			get { return _dispatcher.Listeners; }
 		}
 
 		/// <summary>
 		/// Initializes this instance.
 		/// </summary>
-		private void Initialize()
+		/// <param name="descriptor">The descriptor.</param>
+		private void Initialize(MouseDescriptor descriptor)
 		{
-			dispatcher = new MouseListenerDispatcher();
-			NativeMouse.SetEventCallback(handle, dispatcher.DangerousGetHandle());
+			_dispatcher = new MouseListenerDispatcher();
+			NativeMouse.SetEventCallback(handle, _dispatcher.DangerousGetHandle());
+
+			MouseState = new MouseState(descriptor.MouseState);
 		}
 
 		/// <summary>
@@ -42,27 +51,27 @@ namespace InVision.OIS
 		protected override void ReleaseValidHandle()
 		{
 			NativeMouse.SetEventCallback(handle, IntPtr.Zero);
-			dispatcher.Dispose();
+			_dispatcher.Dispose();
 
 			base.ReleaseValidHandle();
 		}
 
 		public event MouseMovedHandler MouseMoved
 		{
-			add { dispatcher.MouseMoved += value; }
-			remove { dispatcher.MouseMoved -= value; }
+			add { _dispatcher.MouseMoved += value; }
+			remove { _dispatcher.MouseMoved -= value; }
 		}
 
 		public event MouseClickHandler MousePressed
 		{
-			add { dispatcher.MousePressed += value; }
-			remove { dispatcher.MousePressed -= value; }
+			add { _dispatcher.MousePressed += value; }
+			remove { _dispatcher.MousePressed -= value; }
 		}
 
 		public event MouseClickHandler MouseReleased
 		{
-			add { dispatcher.MouseReleased += value; }
-			remove { dispatcher.MouseReleased -= value; }
+			add { _dispatcher.MouseReleased += value; }
+			remove { _dispatcher.MouseReleased -= value; }
 		}
 	}
 }

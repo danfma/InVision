@@ -6,23 +6,15 @@
 
 extern "C"
 {
-	struct KeyEventExtended
+	struct KeyEventDescriptor
 	{
-		EventArgExtended base;
-		_int* key;
+		EventArgDescriptor base;
+		OIS::KeyCode* key;
 		_uint* text;
 	};
 
-	__export KeyEventExtended __entry ois_keyevent_new_from(HKeyEvent self);
+	INV_EXPORT KeyEventDescriptor
+	INV_CALL ois_descriptor_of_keyevent(Handle self, OIS::KeyEvent* e);
 }
-
-#ifdef __cplusplus
-
-	inline OIS::KeyEvent* asKeyEvent(HKeyEvent handle)
-	{
-		return (OIS::KeyEvent*)handle;
-	}
-
-#endif // __cplusplus
 
 #endif // KEYBOARD_H

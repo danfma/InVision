@@ -6,7 +6,7 @@ namespace InVision.OIS
 {
 	public class Keyboard : DeviceObject
 	{
-		private KeyListenerDispatcher dispatcher;
+		private KeyListenerDispatcher _dispatcher;
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="Keyboard"/> class.
@@ -22,7 +22,7 @@ namespace InVision.OIS
 		/// Gets or sets the text translation.
 		/// </summary>
 		/// <value>The text translation.</value>
-		public TextTranslationMode TextTranslation
+		private TextTranslationMode TextTranslation
 		{
 			get { return NativeKeyboard.GetTextTranslationMode(handle); }
 			set { NativeKeyboard.SetTextTranslationMode(handle, value); }
@@ -34,7 +34,7 @@ namespace InVision.OIS
 		/// <value>The listeners.</value>
 		public IList<IKeyListener> Listeners
 		{
-			get { return dispatcher.Listeners; }
+			get { return _dispatcher.Listeners; }
 		}
 
 		/// <summary>
@@ -42,8 +42,9 @@ namespace InVision.OIS
 		/// </summary>
 		private void Initialize()
 		{
-			dispatcher = new KeyListenerDispatcher();
-			NativeKeyboard.SetEventCallback(handle, dispatcher.DangerousGetHandle());
+			TextTranslation = TextTranslationMode.Unicode;
+			_dispatcher = new KeyListenerDispatcher();
+			NativeKeyboard.SetEventCallback(handle, _dispatcher.DangerousGetHandle());
 		}
 
 		/// <summary>
@@ -51,8 +52,8 @@ namespace InVision.OIS
 		/// </summary>
 		protected override void ReleaseValidHandle()
 		{
-			NativeKeyboard.SetEventCallback(handle, IntPtr.Zero); 
-			dispatcher.Dispose();
+			NativeKeyboard.SetEventCallback(handle, IntPtr.Zero);
+			_dispatcher.Dispose();
 
 			base.ReleaseValidHandle();
 		}
@@ -70,12 +71,56 @@ namespace InVision.OIS
 		}
 
 		/// <summary>
+		/// Determines whether [is modifier down] [the specified modifier].
+		/// </summary>
+		/// <param name="modifier">The modifier.</param>
+		/// <returns>
+		/// 	<c>true</c> if [is modifier down] [the specified modifier]; otherwise, <c>false</c>.
+		/// </returns>
+		public bool IsModifierDown(Modifier modifier)
+		{
+			return NativeKeyboard.IsModifierDown(handle, modifier);
+		}
+
+		/// <summary>
+		/// Copies the key states.
+		/// </summary>
+		/// <returns></returns>
+		public bool[] CopyKeyStates()
+		{
+			var keys = new bool[256];
+
+			NativeKeyboard.CopyKeyStates(handle, keys);
+
+			return keys;
+		}
+
+		/// <summary>
+		/// Copies the key states.
+		/// </summary>
+		/// <param name="states">The states (must be one array with 256 of length).</param>
+		public void CopyKeyStates(bool[] states)
+		{
+			NativeKeyboard.CopyKeyStates(handle, states);
+		}
+
+		/// <summary>
+		/// Gets as string.
+		/// </summary>
+		/// <param name="keyCode">The key code.</param>
+		/// <returns></returns>
+		public string GetAsString(KeyCode keyCode)
+		{
+			return NativeKeyboard.GetAsString(handle, keyCode);
+		}
+
+		/// <summary>
 		/// Occurs when [key pressed].
 		/// </summary>
 		public event KeyEventHandler KeyPressed
 		{
-			add { dispatcher.KeyPressed += value; }
-			remove { dispatcher.KeyPressed -= value; }
+			add { _dispatcher.KeyPressed += value; }
+			remove { _dispatcher.KeyPressed -= value; }
 		}
 
 		/// <summary>
@@ -83,8 +128,8 @@ namespace InVision.OIS
 		/// </summary>
 		public event KeyEventHandler KeyReleased
 		{
-			add { dispatcher.KeyReleased += value; }
-			remove { dispatcher.KeyReleased -= value; }
+			add { _dispatcher.KeyReleased += value; }
+			remove { _dispatcher.KeyReleased -= value; }
 		}
 	}
 }

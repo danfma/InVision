@@ -6,28 +6,25 @@
 
 extern "C"
 {
-	struct AxisExtended {
-		ComponentExtended base;
-		_int* abs;
-		_int* rel;
-		_bool* absOnly;
+	struct AxisDescriptor
+	{
+		ComponentDescriptor base;	// 8 bytes
+		int* abs;					// 12
+		int* rel;					// 16
+		bool* absOnly;				// 20
 	};
+
+	AxisDescriptor
+	ois_descriptor_of_axis(_any handle, OIS::Axis* axis);
 
 	/*
 	 * OIS::Button
 	 */
-	__export AxisExtended __entry ois_axis_new();
-	__export AxisExtended __entry ois_axis_new_from(HAxis self);
-	__export void __entry ois_axis_delete(HAxis self);
+	INV_EXPORT AxisDescriptor
+	INV_CALL ois_new_axis();
+
+	INV_EXPORT void
+	INV_CALL ois_delete_axis(OIS::Axis* self);
 }
-
-#ifdef __cplusplus
-
-	inline OIS::Axis* asAxis(HAxis handle)
-	{
-		return (OIS::Axis*)handle;
-	}
-
-#endif // __cplusplus
 
 #endif // CAXIS_H

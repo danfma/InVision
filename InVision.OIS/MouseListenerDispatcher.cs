@@ -6,22 +6,22 @@ namespace InVision.OIS
 {
 	public class MouseListenerDispatcher : Handle
 	{
-		private readonly List<IMouseListener> listeners;
-		private readonly Native.MouseMovedHandler mouseMoved;
-		private readonly Native.MouseClickHandler mousePressed;
-		private readonly Native.MouseClickHandler mouseReleased;
+		private readonly List<IMouseListener> _listeners;
+		private readonly Native.MouseMovedHandler _mouseMoved;
+		private readonly Native.MouseClickHandler _mousePressed;
+		private readonly Native.MouseClickHandler _mouseReleased;
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="MouseListenerDispatcher"/> class.
 		/// </summary>
 		public MouseListenerDispatcher()
 		{
-			mouseMoved = OnMouseMoved;
-			mousePressed = OnMousePressed;
-			mouseReleased = OnMouseReleased;
-			listeners = new List<IMouseListener>();
+			_listeners = new List<IMouseListener>();
+			_mouseMoved = OnMouseMoved;
+			_mousePressed = OnMousePressed;
+			_mouseReleased = OnMouseReleased;
 
-			SetHandle(NativeMouseListener.New(mouseMoved, mousePressed, mouseReleased));
+			SetHandle(NativeMouseListener.New(_mouseMoved, _mousePressed, _mouseReleased));
 		}
 
 		/// <summary>
@@ -30,7 +30,7 @@ namespace InVision.OIS
 		/// <value>The listeners.</value>
 		public IList<IMouseListener> Listeners
 		{
-			get { return listeners; }
+			get { return _listeners; }
 		}
 
 		public event MouseMovedHandler MouseMoved;
@@ -43,7 +43,7 @@ namespace InVision.OIS
 		/// <param name="e">The e.</param>
 		/// <param name="button">The button.</param>
 		/// <returns></returns>
-		private bool OnMouseReleased(MouseEventExtended e, MouseButton button)
+		private bool OnMouseReleased(MouseEventDescriptor e, MouseButton button)
 		{
 			var @event = new MouseEventArgs(e);
 			bool result = true;
@@ -56,7 +56,7 @@ namespace InVision.OIS
 				}
 			}
 
-			foreach (IMouseListener mouseListener in listeners)
+			foreach (IMouseListener mouseListener in _listeners)
 			{
 				result = result && mouseListener.OnMouseReleased(@event, button);
 			}
@@ -70,7 +70,7 @@ namespace InVision.OIS
 		/// <param name="e">The e.</param>
 		/// <param name="button">The button.</param>
 		/// <returns></returns>
-		private bool OnMousePressed(MouseEventExtended e, MouseButton button)
+		private bool OnMousePressed(MouseEventDescriptor e, MouseButton button)
 		{
 			var @event = new MouseEventArgs(e);
 			bool result = true;
@@ -83,7 +83,7 @@ namespace InVision.OIS
 				}
 			}
 
-			foreach (IMouseListener mouseListener in listeners)
+			foreach (IMouseListener mouseListener in _listeners)
 			{
 				result = result && mouseListener.OnMousePressed(@event, button);
 			}
@@ -96,7 +96,7 @@ namespace InVision.OIS
 		/// </summary>
 		/// <param name="e">The e.</param>
 		/// <returns></returns>
-		private bool OnMouseMoved(MouseEventExtended e)
+		private bool OnMouseMoved(MouseEventDescriptor e)
 		{
 			var @event = new MouseEventArgs(e);
 			bool result = true;
@@ -109,7 +109,7 @@ namespace InVision.OIS
 				}
 			}
 
-			foreach (IMouseListener mouseListener in listeners)
+			foreach (IMouseListener mouseListener in _listeners)
 			{
 				result = result && mouseListener.OnMouseMoved(@event);
 			}
@@ -128,7 +128,7 @@ namespace InVision.OIS
 			MouseReleased = null;
 			MouseMoved = null;
 
-			listeners.Clear();
+			_listeners.Clear();
 		}
 	}
 }

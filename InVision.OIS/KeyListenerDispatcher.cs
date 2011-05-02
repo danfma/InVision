@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using InVision.Native;
 using InVision.OIS.Native;
 
@@ -7,20 +6,20 @@ namespace InVision.OIS
 {
 	public class KeyListenerDispatcher : Handle
 	{
-		private readonly Native.KeyEventHandler keyPressedHandler;
-		private readonly Native.KeyEventHandler keyReleasedHandler;
-		private readonly List<IKeyListener> listeners;
+		private readonly Native.KeyEventHandler _keyPressedHandler;
+		private readonly Native.KeyEventHandler _keyReleasedHandler;
+		private readonly List<IKeyListener> _listeners;
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="KeyListenerDispatcher"/> class.
 		/// </summary>
 		public KeyListenerDispatcher()
 		{
-			keyPressedHandler = OnKeyPressed;
-			keyReleasedHandler = OnKeyReleased;
-			listeners = new List<IKeyListener>();
+			_keyPressedHandler = OnKeyPressed;
+			_keyReleasedHandler = OnKeyReleased;
+			_listeners = new List<IKeyListener>();
 
-			SetHandle(NativeKeyListener.New(keyPressedHandler, keyReleasedHandler));
+			SetHandle(NativeKeyListener.New(_keyPressedHandler, _keyReleasedHandler));
 		}
 
 		/// <summary>
@@ -29,7 +28,7 @@ namespace InVision.OIS
 		/// <value>The listeners.</value>
 		public IList<IKeyListener> Listeners
 		{
-			get { return listeners; }
+			get { return _listeners; }
 		}
 
 		public event KeyEventHandler KeyPressed;
@@ -40,7 +39,7 @@ namespace InVision.OIS
 		/// </summary>
 		/// <param name="e">The e.</param>
 		/// <returns></returns>
-		private bool OnKeyPressed(KeyEventExtended e)
+		private bool OnKeyPressed(KeyEventDescriptor e)
 		{
 			bool result = true;
 			var keyEvent = new KeyEventArgs(e);
@@ -66,7 +65,7 @@ namespace InVision.OIS
 		/// </summary>
 		/// <param name="e">The e.</param>
 		/// <returns></returns>
-		private bool OnKeyReleased(KeyEventExtended e)
+		private bool OnKeyReleased(KeyEventDescriptor e)
 		{
 			bool result = true;
 			var keyEvent = new KeyEventArgs(e);

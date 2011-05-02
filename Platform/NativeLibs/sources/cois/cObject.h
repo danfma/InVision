@@ -5,27 +5,32 @@
 
 extern "C"
 {
-	__export void __entry ois_object_delete(HObject self);
-	__export _int __entry ois_object_type(HObject self);
-	__export _string __entry ois_object_vendor(HObject self);
+	INV_EXPORT void
+	INV_CALL ois_delete_object(OIS::Object* self);
 
-	__export _bool __entry ois_object_get_buffered(HObject self);
-	__export void __entry ois_object_set_buffered(HObject self, _bool value);
+	INV_EXPORT OIS::Type
+	INV_CALL ois_object_type(OIS::Object* self);
 
-	__export HInputManager __entry ois_object_get_creator(HObject self);
-	__export void __entry ois_object_capture(HObject self);
+	INV_EXPORT _string
+	INV_CALL ois_object_vendor(OIS::Object* self);
 
-	__export _int __entry ois_object_get_id(HObject self);
+	INV_EXPORT bool
+	INV_CALL ois_object_get_buffered(OIS::Object* self);
 
-	__export HInterface __entry ois_object_query_interface(HObject self, _int itype);
+	INV_EXPORT void
+	INV_CALL ois_object_set_buffered(OIS::Object* self, bool value);
+
+	INV_EXPORT OIS::InputManager*
+	INV_CALL ois_object_get_creator(OIS::Object* self);
+
+	INV_EXPORT void
+	INV_CALL ois_object_capture(OIS::Object* self);
+
+	INV_EXPORT int
+	INV_CALL ois_object_get_id(OIS::Object* self);
+
+	INV_EXPORT OIS::Interface*
+	INV_CALL ois_object_query_interface(OIS::Object* self, OIS::Interface::IType itype);
 }
-
-#ifdef __cplusplus
-
-inline OIS::Object* asDeviceObject(HObject self) {
-	return (OIS::Object*)self;
-}
-
-#endif // __cplusplus
 
 #endif // INPUTOBJECT_H

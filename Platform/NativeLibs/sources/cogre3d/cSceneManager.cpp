@@ -3,7 +3,7 @@
 
 using namespace invision;
 
-__export void __entry scenemanager_delete(HSceneManager self)
+INV_EXPORT void INV_CALL scenemanager_delete(HSceneManager self)
 {
 	if (self == NULL)
 		return;
@@ -11,7 +11,7 @@ __export void __entry scenemanager_delete(HSceneManager self)
 	delete asSceneManager(self);
 }
 
-__export HCamera __entry scenemanager_create_camera(HSceneManager self, const _string name)
+INV_EXPORT HCamera INV_CALL scenemanager_create_camera(HSceneManager self, const _string name)
 {
 	return asSceneManager(self)->createCamera(name);
 }

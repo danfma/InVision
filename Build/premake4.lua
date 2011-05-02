@@ -8,7 +8,7 @@ config = {
 
 if os.is("windows") then
 	local ogredir = "C:\\OgreSDK_vc10_v1-7-2\\"
-	local boostdir = "C:\\boost_1_45_0\\"
+	local boostdir = "C:\\boost_1_46_1\\"
 	local qtsdk = "C:\\Qt\\2010.05\\qt\\include\\"
 	
 	config.defines = { "WIN32", "USE_SIMD" }
@@ -39,9 +39,9 @@ if os.is("windows") then
 end
 
 -- Solution description
-solution "InVisionWrap"
+solution "NativeLibs"
 	configurations { "Debug", "Release" }
-	location "projects/"
+	location "../Platform/Projects/"
 	
 	project "InVisionNative"
 		kind "SharedLib"

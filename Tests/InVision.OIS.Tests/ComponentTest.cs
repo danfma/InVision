@@ -1,4 +1,5 @@
 ﻿using System;
+using InVision.OIS.Components;
 using NUnit.Framework;
 
 namespace InVision.OIS.Tests

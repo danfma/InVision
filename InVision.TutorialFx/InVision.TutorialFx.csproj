@@ -49,13 +49,9 @@
     <Compile Include="ShutdownException.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\InVision.GameMath\InVision.GameMath.csproj">
-      <Project>{19B788E7-19B6-4ECD-8AA1-DD982928DB56}</Project>
-      <Name>InVision.GameMath</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\InVision.Native\InVision.Native.csproj">
-      <Project>{24E00D97-AA09-4ECD-A75A-247697091FDE}</Project>
-      <Name>InVision.Native</Name>
+    <ProjectReference Include="..\InVision.Ogre\InVision.Ogre.csproj">
+      <Project>{5D60C1BB-506C-4A0A-8561-C1669FAFBC5B}</Project>
+      <Name>InVision.Ogre</Name>
     </ProjectReference>
     <ProjectReference Include="..\InVision.OIS\InVision.OIS.csproj">
       <Project>{059527B2-32AF-4983-A27F-12407C88BE0B}</Project>

@@ -6,7 +6,7 @@
 
 extern "C"
 {
-
+	/*
 	struct PovExtended
 	{
 		ComponentExtended base;
@@ -31,7 +31,7 @@ extern "C"
 	};
 
 
-
+	*/
 }
 
 #endif // CJOYSTICK_H

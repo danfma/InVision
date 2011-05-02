@@ -13,10 +13,10 @@ namespace InVision.OIS.Native
 			Init();
 		}
 
-		[DllImport(OISLibrary, EntryPoint = "ois_axis_new")]
-		public static extern AxisExtended New();
+		[DllImport(OISLibrary, EntryPoint = "ois_new_axis")]
+		public static extern AxisDescriptor New();
 
-		[DllImport(OISLibrary, EntryPoint = "ois_axis_delete")]
+		[DllImport(OISLibrary, EntryPoint = "ois_delete_axis")]
 		public static extern void Delete(IntPtr self);
 	}
 }

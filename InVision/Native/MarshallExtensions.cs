@@ -2,13 +2,13 @@
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
-using InVision.Native.Ogre;
 
 namespace InVision.Native
 {
-	internal static class MarshallExtensions
+	public static class MarshallExtensions
 	{
-		private static readonly ConcurrentDictionary<IntPtr, WeakReference> Handles = new ConcurrentDictionary<IntPtr, WeakReference>();
+		private static readonly ConcurrentDictionary<IntPtr, WeakReference> Handles =
+			new ConcurrentDictionary<IntPtr, WeakReference>();
 
 		/// <summary>
 		/// Registers the handle.
@@ -120,7 +120,7 @@ namespace InVision.Native
 			finally
 			{
 				if (pString != IntPtr.Zero)
-					NativeOgreUtilities.DeleteString(pString);
+					PlatformInvoke.DeleteString(pString);
 			}
 		}
 
@@ -146,7 +146,8 @@ namespace InVision.Native
 		/// <param name="converter">The converter.</param>
 		/// <param name="deleter">The deleter.</param>
 		/// <returns></returns>
-		public static IEnumerable<T> AsAutoEnumeration<T>(this IntPtr pEnumerator, Func<IntPtr, T> converter, Action<IntPtr> deleter)
+		public static IEnumerable<T> AsAutoEnumeration<T>(this IntPtr pEnumerator, Func<IntPtr, T> converter,
+														  Action<IntPtr> deleter)
 		{
 			using (var enumerator = new Enumerator<T>(pEnumerator))
 			{

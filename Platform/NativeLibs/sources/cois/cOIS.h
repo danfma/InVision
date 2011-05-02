@@ -8,30 +8,7 @@ extern "C"
 	/*
 	 * Handle types
 	 */
-	typedef _handle HComponent;
-	typedef _handle HAxis;
-	typedef _handle HButton;
-	typedef _handle HVector3;
-	typedef _handle HObject;
-	typedef _handle HInputManager;
-	typedef _handle HInterface;
-	typedef _handle HEventArg;
-
-	typedef _handle HMouseState;
-	typedef _handle HMouseListener;
-	typedef _handle HMouseEvent;
-	typedef _handle HMouse;
-
-	typedef _handle HKeyEvent;
-	typedef _handle HKeyListener;
-	typedef _handle HKeyboard;
-
-	typedef _handle HJoystickState;
-
-	typedef _handle HVector;
-	typedef HVector HVectorBool;
-	typedef HVector HVectorAxis;
-	typedef HVector HVectorVector3;
+	typedef _any Handle;
 
 	/*
 	 * OIS::Type
@@ -89,7 +66,7 @@ namespace ois
 		_raise_exception((const _string)message.c_str(), NULL, 0);
 	}
 
-	inline bool ensureNotNull(_handle handle)
+	inline bool ensureNotNull(_any handle)
 	{
 		bool isNull = handle == NULL;
 		

@@ -31,7 +31,7 @@ void deletePairList(_any data)
  * Implementations
  */
 
-__export HNameValuePairList __entry namevaluepairlist_convert(
+INV_EXPORT HNameValuePairList INV_CALL namevaluepairlist_convert(
 	const PNameValuePair pairs,
 	_int count)
 {
@@ -46,18 +46,18 @@ __export HNameValuePairList __entry namevaluepairlist_convert(
 	return pairList;
 }
 
-__export HNameValuePairList __entry namevaluepairlist_new()
+INV_EXPORT HNameValuePairList INV_CALL namevaluepairlist_new()
 {
 	return new Ogre::NameValuePairList();
 }
 
-__export void __entry namevaluepairlist_delete(
+INV_EXPORT void INV_CALL namevaluepairlist_delete(
 	HNameValuePairList self)
 {
 	delete asNameValuePairList(self);
 }
 
-__export void __entry namevaluepairlist_add(
+INV_EXPORT void INV_CALL namevaluepairlist_add(
 	HNameValuePairList self,
 	const char *key,
 	const char *value)
@@ -69,7 +69,7 @@ __export void __entry namevaluepairlist_add(
 	pairList->insert(std::pair<Ogre::String, Ogre::String>(_key, _value));
 }
 
-__export void __entry namevaluepairlist_remove(
+INV_EXPORT void INV_CALL namevaluepairlist_remove(
 	HNameValuePairList self,
 	const char *key)
 {
@@ -79,19 +79,19 @@ __export void __entry namevaluepairlist_remove(
 	pairList->erase(key);
 }
 
-__export void __entry namevaluepairlist_clear(
+INV_EXPORT void INV_CALL namevaluepairlist_clear(
 	HNameValuePairList self)
 {
 	asNameValuePairList(self)->clear();
 }
 
-__export _int __entry namevaluepairlist_count(
+INV_EXPORT _int INV_CALL namevaluepairlist_count(
 	HNameValuePairList self)
 {
 	return asNameValuePairList(self)->size();
 }
 
-__export const HNameValuePairEnumerator __entry namevaluepairlist_get_pairs(
+INV_EXPORT const HNameValuePairEnumerator INV_CALL namevaluepairlist_get_pairs(
 	HNameValuePairList self)
 {
 	Ogre::NameValuePairList *list = asNameValuePairList(self);
@@ -100,7 +100,7 @@ __export const HNameValuePairEnumerator __entry namevaluepairlist_get_pairs(
 	return e;
 }
 
-__export HNameValuePairList __entry namevaluepairlist_copy(
+INV_EXPORT HNameValuePairList INV_CALL namevaluepairlist_copy(
 	HNameValuePairList self)
 {
 	Ogre::NameValuePairList *list = asNameValuePairList(self);

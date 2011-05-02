@@ -14,6 +14,6 @@ namespace InVision.OIS.Native
 		}
 
 		[DllImport(OISLibrary, EntryPoint = "ois_eventarg_new_from")]
-		public static extern EventArgExtended New(IntPtr self);
+		public static extern EventArgDescriptor New(IntPtr self);
 	}
 }

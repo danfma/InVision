@@ -1,39 +1,56 @@
 #include "cKeyboard.h"
-#include "cCustomKeyEventListener.h"
 
-__export _bool __entry ois_keyboard_is_key_down(HKeyboard self, _int keyCode)
+INV_EXPORT bool
+INV_CALL ois_keyboard_is_key_down(
+	OIS::Keyboard* self,
+	OIS::KeyCode keyCode)
 {
-	return toBool(asKeyboard(self)->isKeyDown((OIS::KeyCode)keyCode));
+	return self->isKeyDown(keyCode);
 }
 
-__export void __entry ois_keyboard_set_event_callback(HKeyboard self, HKeyListener listener)
+INV_EXPORT void
+INV_CALL ois_keyboard_set_event_callback(
+	OIS::Keyboard* self,
+	CustomKeyListener* listener)
 {
-	asKeyboard(self)->setEventCallback(asKeyListener(listener));
+	self->setEventCallback(listener);
 }
 
-__export _int __entry ois_keyboard_get_text_translation_mode(HKeyboard self)
+INV_EXPORT _string
+INV_CALL ois_keyboard_get_as_string(
+	OIS::Keyboard* self,
+	OIS::KeyCode keyCode)
 {
-	return (_int)asKeyboard(self)->getTextTranslation();
+	return copyString(self->getAsString(keyCode));
 }
 
-__export void __entry ois_keyboard_set_text_translation_mode(HKeyboard self, _int translationMode)
+INV_EXPORT bool
+INV_CALL ois_keyboard_is_modifier_down(
+	OIS::Keyboard* self,
+	OIS::Keyboard::Modifier modifier)
 {
-	asKeyboard(self)->setTextTranslation((OIS::Keyboard::TextTranslationMode)translationMode);
+	return self->isModifierDown(modifier);
 }
 
-__export _string __entry ois_keyboard_get_as_string(HKeyboard self, _int keyCode)
+INV_EXPORT void
+INV_CALL ois_keyboard_copy_key_states(
+	OIS::Keyboard* self,
+	char keys[256])
 {
-	std::string keyString = asKeyboard(self)->getAsString((OIS::KeyCode)keyCode);
-
-	return copyString(keyString);
+	self->copyKeyStates(keys);
 }
 
-__export _bool __entry ois_keyboard_is_modifier_down(HKeyboard self, _int modifier)
+INV_EXPORT OIS::Keyboard::TextTranslationMode
+INV_CALL ois_keyboard_get_text_translation(
+	OIS::Keyboard* self)
 {
-	return toBool(asKeyboard(self)->isModifierDown((OIS::Keyboard::Modifier)modifier));
+	return self->getTextTranslation();
 }
 
-__export void __entry ois_keyboard_copy_key_states(HKeyboard self, _byte keys[256])
+INV_EXPORT void
+INV_CALL ois_keyboard_set_text_translation(
+	OIS::Keyboard* self,
+	OIS::Keyboard::TextTranslationMode value)
 {
-	asKeyboard(self)->copyKeyStates((char*)keys);
+	self->setTextTranslation(value);
 }

@@ -1,5 +1,5 @@
 #include "cOgre.h"
-#include "invision/Enumerator.h"
+#include "cEnumerator.h"
 #include <Ogre.h>
 
 const PolygonModeEnum PME_Points = Ogre::PM_POINTS;
@@ -10,7 +10,7 @@ using namespace invision;
 
 RaiseExceptionHandler exceptionHandler = NULL;
 
-__export void __entry util_delete_string(const _string data)
+INV_EXPORT void INV_CALL util_delete_string(const _string data)
 {
 	if (data == NULL)
 		return;
@@ -18,7 +18,7 @@ __export void __entry util_delete_string(const _string data)
 	delete[] data;
 }
 
-__export void __entry util_delete_stringarray(PStringArray strArray)
+INV_EXPORT void INV_CALL util_delete_stringarray(PStringArray strArray)
 {
 	if (strArray == NULL)
 		return;
@@ -30,7 +30,7 @@ __export void __entry util_delete_stringarray(PStringArray strArray)
 	delete strArray;
 }
 
-__export void __entry util_delete_namevaluepair(PNameValuePair data)
+INV_EXPORT void INV_CALL util_delete_namevaluepair(PNameValuePair data)
 {
 	if (data == NULL)
 		return;
@@ -40,7 +40,7 @@ __export void __entry util_delete_namevaluepair(PNameValuePair data)
 	delete data;
 }
 
-__export void __entry util_delete_namehandlepair(PNameHandlePair data)
+INV_EXPORT void INV_CALL util_delete_namehandlepair(PNameHandlePair data)
 {
 	if (data == NULL)
 		return;
@@ -52,7 +52,7 @@ __export void __entry util_delete_namehandlepair(PNameHandlePair data)
 	delete data;
 }
 
-__export void __entry register_exception_raise_handler(RaiseExceptionHandler handler)
+INV_EXPORT void INV_CALL register_exception_raise_handler(RaiseExceptionHandler handler)
 {
 	exceptionHandler = handler;
 }

@@ -13,7 +13,7 @@ namespace InVision.OIS.Native
 			Init();
 		}
 
-		[DllImport(OISLibrary, EntryPoint = "ois_object_delete")]
+		[DllImport(OISLibrary, EntryPoint = "ois_delete_object")]
 		public static extern void Delete(IntPtr self);
 
 		[DllImport(OISLibrary, EntryPoint = "ois_object_type")]
@@ -23,10 +23,13 @@ namespace InVision.OIS.Native
 		public static extern string GetVendor(IntPtr self);
 
 		[DllImport(OISLibrary, EntryPoint = "ois_object_get_buffered")]
+		[return: MarshalAs(UnmanagedType.I1)]
 		public static extern bool GetBuffered(IntPtr self);
 
 		[DllImport(OISLibrary, EntryPoint = "ois_object_set_buffered")]
-		public static extern void SetBuffered(IntPtr self, bool value);
+		public static extern void SetBuffered(
+			IntPtr self,
+			[MarshalAs(UnmanagedType.I1)] bool value);
 
 		[DllImport(OISLibrary, EntryPoint = "ois_object_get_creator")]
 		public static extern IntPtr GetCreator(IntPtr self);

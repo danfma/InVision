@@ -110,10 +110,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\InVision.Native\InVision.Native.csproj">
-      <Project>{24E00D97-AA09-4ECD-A75A-247697091FDE}</Project>
-      <Name>InVision.Native</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\InVision.OIS\InVision.OIS.csproj">
       <Project>{059527B2-32AF-4983-A27F-12407C88BE0B}</Project>
       <Name>InVision.OIS</Name>

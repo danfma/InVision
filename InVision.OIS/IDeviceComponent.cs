@@ -1,4 +1,6 @@
-﻿namespace InVision.OIS
+﻿using InVision.OIS.Components;
+
+namespace InVision.OIS
 {
 	public interface IDeviceComponent
 	{

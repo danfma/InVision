@@ -6,16 +6,23 @@
 
 extern "C"
 {
-	struct ButtonExtended {
-		ComponentExtended base;
-		_bool* pushed;
+	struct ButtonDescriptor
+	{
+		ComponentDescriptor base;
+		bool* pushed;
 	};
+
+	ButtonDescriptor
+	ois_descriptor_of_button(_any handle, OIS::Button* button);
 
 	/*
 	 * OIS::Button
 	 */
-	__export ButtonExtended __entry ois_button_new(_bool pushed);
-	__export void __entry ois_button_delete(HButton self);
+	INV_EXPORT ButtonDescriptor
+	INV_CALL ois_new_button(bool pushed);
+
+	INV_EXPORT void
+	INV_CALL ois_delete_button(OIS::Button* self);
 }
 
 #endif // BUTTON_H

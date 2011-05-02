@@ -2,12 +2,12 @@
 
 using namespace invision;
 
-__export HLogManager __entry ogre_logmanager_get_singleton()
+INV_EXPORT HLogManager INV_CALL ogre_logmanager_get_singleton()
 {
 	return Ogre::LogManager::getSingletonPtr();
 }
 
-__export void __entry ogre_logmanager_log_message(
+INV_EXPORT void INV_CALL ogre_logmanager_log_message(
 		HLogManager self,
 		ConstString message,
 		_int messageLevel,

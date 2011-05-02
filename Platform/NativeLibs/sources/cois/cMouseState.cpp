@@ -1,17 +1,16 @@
 #include "cMouseState.h"
 
-__export MouseStateExtended __entry ois_mousestate_new_from(HMouseState self)
+INV_EXPORT MouseStateDescriptor
+INV_CALL ois_descriptor_of_mousestate(_any self, OIS::MouseState* state)
 {
-	OIS::MouseState* state = asMouseState(self);
+	MouseStateDescriptor descriptor;
+	descriptor.handle = self;
+	descriptor.buttons = &state->buttons;
+	descriptor.width = &state->width;
+	descriptor.height = &state->height;
+	descriptor.x = ois_descriptor_of_axis(&state->X, &state->X);
+	descriptor.y = ois_descriptor_of_axis(&state->Y, &state->Y);
+	descriptor.z = ois_descriptor_of_axis(&state->Z, &state->Z);
 
-	MouseStateExtended ex;
-	ex.handle = state;
-	ex.buttons = (_int*) &state->buttons;
-	ex.width = (_int*) &state->width;
-	ex.height = (_int*) &state->height;
-	ex.x = ois_axis_new_from(&state->X);
-	ex.y = ois_axis_new_from(&state->Y);
-	ex.z = ois_axis_new_from(&state->Z);
-
-	return ex;
+	return descriptor;
 }

@@ -5,13 +5,14 @@
 
 extern "C"
 {
-	struct EventArgExtended
+	struct EventArgDescriptor
 	{
-		HEventArg handle;
-		HObject* device;
+		Handle handle;
+		OIS::Object** device;
 	};
 
-	__export EventArgExtended __entry ois_eventarg_new_from(HEventArg self);
+	INV_EXPORT EventArgDescriptor
+	INV_CALL ois_descriptor_of_eventarg(Handle handle, OIS::EventArg* e);
 }
 
 #endif // EVENTARGS_H

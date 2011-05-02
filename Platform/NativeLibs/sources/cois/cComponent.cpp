@@ -2,34 +2,31 @@
 
 using namespace invision::ois;
 
+
+ComponentDescriptor
+ois_descriptor_of_component(_any self, OIS::Component* component)
+{
+	ComponentDescriptor info;
+	info.handle = self;
+	info.ctype = &component->cType;
+
+	return info;
+}
+
+
 /*
 * OIS::Component
 */
-__export ComponentExtended __entry ois_component_new(_int ctype)
+INV_EXPORT ComponentDescriptor
+INV_CALL ois_new_component(OIS::ComponentType ctype)
 {
-	OIS::Component* component = new OIS::Component((OIS::ComponentType)ctype);
-	ComponentExtended cinfo;
-	cinfo.handle = component;
-	cinfo.componentType = (_int*) &(component->cType);
+	OIS::Component* handle = new OIS::Component(ctype);
 
-	return cinfo;
+	return ois_descriptor_of_component(handle, handle);
 }
 
-__export void __entry ois_component_delete(HComponent self)
-{
-	if (self == NULL)
-		return;
-	
-	delete (OIS::Component*)self;
-}
-
-
-__export ComponentProxyInfo __entry ois_new_component(OIS::ComponentType ctype)
-{
-	return ComponentProxy::createInfo(new ComponentProxy(ctype));
-}
-
-__export void __entry ois_delete_component(OIS::Component* self)
+INV_EXPORT void
+INV_CALL ois_delete_component(OIS::Component* self)
 {
 	if (self == NULL)
 		return;

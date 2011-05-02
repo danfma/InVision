@@ -3,26 +3,26 @@
 
 using namespace invision;
 
-__export ColorValue __entry viewport_get_bgcolor(HViewport self)
+INV_EXPORT ColorValue INV_CALL viewport_get_bgcolor(HViewport self)
 {
 	Ogre::ColourValue color = asViewport(self)->getBackgroundColour();
 
 	return toColorValue(color);
 }
 
-__export void __entry viewport_set_bgcolor(HViewport self, ColorValue color)
+INV_EXPORT void INV_CALL viewport_set_bgcolor(HViewport self, ColorValue color)
 {
 	Ogre::ColourValue c = fromColorValue(color);
 
 	asViewport(self)->setBackgroundColour(c);
 }
 
-__export _int __entry viewport_get_actual_width(HViewport self)
+INV_EXPORT _int INV_CALL viewport_get_actual_width(HViewport self)
 {
 	return asViewport(self)->getActualWidth();
 }
 
-__export _int __entry viewport_get_actual_height(HViewport self)
+INV_EXPORT _int INV_CALL viewport_get_actual_height(HViewport self)
 {
 	return asViewport(self)->getActualHeight();
 }

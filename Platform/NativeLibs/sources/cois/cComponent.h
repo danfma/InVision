@@ -3,56 +3,30 @@
 
 #include "cOIS.h"
 
-#ifdef __cplusplus
-
-struct ComponentProxyInfo
-{
-	_handle handle;
-	OIS::ComponentType* ctype;
-};
-
-class ComponentProxy : public OIS::Component
-{
-public:
-	ComponentProxy(OIS::ComponentType ctype)
-		: OIS::Component(ctype)
-	{
-		std::cout << "ComponentProxy::ctr(" << ctype << ")" << std::endl;
-	}
-
-	virtual ~ComponentProxy()
-	{
-		std::cout << "ComponentWrapper::~ctor()" << std::endl;
-	}
-
-	static ComponentProxyInfo createInfo(ComponentProxy* component)
-	{
-		ComponentProxyInfo info;
-		info.handle = component;
-		info.ctype = &component->cType;
-
-		return info;
-	}
-};
-
-#endif // __cplusplus
+/* OIS::Component */
 
 extern "C"
 {
-	struct ComponentExtended {
-		HComponent handle;
-		_int* componentType;
+	struct ComponentDescriptor
+	{
+		// reference
+		_any handle;
+
+		// field
+		OIS::ComponentType* ctype;
 	};
+
+	ComponentDescriptor
+	ois_descriptor_of_component(_any self, OIS::Component* component);
 
 	/*
 	 * OIS::Component
 	 */
-	__export ComponentExtended __entry ois_component_new(_int ctype);
-	__export void __entry ois_component_delete(HComponent self);
+	INV_EXPORT ComponentDescriptor
+	INV_CALL ois_new_component(OIS::ComponentType ctype);
 
-
-	__export ComponentProxyInfo __entry ois_new_component(OIS::ComponentType ctype);
-	__export void __entry ois_delete_component(OIS::Component* self);
+	INV_EXPORT void
+	INV_CALL ois_delete_component(OIS::Component* self);
 }
 
 #endif // CCOMPONENT_H

@@ -7,13 +7,14 @@
 
 extern "C"
 {
-	struct MouseEventExtended
+	struct MouseEventDescriptor
 	{
-		EventArgExtended base;
-		MouseStateExtended state;
+		EventArgDescriptor base;
+		MouseStateDescriptor state;
 	};
 
-	__export MouseEventExtended __entry ois_mouseevent_new_from(HMouseEvent self);
+	INV_EXPORT MouseEventDescriptor
+	INV_CALL ois_descriptor_of_mouseevent(_any self, OIS::MouseEvent* event);
 }
 
 #endif // MOUSEEVENT_H

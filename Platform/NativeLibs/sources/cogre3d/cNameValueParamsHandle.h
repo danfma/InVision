@@ -13,16 +13,16 @@ extern "C"
 {	
 	/* NEW ****************************************************************************************/
 	
-	__export HNameValuePairList __entry namevaluepairlist_convert(const PNameValuePair pairs, _int count);
-	__export HNameValuePairList __entry namevaluepairlist_new();
-	__export void __entry namevaluepairlist_delete(HNameValuePairList self);
+	INV_EXPORT HNameValuePairList INV_CALL namevaluepairlist_convert(const PNameValuePair pairs, _int count);
+	INV_EXPORT HNameValuePairList INV_CALL namevaluepairlist_new();
+	INV_EXPORT void INV_CALL namevaluepairlist_delete(HNameValuePairList self);
 	
-	__export void __entry namevaluepairlist_add(HNameValuePairList self, const char *key, const char *value);
-	__export void __entry namevaluepairlist_remove(HNameValuePairList self, const char *key);
-	__export void __entry namevaluepairlist_clear(HNameValuePairList self);
-	__export _int __entry namevaluepairlist_count(HNameValuePairList self);
-	__export const HNameValuePairEnumerator __entry namevaluepairlist_get_pairs(HNameValuePairList self);
-	__export HNameValuePairList __entry namevaluepairlist_copy(HNameValuePairList self);
+	INV_EXPORT void INV_CALL namevaluepairlist_add(HNameValuePairList self, const char *key, const char *value);
+	INV_EXPORT void INV_CALL namevaluepairlist_remove(HNameValuePairList self, const char *key);
+	INV_EXPORT void INV_CALL namevaluepairlist_clear(HNameValuePairList self);
+	INV_EXPORT _int INV_CALL namevaluepairlist_count(HNameValuePairList self);
+	INV_EXPORT const HNameValuePairEnumerator INV_CALL namevaluepairlist_get_pairs(HNameValuePairList self);
+	INV_EXPORT HNameValuePairList INV_CALL namevaluepairlist_copy(HNameValuePairList self);
 }
 
 #ifdef __cplusplus

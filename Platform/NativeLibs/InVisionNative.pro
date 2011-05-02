@@ -13,8 +13,7 @@ SOURCES += \
 	$$files(sources/common/*.cpp)
 
 HEADERS += \
-	$$files(sources/common/*.h) \
-    sources/common/cCollections.h
+	$$files(sources/common/*.h)
 
 Release:DESTDIR = Bin/Release
 Release:OBJECTS_DIR = Bin/Release/.obj
@@ -29,7 +28,7 @@ Debug:RCC_DIR = Bin/Debug/.rcc
 Debug:UI_DIR = Bin/Debug/.ui
 Debug:DEFINES += DEBUG
 
-INCLUDEPATH += sources/common sources/cois
+INCLUDEPATH += sources/common sources/cois $$(BOOST_SDK)
 
 win32 {
 	DEFINES += WIN32 DEBUG

@@ -4,16 +4,16 @@ namespace InVision.OIS
 {
 	public class KeyEventArgs : EventArgs
 	{
-		private readonly KeyEventExtended keyEventExtended;
+		private readonly KeyEventDescriptor _descriptor;
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="KeyEventArgs"/> class.
 		/// </summary>
-		/// <param name="keyEventExtended">The key event extended.</param>
-		internal KeyEventArgs(KeyEventExtended keyEventExtended)
-			: base(keyEventExtended.Base)
+		/// <param name="descriptor">The key event extended.</param>
+		internal KeyEventArgs(KeyEventDescriptor descriptor)
+			: base(descriptor.Base)
 		{
-			this.keyEventExtended = keyEventExtended;
+			_descriptor = descriptor;
 		}
 
 		/// <summary>
@@ -22,16 +22,16 @@ namespace InVision.OIS
 		/// <value>The key code.</value>
 		public KeyCode KeyCode
 		{
-			get { return keyEventExtended.Key; }
+			get { return _descriptor.Key; }
 		}
 
 		/// <summary>
-		/// Gets the text value.
+		/// Gets the char.
 		/// </summary>
-		/// <value>The text value.</value>
-		public uint TextValue
+		/// <value>The char.</value>
+		public char Char
 		{
-			get { return keyEventExtended.Text; }
+			get { return _descriptor.Char; }
 		}
 	}
 }

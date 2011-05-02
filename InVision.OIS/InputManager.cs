@@ -7,10 +7,10 @@ namespace InVision.OIS
 {
 	public class InputManager : Handle
 	{
-		private static uint? versionNumber;
-		private string inputSystemName;
-		private string versionName;
-		private List<WeakReference> devices = new List<WeakReference>();
+		private static uint? _versionNumber;
+		private string _inputSystemName;
+		private string _versionName;
+		private readonly List<WeakReference> _devices = new List<WeakReference>();
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="InputManager"/> class.
@@ -28,7 +28,7 @@ namespace InVision.OIS
 		/// <value>The name of the input system.</value>
 		public string InputSystemName
 		{
-			get { return inputSystemName ?? (inputSystemName = NativeInputManager.InputSystemName(handle)); }
+			get { return _inputSystemName ?? (_inputSystemName = NativeInputManager.InputSystemName(handle)); }
 		}
 
 		/// <summary>
@@ -39,10 +39,10 @@ namespace InVision.OIS
 		{
 			get
 			{
-				if (versionNumber == null)
-					versionNumber = NativeInputManager.GetVersionNumber();
+				if (_versionNumber == null)
+					_versionNumber = NativeInputManager.GetVersionNumber();
 
-				return versionNumber.Value;
+				return _versionNumber.Value;
 			}
 		}
 
@@ -52,20 +52,31 @@ namespace InVision.OIS
 		/// <value>The name of the version.</value>
 		public string VersionName
 		{
-			get { return versionName ?? (versionName = NativeInputManager.GetVersionName(handle)); }
+			get { return _versionName ?? (_versionName = NativeInputManager.GetVersionName(handle)); }
 		}
 
-		public static InputManager Create(IntPtr winHandle)
+		/// <summary>
+		/// Creates the specified win handle.
+		/// </summary>
+		/// <param name="winHandle">The win handle.</param>
+		/// <returns></returns>
+		public static InputManager Create(int winHandle)
 		{
 			return NativeInputManager.CreateInputSystem(winHandle).
 				AsHandle(pt => new InputManager(pt, true));
 		}
 
+		/// <summary>
+		/// Creates the specified param list.
+		/// </summary>
+		/// <param name="paramList">The param list.</param>
+		/// <returns></returns>
 		public static InputManager Create(ParamList paramList)
 		{
 			int count;
+			NameValueItem[] parameters = NameValueItem.ToArray(paramList, out count);
 
-			return NativeInputManager.CreateInputSystem(NameValueItem.ToArray(paramList, out count), count).
+			return NativeInputManager.CreateInputSystem(parameters, count).
 				AsHandle(pt => new InputManager(pt, true));
 		}
 
@@ -73,7 +84,7 @@ namespace InVision.OIS
 		/// Gets the number of devices.
 		/// </summary>
 		/// <value>The number of devices.</value>
-		public int GetNumberOfDevices(InterfaceType type)
+		public int GetNumberOfDevices(DeviceType type)
 		{
 			return NativeInputManager.GetNumberOfDevices(handle, type);
 		}
@@ -99,7 +110,7 @@ namespace InVision.OIS
 			var objHandle = NativeInputManager.CreateInputObject(handle, type, bufferMode, vendor);
 			var device = objHandle.AsHandle(pt => DeviceObject.Create(type, pt));
 
-			devices.Add(new WeakReference(device));
+			_devices.Add(new WeakReference(device));
 
 			return device;
 		}
@@ -136,13 +147,13 @@ namespace InVision.OIS
 		/// </summary>
 		protected override void ReleaseValidHandle()
 		{
-			foreach (var weakReference in devices)
+			foreach (var weakReference in _devices)
 			{
 				if (weakReference.IsAlive)
 					((DeviceObject)weakReference.Target).Dispose();
 			}
 
-			devices.Clear();
+			_devices.Clear();
 
 			NativeInputManager.Destroy(handle);
 		}

@@ -3,17 +3,17 @@
 using namespace std;
 using namespace invision;
 
-__export HNameValueCollection __entry namevaluecollection_new()
+INV_EXPORT HNameValueCollection INV_CALL namevaluecollection_new()
 {
 	return new NameValueMap();
 }
 
-__export void __entry namevaluecollection_delete(HNameValueCollection self)
+INV_EXPORT void INV_CALL namevaluecollection_delete(HNameValueCollection self)
 {
 	delete asNameValueCollection(self);
 }
 
-__export void __entry namevaluecollection_add(HNameValuePairList self, const char *key, const char *value)
+INV_EXPORT void INV_CALL namevaluecollection_add(HNameValuePairList self, const char *key, const char *value)
 {
 	string skey = key;
 	string svalue = value;
@@ -21,24 +21,24 @@ __export void __entry namevaluecollection_add(HNameValuePairList self, const cha
 	asNameValueCollection(self)->insert(NameValueCollectionPair(skey, svalue));
 }
 
-__export void __entry namevaluecollection_remove(HNameValuePairList self, const char *key)
+INV_EXPORT void INV_CALL namevaluecollection_remove(HNameValuePairList self, const char *key)
 {
 	string skey = key;
 
 	asNameValueCollection(self)->erase(skey);
 }
 
-__export void __entry namevaluecollection_clear(HNameValuePairList self)
+INV_EXPORT void INV_CALL namevaluecollection_clear(HNameValuePairList self)
 {
 	asNameValueCollection(self)->clear();
 }
 
-__export _int __entry namevaluecollection_count(HNameValuePairList self)
+INV_EXPORT _int INV_CALL namevaluecollection_count(HNameValuePairList self)
 {
 	return asNameValueCollection(self)->size();
 }
 
-__export HNameValuePairEnumerator __entry namevaluecollection_get_pairs(HNameValuePairList self)
+INV_EXPORT HNameValuePairEnumerator INV_CALL namevaluecollection_get_pairs(HNameValuePairList self)
 {
 	NameValueMap* list = asNameValueCollection(self);
 

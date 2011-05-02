@@ -4,83 +4,31 @@
 #include "cOIS.h"
 #include "cComponent.h"
 
-class Vector3Proxy;
-
-// definição do delegate
-typedef void(*Vector3ClearMethod)(Vector3Proxy* self);
-
 // definição da informação
-struct Vector3ProxyInfo
+struct Vector3Descriptor
 {
-	ComponentProxyInfo base;
+	ComponentDescriptor base;	// 8 bytes
 
 	// fields
-	float* x;
-	float* y;
-	float* z;
-
-	// methods
-	Vector3ClearMethod* clear;
+	float* x;					// 12
+	float* y;					// 16
+	float* z;					// 20
 };
 
-// definição do proxy
-class Vector3Proxy : public OIS::Vector3
-{
-private:
-	Vector3ClearMethod clearMethod;
-
-	static void _clear(Vector3Proxy* self)
-	{
-		self->Vector3::clear();
-	}
-
-	void initialize()
-	{
-		clearMethod = Vector3Proxy::_clear;
-	}
-
-public:
-	Vector3Proxy(float x, float y, float z)
-		: OIS::Vector3(x, y, z)
-	{
-		initialize();
-	}
-
-	virtual void clear()
-	{
-		clearMethod(this);
-	}
-
-	static Vector3ProxyInfo createInfo(Vector3Proxy* vector)
-	{
-		Vector3ProxyInfo info;
-		info.base.handle = vector;
-		info.base.ctype = &vector->cType;
-		info.x = &vector->x;
-		info.y = &vector->y;
-		info.z = &vector->z;
-		info.clear = &vector->clearMethod;
-
-		return info;
-	}
-};
 
 extern "C"
 {
-	struct Vector3Extended {
-		ComponentExtended base;
-		_float* x;
-		_float* y;
-		_float* z;
-	};
+	Vector3Descriptor
+	ois_descriptor_of_vector3(_any self, OIS::Vector3* data);
 
 	/*
 	 * OIS::Button
 	 */
-	__export Vector3Extended __entry ois_vector3_new(float x, float y, float z);
-	__export void __entry ois_vector3_delete(HVector3 self);
+	INV_EXPORT Vector3Descriptor
+	INV_CALL ois_new_vector3(float x, float y, float z);
 
-	__export Vector3ProxyInfo __entry ois_new_vector3(float x, float y, float z);
+	INV_EXPORT void
+	INV_CALL ois_delete_vector3(OIS::Vector3* self);
 }
 
 #endif // VECTOR3_H

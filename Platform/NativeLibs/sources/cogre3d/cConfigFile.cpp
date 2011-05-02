@@ -3,17 +3,17 @@
 
 using namespace invision;
 
-__export HConfigFile __entry cfgfile_new()
+INV_EXPORT HConfigFile INV_CALL cfgfile_new()
 {
 	return new Ogre::ConfigFile();
 }
 
-__export void __entry cfgfile_delete(HConfigFile configFile)
+INV_EXPORT void INV_CALL cfgfile_delete(HConfigFile configFile)
 {
 	delete asConfigFile(configFile);
 }
 
-__export void __entry cfgfile_load(
+INV_EXPORT void INV_CALL cfgfile_load(
 		HConfigFile configFile,
 		const _string filename,
 		const _string separators,
@@ -22,7 +22,7 @@ __export void __entry cfgfile_load(
 	asConfigFile(configFile)->load(filename, separators, fromBool(trimWhitespace));
 }
 
-__export void __entry cfgfile_load_with_resourcegroup(
+INV_EXPORT void INV_CALL cfgfile_load_with_resourcegroup(
 		HConfigFile configFile,
 		const _string filename,
 		const _string resourceGroup,
@@ -32,9 +32,9 @@ __export void __entry cfgfile_load_with_resourcegroup(
 	asConfigFile(configFile)->load(filename, resourceGroup, separators, fromBool(trimWhitespace));
 }
 
-// __export void __entry cfgfile_load_with_datastream()
+// INV_EXPORT void INV_CALL cfgfile_load_with_datastream()
 
-__export void __entry cfgfile_load_direct(
+INV_EXPORT void INV_CALL cfgfile_load_direct(
 		HConfigFile configFile,
 		const _string filename,
 		const _string separators,
@@ -43,7 +43,7 @@ __export void __entry cfgfile_load_direct(
 	asConfigFile(configFile)->loadDirect(filename, separators, fromBool(trimWhitespace));
 }
 
-__export void __entry cfgfile_load_from_resource_system(
+INV_EXPORT void INV_CALL cfgfile_load_from_resource_system(
 		HConfigFile configFile,
 		const _string filename,
 		const _string resourceGroup,
@@ -54,7 +54,7 @@ __export void __entry cfgfile_load_from_resource_system(
 				filename, resourceGroup, separators, fromBool(trimWhitespace));
 }
 
-__export const _string __entry cfgfile_get_setting(
+INV_EXPORT const _string INV_CALL cfgfile_get_setting(
 		HConfigFile configFile,
 		const _string key,
 		const _string section,
@@ -68,7 +68,7 @@ __export const _string __entry cfgfile_get_setting(
 	return copyString(str);
 }
 
-__export PStringArray __entry cfgfile_multi_setting(
+INV_EXPORT PStringArray INV_CALL cfgfile_multi_setting(
 		HConfigFile configFile,
 		const _string key,
 		const _string section)
@@ -90,12 +90,12 @@ __export PStringArray __entry cfgfile_multi_setting(
 	return pStrArray;
 }
 
-__export void __entry cfgfile_clear(HConfigFile configFile)
+INV_EXPORT void INV_CALL cfgfile_clear(HConfigFile configFile)
 {
 	asConfigFile(configFile)->clear();
 }
 
-__export HSectionEnumerator __entry cfgfile_get_section_iterator(
+INV_EXPORT HSectionEnumerator INV_CALL cfgfile_get_section_iterator(
 		HConfigFile configFile)
 {
 	Ogre::ConfigFile::SectionIterator iterator = asConfigFile(configFile)->getSectionIterator();
@@ -103,7 +103,7 @@ __export HSectionEnumerator __entry cfgfile_get_section_iterator(
 	return new SectionEnumerator(iterator);
 }
 
-__export HSettingsEnumerator __entry cfgfile_get_settings_iterator(
+INV_EXPORT HSettingsEnumerator INV_CALL cfgfile_get_settings_iterator(
 		HConfigFile configFile,
 		const _string section)
 {

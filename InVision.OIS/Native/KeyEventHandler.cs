@@ -2,6 +2,6 @@
 
 namespace InVision.OIS.Native
 {
-	[UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-	internal delegate bool KeyEventHandler(KeyEventExtended e);
+	[return: MarshalAs(UnmanagedType.I1)]
+	internal delegate bool KeyEventHandler(KeyEventDescriptor e);
 }

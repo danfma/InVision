@@ -1,13 +1,12 @@
 #include "cKeyEvent.h"
 
-__export KeyEventExtended __entry ois_keyevent_new_from(HKeyEvent self)
+INV_EXPORT KeyEventDescriptor
+INV_CALL ois_descriptor_of_keyevent(Handle self, OIS::KeyEvent* e)
 {
-	OIS::KeyEvent* e = asKeyEvent(self);
-
-	KeyEventExtended x;
-	x.base = ois_eventarg_new_from(e);
-	x.key = (_int*) &e->key;
-	x.text = (_uint*) &e->text;
+	KeyEventDescriptor x;
+	x.base = ois_descriptor_of_eventarg(self, e);
+	x.key = const_cast<OIS::KeyCode*>(&e->key);
+	x.text = &e->text;
 
 	return x;
 }

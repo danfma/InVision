@@ -1,6 +1,10 @@
 #include "cCustomMouseListener.h"
 
-__export HMouseListener __entry ois_custommouselistener_new(MouseMovedHandler movedHandler, MouseClickHandler pressHandler, MouseClickHandler releaseHandler)
+INV_EXPORT CustomMouseListener*
+INV_CALL ois_new_custommouselistener(
+	MouseMovedHandler movedHandler,
+	MouseClickHandler pressHandler,
+	MouseClickHandler releaseHandler)
 {
 	CustomMouseListener* listener = new CustomMouseListener();
 	listener->movedHandler = movedHandler;
@@ -10,10 +14,11 @@ __export HMouseListener __entry ois_custommouselistener_new(MouseMovedHandler mo
 	return listener;
 }
 
-__export void __entry ois_customouselistener_delete(HMouseListener self)
+INV_EXPORT void
+INV_CALL ois_delete_customouselistener(CustomMouseListener* self)
 {
 	if (self == NULL)
 		return;
 
-	delete (OIS::MouseListener*)self;
+	delete self;
 }

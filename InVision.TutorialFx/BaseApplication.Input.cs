@@ -18,7 +18,7 @@ namespace InVision.TutorialFx
 
 			Window.GetCustomAttribute("WINDOW", out windowHnd);
 
-			InputManager inputMgr = InputManager.Create(windowHnd);
+			InputManager inputMgr = InputManager.Create(windowHnd.ToInt32());
 
 			Keyboard = (Keyboard)inputMgr.CreateInputObject(DeviceType.Keyboard, true);
 			Mouse = (Mouse)inputMgr.CreateInputObject(DeviceType.Mouse, true);

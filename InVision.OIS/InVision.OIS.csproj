@@ -111,18 +111,15 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AddOnFactory.cs" />
-    <Compile Include="AxisComponent.cs" />
-    <Compile Include="ButtonComponent.cs" />
-    <Compile Include="ComponentType.cs" />
+    <Compile Include="Components\AxisComponent.cs" />
+    <Compile Include="Components\ButtonComponent.cs" />
+    <Compile Include="Components\ComponentType.cs" />
     <Compile Include="DeviceInfo.cs" />
     <Compile Include="DeviceList.cs" />
     <Compile Include="ErrorType.cs" />
     <Compile Include="EventArgs.cs" />
     <Compile Include="FactoryCreator.cs" />
     <Compile Include="FactoryList.cs" />
-    <Compile Include="IAxisComponent.cs" />
-    <Compile Include="IButtonComponent.cs" />
-    <Compile Include="IComponent.cs" />
     <Compile Include="IDevice.cs" />
     <Compile Include="IDeviceComponent.cs" />
     <Compile Include="IFactoryCreator.cs" />
@@ -133,8 +130,6 @@
     <Compile Include="DeviceType.cs" />
     <Compile Include="InterfaceType.cs" />
     <Compile Include="InvalidInputObjectCastException.cs" />
-    <Compile Include="IObject.cs" />
-    <Compile Include="IVector3Component.cs" />
     <Compile Include="Joystick.cs" />
     <Compile Include="Keyboard.cs" />
     <Compile Include="KeyCode.cs" />
@@ -149,16 +144,17 @@
     <Compile Include="MouseListenerDispatcher.cs" />
     <Compile Include="MouseMovedHandler.cs" />
     <Compile Include="MouseState.cs" />
-    <Compile Include="Native\AxisExtended.cs" />
-    <Compile Include="Native\ButtonExtended.cs" />
-    <Compile Include="Native\ComponentExtended.cs" />
-    <Compile Include="Native\EventArgExtended.cs" />
-    <Compile Include="Native\KeyEventExtended.cs" />
+    <Compile Include="Native\AxisDescriptor.cs" />
+    <Compile Include="Native\ButtonDescriptor.cs" />
+    <Compile Include="Native\ComponentDescriptor.cs" />
+    <Compile Include="Native\EventArgDescriptor.cs" />
+    <Compile Include="Native\KeyEventDescriptor.cs" />
     <Compile Include="Native\KeyEventHandler.cs" />
     <Compile Include="Native\MouseClickHandler.cs" />
-    <Compile Include="Native\MouseEventExtended.cs" />
+    <Compile Include="Native\MouseDescriptor.cs" />
+    <Compile Include="Native\MouseEventDescriptor.cs" />
     <Compile Include="Native\MouseMovedHandler.cs" />
-    <Compile Include="Native\MouseStateExtended.cs" />
+    <Compile Include="Native\MouseStateDescriptor.cs" />
     <Compile Include="Native\NameValueItem.cs" />
     <Compile Include="Native\NativeAxis.cs" />
     <Compile Include="Native\NativeButton.cs" />
@@ -174,7 +170,7 @@
     <Compile Include="Native\NativeObject.cs" />
     <Compile Include="Native\NativeOIS.cs" />
     <Compile Include="Native\NativeVector3.cs" />
-    <Compile Include="Native\Vector3Extended.cs" />
+    <Compile Include="Native\Vector3Descriptor.cs" />
     <Compile Include="DeviceObject.cs" />
     <Compile Include="OISEventArgs.cs" />
     <Compile Include="OISException.cs" />
@@ -183,19 +179,9 @@
     <Compile Include="RaiseExceptionHandler.cs" />
     <Compile Include="Tablet.cs" />
     <Compile Include="TextTranslationMode.cs" />
-    <Compile Include="Component.cs" />
+    <Compile Include="Components\Component.cs" />
     <Compile Include="Unknown.cs" />
-    <Compile Include="Vector3Component.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\InVision.Extensions\InVision.Extensions.csproj">
-      <Project>{41AF79CA-A7C1-4C02-AA66-21FA34CDA01D}</Project>
-      <Name>InVision.Extensions</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\InVision.Native\InVision.Native.csproj">
-      <Project>{24E00D97-AA09-4ECD-A75A-247697091FDE}</Project>
-      <Name>InVision.Native</Name>
-    </ProjectReference>
+    <Compile Include="Components\Vector3Component.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
@@ -205,5 +191,10 @@
   <Target Name="AfterBuild">
   </Target>
   -->
-  <ItemGroup />
+  <ItemGroup>
+    <ProjectReference Include="..\InVision\InVision.csproj">
+      <Project>{4A69EB8E-6E49-415C-ACB4-9CB904EA54DB}</Project>
+      <Name>InVision</Name>
+    </ProjectReference>
+  </ItemGroup>
 </Project>

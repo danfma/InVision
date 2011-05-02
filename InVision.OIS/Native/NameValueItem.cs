@@ -6,7 +6,10 @@ namespace InVision.OIS.Native
 	[StructLayout(LayoutKind.Sequential)]
 	internal struct NameValueItem
 	{
+		[MarshalAs(UnmanagedType.LPStr)]
 		public string Name;
+		
+		[MarshalAs(UnmanagedType.LPStr)]
 		public string Value;
 
 		/// <summary>

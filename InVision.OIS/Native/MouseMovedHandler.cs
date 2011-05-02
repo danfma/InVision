@@ -2,6 +2,6 @@
 
 namespace InVision.OIS.Native
 {
-	[UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-	internal delegate bool MouseMovedHandler(MouseEventExtended e);
+	[return: MarshalAs(UnmanagedType.I1)]
+	internal delegate bool MouseMovedHandler(MouseEventDescriptor e);
 }

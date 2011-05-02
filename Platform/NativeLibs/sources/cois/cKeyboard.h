@@ -2,33 +2,43 @@
 #define CKEYBOARD_H
 
 #include "cOIS.h"
+#include "cCustomKeyEventListener.h"
 
 extern "C"
 {
+	INV_EXPORT bool
+	INV_CALL ois_keyboard_is_key_down(
+		OIS::Keyboard* self,
+		OIS::KeyCode keyCode);
 
-__export _bool __entry ois_keyboard_is_key_down(HKeyboard self, _int keyCode);
+	INV_EXPORT void
+	INV_CALL ois_keyboard_set_event_callback(
+		OIS::Keyboard* self,
+		CustomKeyListener* listener);
 
-__export void __entry ois_keyboard_set_event_callback(HKeyboard self, HKeyListener listener);
+	INV_EXPORT _string
+	INV_CALL ois_keyboard_get_as_string(
+		OIS::Keyboard* self,
+		OIS::KeyCode keyCode);
 
-__export _int __entry ois_keyboard_get_text_translation_mode(HKeyboard self);
+	INV_EXPORT bool
+	INV_CALL ois_keyboard_is_modifier_down(
+		OIS::Keyboard* self,
+		OIS::Keyboard::Modifier modifier);
 
-__export void __entry ois_keyboard_set_text_translation_mode(HKeyboard self, _int translationMode);
+	INV_EXPORT void
+	INV_CALL ois_keyboard_copy_key_states(
+		OIS::Keyboard* self,
+		char keys[256]);
 
-__export _string __entry ois_keyboard_get_as_string(HKeyboard self, _int keyCode);
+	INV_EXPORT OIS::Keyboard::TextTranslationMode
+	INV_CALL ois_keyboard_get_text_translation(
+		OIS::Keyboard* self);
 
-__export _bool __entry ois_keyboard_is_modifier_down(HKeyboard self, _int modifier);
-
-__export void __entry ois_keyboard_copy_key_states(HKeyboard self, _byte keys[256]);
-
+	INV_EXPORT void
+	INV_CALL ois_keyboard_set_text_translation(
+		OIS::Keyboard* self,
+		OIS::Keyboard::TextTranslationMode value);
 }
-
-#ifdef __cplusplus
-
-inline OIS::Keyboard* asKeyboard(HKeyboard handle)
-{
-	return (OIS::Keyboard*)handle;
-}
-
-#endif // __cplusplus
 
 #endif // CKEYBOARD_H

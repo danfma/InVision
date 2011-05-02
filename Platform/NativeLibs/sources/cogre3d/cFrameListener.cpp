@@ -3,14 +3,14 @@
 
 using namespace invision;
 
-__export HFrameListener __entry framelistener_new(
+INV_EXPORT HFrameListener INV_CALL framelistener_new(
 		FrameEventHandler frameStartedHandler,
 		FrameEventHandler frameEndedHandler)
 {
 	return new CustomFrameListener(frameStartedHandler, frameEndedHandler);
 }
 
-__export void __entry framelistener_delete(HFrameListener handle)
+INV_EXPORT void INV_CALL framelistener_delete(HFrameListener handle)
 {
 	delete asCustomFrameListener(handle);
 }

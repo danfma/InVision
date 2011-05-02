@@ -253,13 +253,13 @@
     <Compile Include="TypedObject.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\InVision.GameMath\InVision.GameMath.csproj">
-      <Project>{19B788E7-19B6-4ECD-8AA1-DD982928DB56}</Project>
-      <Name>InVision.GameMath</Name>
-    </ProjectReference>
+    <None Include="InVision.pfx" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="InVision.pfx" />
+    <ProjectReference Include="..\InVision\InVision.csproj">
+      <Project>{4A69EB8E-6E49-415C-ACB4-9CB904EA54DB}</Project>
+      <Name>InVision</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

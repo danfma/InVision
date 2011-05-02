@@ -1,6 +1,9 @@
 #include "cCustomKeyEventListener.h"
 
-__export HKeyListener __entry ois_customkeylistener_new(KeyEventHandler pressedHandler, KeyEventHandler releasedHandler)
+INV_EXPORT CustomKeyListener*
+INV_CALL ois_new_customkeylistener(
+	KeyEventHandler pressedHandler,
+	KeyEventHandler releasedHandler)
 {
 	CustomKeyListener* listener = new CustomKeyListener();
 	listener->keyPressedHandler = pressedHandler;
@@ -9,10 +12,11 @@ __export HKeyListener __entry ois_customkeylistener_new(KeyEventHandler pressedH
 	return listener;
 }
 
-__export void __entry ois_customkeylistener_delete(HKeyListener self)
+INV_EXPORT void
+INV_CALL ois_delete_customkeylistener(CustomKeyListener* self)
 {
 	if (self != NULL)
 		return;
 
-	delete asKeyListener(self);
+	delete self;
 }

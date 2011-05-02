@@ -1,54 +1,56 @@
 #include "cObject.h"
 
-__export void __entry ois_object_delete(HObject self)
+INV_EXPORT void
+INV_CALL ois_delete_object(OIS::Object* self)
 {
-	if (self == NULL)
-		return;
-
-	delete asDeviceObject(self);
+	if (self)
+		delete self;
 }
 
-__export _int __entry ois_object_type(HObject self)
+INV_EXPORT OIS::Type
+INV_CALL ois_object_type(OIS::Object* self)
 {
-	return (_int) asDeviceObject(self)->type();
+	return self->type();
 }
 
-__export _string __entry ois_object_vendor(HObject self)
+INV_EXPORT _string
+INV_CALL ois_object_vendor(OIS::Object* self)
 {
-	std::string result = asDeviceObject(self)->vendor();
-
-	return copyString(result);
+	return copyString(self->vendor());
 }
 
-__export _bool __entry ois_object_get_buffered(HObject self)
+INV_EXPORT bool
+INV_CALL ois_object_get_buffered(OIS::Object* self)
 {
-	bool result = asDeviceObject(self)->buffered();
-
-	return toBool(result);
+	return self->buffered();
 }
 
-__export void __entry ois_object_set_buffered(HObject self, _bool value)
+INV_EXPORT void
+INV_CALL ois_object_set_buffered(OIS::Object* self, bool value)
 {
-	asDeviceObject(self)->setBuffered(fromBool(value));
+	self->setBuffered(value);
 }
 
-__export HInputManager __entry ois_object_get_creator(HObject self)
+INV_EXPORT OIS::InputManager*
+INV_CALL ois_object_get_creator(OIS::Object* self)
 {
-	return asDeviceObject(self)->getCreator();
+	return self->getCreator();
 }
 
-__export void __entry ois_object_capture(HObject self)
+INV_EXPORT void
+INV_CALL ois_object_capture(OIS::Object* self)
 {
-	asDeviceObject(self)->capture();
+	self->capture();
 }
 
-__export _int __entry ois_object_get_id(HObject self)
+INV_EXPORT int
+INV_CALL ois_object_get_id(OIS::Object* self)
 {
-	return asDeviceObject(self)->getID();
+	return self->getID();
 }
 
-__export HInterface __entry ois_object_query_interface(HObject self, _int itype)
+INV_EXPORT OIS::Interface*
+INV_CALL ois_object_query_interface(OIS::Object* self, OIS::Interface::IType itype)
 {
-	return asDeviceObject(self)->queryInterface((OIS::Interface::IType)itype);
+	return self->queryInterface(itype);
 }
-

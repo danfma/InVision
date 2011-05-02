@@ -6,40 +6,53 @@
 
 extern "C"
 {
+	struct NameValueItem
+	{
+		_string name;
+		_string value;
+	};
 
-struct NameValueItem
-{
-	_string name;
-	_string value;
-};
+	INV_EXPORT _uint
+	INV_CALL ois_inputmanager_get_version_number();
 
-__export _uint __entry ois_inputmanager_get_version_number();
+	INV_EXPORT OIS::InputManager*
+	INV_CALL ois_inputmanager_create_input_system(
+		int winHandle);
 
-__export HInputManager __entry ois_inputmanager_create_input_system(_handle winHandle);
+	INV_EXPORT OIS::InputManager*
+	INV_CALL ois_inputmanager_create_by_param_input_system(
+		const NameValueItem *items,
+		_int numItems);
 
-__export HInputManager __entry ois_inputmanager_create_by_param_input_system(const NameValueItem *items, _int numItems);
+	INV_EXPORT void
+	INV_CALL ois_inputmanager_destroy(
+		OIS::InputManager* self);
 
-__export void __entry ois_inputmanager_destroy(HInputManager self);
+	INV_EXPORT _string
+	INV_CALL ois_inputmanager_get_version_name(
+		OIS::InputManager* self);
 
-__export _string __entry ois_inputmanager_get_version_name(HInputManager self);
+	INV_EXPORT _string
+	INV_CALL ois_inputmanager_input_system_name(
+		OIS::InputManager* self);
 
-__export _string __entry ois_inputmanager_input_system_name(HInputManager self);
+	INV_EXPORT _int
+	INV_CALL ois_inputmanager_get_number_of_devices(
+		OIS::InputManager* self,
+		OIS::Type deviceType);
 
-__export _int __entry ois_inputmanager_get_number_of_devices(HInputManager self, _int deviceType);
+	INV_EXPORT OIS::Object*
+	INV_CALL ois_inputmanager_create_input_object(
+		OIS::InputManager* self,
+		OIS::Type deviceType,
+		bool bufferMode,
+		_string vendor);
 
-__export HObject __entry ois_inputmanager_create_input_object(HInputManager self, _int deviceType, _bool bufferMode, _string vendor);
-
-__export void __entry ois_inputmanager_destroy_input_object(HInputManager self, HObject obj);
+	INV_EXPORT void
+	INV_CALL ois_inputmanager_destroy_input_object(
+		OIS::InputManager* self,
+		OIS::Object* obj);
 
 }
-
-#ifdef __cplusplus
-
-inline OIS::InputManager* asInputManager(HInputManager handle)
-{
-	return (OIS::InputManager*)handle;
-}
-
-#endif // __cplusplus
 
 #endif // INPUTMANAGER_H

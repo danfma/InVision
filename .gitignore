@@ -1,9 +1,7 @@
 
 /_ReSharper.InVision
 
-/Build/projects
 /Build/Build
-
 /Build/Bin
 
 */bin
@@ -17,6 +15,6 @@
 .DS_Store
 InVision.suo
 
-/Platform/projects
+/Platform/Projects
 /Platform/*-build-desktop/
 /Platform/NativeLibs/*.pro.user*

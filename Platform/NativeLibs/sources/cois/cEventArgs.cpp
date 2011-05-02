@@ -1,12 +1,11 @@
 #include "cEventArgs.h"
 
-__export EventArgExtended __entry ois_eventarg_new_from(HEventArg self)
+INV_EXPORT EventArgDescriptor
+INV_CALL ois_descriptor_of_eventarg(Handle handle, OIS::EventArg* e)
 {
-	OIS::EventArg* e = (OIS::EventArg*)self;
-
-	EventArgExtended ex;
-	ex.handle = e;
-	ex.device = (HObject*) &e->device;
+	EventArgDescriptor ex;
+	ex.handle = handle;
+	ex.device = const_cast<OIS::Object**>(&e->device);
 
 	return ex;
 }

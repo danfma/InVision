@@ -1,7 +1,6 @@
 -- COMPILING WRAPPERS AND MANAGED
 os.execute("premake4 --os=windows --platform=x32 vs2010")
-os.execute("msbuild projects/InVisionWrap.sln")
-os.execute("msbuild ../InVision.sln")
+os.execute("msbuild ../Platform/Projects/NativeLibs.sln")
 
 -- COPYING DEBUG FILES
 os.execute("mkdir Bin\\Debug\\Managed")

@@ -116,10 +116,6 @@
       <Project>{DF5FAE84-D72B-44DF-B646-EA3FBE436732}</Project>
       <Name>InVision.Bullet</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\InVision.GameMath\InVision.GameMath.csproj">
-      <Project>{19B788E7-19B6-4ECD-8AA1-DD982928DB56}</Project>
-      <Name>InVision.GameMath</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />

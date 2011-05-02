@@ -1,4 +1,5 @@
 ﻿using System;
+using InVision.OIS.Components;
 
 namespace InVision.OIS.FunctionalTest
 {
@@ -6,57 +7,8 @@ namespace InVision.OIS.FunctionalTest
 	{
 		private static void Main(string[] args)
 		{
-			TestWrapper();
-
 			//TestComponent();
 			//TestButton();
-		}
-
-		private class MyVector3 : Vector3Proxy
-		{
-			public MyVector3(float x, float y, float z)
-				: base(x, y, z)
-			{
-			}
-
-			protected MyVector3(IntPtr pSelf, bool ownsHandle)
-				: base(pSelf, ownsHandle)
-			{
-			}
-
-			protected MyVector3(bool ownsHandle)
-				: base(ownsHandle)
-			{
-			}
-
-			/// <summary>
-			/// Clears this instance.
-			/// </summary>
-			public override void Clear()
-			{
-				Console.WriteLine("It worked!!");
-
-				base.Clear();
-			}
-		}
-
-		private static void TestWrapper()
-		{
-			// vtable not overrided
-			using (var vector = new Vector3Proxy(1, 2, 3))
-			{
-				Console.WriteLine(vector);
-				vector.Clear();
-				Console.WriteLine(vector);
-			}
-
-			// vtable overrided
-			using (var vector = new MyVector3(1, 2, 3))
-			{
-				Console.WriteLine(vector);
-				vector.Clear();
-				Console.WriteLine(vector);
-			}
 		}
 
 		/// <summary>

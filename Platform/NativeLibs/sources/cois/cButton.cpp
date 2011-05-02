@@ -1,21 +1,25 @@
 #include "cButton.h"
 
-__export ButtonExtended __entry ois_button_new(_bool pushed)
+ButtonDescriptor ois_descriptor_of_button(_any handle, OIS::Button* button)
+{
+	ButtonDescriptor descriptor;
+	descriptor.base = ois_descriptor_of_component(handle, button);
+	descriptor.pushed = &button->pushed;
+
+	return descriptor;
+}
+
+INV_EXPORT ButtonDescriptor INV_CALL ois_new_button(bool pushed)
 {
 	OIS::Button* button = new OIS::Button(fromBool(pushed));
 
-	ButtonExtended btinfo;
-	btinfo.base.handle = button;
-	btinfo.base.componentType = (_int*) &button->cType;
-	btinfo.pushed = (_bool*) &button->pushed;
-
-	return btinfo;
+	return ois_descriptor_of_button(button, button);
 }
 
-__export void __entry ois_button_delete(HButton self)
+INV_EXPORT void INV_CALL ois_delete_button(OIS::Button* self)
 {
 	if (self == NULL)
 		return;
 
-	delete (OIS::Button*)self;
+	delete self;
 }

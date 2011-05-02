@@ -1,29 +1,32 @@
 #include "cVector3.h"
 
-__export Vector3Extended __entry ois_vector3_new(float x, float y, float z)
+
+Vector3Descriptor
+ois_descriptor_of_vector3(_any self, OIS::Vector3* data)
+{
+	Vector3Descriptor descriptor;
+	descriptor.base = ois_descriptor_of_component(self, data);
+	descriptor.x = &data->x;
+	descriptor.y = &data->y;
+	descriptor.z = &data->z;
+
+	return descriptor;
+}
+
+INV_EXPORT Vector3Descriptor
+INV_CALL ois_new_vector3(float x, float y, float z)
 {
 	OIS::Vector3* vector = new OIS::Vector3(x, y, z);
 
-	Vector3Extended vectorInfo;
-	vectorInfo.base.handle = vector;
-	vectorInfo.base.componentType = (_int*) &vector->cType;
-	vectorInfo.x = (_float*) &vector->x;
-	vectorInfo.y = (_float*) &vector->y;
-	vectorInfo.z = (_float*) &vector->z;
-
-	return vectorInfo;
+	return ois_descriptor_of_vector3(vector, vector);
 }
 
-__export void __entry ois_vector3_delete(HVector3 self)
+INV_EXPORT void
+INV_CALL ois_delete_vector3(OIS::Vector3* self)
 {
 	if (self == NULL)
 		return;
 
-	delete (OIS::Vector3*)self;
-}
-
-__export Vector3ProxyInfo __entry ois_new_vector3(float x, float y, float z)
-{
-	return Vector3Proxy::createInfo(new Vector3Proxy(x, y, z));
+	delete self;
 }
 

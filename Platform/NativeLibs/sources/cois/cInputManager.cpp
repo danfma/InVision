@@ -1,16 +1,22 @@
 #include "cInputManager.h"
 
-__export _uint __entry ois_inputmanager_get_version_number()
+INV_EXPORT _uint
+INV_CALL ois_inputmanager_get_version_number()
 {
 	return OIS::InputManager::getVersionNumber();
 }
 
-__export HInputManager __entry ois_inputmanager_create_input_system(_handle winHandle)
+INV_EXPORT OIS::InputManager*
+INV_CALL ois_inputmanager_create_input_system(
+	int winHandle)
 {
 	return OIS::InputManager::createInputSystem((size_t)winHandle);
 }
 
-__export HInputManager __entry ois_inputmanager_create_by_param_input_system(const NameValueItem *items, _int numItems)
+INV_EXPORT OIS::InputManager*
+INV_CALL ois_inputmanager_create_by_param_input_system(
+	const NameValueItem *items,
+	_int numItems)
 {
 	OIS::ParamList parameters;
 
@@ -24,36 +30,53 @@ __export HInputManager __entry ois_inputmanager_create_by_param_input_system(con
 	return OIS::InputManager::createInputSystem(parameters);
 }
 
-__export void __entry ois_inputmanager_destroy(HInputManager self)
+INV_EXPORT void
+INV_CALL ois_inputmanager_destroy(
+	OIS::InputManager* self)
 {
-	OIS::InputManager::destroyInputSystem(asInputManager(self));
+	OIS::InputManager::destroyInputSystem(self);
 }
 
-__export _string __entry ois_inputmanager_get_version_name(HInputManager self)
+INV_EXPORT _string
+INV_CALL ois_inputmanager_get_version_name(
+	OIS::InputManager* self)
 {
-	std::string name = asInputManager(self)->getVersionName();
+	std::string name = self->getVersionName();
 
 	return copyString(name);
 }
 
-__export _string __entry ois_inputmanager_input_system_name(HInputManager self)
+INV_EXPORT _string
+INV_CALL ois_inputmanager_input_system_name(
+	OIS::InputManager* self)
 {
-	std::string name = asInputManager(self)->inputSystemName();
+	std::string name = self->inputSystemName();
 
 	return copyString(name);
 }
 
-__export _int __entry ois_inputmanager_get_number_of_devices(HInputManager self, _int deviceType)
+INV_EXPORT _int
+INV_CALL ois_inputmanager_get_number_of_devices(
+	OIS::InputManager* self,
+	OIS::Type deviceType)
 {
-	return (_int)asInputManager(self)->getNumberOfDevices((OIS::Type)deviceType);
+	return self->getNumberOfDevices(deviceType);
 }
 
-__export HObject __entry ois_inputmanager_create_input_object(HInputManager self, _int deviceType, _bool bufferMode, _string vendor)
+INV_EXPORT OIS::Object*
+INV_CALL ois_inputmanager_create_input_object(
+	OIS::InputManager* self,
+	OIS::Type deviceType,
+	bool bufferMode,
+	_string vendor)
 {
-	return asInputManager(self)->createInputObject((OIS::Type)deviceType, fromBool(bufferMode), vendor);
+	return self->createInputObject(deviceType, bufferMode, vendor);
 }
 
-__export void __entry ois_inputmanager_destroy_input_object(HInputManager self, HObject obj)
+INV_EXPORT void
+INV_CALL ois_inputmanager_destroy_input_object(
+	OIS::InputManager* self,
+	OIS::Object* obj)
 {
-	asInputManager(self)->destroyInputObject(asDeviceObject(obj));
+	self->destroyInputObject(obj);
 }

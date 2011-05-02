@@ -3,17 +3,17 @@
 
 using namespace invision;
 
-__export _uint __entry ogre_renderwindow_get_width(HRenderWindow self)
+INV_EXPORT _uint INV_CALL ogre_renderwindow_get_width(HRenderWindow self)
 {
 	return asRenderWindow(self)->getWidth();
 }
 
-__export _uint __entry ogre_renderwindow_get_height(HRenderWindow self)
+INV_EXPORT _uint INV_CALL ogre_renderwindow_get_height(HRenderWindow self)
 {
 	return asRenderWindow(self)->getHeight();
 }
 
-__export HViewport __entry ogre_renderwindow_add_viewport(
+INV_EXPORT HViewport INV_CALL ogre_renderwindow_add_viewport(
 	HRenderWindow self,
 	HCamera camera,
 	_int zOrder,
@@ -29,7 +29,7 @@ __export HViewport __entry ogre_renderwindow_add_viewport(
 				width, height);
 }
 
-__export String __entry ogre_renderwindow_write_contents_to_timestamped_file(
+INV_EXPORT String INV_CALL ogre_renderwindow_write_contents_to_timestamped_file(
 	HRenderWindow self,
 	ConstString prefix,
 	ConstString suffix)
@@ -39,7 +39,7 @@ __export String __entry ogre_renderwindow_write_contents_to_timestamped_file(
 	return copyString(s);
 }
 
-__export void __entry ogre_renderwindow_get_custom_attrib(
+INV_EXPORT void INV_CALL ogre_renderwindow_get_custom_attrib(
 		HRenderWindow self,
 		ConstString name,
 		_any data)
@@ -47,7 +47,7 @@ __export void __entry ogre_renderwindow_get_custom_attrib(
 	asRenderWindow(self)->getCustomAttribute(name, data);
 }
 
-__export FrameStats* __entry ogre_get_statistics(HRenderWindow self)
+INV_EXPORT FrameStats* INV_CALL ogre_get_statistics(HRenderWindow self)
 {
 	Ogre::RenderTarget::FrameStats f = asRenderWindow(self)->getStatistics();
 

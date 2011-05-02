@@ -13,10 +13,10 @@ namespace InVision.OIS.Native
 			Init();
 		}
 
-		[DllImport(OISLibrary, EntryPoint = "ois_customkeylistener_new")]
+		[DllImport(OISLibrary, EntryPoint = "ois_new_customkeylistener")]
 		public static extern IntPtr New(KeyEventHandler keyPressedHandler, KeyEventHandler keyReleasedHandler);
 
-		[DllImport(OISLibrary, EntryPoint = "ois_customkeylistener_delete")]
+		[DllImport(OISLibrary, EntryPoint = "ois_delete_customkeylistener")]
 		public static extern void Delete(IntPtr self);
 	}
 }

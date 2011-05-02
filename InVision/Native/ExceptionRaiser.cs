@@ -2,7 +2,7 @@
 
 namespace InVision.Native
 {
-	internal sealed class ExceptionRaiser : IDisposable
+	public sealed class ExceptionRaiser : IDisposable
 	{
 		private RaiseExceptionHandler raiseException;
 
@@ -50,9 +50,11 @@ namespace InVision.Native
 		/// Raises the exception.
 		/// </summary>
 		/// <param name="message">The message.</param>
-		private static void RaiseException(string message)
+		/// <param name="filename">The filename.</param>
+		/// <param name="line">The line.</param>
+		private static void RaiseException(string message, string filename, int line)
 		{
-			throw new InVisionException(message);
+			throw new InVisionNativeException(message, filename, line);
 		}
 	}
 }

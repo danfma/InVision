@@ -14,6 +14,6 @@ namespace InVision.OIS.Native
 		}
 
 		[DllImport(OISLibrary, EntryPoint = "ois_mousestate_new_from")]
-		public static extern MouseStateExtended New(IntPtr self);
+		public static extern MouseStateDescriptor New(IntPtr self);
 	}
 }

@@ -4,10 +4,14 @@ namespace InVision.OIS
 {
 	public class MouseEventArgs : EventArgs
 	{
-		internal MouseEventArgs(MouseEventExtended mouseEventExtended)
-			: base(mouseEventExtended.Base)
+		/// <summary>
+		/// Initializes a new instance of the <see cref="MouseEventArgs"/> class.
+		/// </summary>
+		/// <param name="descriptor">The mouse event descriptor.</param>
+		internal MouseEventArgs(MouseEventDescriptor descriptor)
+			: base(descriptor.Base)
 		{
-			State = new MouseState(mouseEventExtended.State);
+			State = new MouseState(descriptor.MouseState);
 		}
 
 		/// <summary>

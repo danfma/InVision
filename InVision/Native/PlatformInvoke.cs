@@ -1,11 +1,13 @@
-﻿using System.Runtime.CompilerServices;
+﻿using System;
+using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
 namespace InVision.Native
 {
-	internal class PlatformInvoke
+	public class PlatformInvoke
 	{
-		public const string Library = "InVisionWrap.dll";
+		public const string CommonLibrary = "InVisionNative.dll";
+
 		private static bool initialized;
 		public static ExceptionRaiser ExceptionRaiser;
 
@@ -22,7 +24,10 @@ namespace InVision.Native
 			initialized = true;
 		}
 
-		[DllImport(Library, EntryPoint = "register_exception_raise_handler")]
+		[DllImport(CommonLibrary, EntryPoint = "_register_exception_handler")]
 		public static extern void RegisterExceptionHandler(RaiseExceptionHandler exceptionHandler);
+
+		[DllImport(CommonLibrary, EntryPoint = "util_string_delete")]
+		public static extern void DeleteString(IntPtr pString);
 	}
 }

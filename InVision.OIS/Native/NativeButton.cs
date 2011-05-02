@@ -13,10 +13,10 @@ namespace InVision.OIS.Native
 			Init();
 		}
 
-		[DllImport(OISLibrary, EntryPoint = "ois_button_new")]
-		public static extern ButtonExtended New(bool pushed);
+		[DllImport(OISLibrary, EntryPoint = "ois_new_button")]
+		public static extern ButtonDescriptor New(bool pushed);
 
-		[DllImport(OISLibrary, EntryPoint = "ois_button_delete")]
+		[DllImport(OISLibrary, EntryPoint = "ois_delete_button")]
 		public static extern void Delete(IntPtr self);
 	}
 }
