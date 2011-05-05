@@ -21,7 +21,6 @@
  * 3. This notice may not be removed or altered from any source distribution.
  */
 
-using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using InVision.Bullet.Collision.BroadphaseCollision;
@@ -147,110 +146,4 @@ public class GhostObject : CollisionObject
     protected IList<CollisionObject> m_overlappingObjects;
 
 }
-
-    public class PairCachingGhostObject : GhostObject
-    {
-	    public PairCachingGhostObject()
-        {
-            m_hashPairCache = new HashedOverlappingPairCache();
-        }
-
-	    public override void Cleanup()
-        {
-            m_hashPairCache.Cleanup();
-	        m_hashPairCache = null;
-        }
-
-	    ///this method is mainly for expert/internal use only.
-        public override void AddOverlappingObjectInternal(BroadphaseProxy otherProxy, BroadphaseProxy thisProxy)
-        {
-            BroadphaseProxy actualThisProxy = thisProxy != null ? thisProxy : GetBroadphaseHandle();
-			System.Diagnostics.Debug.Assert(actualThisProxy != null);
-
-            CollisionObject otherObject = (CollisionObject)otherProxy.m_clientObject;
-			System.Diagnostics.Debug.Assert(otherObject != null);
-            if(!m_overlappingObjects.Contains(otherObject))
-            {
-                m_overlappingObjects.Add(otherObject);
-                m_hashPairCache.AddOverlappingPair(actualThisProxy, otherProxy);
-            }
-        }
-
-        public override void RemoveOverlappingObjectInternal(BroadphaseProxy otherProxy, IDispatcher dispatcher, BroadphaseProxy thisProxy)
-        {
-            CollisionObject otherObject = (CollisionObject)otherProxy.m_clientObject;
-            BroadphaseProxy actualThisProxy = thisProxy != null ? thisProxy : GetBroadphaseHandle();
-			System.Diagnostics.Debug.Assert(actualThisProxy != null);
-
-			System.Diagnostics.Debug.Assert(otherObject != null);
-            if(m_overlappingObjects.Contains(otherObject))
-            {
-                m_overlappingObjects.Remove(otherObject);
-                m_hashPairCache.RemoveOverlappingPair(actualThisProxy, otherProxy, dispatcher);
-            }
-        }
-
-	    public HashedOverlappingPairCache GetOverlappingPairCache()
-	    {
-		    return m_hashPairCache;
-	    }
-
-        private HashedOverlappingPairCache	m_hashPairCache;
-
-    }
-
-
-
-    ///The btGhostPairCallback interfaces and forwards adding and removal of overlapping pairs from the btBroadphaseInterface to btGhostObject.
-    public class GhostPairCallback : IOverlappingPairCallback
-    {
-	    public GhostPairCallback()
-	    {
-	    }
-
-        public virtual void cleanup()
-        {
-        }
-
-	    public virtual BroadphasePair AddOverlappingPair(BroadphaseProxy proxy0,BroadphaseProxy proxy1)
-	    {
-		    CollisionObject colObj0 = (CollisionObject) proxy0.m_clientObject;
-		    CollisionObject colObj1 = (CollisionObject) proxy1.m_clientObject;
-		    GhostObject ghost0 = GhostObject.Upcast(colObj0);
-		    GhostObject ghost1 = GhostObject.Upcast(colObj1);
-            if (ghost0 != null)
-            {
-                ghost0.AddOverlappingObjectInternal(proxy1, proxy0);
-            }
-            if (ghost1 != null)
-            {
-                ghost1.AddOverlappingObjectInternal(proxy0, proxy1);
-            }
-		    return null;
-	    }
-
-	    public virtual Object RemoveOverlappingPair(BroadphaseProxy proxy0,BroadphaseProxy proxy1,IDispatcher dispatcher)
-	    {
-		    CollisionObject colObj0 = (CollisionObject) proxy0.m_clientObject;
-		    CollisionObject colObj1 = (CollisionObject) proxy1.m_clientObject;
-		    GhostObject ghost0 = GhostObject.Upcast(colObj0);
-		    GhostObject ghost1 = GhostObject.Upcast(colObj1);
-            if (ghost0 != null)
-            {
-                ghost0.RemoveOverlappingObjectInternal(proxy1, dispatcher, proxy0);
-            }
-            if (ghost1 != null)
-            {
-                ghost1.RemoveOverlappingObjectInternal(proxy0, dispatcher, proxy1);
-            }
-		    return null;
-	    }
-
-	    public virtual void RemoveOverlappingPairsContainingProxy(BroadphaseProxy proxy0,IDispatcher dispatcher)
-	    {
-			System.Diagnostics.Debug.Assert(false);
-		    //need to keep track of all ghost objects and call them here
-		    //m_hashPairCache->removeOverlappingPairsContainingProxy(proxy0,dispatcher);
-	    }
-    }
 }

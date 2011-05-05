@@ -27,48 +27,7 @@ using InVision.GameMath;
 
 namespace InVision.Bullet.Dynamics.Vehicle
 {
-    public struct WheelInfoConstructionInfo
-    {
-	    public Vector3 m_chassisConnectionCS;
-	    public Vector3 m_wheelDirectionCS;
-	    public Vector3 m_wheelAxleCS;
-	    public float m_suspensionRestLength;
-	    public float m_maxSuspensionTravelCm;
-	    public float m_wheelRadius;
-    	
-	    public float m_suspensionStiffness;
-	    public float m_wheelsDampingCompression;
-	    public float m_wheelsDampingRelaxation;
-	    public float m_frictionSlip;
-        public float m_maxSuspensionForce;
-	
-	    public bool m_bIsFrontWheel;
-    }
-
-
-    public struct WheelRaycastInfo
-    {
-	    //set by raycaster
-	    public Vector3	m_contactNormalWS;//contactnormal
-	    public Vector3	m_contactPointWS;//raycast hitpoint
-	    public float	m_suspensionLength;
-        public float m_suspensionLengthBak;
-
-        public Vector3	m_hardPointWS;//raycast starting point
-        public Vector3 m_hardPointWSBak;//raycast starting point
-
-	    public Vector3	m_wheelDirectionWS; //direction in worldspace
-        public Vector3 m_wheelDirectionWSBak; //direction in worldspace
-
-	    public Vector3	m_wheelAxleWS; // axle in worldspace
-        public Vector3 m_wheelAxleWSBak; // axle in worldspace
-
-	    public bool		m_isInContact;
-	    public Object		m_groundObject; //could be general void* ptr
-    }
-
-    
-    /// btWheelInfo contains information per wheel about friction and suspension.
+	/// btWheelInfo contains information per wheel about friction and suspension.
     public class WheelInfo
     {
 	    public WheelRaycastInfo m_raycastInfo;

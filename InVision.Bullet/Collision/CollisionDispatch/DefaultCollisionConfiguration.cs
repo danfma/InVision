@@ -26,12 +26,7 @@ using InVision.Bullet.Collision.NarrowPhaseCollision;
 
 namespace InVision.Bullet.Collision.CollisionDispatch
 {
-    public class DefaultCollisionConstructionInfo
-    {
-    }
-
-
-    public class DefaultCollisionConfiguration : ICollisionConfiguration
+	public class DefaultCollisionConfiguration : ICollisionConfiguration
     {
     ///btCollisionConfiguration allows to configure Bullet collision detection
     ///stack allocator, pool memory allocators

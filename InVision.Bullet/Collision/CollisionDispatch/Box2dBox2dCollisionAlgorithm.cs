@@ -467,33 +467,8 @@ namespace InVision.Bullet.Collision.CollisionDispatch
 	}
 
 
-
-
-
-	public struct ClipVertex
-	{
-		public Vector3 v;
-		public int id;
-		//b2ContactID id;
-		//b2ContactID id;
-	}
-
 	//#define b2Dot(a,b) (a).dot(b)
 	//#define b2Mul(a,b) (a)*(b)
 	//#define b2MulT(a,b) (a).transpose()*(b)
 	//#define b2Cross(a,b) (a).cross(b)
-
-
-
-
-
-
-
-	public class Box2dBox2dCreateFunc : CollisionAlgorithmCreateFunc
-	{
-		public override CollisionAlgorithm CreateCollisionAlgorithm(CollisionAlgorithmConstructionInfo ci, CollisionObject body0, CollisionObject body1)
-		{
-			return new Box2dBox2dCollisionAlgorithm(null, ci, body0, body1);
-		}
-	}
 }

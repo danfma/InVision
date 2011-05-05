@@ -363,24 +363,4 @@ namespace InVision.Bullet.Collision.CollisionShapes
 		private float m_collisionMargin;
 		protected Vector3 m_localScaling;
 	}
-
-	public class CompoundShapeChild
-	{
-		public Matrix m_transform;
-		public CollisionShape m_childShape;
-		public BroadphaseNativeTypes m_childShapeType;
-		public float m_childMargin;
-		public DbvtNode m_treeNode;
-
-		public override bool Equals(object obj)
-		{
-			CompoundShapeChild other = (CompoundShapeChild)obj;
-			return (m_transform == other.m_transform &&
-				m_childShape == other.m_childShape &&
-				m_childShapeType == other.m_childShapeType &&
-				m_childMargin == other.m_childMargin);
-		}
-
-	}
-
 }

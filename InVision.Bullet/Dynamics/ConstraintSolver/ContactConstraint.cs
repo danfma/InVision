@@ -121,11 +121,4 @@ namespace InVision.Bullet.Dynamics.ConstraintSolver
         public const bool USE_INTERNAL_APPLY_IMPULSE = true;
 
     }
-
-
-    public interface IContactSolverFunc
-    {
-        float ContactSolverFunc(RigidBody body1,RigidBody body2,ManifoldPoint contactPoint,
-									 ContactSolverInfo info);
-    }
 }

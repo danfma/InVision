@@ -29,46 +29,7 @@ using InVision.GameMath;
 
 namespace InVision.Bullet.Collision.CollisionDispatch
 {
-        [Flags]
-        public enum CollisionFlags
-        {
-            CF_STATIC_OBJECT=1,
-            CF_KINEMATIC_OBJECT=2,
-            CF_NO_CONTACT_RESPONSE=4,
-            CF_CUSTOM_MATERIAL_CALLBACK=8,
-            CF_CHARACTER_OBJECT=16,
-		    CF_DISABLE_VISUALIZE_OBJECT = 32, //disable debug drawing
-		    CF_DISABLE_SPU_COLLISION_PROCESSING = 64//disable parallel/SPU processing
-        }
-
-
-
-        public enum CollisionObjectTypes
-        {
-            CO_COLLISION_OBJECT=1,
-            CO_RIGID_BODY,
-		    ///CO_GHOST_OBJECT keeps track of all objects overlapping its AABB and that pass its collision filter
-		    ///It is useful for collision sensors, explosion objects, character controller etc.
-		    CO_GHOST_OBJECT,
-		    CO_SOFT_BODY,
-		    CO_HF_FLUID
-        }
-
-
-
-        public enum ActivationState
-        {
-            UNDEFINED=0,
-            ACTIVE_TAG=1,
-            ISLAND_SLEEPING=2,
-            WANTS_DEACTIVATION=3,
-            DISABLE_DEACTIVATION=4,
-            DISABLE_SIMULATION=5
-        }
-
-
-
-    public class CollisionObject
+	public class CollisionObject
     {
 
         public CollisionObject()

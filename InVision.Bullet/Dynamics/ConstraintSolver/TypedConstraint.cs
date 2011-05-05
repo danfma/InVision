@@ -24,32 +24,13 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using InVision.Bullet.Collision.NarrowPhaseCollision;
 using InVision.Bullet.Dynamics.Dynamics;
 using InVision.Bullet.LinearMath;
 using InVision.GameMath;
 
 namespace InVision.Bullet.Dynamics.ConstraintSolver
 {
-    public enum TypedConstraintType
-    {
-        POINT2POINT_CONSTRAINT_TYPE = ContactManifoldTypes.MAX_CONTACT_MANIFOLD_TYPE + 1,
-        HINGE_CONSTRAINT_TYPE,
-        CONETWIST_CONSTRAINT_TYPE,
-        D6_CONSTRAINT_TYPE,
-        SLIDER_CONSTRAINT_TYPE,
-        CONTACT_CONSTRAINT_TYPE
-    }
-
-    public enum ConstraintParams
-    {
-        BT_CONSTRAINT_ERP = 1,
-        BT_CONSTRAINT_STOP_ERP,
-        BT_CONSTRAINT_CFM,
-        BT_CONSTRAINT_STOP_CFM
-    }
-
-    public class TypedConstraint : TypedObject
+	public class TypedConstraint : TypedObject
     {
         ///TypedConstraint is the baseclass for Bullet constraints and vehicles
 
@@ -358,32 +339,4 @@ namespace InVision.Bullet.Dynamics.ConstraintSolver
 
 
     }
-
-    public class ConstraintInfo1
-    {
-        public int m_numConstraintRows;
-        public int nub;
-    }
-
-    public class ConstraintInfo2
-    {
-        // Workaround for the idea of having multiple solver constraints and row count.
-        // This should be populated with a list of the SolverConstraint for a give Constraint. - MAN
-        public SolverConstraint[] m_solverConstraints;
-
-        // integrator parameters: frames per second (1/stepsize), default error
-        // reduction parameter (0..1).
-        public float fps;
-        public float erp;
-
-        // findex vector for variables. see the LCP solver interface for a
-        // description of what this does. this is set to -1 on entry.
-        // note that the returned indexes are relative to the first index of
-        // the constraint.
-        public int findex;
-        public int m_numIterations;
-    }
-
-
-
 }

@@ -21,7 +21,6 @@
  * 3. This notice may not be removed or altered from any source distribution.
  */
 
-using System;
 using System.Diagnostics;
 using InVision.Bullet.Dynamics.Dynamics;
 using InVision.Bullet.LinearMath;
@@ -943,13 +942,4 @@ namespace InVision.Bullet.Dynamics.ConstraintSolver
 			}
 		}
 	}
-
-	[Flags]
-	public enum ConeTwistFlags
-	{
-		BT_CONETWIST_FLAGS_LIN_CFM = 1,
-		BT_CONETWIST_FLAGS_LIN_ERP = 2,
-		BT_CONETWIST_FLAGS_ANG_CFM = 4
-	}
-
 }

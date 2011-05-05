@@ -28,12 +28,7 @@ using InVision.GameMath;
 
 namespace InVision.Bullet.Collision.CollisionDispatch
 {
-    public interface IContactAddedCallback
-    {
-        bool Callback(ManifoldPoint cp, CollisionObject colObj0, int partId0, int index0, CollisionObject colObj1, int partId1, int index1);
-    }
-    
-    ///btManifoldResult is a helper class to manage  contact results.
+	///btManifoldResult is a helper class to manage  contact results.
     public class ManifoldResult : IDiscreteCollisionDetectorInterfaceResult
     {
 	    public ManifoldResult()

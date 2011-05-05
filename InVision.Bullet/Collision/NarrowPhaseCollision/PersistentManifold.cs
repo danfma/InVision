@@ -464,20 +464,4 @@ namespace InVision.Bullet.Collision.NarrowPhaseCollision
             return islandId;
         }
     }
-
-    public interface IContactDestroyedCallback
-    {
-        bool callback(Object userPersistentData);
-    }
-
-    public interface IContactProcessedCallback
-    {
-        bool callback(ManifoldPoint point, Object body0, Object body1);
-    }
-
-    public enum ContactManifoldTypes
-    {
-        BT_PERSISTENT_MANIFOLD_TYPE = 1,
-        MAX_CONTACT_MANIFOLD_TYPE
-    }
 }

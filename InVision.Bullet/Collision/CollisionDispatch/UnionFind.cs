@@ -22,30 +22,14 @@
  */
 
 #define USE_PATH_COMPRESSION
-using System;
 using System.Collections.Generic;
 using InVision.Bullet.LinearMath;
 
 namespace InVision.Bullet.Collision.CollisionDispatch
 {
     // first pass I'm not going to worry too much about performance so this has become a class.
-    public class Element : IComparable<Element>
-    {
-        public int m_id;
-        public int m_sz;
 
-        public int CompareTo(Element obj)
-        {
-            // Original 
-            //bool operator() ( const btElement& lhs, const btElement& rhs )
-            //{
-            //    return lhs.m_id < rhs.m_id;
-            //}
-            return m_id - obj.m_id;
-        }
-    }
-
-    public class UnionFind
+	public class UnionFind
     {
 		public UnionFind()
         {

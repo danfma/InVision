@@ -30,22 +30,7 @@ using InVision.GameMath;
 
 namespace InVision.Bullet.Dynamics.Dynamics
 {
-
-    public enum DynamicsWorldType
-    {
-        BT_SIMPLE_DYNAMICS_WORLD = 1,
-        BT_DISCRETE_DYNAMICS_WORLD = 2,
-        BT_CONTINUOUS_DYNAMICS_WORLD = 3
-    }
-
-    /// Type for the callback for each tick
-    public interface IInternalTickCallback
-    {
-        void InternalTickCallback(DynamicsWorld world, float timeStep);
-    }
-
-
-    public abstract class DynamicsWorld : CollisionWorld
+	public abstract class DynamicsWorld : CollisionWorld
     {
 
 		public DynamicsWorld(IDispatcher dispatcher,IBroadphaseInterface broadphase,ICollisionConfiguration collisionConfiguration)

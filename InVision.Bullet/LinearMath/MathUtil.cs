@@ -1138,15 +1138,15 @@ namespace InVision.Bullet.LinearMath
 			//return b * a;
         }
 
-        public static Matrix BulletMatrixMultiply(Matrix m1, Matrix m2)
-        {
-            return BulletMatrixMultiply(ref m1, ref m2);
-        }
+		public static Matrix BulletMatrixMultiply(Matrix m1, Matrix m2)
+		{
+			return BulletMatrixMultiply(ref m1, ref m2);
+		}
 
-        public static Matrix BulletMatrixMultiply(ref Matrix m1, ref Matrix m2)
-        {
-            return m2 * m1;
-        }
+		public static Matrix BulletMatrixMultiply(ref Matrix m1, ref Matrix m2)
+		{
+			return Matrix.Multiply(m1, m2);
+		}
 
         public static Matrix BulletMatrixMultiplyBasis(Matrix m1, Matrix m2)
         {
