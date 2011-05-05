@@ -1,11 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-using InVision.Collections;
 using InVision.Native;
-using InVision.Native.Ogre;
-using InVision.Rendering.Listeners;
+using InVision.Ogre.Collections;
+using InVision.Ogre.Listeners;
+using InVision.Ogre.Native;
+using MarshallExtensions = InVision.Native.MarshallExtensions;
 
-namespace InVision.Rendering
+namespace InVision.Ogre
 {
 	public sealed class Root : Handle
 	{
@@ -146,7 +147,7 @@ namespace InVision.Rendering
 			if (pRenderWindow == IntPtr.Zero)
 				return null;
 
-			return pRenderWindow.AsHandle(ptr => new RenderWindow(ptr));
+			return MarshallExtensions.AsHandle(pRenderWindow, ptr => new RenderWindow(ptr));
 		}
 
 		/// <summary>
@@ -235,7 +236,7 @@ namespace InVision.Rendering
 																  options.DictionaryHandle);
 			}
 
-			return pRenderWindow.AsHandle(ptr => new RenderWindow(ptr));
+			return MarshallExtensions.AsHandle(pRenderWindow, ptr => new RenderWindow(ptr));
 		}
 
 		/// <summary>
@@ -253,7 +254,7 @@ namespace InVision.Rendering
 			else
 				pSceneManager = NativeOgreRoot.CreateSceneManagerByType(handle, sceneType, instanceName);
 
-			return pSceneManager.AsHandle(ptr => new SceneManager(ptr));
+			return MarshallExtensions.AsHandle(pSceneManager, ptr => new SceneManager(ptr));
 		}
 
 		/// <summary>
@@ -271,7 +272,7 @@ namespace InVision.Rendering
 			else
 				pSceneManager = NativeOgreRoot.CreateSceneManagerByTypeName(handle, typeName, instanceName);
 
-			return pSceneManager.AsHandle(ptr => new SceneManager(ptr));
+			return MarshallExtensions.AsHandle(pSceneManager, ptr => new SceneManager(ptr));
 		}
 	}
 }

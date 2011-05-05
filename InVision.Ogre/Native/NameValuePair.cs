@@ -1,6 +1,6 @@
 ﻿using System.Runtime.InteropServices;
 
-namespace InVision.Native
+namespace InVision.Ogre.Native
 {
 	[StructLayout(LayoutKind.Sequential)]
 	public struct NameValuePair

@@ -1,4 +1,4 @@
-﻿namespace InVision.Rendering
+﻿namespace InVision.Ogre
 {
 	/// <summary>
 	/// Enumeration denoting the spaces which a transform can be relative to. 

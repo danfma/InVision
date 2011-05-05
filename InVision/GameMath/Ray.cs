@@ -67,7 +67,7 @@ namespace InVision.GameMath
 			return result;
 		}
 		
-		public void Intersects (ref BoundingSphere sphere, out Nullable<float> result)
+		public void Intersects (ref BoundingSphere sphere, out float? result)
 		{
 			sphere.Intersects (ref this, out result);
 		}
@@ -79,9 +79,29 @@ namespace InVision.GameMath
 			return result;
 		}
 		
-		public void Intersects (ref Plane plane, out Nullable<float> result)
+		public void Intersects (ref Plane plane, out float? result)
 		{
-			throw new NotImplementedException ();
+			float num = plane.Normal.X * this.Direction.X + plane.Normal.Y * this.Direction.Y + plane.Normal.Z * this.Direction.Z;
+			
+			if (Math.Abs(num) < 1E-05f)
+			{
+				result = null;
+				return;
+			}
+			
+			float num2 = plane.Normal.X * this.Position.X + plane.Normal.Y * this.Position.Y + plane.Normal.Z * this.Position.Z;
+			float num3 = (-plane.D - num2) / num;
+
+			if (num3 < 0f)
+			{
+				if (num3 < -1E-05f)
+				{
+					result = null;
+					return;
+				}
+				result = new float?(0f);
+			}
+			result = new float?(num3);
 		}
 		
 		#endregion

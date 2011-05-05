@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace InVision.Rendering.Util
+namespace InVision.Ogre.Util
 {
 	public abstract class ColourRepresentation
 	{

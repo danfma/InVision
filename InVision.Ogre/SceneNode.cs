@@ -1,7 +1,7 @@
 ﻿using System;
 using InVision.Native;
 
-namespace InVision.Rendering
+namespace InVision.Ogre
 {
 	public class SceneNode : Handle
 	{

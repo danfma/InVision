@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Runtime.InteropServices;
-using InVision.Collections;
+using InVision.Ogre.Collections;
 
-namespace InVision.Native
+namespace InVision.Ogre.Native
 {
 	internal sealed class NativeVectorList : PlatformInvoke
 	{

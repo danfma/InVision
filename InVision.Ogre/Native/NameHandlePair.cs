@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Runtime.InteropServices;
 
-namespace InVision.Native
+namespace InVision.Ogre.Native
 {
 	[StructLayout(LayoutKind.Explicit)]
 	public struct NameHandlePair

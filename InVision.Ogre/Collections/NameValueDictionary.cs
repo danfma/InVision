@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using InVision.Native;
-using InVision.Native.Ogre;
+using InVision.Ogre.Native;
 
-namespace InVision.Collections
+namespace InVision.Ogre.Collections
 {
 	public class NameValueDictionary : Dictionary<string, string>
 	{

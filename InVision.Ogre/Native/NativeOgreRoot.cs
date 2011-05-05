@@ -2,9 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.InteropServices;
-using InVision.Rendering;
 
-namespace InVision.Native.Ogre
+namespace InVision.Ogre.Native
 {
 	internal sealed class NativeOgreRoot : PlatformInvoke
 	{

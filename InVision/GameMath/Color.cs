@@ -28,6 +28,7 @@ using System;
 namespace InVision.GameMath
 {
 	[Serializable]
+	[CLSCompliant(true)]
 	public struct Color : IEquatable<Color>
 	{
 		const uint R_MASK = 0x000000FF;
@@ -93,7 +94,6 @@ namespace InVision.GameMath
 		
 		#endregion
 		
-		[CLSCompliant (false)]
 		public uint PackedValue {
 			get { return packed; }
 			set { packed = value; }

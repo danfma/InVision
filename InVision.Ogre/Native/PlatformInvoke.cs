@@ -1,7 +1,7 @@
 ﻿using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
-namespace InVision.Native
+namespace InVision.Ogre.Native
 {
 	internal class PlatformInvoke
 	{

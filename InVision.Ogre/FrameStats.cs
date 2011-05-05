@@ -1,6 +1,6 @@
 ﻿using System.Runtime.InteropServices;
 
-namespace InVision.Rendering
+namespace InVision.Ogre
 {
 	[StructLayout(LayoutKind.Sequential)]
 	public struct FrameStats

@@ -32,7 +32,7 @@ using Mono.Simd;
 namespace InVision.GameMath
 {
 	[Serializable]
-	public struct Vector3 : IEquatable<Vector3>
+	public partial struct Vector3 : IEquatable<Vector3>
 	{
 #if SIMD
 		internal Vector4f v4;
@@ -247,7 +247,7 @@ namespace InVision.GameMath
 		public static void Negate(ref Vector3 value, out Vector3 result)
 		{
 #if SIMD
-			result.v4 = value.v4 ^ new Vector4f(-0.0f);
+			result.v4 = value.v4 * -1;
 #else
 			result.x = - value.x;
 			result.y = - value.y;
@@ -497,26 +497,18 @@ namespace InVision.GameMath
 
 		public static Vector3 Cross(Vector3 vector1, Vector3 vector2)
 		{
-			Vector3 result;
-			Cross(ref vector1, ref vector2, out result);
-			return result;
+			return new Vector3(
+				vector1.Y * vector2.Z - vector1.Z * vector2.Y,
+				vector1.Z * vector2.X - vector1.X * vector2.Z,
+				vector1.X * vector2.Y - vector1.Y * vector2.X);
 		}
 
 		public static void Cross(ref Vector3 vector1, ref Vector3 vector2, out Vector3 result)
 		{
-#if SIMD
-			Vector4f r1 = vector1.v4;
-			Vector4f r2 = vector2.v4;
-			result.v4 =
-				r1.Shuffle(ShuffleSel.XFromY | ShuffleSel.YFromZ | ShuffleSel.ZFromX | ShuffleSel.WFromW) *
-				r2.Shuffle(ShuffleSel.XFromZ | ShuffleSel.YFromX | ShuffleSel.ZFromY | ShuffleSel.WFromW) -
-				r1.Shuffle(ShuffleSel.XFromZ | ShuffleSel.YFromX | ShuffleSel.ZFromY | ShuffleSel.WFromW) *
-				r2.Shuffle(ShuffleSel.XFromY | ShuffleSel.YFromZ | ShuffleSel.ZFromX | ShuffleSel.WFromW);
-#else
-			result.x = vector1.y * vector2.z - vector1.z * vector2.y;
-			result.y = vector1.z * vector2.x - vector1.x * vector2.z;
-			result.z = vector1.x * vector2.y - vector1.y * vector2.x;
-#endif
+			result = new Vector3(
+				vector1.Y * vector2.Z - vector1.Z * vector2.Y,
+				vector1.Z * vector2.X - vector1.X * vector2.Z,
+				vector1.X * vector2.Y - vector1.Y * vector2.X);
 		}
 
 		public static float Distance(Vector3 value1, Vector3 value2)
@@ -528,16 +520,9 @@ namespace InVision.GameMath
 
 		public static void Distance(ref Vector3 value1, ref Vector3 value2, out float result)
 		{
-#if SIMD
-			Vector4f r0 = value2.v4 - value1.v4;
-			r0 = r0 * r0;
-			r0 = r0 + r0.Shuffle(ShuffleSel.Swap);
-			r0 = r0 + r0.Shuffle(ShuffleSel.RotateLeft);
-			result = r0.Sqrt().X;
-#else
 			DistanceSquared (ref value1, ref value2, out result);
+			
 			result = (float) System.Math.Sqrt (result);
-#endif
 		}
 
 		public static float DistanceSquared(Vector3 value1, Vector3 value2)
@@ -549,61 +534,28 @@ namespace InVision.GameMath
 
 		public static void DistanceSquared(ref Vector3 value1, ref Vector3 value2, out float result)
 		{
-#if SIMD
-			Vector4f r0 = value2.v4 - value1.v4;
-			r0 = r0 * r0;
-			r0 = r0 + r0.Shuffle(ShuffleSel.Swap);
-			r0 = r0 + r0.Shuffle(ShuffleSel.RotateLeft);
-			result = r0.X;
-#else
 			Subtract (ref value1, ref value2, out value1);
 			result = value1.LengthSquared ();
-#endif
 		}
 
 		public static float Dot(Vector3 vector1, Vector3 vector2)
 		{
-			float result;
-			Dot(ref vector1, ref vector2, out result);
-			return result;
+			return (vector1.X * vector2.X) + (vector1.Y * vector2.Y) + (vector1.Z * vector2.Z);
 		}
 
 		public static void Dot(ref Vector3 vector1, ref Vector3 vector2, out float result)
 		{
-#if SIMD
-			Vector4f r0 = vector2.v4 * vector1.v4;
-			r0 = r0 + r0.Shuffle(ShuffleSel.Swap);
-			r0 = r0 + r0.Shuffle(ShuffleSel.RotateLeft);
-			result = r0.Sqrt().X;
-#else
-			result = (vector1.x * vector2.x) + (vector1.y * vector2.y) + (vector1.z * vector2.z);
-#endif
+			result = (vector1.X * vector2.X) + (vector1.Y * vector2.Y) + (vector1.Z * vector2.Z);
 		}
 
 		public float Length()
 		{
-#if SIMD
-			Vector4f r0 = v4;
-			r0 = r0 * r0;
-			r0 = r0 + r0.Shuffle(ShuffleSel.Swap);
-			r0 = r0 + r0.Shuffle(ShuffleSel.RotateLeft);
-			return r0.Sqrt().X;
-#else
-			return (float) System.Math.Sqrt (LengthSquared ());
-#endif
+			return (float)System.Math.Sqrt(LengthSquared());
 		}
 
 		public float LengthSquared()
 		{
-#if SIMD
-			Vector4f r0 = v4;
-			r0 = r0 * r0;
-			r0 = r0 + r0.Shuffle(ShuffleSel.Swap);
-			r0 = r0 + r0.Shuffle(ShuffleSel.RotateLeft);
-			return r0.X;
-#else
-			return (x * x) + (y * y) + (z * z);
-#endif
+			return (X * X) + (Y * Y) + (Z * Z);
 		}
 
 		public static Vector3 Max(Vector3 value1, Vector3 value2)
@@ -653,18 +605,9 @@ namespace InVision.GameMath
 
 		public static void Normalize(ref Vector3 value, out Vector3 result)
 		{
-#if SIMD
-			Vector4f r0 = value.v4;
-			r0 = r0 * r0;
-			r0 = r0 + r0.Shuffle(ShuffleSel.Swap);
-			r0 = r0 + r0.Shuffle(ShuffleSel.RotateLeft);
-			result.v4 = value.v4 / r0.Sqrt();
-#else
-			var l = value.Length ();
-			result.x = value.x / l;
-			result.y = value.y / l;
-			result.z = value.z / l;
-#endif
+			var l = value.Length();
+
+			result = value / l;
 		}
 
 		public static Vector3 Reflect(Vector3 vector, Vector3 normal)
@@ -676,21 +619,10 @@ namespace InVision.GameMath
 
 		public static void Reflect(ref Vector3 vector, ref Vector3 normal, out Vector3 result)
 		{
-#if SIMD
-			Vector4f v = vector.v4, n = normal.v4;
-			Vector4f r0 = v * n;
-			r0 = r0 + r0.Shuffle(ShuffleSel.Swap);
-			r0 = r0 + r0.Shuffle(ShuffleSel.RotateLeft);
-			r0 = r0.Sqrt();
-			result.v4 = (r0 + r0) * n - v;
-
-#else
-			float d2 = (float) System.Math.Sqrt (normal.x * vector.x + normal.y * vector.y + normal.z * vector.z);
+			float d2 = (float)System.Math.Sqrt(normal.X * vector.X + normal.Y * vector.Y + normal.Z * vector.Z);
 			d2 = d2 + d2;
-			result.x = d2 * normal.x - vector.x;
-			result.y = d2 * normal.y - vector.y;
-			result.z = d2 * normal.z - vector.z;
-#endif
+
+			result = (d2 * normal) - vector;
 		}
 
 		#endregion
@@ -721,7 +653,23 @@ namespace InVision.GameMath
 
 		public static void Transform(ref Vector3 value, ref Quaternion rotation, out Vector3 result)
 		{
-			throw new NotImplementedException();
+			float num = rotation.X + rotation.X;
+			float num2 = rotation.Y + rotation.Y;
+			float num3 = rotation.Z + rotation.Z;
+			float num4 = rotation.W * num;
+			float num5 = rotation.W * num2;
+			float num6 = rotation.W * num3;
+			float num7 = rotation.X * num;
+			float num8 = rotation.X * num2;
+			float num9 = rotation.X * num3;
+			float num10 = rotation.Y * num2;
+			float num11 = rotation.Y * num3;
+			float num12 = rotation.Z * num3;
+			float x = value.X * (1f - num10 - num12) + value.Y * (num8 - num6) + value.Z * (num9 + num5);
+			float y = value.X * (num8 + num6) + value.Y * (1f - num7 - num12) + value.Z * (num11 - num4);
+			float z = value.X * (num9 - num5) + value.Y * (num11 + num4) + value.Z * (1f - num7 - num10);
+
+			result = new Vector3(x, y, z);
 		}
 
 		static void CheckArrayArgs(Vector3[] sourceArray, int sourceIndex, Vector3[] destinationArray,
@@ -857,29 +805,7 @@ namespace InVision.GameMath
 
 		public override int GetHashCode()
 		{
-#if SIMD
-			unsafe
-			{
-				Vector4f f = v4;
-				Vector4i i = *((Vector4i*)&f);
-				i = i ^ i.Shuffle(ShuffleSel.Swap);
-				i = i ^ i.Shuffle(ShuffleSel.RotateLeft);
-				return i.X;
-			}
-#elif UNSAFE
-			unsafe {
-				float f = x;
-				int acc = *((int*)&f);
-				f = y;
-				acc ^= *((int*)&f);
-				f = z;
-				acc ^= *((int*)&f);
-				return acc;
-			}
-			
-#else
-			return x.GetHashCode () ^ y.GetHashCode () ^ z.GetHashCode ();
-#endif
+			return X.GetHashCode() ^ Y.GetHashCode() ^ Z.GetHashCode();
 		}
 
 		public static bool operator ==(Vector3 a, Vector3 b)

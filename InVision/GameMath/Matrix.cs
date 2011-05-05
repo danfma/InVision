@@ -26,9 +26,6 @@
 
 using System;
 using Mono.Simd;
-#if SIMD
-
-#endif
 
 namespace InVision.GameMath
 {
@@ -201,6 +198,44 @@ namespace InVision.GameMath
 #endif
 		}
 
+		/// <summary>
+		/// Gets or sets the <see cref="System.Single"/> with the specified row and column.
+		/// </summary>
+		/// <value></value>
+		public float this[int row, int col]
+		{
+			get
+			{
+				unsafe
+				{
+					int rowSpace = sizeof(Vector4f) * row;
+
+					fixed (void* pself = &this)
+					{
+						var pData = (float*)pself;
+						pData += rowSpace + col * sizeof(float);
+
+						return *pData;
+					}
+				}
+			}
+			set
+			{
+				unsafe
+				{
+					int rowSpace = sizeof(Vector4f) * row;
+
+					fixed (void* pself = &this)
+					{
+						var pData = (float*)pself;
+						pData += rowSpace + col * sizeof(float);
+
+						*pData = value;
+					}
+				}
+			}
+		}
+
 		#region Vector Properties
 
 		//See http://stevehazen.wordpress.com/2010/02/15/
@@ -352,7 +387,43 @@ namespace InVision.GameMath
 		public static void CreateBillboard(ref Vector3 objectPosition, ref Vector3 cameraPosition,
 										   ref Vector3 cameraUpVector, Vector3? cameraForwardVector, out Matrix result)
 		{
-			throw new NotImplementedException();
+			Vector3 vector = default(Vector3);
+			vector.X = objectPosition.X - cameraPosition.X;
+			vector.Y = objectPosition.Y - cameraPosition.Y;
+			vector.Z = objectPosition.Z - cameraPosition.Z;
+			float num = vector.LengthSquared();
+			if (num < 0.0001f)
+			{
+				vector = (cameraForwardVector.HasValue ? (-cameraForwardVector.Value) : Vector3.Forward);
+			}
+			else
+			{
+				Vector3.Multiply(ref vector, 1f / (float)Math.Sqrt(num), out vector);
+			}
+			Vector3 vector2 = default(Vector3);
+			Vector3.Cross(ref cameraUpVector, ref vector, out vector2);
+			vector2.Normalize();
+
+			Vector3 vector3 = default(Vector3);
+			Vector3.Cross(ref vector, ref vector2, out vector3);
+
+			result = default(Matrix);
+			result.M11 = vector2.X;
+			result.M12 = vector2.Y;
+			result.M13 = vector2.Z;
+			result.M14 = 0f;
+			result.M21 = vector3.X;
+			result.M22 = vector3.Y;
+			result.M23 = vector3.Z;
+			result.M24 = 0f;
+			result.M31 = vector.X;
+			result.M32 = vector.Y;
+			result.M33 = vector.Z;
+			result.M34 = 0f;
+			result.M41 = objectPosition.X;
+			result.M42 = objectPosition.Y;
+			result.M43 = objectPosition.Z;
+			result.M44 = 1f;
 		}
 
 		public static Matrix CreateConstrainedBillboard(Vector3 objectPosition, Vector3 cameraPosition,
@@ -369,7 +440,63 @@ namespace InVision.GameMath
 													  ref Vector3 rotateAxis, Vector3? cameraForwardVector,
 													  Vector3? objectForwardVector, out Matrix result)
 		{
-			throw new NotImplementedException();
+			Vector3 vector = default(Vector3);
+			vector.X = objectPosition.X - cameraPosition.X;
+			vector.Y = objectPosition.Y - cameraPosition.Y;
+			vector.Z = objectPosition.Z - cameraPosition.Z;
+
+			float num = vector.LengthSquared();
+
+			if (num < 0.0001f)
+			{
+				vector = (cameraForwardVector.HasValue ? (-cameraForwardVector.Value) : Vector3.Forward);
+			}
+			else
+			{
+				Vector3.Multiply(ref vector, 1f / (float)Math.Sqrt(num), out vector);
+			}
+
+			Vector3 vector2 = rotateAxis;
+			float value;
+			Vector3.Dot(ref rotateAxis, ref vector, out value);
+			Vector3 vector3 = default(Vector3);
+			Vector3 vector4 = default(Vector3);
+
+			if (Math.Abs(value) > 0.998254657f)
+			{
+				if (objectForwardVector.HasValue)
+				{
+					vector3 = objectForwardVector.Value;
+					Vector3.Dot(ref rotateAxis, ref vector3, out value);
+					if (Math.Abs(value) > 0.998254657f)
+					{
+						value = rotateAxis.X * Vector3.Forward.X + rotateAxis.Y * Vector3.Forward.Y + rotateAxis.Z * Vector3.Forward.Z;
+						vector3 = ((Math.Abs(value) > 0.998254657f) ? Vector3.Right : Vector3.Forward);
+					}
+				}
+				else
+				{
+					value = rotateAxis.X * Vector3.Forward.X + rotateAxis.Y * Vector3.Forward.Y + rotateAxis.Z * Vector3.Forward.Z;
+					vector3 = ((Math.Abs(value) > 0.998254657f) ? Vector3.Right : Vector3.Forward);
+				}
+				Vector3.Cross(ref rotateAxis, ref vector3, out vector4);
+				vector4.Normalize();
+				Vector3.Cross(ref vector4, ref rotateAxis, out vector3);
+				vector3.Normalize();
+			}
+			else
+			{
+				Vector3.Cross(ref rotateAxis, ref vector, out vector4);
+				vector4.Normalize();
+				Vector3.Cross(ref vector4, ref vector2, out vector3);
+				vector3.Normalize();
+			}
+
+			result = new Matrix(
+				vector4.X, vector4.Y, vector4.Z, 0f,
+				vector2.X, vector2.Y, vector2.Z, 0f,
+				vector3.X, vector3.Y, vector3.Z, 0f,
+				objectPosition.X, objectPosition.Y, objectPosition.Z, 1f);
 		}
 
 		public static Matrix CreateFromAxisAngle(Vector3 axis, float angle)
@@ -381,7 +508,38 @@ namespace InVision.GameMath
 
 		public static void CreateFromAxisAngle(ref Vector3 axis, float angle, out Matrix result)
 		{
-			throw new NotImplementedException();
+			float x = axis.X;
+			float y = axis.Y;
+			float z = axis.Z;
+			var num = (float)Math.Sin(angle);
+			var num2 = (float)Math.Cos(angle);
+			float num3 = x * x;
+			float num4 = y * y;
+			float num5 = z * z;
+			float num6 = x * y;
+			float num7 = x * z;
+			float num8 = y * z;
+
+			result = default(Matrix);
+			result.M11 = num3 + num2 * (1f - num3);
+			result.M12 = num6 - num2 * num6 + num * z;
+			result.M13 = num7 - num2 * num7 - num * y;
+			result.M14 = 0f;
+
+			result.M21 = num6 - num2 * num6 - num * z;
+			result.M22 = num4 + num2 * (1f - num4);
+			result.M23 = num8 - num2 * num8 + num * x;
+			result.M24 = 0f;
+
+			result.M31 = num7 - num2 * num7 + num * y;
+			result.M32 = num8 - num2 * num8 - num * x;
+			result.M33 = num5 + num2 * (1f - num5);
+			result.M34 = 0f;
+
+			result.M41 = 0f;
+			result.M42 = 0f;
+			result.M43 = 0f;
+			result.M44 = 1f;
 		}
 
 		public static Matrix CreateFromQuaternion(Quaternion quaternion)
@@ -393,7 +551,7 @@ namespace InVision.GameMath
 
 		public static void CreateFromQuaternion(ref Quaternion quaternion, out Matrix result)
 		{
-			result = Matrix.Identity;
+			result = Identity;
 
 			result.M11 = 1 - 2 * (quaternion.Y * quaternion.Y + quaternion.Z * quaternion.Z);
 			result.M12 = 2 * (quaternion.X * quaternion.Y + quaternion.W * quaternion.Z);
@@ -404,7 +562,6 @@ namespace InVision.GameMath
 			result.M31 = 2 * (quaternion.X * quaternion.Z + quaternion.W * quaternion.Y);
 			result.M32 = 2 * (quaternion.Y * quaternion.Z - quaternion.W * quaternion.X);
 			result.M33 = 1 - 2 * (quaternion.X * quaternion.X + quaternion.Y * quaternion.Y);
-
 		}
 
 		public static Matrix CreateFromYawPitchRoll(float yaw, float pitch, float roll)
@@ -477,7 +634,16 @@ namespace InVision.GameMath
 		public static void CreateOrthographic(float width, float height, float zNearPlane, float zFarPlane,
 											  out Matrix result)
 		{
-			throw new NotImplementedException();
+			result = default(Matrix);
+			result.M11 = 2f / width;
+			result.M12 = (result.M13 = (result.M14 = 0f));
+			result.M22 = 2f / height;
+			result.M21 = (result.M23 = (result.M24 = 0f));
+			result.M33 = 1f / (zNearPlane - zFarPlane);
+			result.M31 = (result.M32 = (result.M34 = 0f));
+			result.M41 = (result.M42 = 0f);
+			result.M43 = zNearPlane / (zNearPlane - zFarPlane);
+			result.M44 = 1f;
 		}
 
 		public static Matrix CreateOrthographicOffCenter(float left, float right, float bottom, float top,
@@ -491,7 +657,17 @@ namespace InVision.GameMath
 		public static void CreateOrthographicOffCenter(float left, float right, float bottom, float top,
 													   float zNearPlane, float zFarPlane, out Matrix result)
 		{
-			throw new NotImplementedException();
+			result = default(Matrix);
+			result.M11 = 2f / (right - left);
+			result.M12 = (result.M13 = (result.M14 = 0f));
+			result.M22 = 2f / (top - bottom);
+			result.M21 = (result.M23 = (result.M24 = 0f));
+			result.M33 = 1f / (zNearPlane - zFarPlane);
+			result.M31 = (result.M32 = (result.M34 = 0f));
+			result.M41 = (left + right) / (left - right);
+			result.M42 = (top + bottom) / (bottom - top);
+			result.M43 = zNearPlane / (zNearPlane - zFarPlane);
+			result.M44 = 1f;
 		}
 
 		public static Matrix CreatePerspective(float width, float height, float nearPlaneDistance,
@@ -505,7 +681,25 @@ namespace InVision.GameMath
 		public static void CreatePerspective(float width, float height, float nearPlaneDistance,
 											 float farPlaneDistance, out Matrix result)
 		{
-			throw new NotImplementedException();
+			if (nearPlaneDistance <= 0f)
+				throw new ArgumentOutOfRangeException("nearPlaneDistance");
+
+			if (farPlaneDistance <= 0f)
+				throw new ArgumentOutOfRangeException("farPlaneDistance");
+
+			if (nearPlaneDistance >= farPlaneDistance)
+				throw new ArgumentOutOfRangeException("nearPlaneDistance");
+
+			result = default(Matrix);
+			result.M11 = 2f * nearPlaneDistance / width;
+			result.M12 = (result.M13 = (result.M14 = 0f));
+			result.M22 = 2f * nearPlaneDistance / height;
+			result.M21 = (result.M23 = (result.M24 = 0f));
+			result.M33 = farPlaneDistance / (nearPlaneDistance - farPlaneDistance);
+			result.M31 = (result.M32 = 0f);
+			result.M34 = -1f;
+			result.M41 = (result.M42 = (result.M44 = 0f));
+			result.M43 = nearPlaneDistance * farPlaneDistance / (nearPlaneDistance - farPlaneDistance);
 		}
 
 		public static Matrix CreatePerspectiveFieldOfView(float fieldOfView, float aspectRatio,
@@ -519,7 +713,31 @@ namespace InVision.GameMath
 		public static void CreatePerspectiveFieldOfView(float fieldOfView, float aspectRatio, float nearPlaneDistance,
 														float farPlaneDistance, out Matrix result)
 		{
-			throw new NotImplementedException();
+			if (fieldOfView <= 0f || fieldOfView >= 3.14159274f)
+				throw new ArgumentOutOfRangeException("fieldOfView");
+
+			if (nearPlaneDistance <= 0f)
+				throw new ArgumentOutOfRangeException("nearPlaneDistance");
+
+			if (farPlaneDistance <= 0f)
+				throw new ArgumentOutOfRangeException("farPlaneDistance");
+
+			if (nearPlaneDistance >= farPlaneDistance)
+				throw new ArgumentOutOfRangeException("nearPlaneDistance");
+
+			float num = 1f / (float)Math.Tan((fieldOfView * 0.5f));
+			float m = num / aspectRatio;
+
+			result = default(Matrix);
+			result.M11 = m;
+			result.M12 = (result.M13 = (result.M14 = 0f));
+			result.M22 = num;
+			result.M21 = (result.M23 = (result.M24 = 0f));
+			result.M31 = (result.M32 = 0f);
+			result.M33 = farPlaneDistance / (nearPlaneDistance - farPlaneDistance);
+			result.M34 = -1f;
+			result.M41 = (result.M42 = (result.M44 = 0f));
+			result.M43 = nearPlaneDistance * farPlaneDistance / (nearPlaneDistance - farPlaneDistance);
 		}
 
 		public static Matrix CreatePerspectiveOffCenter(float left, float right, float bottom, float top,
@@ -533,7 +751,26 @@ namespace InVision.GameMath
 		public static void CreatePerspectiveOffCenter(float left, float right, float bottom, float top,
 													  float nearPlaneDistance, float farPlaneDistance, out Matrix result)
 		{
-			throw new NotImplementedException();
+			if (nearPlaneDistance <= 0f)
+				throw new ArgumentOutOfRangeException("nearPlaneDistance");
+
+			if (farPlaneDistance <= 0f)
+				throw new ArgumentOutOfRangeException("farPlaneDistance");
+
+			if (nearPlaneDistance >= farPlaneDistance)
+				throw new ArgumentOutOfRangeException("nearPlaneDistance");
+
+			result = default(Matrix);
+			result.M11 = 2f * nearPlaneDistance / (right - left);
+			result.M12 = (result.M13 = (result.M14 = 0f));
+			result.M22 = 2f * nearPlaneDistance / (top - bottom);
+			result.M21 = (result.M23 = (result.M24 = 0f));
+			result.M31 = (left + right) / (right - left);
+			result.M32 = (top + bottom) / (top - bottom);
+			result.M33 = farPlaneDistance / (nearPlaneDistance - farPlaneDistance);
+			result.M34 = -1f;
+			result.M43 = nearPlaneDistance * farPlaneDistance / (nearPlaneDistance - farPlaneDistance);
+			result.M41 = (result.M42 = (result.M44 = 0f));
 		}
 
 		public static Matrix CreateReflection(Plane value)
@@ -545,7 +782,34 @@ namespace InVision.GameMath
 
 		public static void CreateReflection(ref Plane value, out Matrix result)
 		{
-			throw new NotImplementedException();
+			Plane plane;
+			Plane.Normalize(ref value, out plane);
+			value.Normalize();
+
+			float x = plane.Normal.X;
+			float y = plane.Normal.Y;
+			float z = plane.Normal.Z;
+			float num = -2f * x;
+			float num2 = -2f * y;
+			float num3 = -2f * z;
+
+			result = default(Matrix);
+			result.M11 = num * x + 1f;
+			result.M12 = num2 * x;
+			result.M13 = num3 * x;
+			result.M14 = 0f;
+			result.M21 = num * y;
+			result.M22 = num2 * y + 1f;
+			result.M23 = num3 * y;
+			result.M24 = 0f;
+			result.M31 = num * z;
+			result.M32 = num2 * z;
+			result.M33 = num3 * z + 1f;
+			result.M34 = 0f;
+			result.M41 = num * plane.D;
+			result.M42 = num2 * plane.D;
+			result.M43 = num3 * plane.D;
+			result.M44 = 1f;
 		}
 
 		public static Matrix CreateRotationX(float radians)
@@ -557,8 +821,8 @@ namespace InVision.GameMath
 
 		public static void CreateRotationX(float radians, out Matrix result)
 		{
-			var cos = (float)System.Math.Cos(radians);
-			var sin = (float)System.Math.Sin(radians);
+			var cos = (float)Math.Cos(radians);
+			var sin = (float)Math.Sin(radians);
 
 			result = new Matrix();
 			result.M11 = 1.0f;
@@ -578,8 +842,8 @@ namespace InVision.GameMath
 
 		public static void CreateRotationY(float radians, out Matrix result)
 		{
-			var cos = (float)System.Math.Cos(radians);
-			var sin = (float)System.Math.Sin(radians);
+			var cos = (float)Math.Cos(radians);
+			var sin = (float)Math.Sin(radians);
 
 			result = new Matrix();
 			result.M11 = cos;
@@ -599,8 +863,8 @@ namespace InVision.GameMath
 
 		public static void CreateRotationZ(float radians, out Matrix result)
 		{
-			var cos = (float)System.Math.Cos(radians);
-			var sin = (float)System.Math.Sin(radians);
+			var cos = (float)Math.Cos(radians);
+			var sin = (float)Math.Sin(radians);
 
 			result = new Matrix();
 			result.M11 = cos;
@@ -659,7 +923,31 @@ namespace InVision.GameMath
 
 		public static void CreateShadow(ref Vector3 lightDirection, ref Plane plane, out Matrix result)
 		{
-			throw new NotImplementedException();
+			Plane plane2;
+			Plane.Normalize(ref plane, out plane2);
+			float num = plane2.Normal.X * lightDirection.X + plane2.Normal.Y * lightDirection.Y + plane2.Normal.Z * lightDirection.Z;
+			float num2 = -plane2.Normal.X;
+			float num3 = -plane2.Normal.Y;
+			float num4 = -plane2.Normal.Z;
+			float num5 = -plane2.D;
+
+			result = default(Matrix);
+			result.M11 = num2 * lightDirection.X + num;
+			result.M21 = num3 * lightDirection.X;
+			result.M31 = num4 * lightDirection.X;
+			result.M41 = num5 * lightDirection.X;
+			result.M12 = num2 * lightDirection.Y;
+			result.M22 = num3 * lightDirection.Y + num;
+			result.M32 = num4 * lightDirection.Y;
+			result.M42 = num5 * lightDirection.Y;
+			result.M13 = num2 * lightDirection.Z;
+			result.M23 = num3 * lightDirection.Z;
+			result.M33 = num4 * lightDirection.Z + num;
+			result.M43 = num5 * lightDirection.Z;
+			result.M14 = 0f;
+			result.M24 = 0f;
+			result.M34 = 0f;
+			result.M44 = num;
 		}
 
 		public static Matrix CreateTranslation(float xPosition, float yPosition, float zPosition)
@@ -762,71 +1050,33 @@ namespace InVision.GameMath
 
 		public static Matrix Multiply(Matrix matrix1, Matrix matrix2)
 		{
-#if SIMD
-			//sse version only sets the result when the calculation is complete
-			Multiply(ref matrix1, ref matrix2, out matrix1);
-			return matrix1;
-#else
-	//non-sse version needs m1 and m1 to remain unchanged
 			Matrix result;
 			Multiply (ref matrix1, ref matrix2, out result);
 			return result;
-#endif
 		}
 
 		public static void Multiply(ref Matrix matrix1, ref Matrix matrix2, out Matrix result)
 		{
-#if SIMD
-			//http://www.freevec.org/function/matrix_4x4_multiplication_floats
-			//FIXME does Mono.Simd have fused multiply-add?
-			Vector4f a1 = matrix1.r1, a2 = matrix1.r2, a3 = matrix1.r3, a4 = matrix1.r4;
-			Vector4f b1 = matrix2.r1, b2 = matrix2.r2, b3 = matrix2.r3, b4 = matrix2.r4;
+			result = default(Matrix);
+			result.M11 = matrix1.M11 * matrix2.M11 + matrix1.M12 * matrix2.M21 + matrix1.M13 * matrix2.M31 + matrix1.M14 * matrix2.M41;
+			result.M12 = matrix1.M11 * matrix2.M12 + matrix1.M12 * matrix2.M22 + matrix1.M13 * matrix2.M32 + matrix1.M14 * matrix2.M42;
+			result.M13 = matrix1.M11 * matrix2.M13 + matrix1.M12 * matrix2.M23 + matrix1.M13 * matrix2.M33 + matrix1.M14 * matrix2.M43;
+			result.M14 = matrix1.M11 * matrix2.M14 + matrix1.M12 * matrix2.M24 + matrix1.M13 * matrix2.M34 + matrix1.M14 * matrix2.M44;
 
-			Vector4f c1 = a1.Shuffle(ShuffleSel.ExpandX) * b1;
-			Vector4f c2 = a2.Shuffle(ShuffleSel.ExpandX) * b2;
-			Vector4f c3 = a3.Shuffle(ShuffleSel.ExpandX) * b3;
-			Vector4f c4 = a4.Shuffle(ShuffleSel.ExpandX) * b4;
+			result.M21 = matrix1.M21 * matrix2.M11 + matrix1.M22 * matrix2.M21 + matrix1.M23 * matrix2.M31 + matrix1.M24 * matrix2.M41;
+			result.M22 = matrix1.M21 * matrix2.M12 + matrix1.M22 * matrix2.M22 + matrix1.M23 * matrix2.M32 + matrix1.M24 * matrix2.M42;
+			result.M23 = matrix1.M21 * matrix2.M13 + matrix1.M22 * matrix2.M23 + matrix1.M23 * matrix2.M33 + matrix1.M24 * matrix2.M43;
+			result.M24 = matrix1.M21 * matrix2.M14 + matrix1.M22 * matrix2.M24 + matrix1.M23 * matrix2.M34 + matrix1.M24 * matrix2.M44;
 
-			c1 += a1.Shuffle(ShuffleSel.ExpandY) * b1;
-			c2 += a2.Shuffle(ShuffleSel.ExpandY) * b2;
-			c3 += a3.Shuffle(ShuffleSel.ExpandY) * b3;
-			c4 += a4.Shuffle(ShuffleSel.ExpandY) * b4;
+			result.M31 = matrix1.M31 * matrix2.M11 + matrix1.M32 * matrix2.M21 + matrix1.M33 * matrix2.M31 + matrix1.M34 * matrix2.M41;
+			result.M32 = matrix1.M31 * matrix2.M12 + matrix1.M32 * matrix2.M22 + matrix1.M33 * matrix2.M32 + matrix1.M34 * matrix2.M42;
+			result.M33 = matrix1.M31 * matrix2.M13 + matrix1.M32 * matrix2.M23 + matrix1.M33 * matrix2.M33 + matrix1.M34 * matrix2.M43;
+			result.M34 = matrix1.M31 * matrix2.M14 + matrix1.M32 * matrix2.M24 + matrix1.M33 * matrix2.M34 + matrix1.M34 * matrix2.M44;
 
-			c1 += a1.Shuffle(ShuffleSel.ExpandZ) * b1;
-			c2 += a2.Shuffle(ShuffleSel.ExpandZ) * b2;
-			c3 += a3.Shuffle(ShuffleSel.ExpandZ) * b3;
-			c4 += a4.Shuffle(ShuffleSel.ExpandZ) * b4;
-
-			c1 += a1.Shuffle(ShuffleSel.ExpandW) * b1;
-			c2 += a2.Shuffle(ShuffleSel.ExpandW) * b2;
-			c3 += a3.Shuffle(ShuffleSel.ExpandW) * b3;
-			c4 += a4.Shuffle(ShuffleSel.ExpandW) * b4;
-
-			result.r1 = c1;
-			result.r2 = c2;
-			result.r3 = c3;
-			result.r4 = c4;
-#else
-			result.m11 = matrix1.m11*matrix2.m11 + matrix1.m12*matrix2.m21 + matrix1.m13*matrix2.m31 + matrix1.m14*matrix2.m41;
-			result.m12 = matrix1.m11*matrix2.m12 + matrix1.m12*matrix2.m22 + matrix1.m13*matrix2.m32 + matrix1.m14*matrix2.m42;
-			result.m13 = matrix1.m11*matrix2.m13 + matrix1.m12*matrix2.m23 + matrix1.m13*matrix2.m33 + matrix1.m14*matrix2.m43;
-			result.m14 = matrix1.m11*matrix2.m14 + matrix1.m12*matrix2.m24 + matrix1.m13*matrix2.m34 + matrix1.m14*matrix2.m44;
-				
-			result.m21 = matrix1.m21*matrix2.m11 + matrix1.m22*matrix2.m21 + matrix1.m23*matrix2.m31 + matrix1.m24*matrix2.m41;
-			result.m22 = matrix1.m21*matrix2.m12 + matrix1.m22*matrix2.m22 + matrix1.m23*matrix2.m32 + matrix1.m24*matrix2.m42;
-			result.m23 = matrix1.m21*matrix2.m13 + matrix1.m22*matrix2.m23 + matrix1.m23*matrix2.m33 + matrix1.m24*matrix2.m43;
-			result.m24 = matrix1.m21*matrix2.m14 + matrix1.m22*matrix2.m24 + matrix1.m23*matrix2.m34 + matrix1.m24*matrix2.m44;
-			
-			result.m31 = matrix1.m31*matrix2.m11 + matrix1.m32*matrix2.m21 + matrix1.m33*matrix2.m31 + matrix1.m34*matrix2.m41;
-			result.m32 = matrix1.m31*matrix2.m12 + matrix1.m32*matrix2.m22 + matrix1.m33*matrix2.m32 + matrix1.m34*matrix2.m42;
-			result.m33 = matrix1.m31*matrix2.m13 + matrix1.m32*matrix2.m23 + matrix1.m33*matrix2.m33 + matrix1.m34*matrix2.m43;
-			result.m34 = matrix1.m31*matrix2.m14 + matrix1.m32*matrix2.m24 + matrix1.m33*matrix2.m34 + matrix1.m34*matrix2.m44;
-			
-			result.m41 = matrix1.m41*matrix2.m11 + matrix1.m42*matrix2.m21 + matrix1.m43*matrix2.m31 + matrix1.m44*matrix2.m41;
-			result.m42 = matrix1.m41*matrix2.m12 + matrix1.m42*matrix2.m22 + matrix1.m43*matrix2.m32 + matrix1.m44*matrix2.m42;
-			result.m43 = matrix1.m41*matrix2.m13 + matrix1.m42*matrix2.m23 + matrix1.m43*matrix2.m33 + matrix1.m44*matrix2.m43;
-			result.m44 = matrix1.m41*matrix2.m14 + matrix1.m42*matrix2.m24 + matrix1.m43*matrix2.m34 + matrix1.m44*matrix2.m44;
-#endif
+			result.M41 = matrix1.M41 * matrix2.M11 + matrix1.M42 * matrix2.M21 + matrix1.M43 * matrix2.M31 + matrix1.M44 * matrix2.M41;
+			result.M42 = matrix1.M41 * matrix2.M12 + matrix1.M42 * matrix2.M22 + matrix1.M43 * matrix2.M32 + matrix1.M44 * matrix2.M42;
+			result.M43 = matrix1.M41 * matrix2.M13 + matrix1.M42 * matrix2.M23 + matrix1.M43 * matrix2.M33 + matrix1.M44 * matrix2.M43;
+			result.M44 = matrix1.M41 * matrix2.M14 + matrix1.M42 * matrix2.M24 + matrix1.M43 * matrix2.M34 + matrix1.M44 * matrix2.M44;
 		}
 
 		public static Matrix Multiply(Matrix matrix1, float scaleFactor)
@@ -1038,8 +1288,9 @@ namespace InVision.GameMath
 		{
 #if SIMD
 			//sse version only sets the result when the calculation is complete
-			Multiply(ref matrix1, ref matrix2, out matrix1);
-			return matrix1;
+			Matrix result;
+			Multiply(ref matrix1, ref matrix2, out result);
+			return result;
 #else
 	//non-sse version needs m1 and m1 to remain unchanged
 			Matrix result;
@@ -1076,51 +1327,110 @@ namespace InVision.GameMath
 
 		#region Other maths
 
+		private struct VectorBasis
+		{
+			public unsafe Vector3* Element0;
+			public unsafe Vector3* Element1;
+			public unsafe Vector3* Element2;
+		}
+
+		private struct CanonicalBasis
+		{
+			public Vector3 Row0;
+			public Vector3 Row1;
+			public Vector3 Row2;
+		}
+
+
 		public bool Decompose(out Vector3 scale, out Quaternion rotation, out Vector3 translation)
 		{
-			bool decomp = false;
+			/* Based on:
+			 * http://assimp.svn.sourceforge.net/viewvc/assimp/trunk/include/aiMatrix4x4.inl?view=markup
+			 * 
+			 */
 
 			translation = new Vector3(M41, M42, M43);
 
-			float xs, ys, zs;
+			var rows = new[] {
+				new Vector3(M11, M12, M13),
+ 				new Vector3(M21, M22, M23),
+				new Vector3(M31, M31, M33) 
+			};
 
-			if (System.Math.Sign(M11 * M12 * M13 * M14) < 0)
-				xs = -1f;
-			else
-				xs = 1f;
+			// scaling factors
+			scale = new Vector3(rows[0].Length(), rows[1].Length(), rows[2].Length());
 
-			if (System.Math.Sign(M21 * M22 * M23 * M24) < 0)
-				ys = -1f;
-			else
-				ys = 1f;
+			double trace = r1.X + r2.Y + r3.Z;
+			double[] temp = new double[4];
 
-			if (System.Math.Sign(M31 * M32 * M33 * M34) < 0)
-				zs = -1f;
-			else
-				zs = 1f;
-
-			scale = new Vector3(
-				xs * (float)System.Math.Sqrt(this.M11 * this.M11 + this.M12 * this.M12 + this.M13 * this.M13),
-				ys * (float)System.Math.Sqrt(this.M21 * this.M21 + this.M22 * this.M22 + this.M23 * this.M23),
-				zs * (float)System.Math.Sqrt(this.M31 * this.M31 + this.M32 * this.M32 + this.M33 * this.M33));
-
-			Matrix m1 = new Matrix(this.M11 / scale.X, M12 / scale.X, M13 / scale.X, 0,
-					this.M21 / scale.Y, M22 / scale.Y, M23 / scale.Y, 0,
-					this.M31 / scale.Z, M32 / scale.Z, M33 / scale.Z, 0,
-					0, 0, 0, 1);
-
-			if (Matrix.Transpose(m1) == Matrix.Invert(m1))
+			if (trace > 0.0)
 			{
-				rotation = Quaternion.CreateFromRotationMatrix(m1);
-				decomp = true;
+				double s = Math.Sqrt(trace + 1.0);
+				temp[3] = s * 0.5;
+				s = 0.5 / s;
+
+				temp[0] = ((r3.Y - r2.Z) * s);
+				temp[1] = ((r1.Z - r3.X) * s);
+				temp[2] = (r2.X - r1.Y) * s;
 			}
 			else
 			{
-				rotation = new Quaternion(0f, 0f, 0f, 1f);
+				int i = r1.X < r2.Y ? (r2.Y < r3.Z ? 2 : 1) : (r1.X < r3.Z ? 2 : 0);
+				int j = (i + 1) % 3;
+				int k = (i + 2) % 3;
+
+				double s = Math.Sqrt(this[i, i] - this[j, j] - this[k, k] + 1.0);
+				temp[i] = s * 0.5;
+				s = 0.5 / s;
+
+				temp[3] = (this[k, j] - this[j, k]) * s;
+				temp[j] = (this[j, i] + this[i, j]) * s;
+				temp[k] = (this[k, i] + this[i, k]) * s;
 			}
 
-			return decomp;
+			rotation = new Quaternion((float)temp[0], (float)temp[1], (float)temp[2], (float)temp[3]);
 
+			/*var tmp = (Matrix)MemberwiseClone();
+
+			var angleZ = (float)MathHelper.GetSignedAngleBetween(tmp.Right, Vector3.Right, Vector3.Right);
+
+			if (angleZ != 0)
+				tmp *= CreateRotationZ(angleZ);
+
+			var angleY = (float)MathHelper.GetSignedAngleBetween(tmp.Up, Vector3.Up, Vector3.Right);
+
+			if (angleY != 0)
+				tmp *= CreateRotationY(angleY);
+
+			var angleX = (float)MathHelper.GetSignedAngleBetween(tmp.Forward, Vector3.Forward, Vector3.Right);
+
+			rotation = Quaternion.CreateFromYawPitchRoll(angleX, angleY, angleZ);
+			*/
+
+			//rotation = default(Quaternion);
+
+			//// and remove all scaling from the matrix
+			//if (Math.Abs(scale.X - 0f) > float.Epsilon)
+			//    rows[0] /= scale.X;
+			//else
+			//    return false;
+
+			//if (Math.Abs(scale.Y - 0) > float.Epsilon)
+			//    rows[1] /= scale.Y;
+			//else
+			//    return false;
+
+			//if (Math.Abs(scale.Z - 0) > float.Epsilon)
+			//    rows[2] /= scale.Z;
+			//else
+			//    return false;
+
+			//rotation = new Quaternion(new Matrix3(
+			//    rows[0].X, rows[1].X, rows[2].X,
+			//    rows[0].Y, rows[1].Y, rows[2].Y,
+			//    rows[0].Z, rows[1].Z, rows[2].Z));)))))));)
+
+			return true;
 		}
 
 		public float Determinant()
@@ -1197,10 +1507,10 @@ namespace InVision.GameMath
 
 			// convert the matrix to an array for easy looping
 			float[,] inverse = {
-			                   	{ matrix.Row0.X, matrix.Row0.Y, matrix.Row0.Z, matrix.Row0.W },
-			                   	{ matrix.Row1.X, matrix.Row1.Y, matrix.Row1.Z, matrix.Row1.W },
-			                   	{ matrix.Row2.X, matrix.Row2.Y, matrix.Row2.Z, matrix.Row2.W },
-			                   	{ matrix.Row3.X, matrix.Row3.Y, matrix.Row3.Z, matrix.Row3.W }
+			                   	{matrix.Row0.X, matrix.Row0.Y, matrix.Row0.Z, matrix.Row0.W},
+			                   	{matrix.Row1.X, matrix.Row1.Y, matrix.Row1.Z, matrix.Row1.W},
+			                   	{matrix.Row2.X, matrix.Row2.Y, matrix.Row2.Z, matrix.Row2.W},
+			                   	{matrix.Row3.X, matrix.Row3.Y, matrix.Row3.Z, matrix.Row3.W}
 			                   };
 
 			int icol = 0;
@@ -1219,7 +1529,7 @@ namespace InVision.GameMath
 						{
 							if (pivotIdx[k] == -1)
 							{
-								float absVal = System.Math.Abs(inverse[j, k]);
+								float absVal = Math.Abs(inverse[j, k]);
 								if (absVal > maxPivot)
 								{
 									maxPivot = absVal;
@@ -1292,11 +1602,19 @@ namespace InVision.GameMath
 				}
 			}
 
+#if SIMD
 			result = new Matrix(
 				new Vector4f(inverse[0, 0], inverse[0, 1], inverse[0, 2], inverse[0, 3]),
 				new Vector4f(inverse[1, 0], inverse[1, 1], inverse[1, 2], inverse[1, 3]),
 				new Vector4f(inverse[2, 0], inverse[2, 1], inverse[2, 2], inverse[2, 3]),
 				new Vector4f(inverse[3, 0], inverse[3, 1], inverse[3, 2], inverse[3, 3]));
+#else
+			result = new Matrix(
+				inverse[0, 0], inverse[0, 1], inverse[0, 2], inverse[0, 3],
+				inverse[1, 0], inverse[1, 1], inverse[1, 2], inverse[1, 3],
+				inverse[2, 0], inverse[2, 1], inverse[2, 2], inverse[2, 3],
+				inverse[3, 0], inverse[3, 1], inverse[3, 2], inverse[3, 3]);
+#endif
 		}
 
 		public static Matrix Lerp(Matrix matrix1, Matrix matrix2, float amount)
@@ -1344,7 +1662,53 @@ namespace InVision.GameMath
 
 		public static void Transform(ref Matrix value, ref Quaternion rotation, out Matrix result)
 		{
-			throw new NotImplementedException();
+			float num = rotation.X + rotation.X;
+			float num2 = rotation.Y + rotation.Y;
+			float num3 = rotation.Z + rotation.Z;
+			float num4 = rotation.W * num;
+			float num5 = rotation.W * num2;
+			float num6 = rotation.W * num3;
+			float num7 = rotation.X * num;
+			float num8 = rotation.X * num2;
+			float num9 = rotation.X * num3;
+			float num10 = rotation.Y * num2;
+			float num11 = rotation.Y * num3;
+			float num12 = rotation.Z * num3;
+			float num13 = 1f - num10 - num12;
+			float num14 = num8 - num6;
+			float num15 = num9 + num5;
+			float num16 = num8 + num6;
+			float num17 = 1f - num7 - num12;
+			float num18 = num11 - num4;
+			float num19 = num9 - num5;
+			float num20 = num11 + num4;
+			float num21 = 1f - num7 - num10;
+
+			float item11 = value.M11 * num13 + value.M12 * num14 + value.M13 * num15;
+			float item12 = value.M11 * num16 + value.M12 * num17 + value.M13 * num18;
+			float item13 = value.M11 * num19 + value.M12 * num20 + value.M13 * num21;
+			float item14 = value.M14;
+
+			float item21 = value.M21 * num13 + value.M22 * num14 + value.M23 * num15;
+			float item22 = value.M21 * num16 + value.M22 * num17 + value.M23 * num18;
+			float item23 = value.M21 * num19 + value.M22 * num20 + value.M23 * num21;
+			float item24 = value.M24;
+
+			float item31 = value.M31 * num13 + value.M32 * num14 + value.M33 * num15;
+			float item32 = value.M31 * num16 + value.M32 * num17 + value.M33 * num18;
+			float item33 = value.M31 * num19 + value.M32 * num20 + value.M33 * num21;
+			float item34 = value.M34;
+
+			float item41 = value.M41 * num13 + value.M42 * num14 + value.M43 * num15;
+			float item42 = value.M41 * num16 + value.M42 * num17 + value.M43 * num18;
+			float item43 = value.M41 * num19 + value.M42 * num20 + value.M43 * num21;
+			float item44 = value.M44;
+
+			result = new Matrix(
+				item11, item12, item13, item14,
+				item21, item22, item23, item24,
+				item31, item32, item33, item34,
+				item41, item42, item43, item44);
 		}
 
 		public static Matrix Transpose(Matrix matrix)
@@ -1367,10 +1731,10 @@ namespace InVision.GameMath
 			return new Matrix(xmm0, xmm3, xmm1, xmm4);
 #else
 			return new Matrix (
-				matrix.m11, matrix.m21, matrix.m31, matrix.m41,
-				matrix.m12, matrix.m22, matrix.m32, matrix.m42,
-				matrix.m13, matrix.m23, matrix.m33, matrix.m43,
-				matrix.m14, matrix.m24, matrix.m34, matrix.m44);
+				matrix.M11, matrix.M21, matrix.M31, matrix.M41,
+				matrix.M12, matrix.M22, matrix.M32, matrix.M42,
+				matrix.M13, matrix.M23, matrix.M33, matrix.M43,
+				matrix.M14, matrix.M24, matrix.M34, matrix.M44);
 #endif
 		}
 
@@ -1450,59 +1814,11 @@ namespace InVision.GameMath
 
 		public override int GetHashCode()
 		{
-#if SIMD
-			unsafe
-			{
-				Vector4f f = r1;
-				Vector4i i = *((Vector4i*)&f);
-				i = i ^ i.Shuffle(ShuffleSel.Swap);
-				i = i ^ i.Shuffle(ShuffleSel.RotateLeft);
-				f = r2;
-				Vector4i j = *((Vector4i*)&f);
-				j = j ^ j.Shuffle(ShuffleSel.Swap);
-				j = j ^ j.Shuffle(ShuffleSel.RotateLeft);
-				f = r3;
-				Vector4i k = *((Vector4i*)&f);
-				k = k ^ k.Shuffle(ShuffleSel.Swap);
-				k = k ^ k.Shuffle(ShuffleSel.RotateLeft);
-				f = r4;
-				Vector4i l = *((Vector4i*)&f);
-				l = l ^ l.Shuffle(ShuffleSel.Swap);
-				l = l ^ l.Shuffle(ShuffleSel.RotateLeft);
-				return (i ^ j ^ k ^ l).X;
-			}
-#elif UNSAFE
-			unsafe {
-				float f = m11;
-				int acc = *((int*)&f);
-				f = m12; acc ^= *((int*)&f);
-				f = m13; acc ^= *((int*)&f);
-				f = m14; acc ^= *((int*)&f);
-				
-				f = m21; acc ^= *((int*)&f);
-				f = m22; acc ^= *((int*)&f);
-				f = m23; acc ^= *((int*)&f);
-				f = m24; acc ^= *((int*)&f);
-				
-				f = m31; acc ^= *((int*)&f);
-				f = m32; acc ^= *((int*)&f);
-				f = m33; acc ^= *((int*)&f);
-				f = m34; acc ^= *((int*)&f);
-				
-				f = m41; acc ^= *((int*)&f);
-				f = m42; acc ^= *((int*)&f);
-				f = m43; acc ^= *((int*)&f);
-				f = m44; acc ^= *((int*)&f);
-				return acc;
-			}
-
-#else
 			return
-				m11.GetHashCode () ^ m12.GetHashCode () ^ m13.GetHashCode () ^ m14.GetHashCode () ^
-				m21.GetHashCode () ^ m22.GetHashCode () ^ m23.GetHashCode () ^ m24.GetHashCode () ^
-				m31.GetHashCode () ^ m32.GetHashCode () ^ m33.GetHashCode () ^ m34.GetHashCode () ^
-				m41.GetHashCode () ^ m42.GetHashCode () ^ m43.GetHashCode () ^ m44.GetHashCode ();
-#endif
+				M11.GetHashCode () ^ M12.GetHashCode () ^ M13.GetHashCode () ^ M14.GetHashCode () ^
+				M21.GetHashCode () ^ M22.GetHashCode () ^ M23.GetHashCode () ^ M24.GetHashCode () ^
+				M31.GetHashCode () ^ M32.GetHashCode () ^ M33.GetHashCode () ^ M34.GetHashCode () ^
+				M41.GetHashCode () ^ M42.GetHashCode () ^ M43.GetHashCode () ^ M44.GetHashCode ();
 		}
 
 		public static bool operator ==(Matrix a, Matrix b)

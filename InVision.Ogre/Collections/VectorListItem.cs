@@ -1,4 +1,4 @@
-﻿namespace InVision.Collections
+﻿namespace InVision.Ogre.Collections
 {
 	public enum VectorListItem
 	{

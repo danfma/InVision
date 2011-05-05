@@ -1,9 +1,8 @@
 ﻿using System;
 using System.Runtime.InteropServices;
-using InVision.Rendering;
 using InVision.GameMath;
 
-namespace InVision.Native.Ogre
+namespace InVision.Ogre.Native
 {
 	internal sealed class NativeOgreCamera : PlatformInvoke
 	{

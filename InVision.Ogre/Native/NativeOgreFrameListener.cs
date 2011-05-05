@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Runtime.InteropServices;
-using InVision.Rendering.Listeners;
+using InVision.Ogre.Listeners;
 
-namespace InVision.Native.Ogre
+namespace InVision.Ogre.Native
 {
 	internal sealed class NativeOgreFrameListener : PlatformInvoke
 	{

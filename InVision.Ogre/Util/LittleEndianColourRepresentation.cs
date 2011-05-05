@@ -1,4 +1,4 @@
-﻿namespace InVision.Rendering.Util
+﻿namespace InVision.Ogre.Util
 {
 	public class LittleEndianColourRepresentation : ColourRepresentation
 	{

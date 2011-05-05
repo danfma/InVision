@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace InVision.Native
+namespace InVision.Ogre.Native
 {
 	internal sealed class ExceptionRaiser : IDisposable
 	{

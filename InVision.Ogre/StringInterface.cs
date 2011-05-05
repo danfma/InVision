@@ -1,9 +1,8 @@
 ﻿using System;
 using System.Runtime.InteropServices;
 using InVision.Native;
-using InVision.Native.Ogre;
 
-namespace InVision.Rendering
+namespace InVision.Ogre
 {
 	public class StringInterface : Handle
 	{

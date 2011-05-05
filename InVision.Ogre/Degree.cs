@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Runtime.InteropServices;
-using InVision.Rendering.Util;
+using InVision.GameMath;
+using InVision.Ogre.Util;
 
-namespace InVision.Rendering
+namespace InVision.Ogre
 {
 	[StructLayout(LayoutKind.Sequential)]
 	public struct Degree : IEquatable<Degree>, IComparable<Degree>
@@ -43,7 +44,7 @@ namespace InVision.Rendering
 		/// <value>The value radians.</value>
 		public float ValueRadians
 		{
-			get { return MathUtility.DegreeToRadian(degrees); }
+			get { return degrees.ToRadian(); }
 		}
 
 		/// <summary>
@@ -234,7 +235,7 @@ namespace InVision.Rendering
 		/// <returns></returns>
 		public static Degree FromRadians(float radians)
 		{
-			return new Degree(MathUtility.RadianToDegree(radians));
+			return new Degree(radians.ToDegree());
 		}
 
 		public static Degree Add(ref Degree right)

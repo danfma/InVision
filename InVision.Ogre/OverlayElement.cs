@@ -1,7 +1,8 @@
 ﻿using System;
-using InVision.Native.Ogre;
+using InVision.Native;
+using InVision.Ogre.Native;
 
-namespace InVision.Rendering
+namespace InVision.Ogre
 {
 	public class OverlayElement : Handle
 	{

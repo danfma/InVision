@@ -1,6 +1,6 @@
 ﻿using System.Runtime.InteropServices;
 
-namespace InVision.Rendering.Listeners
+namespace InVision.Ogre.Listeners
 {
 	[StructLayout(LayoutKind.Sequential)]
 	public struct FrameEvent

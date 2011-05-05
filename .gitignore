@@ -11,6 +11,10 @@
 
 */*/bin
 */*/obj
+/Tests/*/bin
+/Tests/*/obj
+/Tests/*/*/bin
+/Tests/*/*/obj
 
 .DS_Store
 InVision.suo

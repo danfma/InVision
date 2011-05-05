@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
-using InVision.Rendering.Util;
+using InVision.Ogre.Util;
 
-namespace InVision.Rendering
+namespace InVision.Ogre
 {
 	/// <summary>
 	/// 	Class representing colour.

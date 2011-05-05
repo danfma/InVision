@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Runtime.InteropServices;
 
-namespace InVision.Native
+namespace InVision.Ogre.Native
 {
 	internal sealed class NativeEnumerator : PlatformInvoke
 	{

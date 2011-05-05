@@ -1,10 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using InVision.Native;
-using InVision.Native.Ogre;
+using InVision.Ogre.Native;
 
-namespace InVision.Collections
+namespace InVision.Ogre.Collections
 {
 	public class NameValueCollection : KeyValueCollection<string, string>
 	{

@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Runtime.InteropServices;
-using InVision.Rendering.Util;
+using InVision.Ogre.Util;
+using InVision.GameMath;
 
-namespace InVision.Rendering
+namespace InVision.Ogre
 {
 	[StructLayout(LayoutKind.Sequential)]
 	public struct Radian : IEquatable<Radian>, IComparable<Radian>
@@ -34,7 +35,7 @@ namespace InVision.Rendering
 		/// <value>The value degrees.</value>
 		public float ValueDegrees
 		{
-			get { return MathUtility.RadianToDegree(radians); }
+			get { return radians.ToDegree(); }
 		}
 
 		/// <summary>

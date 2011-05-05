@@ -1,4 +1,4 @@
-﻿using InVision.Rendering;
+﻿using InVision.Ogre;
 
 namespace InVision.TutorialFx
 {

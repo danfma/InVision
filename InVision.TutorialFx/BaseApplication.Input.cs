@@ -1,6 +1,6 @@
 ﻿using System;
+using InVision.Ogre;
 using InVision.OIS;
-using InVision.Rendering;
 
 namespace InVision.TutorialFx
 {

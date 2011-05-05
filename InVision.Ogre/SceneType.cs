@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace InVision.Rendering
+namespace InVision.Ogre
 {
 	[Flags]
 	public enum SceneType : uint

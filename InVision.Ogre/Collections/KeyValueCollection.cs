@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace InVision.Collections
+namespace InVision.Ogre.Collections
 {
 	public abstract class KeyValueCollection<TKey, TValue> : IEnumerable<KeyValuePair<TKey, TValue>>
 	{

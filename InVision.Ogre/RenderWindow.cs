@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Runtime.InteropServices;
 using InVision.Native;
-using InVision.Native.Ogre;
+using InVision.Ogre.Native;
 
-namespace InVision.Rendering
+namespace InVision.Ogre
 {
 	public class RenderWindow : Handle
 	{

@@ -1,4 +1,4 @@
-﻿namespace InVision.Rendering.Listeners
+﻿namespace InVision.Ogre.Listeners
 {
 	/// <summary>
 	/// 

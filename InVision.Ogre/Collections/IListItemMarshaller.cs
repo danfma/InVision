@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace InVision.Collections
+namespace InVision.Ogre.Collections
 {
 	internal interface IListItemMarshaller<T>
 	{

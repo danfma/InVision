@@ -2,9 +2,9 @@
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
-using InVision.Native.Ogre;
+using InVision.Native;
 
-namespace InVision.Native
+namespace InVision.Ogre.Native
 {
 	internal static class MarshallExtensions
 	{

@@ -1,10 +1,9 @@
 ﻿using System;
 using InVision.GameMath;
 using InVision.Native;
-using InVision.Native.Ogre;
-using InVision.GameMath;
+using InVision.Ogre.Native;
 
-namespace InVision.Rendering
+namespace InVision.Ogre
 {
 	/// <summary>
 	/// </summary>

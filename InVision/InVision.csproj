@@ -144,8 +144,10 @@
     <Compile Include="GameMath\BoundingSphere.cs" />
     <Compile Include="GameMath\Color.cs" />
     <Compile Include="GameMath\Enums.cs" />
+    <Compile Include="GameMath\Gjk.cs" />
     <Compile Include="GameMath\MathHelper.cs" />
     <Compile Include="GameMath\Matrix.cs" />
+    <Compile Include="GameMath\Matrix3.cs" />
     <Compile Include="GameMath\Plane.cs" />
     <Compile Include="GameMath\Point.cs" />
     <Compile Include="GameMath\Quaternion.cs" />
@@ -153,6 +155,7 @@
     <Compile Include="GameMath\Rectangle.cs" />
     <Compile Include="GameMath\Vector2.cs" />
     <Compile Include="GameMath\Vector3.cs" />
+    <Compile Include="GameMath\Vector3.Extension.cs" />
     <Compile Include="GameMath\Vector4.cs" />
     <Compile Include="Native\Collections\Dictionary.cs" />
     <Compile Include="Native\Collections\INativeCollection.cs" />

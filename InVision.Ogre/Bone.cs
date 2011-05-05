@@ -1,4 +1,4 @@
-﻿namespace InVision.Rendering
+﻿namespace InVision.Ogre
 {
 	class Bone
 	{

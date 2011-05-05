@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Runtime.InteropServices;
 
-namespace InVision.Native.Ogre
+namespace InVision.Ogre.Native
 {
 	internal static class NativeOgreUtilities
 	{

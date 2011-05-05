@@ -2,8 +2,9 @@
 using System.Collections;
 using System.Collections.Generic;
 using InVision.Native;
+using InVision.Ogre.Native;
 
-namespace InVision.Collections
+namespace InVision.Ogre.Collections
 {
 	public abstract class VectorList<T> : Handle,  IList<T>
 	{

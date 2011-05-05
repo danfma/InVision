@@ -4,8 +4,8 @@ using System.Linq;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
 using InVision.GameMath;
-using InVision.Rendering;
-using InVision.Rendering.Listeners;
+using InVision.Ogre;
+using InVision.Ogre.Listeners;
 
 namespace InVision.TutorialFx
 {

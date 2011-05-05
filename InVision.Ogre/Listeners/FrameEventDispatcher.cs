@@ -2,9 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using InVision.Native;
-using InVision.Native.Ogre;
+using InVision.Ogre.Native;
+using MarshallExtensions = InVision.Native.MarshallExtensions;
 
-namespace InVision.Rendering.Listeners
+namespace InVision.Ogre.Listeners
 {
 	public sealed class FrameEventDispatcher : Handle, IFrameListener, IEventDispatcher
 	{
@@ -78,7 +79,7 @@ namespace InVision.Rendering.Listeners
 		/// <returns></returns>
 		private bool OnFrameStarted(IntPtr pEvent)
 		{
-			var e = pEvent.AsStructure<FrameEvent>();
+			var e = MarshallExtensions.AsStructure<FrameEvent>(pEvent);
 
 			return OnFrameStarted(e);
 		}
@@ -90,7 +91,7 @@ namespace InVision.Rendering.Listeners
 		/// <returns></returns>
 		private bool OnFrameEnded(IntPtr pEvent)
 		{
-			var e = pEvent.AsStructure<FrameEvent>();
+			var e = MarshallExtensions.AsStructure<FrameEvent>(pEvent);
 
 			return OnFrameEnded(e);
 		}

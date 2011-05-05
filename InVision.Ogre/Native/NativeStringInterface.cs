@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace InVision.Native.Ogre
+﻿namespace InVision.Ogre.Native
 {
 	internal sealed class NativeStringInterface : PlatformInvoke
 	{
