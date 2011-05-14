@@ -1,0 +1,114 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" DefaultTargets="Build">
+  <PropertyGroup>
+    <ProjectGuid>{1DA3517F-24BC-4FB9-9121-F418B12B1C4A}</ProjectGuid>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
+    <OutputType>Library</OutputType>
+    <RootNamespace>Framework.Tests</RootNamespace>
+    <AssemblyName>Framework.Tests</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <TargetFrameworkProfile>Client</TargetFrameworkProfile>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RunPostBuildEvent>OnBuildSuccess</RunPostBuildEvent>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Platform)' == 'x86' ">
+    <PlatformTarget>x86</PlatformTarget>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
+    <OutputPath>bin\Debug\</OutputPath>
+    <DebugSymbols>True</DebugSymbols>
+    <DebugType>Full</DebugType>
+    <Optimize>False</Optimize>
+    <CheckForOverflowUnderflow>True</CheckForOverflowUnderflow>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
+    <OutputPath>bin\Release\</OutputPath>
+    <DebugSymbols>False</DebugSymbols>
+    <DebugType>None</DebugType>
+    <Optimize>True</Optimize>
+    <CheckForOverflowUnderflow>False</CheckForOverflowUnderflow>
+    <DefineConstants>TRACE</DefineConstants>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="nunit.framework">
+      <HintPath>..\..\..\Libs\NUnit\nunit.framework.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Xml.Linq">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Scripting\Boo\BooScriptTests.cs" />
+    <Compile Include="Scripting\Cobra\CobraScriptTests.cs" />
+    <Compile Include="Scripting\Lua\LuaScriptTests.cs" />
+    <Compile Include="Scripting\Ruby\RubyScriptTests.cs" />
+    <Compile Include="Scripting\ScriptFactoryTests.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\InVision.Framework\InVision.Framework.csproj">
+      <Project>{2104F696-0FF2-4634-89D1-56613AEB7E7C}</Project>
+      <Name>InVision.Framework</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\InVision.Scripting.Boo\InVision.Scripting.Boo.csproj">
+      <Project>{20B137CC-2EF3-402B-8E29-7E38E6606F13}</Project>
+      <Name>InVision.Scripting.Boo</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\InVision.Scripting.Cobra\InVision.Scripting.Cobra.csproj">
+      <Project>{C31DDEDA-CA54-4D48-AF8B-5484F22EF11D}</Project>
+      <Name>InVision.Scripting.Cobra</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\InVision.Scripting.IronRuby\InVision.Scripting.IronRuby.csproj">
+      <Project>{9AC5081A-26D7-4521-A7DA-80F548BD25C8}</Project>
+      <Name>InVision.Scripting.IronRuby</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\InVision.Scripting.Lua\InVision.Scripting.Lua.csproj">
+      <Project>{F0D751C6-A209-48BF-93F9-E368165A4FE3}</Project>
+      <Name>InVision.Scripting.Lua</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\InVision\InVision.csproj">
+      <Project>{4A69EB8E-6E49-415C-ACB4-9CB904EA54DB}</Project>
+      <Name>InVision</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup />
+  <ItemGroup>
+    <None Include="Scripting\Boo\Configurer.boo">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Scripting\Cobra\Configurer.cobra">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Scripting\Cobra\HelloWorld.cobra">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Scripting\Lua\Configurer.lua">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Scripting\Lua\HelloWorld.lua">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Scripting\Ruby\Configurer.rb">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Scripting\Ruby\HelloWorld.rb">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Scripting\Boo\HelloWorld.boo">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.Targets" />
+  <PropertyGroup>
+    <PostBuildEvent>copy "$(SolutionDir)\Libs\Boo\*.dll" "$(TargetDir)"
+copy "$(SolutionDir)\Libs\Cobra\*.*" "$(TargetDir)"</PostBuildEvent>
+  </PropertyGroup>
+</Project>

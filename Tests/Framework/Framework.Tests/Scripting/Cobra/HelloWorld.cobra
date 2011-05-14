@@ -1,0 +1,3 @@
+﻿class HelloWorld
+	def onLoad
+		print "Cobra onLoad"

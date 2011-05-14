@@ -1,0 +1,9 @@
+﻿use InVision.GameMath
+use InVision.Framework.Config
+
+class CobraConfigurer implements IConfigurator
+	def configure(config as FxConfiguration)
+		config.screen.width = 640
+		config.screen.height = 480
+		config.screen.backgroundColor = Color.black
+	

@@ -13,7 +13,7 @@
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <SignAssembly>true</SignAssembly>
-    <AssemblyOriginatorKeyFile>..\InVision\InVision.pfx</AssemblyOriginatorKeyFile>
+    <AssemblyOriginatorKeyFile>InVision.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -197,4 +197,10 @@
       <Name>InVision</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup>
+    <None Include="InVision.snk" />
+  </ItemGroup>
+  <PropertyGroup>
+    <PostBuildEvent>copy "$(TargetDir)*.*" "$(SolutionDir)Samples\Empty\Bin\"</PostBuildEvent>
+  </PropertyGroup>
 </Project>
