@@ -1,30 +1,22 @@
 ﻿using System;
 using System.Runtime.InteropServices;
+using InVision.Native.Ext;
 
 namespace InVision.OIS.Native
 {
+	[GeneratorType, ValueObject]
 	[StructLayout(LayoutKind.Sequential)]
-	internal unsafe struct EventArgDescriptor
+	internal struct EventArgDescriptor
 	{
-		private readonly IntPtr _self;
-		private readonly IntPtr* _device;
+		private readonly Handle _self;
 
 		/// <summary>
 		/// Gets the self.
 		/// </summary>
 		/// <value>The self.</value>
-		public IntPtr Self
+		public Handle Self
 		{
 			get { return _self; }
-		}
-
-		/// <summary>
-		/// Gets the device.
-		/// </summary>
-		/// <value>The device.</value>
-		public IntPtr Device
-		{
-			get { return *_device; }
 		}
 	}
 }

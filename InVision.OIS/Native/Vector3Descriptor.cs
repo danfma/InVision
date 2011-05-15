@@ -1,11 +1,13 @@
 ﻿using System.Runtime.InteropServices;
+using InVision.Native.Ext;
 
 namespace InVision.OIS.Native
 {
+	[GeneratorType, ValueObject]
 	[StructLayout(LayoutKind.Sequential)]
 	internal unsafe struct Vector3Descriptor
 	{
-		private readonly ComponentDescriptor _baseDescriptor;
+		private readonly ComponentDescriptor _base;
 		private readonly float* _x;
 		private readonly float* _y;
 		private readonly float* _z;
@@ -14,9 +16,9 @@ namespace InVision.OIS.Native
 		/// Gets the base info.
 		/// </summary>
 		/// <value>The base info.</value>
-		public ComponentDescriptor BaseDescriptor
+		public ComponentDescriptor Base
 		{
-			get { return _baseDescriptor; }
+			get { return _base; }
 		}
 
 		/// <summary>

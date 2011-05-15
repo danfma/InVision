@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Runtime.InteropServices;
+using InVision.Native.Ext;
 using InVision.OIS.Components;
 
 namespace InVision.OIS.Native
 {
+	[GeneratorType, FunctionProvider, TargetCppType("Component", Namespace = "OIS")]
 	internal class NativeComponent : NativeOIS
 	{
 		/// <summary>
@@ -14,10 +16,14 @@ namespace InVision.OIS.Native
 			Init();
 		}
 
-		[DllImport(OISLibrary, EntryPoint = "ois_new_component")]
-		public static extern ComponentDescriptor New(ComponentType componentType);
+		[DllImport(OISLibrary, EntryPoint = "new_component_by_ctype")]
+		public static extern ComponentDescriptor New(ComponentType ctype);
 
-		[DllImport(OISLibrary, EntryPoint = "ois_delete_component")]
-		public static extern void Delete(IntPtr self);
+		/// <summary>
+		/// Deletes the specified handle.
+		/// </summary>
+		/// <param name="handle">The handle.</param>
+		[DllImport(OISLibrary, EntryPoint = "delete_component")]
+		public static extern void Delete(Handle handle);
 	}
 }

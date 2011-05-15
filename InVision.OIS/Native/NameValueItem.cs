@@ -1,14 +1,16 @@
 ﻿using System.Collections.Generic;
 using System.Runtime.InteropServices;
+using InVision.Native.Ext;
 
 namespace InVision.OIS.Native
 {
+	[GeneratorType, ValueObject]
 	[StructLayout(LayoutKind.Sequential)]
 	internal struct NameValueItem
 	{
 		[MarshalAs(UnmanagedType.LPStr)]
 		public string Name;
-		
+
 		[MarshalAs(UnmanagedType.LPStr)]
 		public string Value;
 

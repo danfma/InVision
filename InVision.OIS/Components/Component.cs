@@ -1,10 +1,10 @@
 using System;
-using InVision.Native;
+using InVision.Native.Ext;
 using InVision.OIS.Native;
 
 namespace InVision.OIS.Components
 {
-	public class Component : Handle
+	public class Component : HandleContainer
 	{
 		private ComponentDescriptor _descriptor;
 
@@ -23,7 +23,7 @@ namespace InVision.OIS.Components
 		/// <param name="descriptor">The extended.</param>
 		/// <param name="ownsHandle">if set to <c>true</c> [owns handle].</param>
 		internal Component(ComponentDescriptor descriptor, bool ownsHandle = false)
-			: base(descriptor.Self, ownsHandle)
+			: base(descriptor.Handle, ownsHandle)
 		{
 			_descriptor = descriptor;
 		}
@@ -38,12 +38,12 @@ namespace InVision.OIS.Components
 		}
 
 		/// <summary>
-		/// Releases the valid handle.
+		/// Deletes the handle.
 		/// </summary>
-		protected override void ReleaseValidHandle()
+		protected override void DeleteHandle()
 		{
-			NativeComponent.Delete(handle);
-			_descriptor = default(ComponentDescriptor);
+			NativeComponent.Delete(SelfHandle);
+			_descriptor = new ComponentDescriptor();
 		}
 	}
 }

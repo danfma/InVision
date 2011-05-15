@@ -6,10 +6,10 @@ namespace CodeGenerator
 	internal interface IGenerator
 	{
 		/// <summary>
-		/// Generates the specified types.
+		/// Generates the specified options.
 		/// </summary>
-		/// <param name="projectName">Name of the project.</param>
+		/// <param name="options">The options.</param>
 		/// <param name="types">The types.</param>
-		void Generate(string projectName, IEnumerable<Type> types);
+		void Generate(Options options, IEnumerable<Type> types);
 	}
 }

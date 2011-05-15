@@ -168,7 +168,15 @@
     <Compile Include="Native\Collections\MultiDictionary.cs" />
     <Compile Include="Native\Enumerator.cs" />
     <Compile Include="Native\ExceptionRaiser.cs" />
+    <Compile Include="Native\Ext\ConstructorAttribute.cs" />
+    <Compile Include="Native\Ext\DestructorAttribute.cs" />
+    <Compile Include="Native\Ext\FunctionProviderAttribute.cs" />
+    <Compile Include="Native\Ext\GeneratorTypeAttribute.cs" />
     <Compile Include="Native\Ext\Handle.cs" />
+    <Compile Include="Native\Ext\HandleContainer.cs" />
+    <Compile Include="Native\Ext\HandleReference.cs" />
+    <Compile Include="Native\Ext\TargetCppTypeAttribute.cs" />
+    <Compile Include="Native\Ext\ValueObjectAttribute.cs" />
     <Compile Include="Native\Handle.cs" />
     <Compile Include="Native\InVisionException.cs" />
     <Compile Include="Native\MarshallExtensions.cs" />

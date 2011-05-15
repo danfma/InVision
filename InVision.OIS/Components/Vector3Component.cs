@@ -23,7 +23,7 @@ namespace InVision.OIS.Components
 		/// <param name="descriptor">The native ref.</param>
 		/// <param name="ownsHandle">if set to <c>true</c> [owns handle].</param>
 		internal Vector3Component(Vector3Descriptor descriptor, bool ownsHandle = false)
-			: base(descriptor.BaseDescriptor, ownsHandle)
+			: base(descriptor.Base, ownsHandle)
 		{
 			_descriptor = descriptor;
 		}
@@ -58,9 +58,9 @@ namespace InVision.OIS.Components
 		/// <summary>
 		/// Releases the valid handle.
 		/// </summary>
-		protected override void ReleaseValidHandle()
+		protected override void DeleteHandle()
 		{
-			NativeVector3.Delete(handle);
+			NativeVector3.Delete(SelfHandle);
 			_descriptor = default(Vector3Descriptor);
 		}
 	}

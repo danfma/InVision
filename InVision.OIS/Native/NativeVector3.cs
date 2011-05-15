@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Runtime.InteropServices;
+using InVision.Native.Ext;
 
 namespace InVision.OIS.Native
 {
@@ -17,6 +18,6 @@ namespace InVision.OIS.Native
 		public static extern Vector3Descriptor New(float x, float y, float z);
 
 		[DllImport(OISLibrary, EntryPoint = "ois_delete_vector3")]
-		public static extern void Delete(IntPtr self);
+		public static extern void Delete(Handle self);
 	}
 }

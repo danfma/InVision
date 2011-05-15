@@ -1,9 +1,10 @@
 ﻿using System;
+using InVision.Native.Ext;
 using InVision.OIS.Native;
 
 namespace InVision.OIS
 {
-	public class EventArgs : System.EventArgs
+	public class EventArgs : HandleReference
 	{
 		private readonly EventArgDescriptor _descriptor;
 
@@ -12,6 +13,7 @@ namespace InVision.OIS
 		/// </summary>
 		/// <param name="descriptor">The descriptor.</param>
 		internal EventArgs(EventArgDescriptor descriptor)
+			: base(descriptor.Self)
 		{
 			_descriptor = descriptor;
 		}
@@ -20,9 +22,9 @@ namespace InVision.OIS
 		/// Gets or sets the device.
 		/// </summary>
 		/// <value>The device.</value>
-		public IntPtr Device
+		public IDevice Device
 		{
-			get { return _descriptor.Device; }
+			get { throw new NotImplementedException(); }
 		}
 	}
 }

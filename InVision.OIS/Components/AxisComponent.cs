@@ -12,7 +12,7 @@ namespace InVision.OIS.Components
 		public AxisComponent()
 			: this(NativeAxis.New(), true)
 		{
-			
+
 		}
 
 		/// <summary>
@@ -21,7 +21,7 @@ namespace InVision.OIS.Components
 		/// <param name="pSelf">The p self.</param>
 		/// <param name="ownsHandle">if set to <c>true</c> [owns handle].</param>
 		internal AxisComponent(AxisDescriptor pSelf, bool ownsHandle = false)
-			: base(pSelf.BaseDescriptor, ownsHandle)
+			: base(pSelf.Base, ownsHandle)
 		{
 			_descriptor = pSelf;
 		}
@@ -56,9 +56,9 @@ namespace InVision.OIS.Components
 		/// <summary>
 		/// Releases the valid handle.
 		/// </summary>
-		protected override void ReleaseValidHandle()
+		protected override void DeleteHandle()
 		{
-			NativeAxis.Delete(handle);
+			NativeAxis.Delete(SelfHandle);
 			_descriptor = default(AxisDescriptor);
 		}
 	}

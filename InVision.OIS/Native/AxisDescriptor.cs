@@ -1,22 +1,25 @@
-﻿using System.Runtime.InteropServices;
+﻿using System;
+using System.Runtime.InteropServices;
+using InVision.Native.Ext;
 
 namespace InVision.OIS.Native
 {
+	[GeneratorType, ValueObject]
 	[StructLayout(LayoutKind.Sequential)]
 	internal unsafe struct AxisDescriptor
 	{
-		private readonly ComponentDescriptor _baseDescriptor;
+		private readonly ComponentDescriptor _base;
 		private readonly int* _abs;
 		private readonly int* _rel;
-		private readonly byte* _absOnly;
+		private readonly bool* _absOnly;
 
 		/// <summary>
 		/// Gets the base info.
 		/// </summary>
 		/// <value>The base info.</value>
-		public ComponentDescriptor BaseDescriptor
+		public ComponentDescriptor Base
 		{
-			get { return _baseDescriptor; }
+			get { return _base; }
 		}
 
 		/// <summary>
@@ -43,7 +46,7 @@ namespace InVision.OIS.Native
 		/// <value><c>true</c> if [abs only]; otherwise, <c>false</c>.</value>
 		public bool AbsOnly
 		{
-			get { return *_absOnly != 0; }
+			get { return *_absOnly; }
 		}
 	}
 }

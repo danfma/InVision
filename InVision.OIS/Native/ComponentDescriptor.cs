@@ -1,33 +1,24 @@
 ﻿using System;
 using System.Runtime.InteropServices;
+using InVision.Native.Ext;
 using InVision.OIS.Components;
 
 namespace InVision.OIS.Native
 {
+	[GeneratorType, ValueObject]
 	[StructLayout(LayoutKind.Sequential)]
 	internal unsafe struct ComponentDescriptor
 	{
-		private readonly IntPtr _self;
-		private readonly ComponentType* _componentType;
-
-		/// <summary>
-		/// Initializes a new instance of the <see cref="ComponentDescriptor"/> struct.
-		/// </summary>
-		/// <param name="self">The handle.</param>
-		/// <param name="componentType">Type of the p component.</param>
-		public ComponentDescriptor(IntPtr self, ComponentType* componentType)
-		{
-			_self = self;
-			_componentType = componentType;
-		}
+		private readonly Handle _handle;
+		private readonly ComponentType* _ctype;
 
 		/// <summary>
 		/// Gets the handle.
 		/// </summary>
 		/// <value>The handle.</value>
-		public IntPtr Self
+		public Handle Handle
 		{
-			get { return _self; }
+			get { return _handle; }
 		}
 
 		/// <summary>
@@ -36,7 +27,7 @@ namespace InVision.OIS.Native
 		/// <value>The type of the component.</value>
 		public ComponentType ComponentType
 		{
-			get { return *_componentType; }
+			get { return *_ctype; }
 		}
 	}
 }
