@@ -6,13 +6,13 @@ namespace CodeGenerator
 	public class CsGenerator : IGenerator
 	{
 		/// <summary>
-		/// Generates the specified types.
+		/// Generates the specified options.
 		/// </summary>
-		/// <param name="projectName">Name of the project.</param>
+		/// <param name="options">The options.</param>
 		/// <param name="types">The types.</param>
-		public void Generate(string projectName, IEnumerable<Type> types)
+		public void Generate(Options options, IEnumerable<Type> types)
 		{
-			throw new NotImplementedException();
+			
 		}
 	}
 }

@@ -22,3 +22,4 @@ InVision.suo
 /Platform/Projects
 /Platform/*-build-desktop/
 /Platform/NativeLibs/*.pro.user*
+/Platform/Nursery/*-build-desktop

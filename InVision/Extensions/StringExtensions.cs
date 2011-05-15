@@ -28,7 +28,7 @@ namespace InVision.Extensions
 			if (string.IsNullOrEmpty(@this))
 				return @this;
 
-			return Char.ToLower(@this[0]) + @this.Length > 1 ? @this.Substring(1) : string.Empty;
+			return Char.ToLower(@this[0]) + (@this.Length > 1 ? @this.Substring(1) : string.Empty);
 		}
 
 		/// <summary>

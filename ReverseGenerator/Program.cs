@@ -4,6 +4,7 @@ using System.Linq;
 using System.Reflection;
 using InVision.Extensions;
 using InVision.Native.Ext;
+using NDesk.Options;
 
 namespace CodeGenerator
 {
@@ -11,16 +12,23 @@ namespace CodeGenerator
 	{
 		private static void Main(string[] args)
 		{
-			if (args.Count() < 2)
+			if (args.Count() < 3)
 			{
 				ShowUsage();
 				return;
 			}
 
-			string projectName = args[0];
-			IEnumerable<Assembly> assemblies = ParseArguments(args.Skip(1));
+			var options = new Options();
+			var optionSet = new OptionSet {
+				{ "p|project=",		v => options.ProjectName = v },
+				{ "a|assembly=",	v => options.AssembliesToScan.Add(Assembly.LoadFrom(v)) },
+				{ "cs|csout=",			v => options.CsOutputDir = v },
+				{ "cpp|cppout=",		v => options.CppOutputDir = v }
+			};
 
-			GenerateFiles(projectName, assemblies);
+			optionSet.Parse(args);
+
+			GenerateFiles(options);
 		}
 
 		/// <summary>
@@ -28,21 +36,20 @@ namespace CodeGenerator
 		/// </summary>
 		private static void ShowUsage()
 		{
-			Console.WriteLine("Usage: CodeGenerator projectName assembly [assembly2 assembly3 ...]");
+			Console.WriteLine("Usage: CodeGenerator projectName outputDir assembly [assembly2 assembly3 ...]");
 		}
 
 		/// <summary>
 		/// Generates the files.
 		/// </summary>
-		/// <param name="projectName">Name of the project.</param>
-		/// <param name="assemblies">The assemblies.</param>
-		private static void GenerateFiles(string projectName, IEnumerable<Assembly> assemblies)
+		/// <param name="options">The options.</param>
+		private static void GenerateFiles(Options options)
 		{
 			IEnumerable<IGenerator> generators = GetGenerators();
 
 			foreach (IGenerator generator in generators)
 			{
-				generator.Generate(projectName, GetCppTypes(assemblies));
+				generator.Generate(options, GetCppTypes(options.AssembliesToScan));
 			}
 		}
 
@@ -67,16 +74,6 @@ namespace CodeGenerator
 				from type in assembly.GetTypes()
 				where type.HasAttribute<GeneratorTypeAttribute>()
 				select type;
-		}
-
-		/// <summary>
-		/// Parses the arguments.
-		/// </summary>
-		/// <param name="args">The args.</param>
-		/// <returns></returns>
-		private static IEnumerable<Assembly> ParseArguments(IEnumerable<string> args)
-		{
-			return args.Select(Assembly.LoadFrom).ToList();
 		}
 	}
 }

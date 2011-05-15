@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Runtime.InteropServices;
+using InVision.Native.Ext;
 
 namespace InVision.OIS.Native
 {
@@ -17,6 +18,6 @@ namespace InVision.OIS.Native
 		public static extern AxisDescriptor New();
 
 		[DllImport(OISLibrary, EntryPoint = "ois_delete_axis")]
-		public static extern void Delete(IntPtr self);
+		public static extern void Delete(Handle self);
 	}
 }

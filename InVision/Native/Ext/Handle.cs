@@ -25,56 +25,14 @@ namespace InVision.Native.Ext
 		{
 			get { return _value; }
 		}
-	}
 
-	public class GeneratorTypeAttribute : Attribute
-	{
-		
-	}
-
-	[AttributeUsage(AttributeTargets.Interface)]
-	public class FunctionProviderAttribute : Attribute
-	{
-		
-	}
-
-	[AttributeUsage(AttributeTargets.Interface)]
-	public class TargetCppTypeAttribute : Attribute
-	{
 		/// <summary>
-		/// Initializes a new instance of the <see cref="TargetCppTypeAttribute"/> class.
+		/// Gets a value indicating whether this instance is valid.
 		/// </summary>
-		/// <param name="typename">The typename.</param>
-		public TargetCppTypeAttribute(string typename)
+		/// <value><c>true</c> if this instance is valid; otherwise, <c>false</c>.</value>
+		public bool IsValid
 		{
-			Typename = typename;
+			get { return _value > 0; }
 		}
-
-		/// <summary>
-		/// Gets or sets the typename.
-		/// </summary>
-		/// <value>The typename.</value>
-		public string Typename { get; private set; }
-
-		/// <summary>
-		/// Gets or sets the namespace.
-		/// </summary>
-		/// <value>The namespace.</value>
-		public string Namespace { get; set; }
 	}
-
-	/// <summary>
-	/// 
-	/// </summary>
-	public class ConstructorAttribute : Attribute { }
-
-	/// <summary>
-	/// 
-	/// </summary>
-	public class DestructorAttribute : Attribute { }
-
-	/// <summary>
-	/// 
-	/// </summary>
-	public class ValueObjectAttribute : Attribute { }
 }

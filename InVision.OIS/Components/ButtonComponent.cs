@@ -1,4 +1,5 @@
-﻿using InVision.OIS.Native;
+﻿using System;
+using InVision.OIS.Native;
 
 namespace InVision.OIS.Components
 {
@@ -21,12 +22,10 @@ namespace InVision.OIS.Components
 		/// <param name="descriptor">The native ref.</param>
 		/// <param name="ownsHandle">if set to <c>true</c> [owns handle].</param>
 		internal ButtonComponent(ButtonDescriptor descriptor, bool ownsHandle = false)
-			: base(descriptor.BaseDescriptor, ownsHandle)
+			: base(descriptor.Base, ownsHandle)
 		{
 			_descriptor = descriptor;
 		}
-
-		#region IButtonComponent Members
 
 		/// <summary>
 		/// Gets a value indicating whether this <see cref="ButtonDescriptor"/> is pushed.
@@ -37,14 +36,12 @@ namespace InVision.OIS.Components
 			get { return _descriptor.Pushed; }
 		}
 
-		#endregion
-
 		/// <summary>
 		/// Releases the valid handle.
 		/// </summary>
-		protected override void ReleaseValidHandle()
+		protected override void DeleteHandle()
 		{
-			NativeButton.Delete(handle);
+			NativeButton.Delete(SelfHandle);
 			_descriptor = default(ButtonDescriptor);
 		}
 	}

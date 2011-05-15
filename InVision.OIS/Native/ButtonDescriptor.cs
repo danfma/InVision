@@ -1,20 +1,22 @@
 ﻿using System.Runtime.InteropServices;
+using InVision.Native.Ext;
 
 namespace InVision.OIS.Native
 {
+	[GeneratorType, ValueObject]
 	[StructLayout(LayoutKind.Sequential)]
 	internal unsafe struct ButtonDescriptor
 	{
-		private readonly ComponentDescriptor _baseDescriptor;
-		private readonly sbyte* _pushed;
+		private readonly ComponentDescriptor _base;
+		private readonly bool* _pushed;
 
 		/// <summary>
 		/// Gets the base info.
 		/// </summary>
 		/// <value>The base info.</value>
-		public ComponentDescriptor BaseDescriptor
+		public ComponentDescriptor Base
 		{
-			get { return _baseDescriptor; }
+			get { return _base; }
 		}
 
 		/// <summary>
@@ -23,7 +25,7 @@ namespace InVision.OIS.Native
 		/// <value><c>true</c> if pushed; otherwise, <c>false</c>.</value>
 		public bool Pushed
 		{
-			get { return *_pushed != 0; }
+			get { return *_pushed; }
 		}
 	}
 }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.InteropServices;
@@ -10,10 +11,11 @@ namespace CodeGenerator
 {
 	public class CppGenerator : IGenerator
 	{
+		private const BindingFlags MethodFlags = BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly;
+
 		public static readonly IDictionary<Type, string> TranslatedTypes;
 		private string _defineFilename;
 		private string _filename;
-		private string _projectName;
 		private SourceWriter _writer;
 
 		/// <summary>
@@ -40,20 +42,36 @@ namespace CodeGenerator
 			TranslatedTypes.Add(typeof(void), "void");
 		}
 
+		/// <summary>
+		/// Gets the name of the project.
+		/// </summary>
+		/// <value>The name of the project.</value>
+		protected string ProjectName
+		{
+			get { return Options.ProjectName; }
+		}
+
+		/// <summary>
+		/// Gets or sets the options.
+		/// </summary>
+		/// <value>The options.</value>
+		protected Options Options { get; set; }
+
 		#region IGenerator Members
 
 		/// <summary>
-		/// Generates the specified type.
+		/// Generates the specified options.
 		/// </summary>
-		/// <param name="projectName">Name of the project.</param>
+		/// <param name="options">The options.</param>
 		/// <param name="types">The types.</param>
-		public void Generate(string projectName, IEnumerable<Type> types)
+		public void Generate(Options options, IEnumerable<Type> types)
 		{
-			_projectName = projectName;
-			_filename = (projectName + ".h").ToLower();
+			Options = options;
+
+			_filename = (ProjectName + ".h").ToLower();
 			_defineFilename = _filename.Replace('.', '_').ToUpper();
 
-			using (_writer = new SourceWriter(_filename))
+			using (_writer = new SourceWriter(Path.Combine(Path.GetFullPath(Options.CppOutputDir), _filename)))
 			{
 				IEnumerable<Type> valueObjects = types.Where(t => t.HasAttribute<ValueObjectAttribute>());
 				IEnumerable<Type> functionProviders = types.Where(t => t.HasAttribute<FunctionProviderAttribute>());
@@ -110,6 +128,8 @@ namespace CodeGenerator
 			{
 				WritePrototype(type);
 			}
+
+			_writer.WriteLine();
 		}
 
 		/// <summary>
@@ -120,11 +140,7 @@ namespace CodeGenerator
 		{
 			string cppTypename = GetCppTypename(type);
 
-			_writer.WriteLine("/**");
-			_writer.WriteLine(" * Type {0}", cppTypename);
-			_writer.WriteLine(" */");
 			_writer.WriteLine("struct {0};", cppTypename);
-			_writer.WriteLine();
 		}
 
 		/// <summary>
@@ -147,7 +163,12 @@ namespace CodeGenerator
 		/// <param name="type">The type.</param>
 		private void WriteTypeDefinition(Type type)
 		{
-			_writer.WriteLine("struct {0}", GetCppTypename(type));
+			var cppTypename = GetCppTypename(type);
+
+			_writer.WriteLine("/**");
+			_writer.WriteLine(" * Type {0}", cppTypename);
+			_writer.WriteLine(" */");
+			_writer.WriteLine("struct {0}", cppTypename);
 			_writer.WriteLine("{");
 			_writer.Indent();
 
@@ -210,7 +231,7 @@ namespace CodeGenerator
 
 			var attribute = functionProvider.GetAttribute<TargetCppTypeAttribute>(false);
 			string targetType = attribute.Typename;
-			MethodInfo[] methods = functionProvider.GetMethods(BindingFlags.Public | BindingFlags.Instance);
+			MethodInfo[] methods = functionProvider.GetMethods(MethodFlags);
 
 			foreach (MethodInfo methodInfo in methods)
 			{
@@ -230,30 +251,24 @@ namespace CodeGenerator
 
 			if (methodInfo.HasAttribute<ConstructorAttribute>())
 			{
-				functionName = "new" + targetType;
+				functionName = "new" + targetType.ToLower().ToPascalCase();
 				targetMethod = targetType;
 
-				for (int paramIndex = 0; paramIndex < methodInfo.GetParameters().Length; paramIndex++)
-				{
-					var parameterInfo = methodInfo.GetParameters()[paramIndex];
-
-					if (paramIndex == 0)
-						functionName += "By_";
-					else
-						functionName += "_";
-
-					functionName += parameterInfo.Name.ToPascalCase();
-				}
+				var ctrParameters = methodInfo.GetParameters();
+				functionName = AddBySuffix(ctrParameters, functionName);
 			}
 			else if (methodInfo.HasAttribute<DestructorAttribute>())
 			{
-				functionName = "delete" + targetType;
+				functionName = "delete" + targetType.ToLower().ToPascalCase();
 				targetMethod = "~" + targetType;
 			}
 			else
 			{
-				functionName = targetType + methodInfo.Name;
+				functionName = targetType.ToLower().ToPascalCase() + methodInfo.Name;
 				targetMethod = methodInfo.Name.ToCamelCase();
+
+				if (IsOverloaded(methodInfo))
+					functionName += GetNumberFromSequence(methodInfo);
 			}
 
 			string parameters = GetParametersString(methodInfo);
@@ -261,9 +276,73 @@ namespace CodeGenerator
 			_writer.WriteLine("/**");
 			_writer.WriteLine(" * Method: {0}::{1}", targetType, targetMethod);
 			_writer.WriteLine(" */");
-			_writer.WriteLine("INV_EXPORT {0}", TranslateType(methodInfo, methodInfo.ReturnType));
+			_writer.WriteLine("INV_EXPORT {0}", TranslateType(methodInfo.ReturnParameter, methodInfo.ReturnType));
 			_writer.WriteLine("INV_CALL {0}({1});", functionName.ToCStyle(), parameters);
 			_writer.WriteLine();
+		}
+
+		private static int GetNumberFromSequence(MethodInfo methodInfo)
+		{
+			var declaringType = methodInfo.DeclaringType;
+			var methods = declaringType.
+				GetMethods(MethodFlags).
+				Where(m => m.Name == methodInfo.Name);
+
+			int i = 0;
+
+			foreach (var method in methods)
+			{
+				i++;
+
+				if (ReferenceEquals(method, methodInfo))
+					return i;
+			}
+
+			return 0;
+		}
+
+		/// <summary>
+		/// Determines whether the specified method info is overloaded.
+		/// </summary>
+		/// <param name="methodInfo">The method info.</param>
+		/// <returns>
+		/// 	<c>true</c> if the specified method info is overloaded; otherwise, <c>false</c>.
+		/// </returns>
+		private static bool IsOverloaded(MethodInfo methodInfo)
+		{
+			var declaringType = methodInfo.DeclaringType;
+
+			return declaringType.GetMethods(MethodFlags).
+				Where(m => m.Name == methodInfo.Name).
+				Count() > 1;
+		}
+
+		/// <summary>
+		/// Adds the by suffix.
+		/// </summary>
+		/// <param name="parameters">The parameters.</param>
+		/// <param name="functionName">Name of the function.</param>
+		/// <returns></returns>
+		private string AddBySuffix(ParameterInfo[] parameters, string functionName)
+		{
+			int paramStart = 0;
+
+			if (parameters.Count() > 0 && parameters.First().Name == "self")
+				paramStart = 1;
+
+			for (int paramIndex = paramStart; paramIndex < parameters.Length; paramIndex++)
+			{
+				ParameterInfo parameterInfo = parameters[paramIndex];
+
+				if (paramIndex == paramStart)
+					functionName += "By_";
+				else
+					functionName += "_";
+
+				functionName += parameterInfo.Name.ToLower().ToPascalCase();
+			}
+
+			return functionName;
 		}
 
 		/// <summary>
