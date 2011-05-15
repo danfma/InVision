@@ -101,7 +101,7 @@ extern "C"
 		_char* data = __new<_char>(length + 1);
 
 		memcpy(data, str->c_str(), length);
-		data[length] = NULL;
+		data[length] = '\0';
 
 		return data;
 	}
@@ -112,7 +112,7 @@ extern "C"
 		_char* data = __new<_char>(length + 1);
 
 		memcpy(data, str.c_str(), length);
-		data[length] = NULL;
+		data[length] = '\0';
 
 		return data;
 	}
@@ -123,7 +123,7 @@ extern "C"
 		_char* data = __new<_char>(length + 1);
 
 		memcpy(data, str.c_str(), length);
-		data[length] = NULL;
+		data[length] = '\0';
 
 		return data;
 	}

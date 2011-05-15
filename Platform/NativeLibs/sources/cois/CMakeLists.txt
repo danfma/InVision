@@ -1,15 +1,19 @@
 set (SOURCES 
-	../common/cWrapper.cpp
-	cOIS.cpp
 	cAxis.cpp
 	cButton.cpp
 	cComponent.cpp
+	cCustomKeyEventListener.cpp
 	cCustomMouseListener.cpp
 	cEventArgs.cpp
 	cInputManager.cpp
-	cInputObject.cpp
+	cJoystick.cpp
+	cKeyboard.cpp
+	cKeyEvent.cpp
+	cMouse.cpp
 	cMouseEvent.cpp
 	cMouseState.cpp
+	cObject.cpp
+	cOIS.cpp
 	cVector3.cpp
 )
 
@@ -29,5 +33,5 @@ else()
 endif (WIN32)
 
 include_directories(${INCLUDES})
-add_library(cOIS SHARED ${SOURCES})
-target_link_libraries(cOIS ${LIBRARIES})
+add_library(InVisionNative_OIS SHARED ${SOURCES})
+target_link_libraries(InVisionNative_OIS ${LIBRARIES})
