@@ -1,16 +1,16 @@
-#include "cComponent.h"
+#include "cOIS.h"
 
 using namespace invision;
-using namespace invision::ois;
 
-INV_EXPORT ComponentDescriptor
-INV_CALL ois_descriptor_of_component(InvHandle handle)
+
+ComponentDescriptor
+descriptor_of_component(InvHandle handle)
 {
 	OIS::Component* cp = castHandle<OIS::Component>(handle);
 
 	ComponentDescriptor descriptor;
 	descriptor.handle = handle;
-	descriptor.ctype = (COMPONENT_TYPE*)&cp->cType;
+	descriptor.ctype = (_int*)&cp->cType;
 
 	return descriptor;
 }
@@ -21,16 +21,16 @@ INV_CALL new_component()
 {
 	InvHandle handle = newHandleOf<OIS::Component>();
 
-	return ois_descriptor_of_component(handle);
+	return descriptor_of_component(handle);
 }
 
 
 INV_EXPORT ComponentDescriptor
-INV_CALL new_component_by_ctype(COMPONENT_TYPE ctype)
+INV_CALL new_component_by_ctype(_int ctype)
 {
-	InvHandle handle = newHandleOf<OIS::Component, OIS::ComponentType>(ctype);
+	InvHandle handle = newHandleOf<OIS::Component, OIS::ComponentType>((OIS::ComponentType)ctype);
 
-	return ois_descriptor_of_component(handle);
+	return descriptor_of_component(handle);
 }
 
 

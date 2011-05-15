@@ -1,15 +1,11 @@
 #ifndef COIS_H
 #define COIS_H
 
-#include "cWrapper.h"
+#include <InvisionHandle.h>
+#include "invisionnative_ois.h"
 
 extern "C"
 {
-	/*
-	 * Handle types
-	 */
-	typedef _any Handle;
-
 	/*
 	 * OIS::Type
 	 */
@@ -46,6 +42,25 @@ extern "C"
 	 */
 	extern _int OIS_ITYPE_FORCE_FEEDBACK;
 	extern _int OIS_ITYPE_RESERVED;
+		
+	
+	/*
+	 * Descriptors
+	 */
+	ComponentDescriptor 
+	descriptor_of_component(InvHandle handle);
+	
+	ButtonDescriptor 
+	descriptor_of_button(InvHandle handle);
+	
+	AxisDescriptor
+	descriptor_of_axis(InvHandle handle);
+	
+	Vector3Descriptor
+	descriptor_of_vector3(InvHandle handle);
+	
+	EventArgDescriptor
+	descriptor_of_eventarg(InvHandle handle);
 }
 
 #ifdef __cplusplus

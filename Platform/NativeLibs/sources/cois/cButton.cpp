@@ -1,25 +1,39 @@
-#include "cButton.h"
+#include "cOIS.h"
 
-ButtonDescriptor ois_descriptor_of_button(_any handle, OIS::Button* button)
+using namespace invision;
+
+
+ButtonDescriptor 
+descriptor_of_button(InvHandle handle)
 {
+	OIS::Button* button = castHandle<OIS::Button>(handle);
+	
 	ButtonDescriptor descriptor;
-	descriptor.base = ois_descriptor_of_component(handle, button);
-	descriptor.pushed = &button->pushed;
+	descriptor.base = descriptor_of_component(handle);
+	descriptor.pushed = (_bool*)&button->pushed;
 
 	return descriptor;
 }
 
-INV_EXPORT ButtonDescriptor INV_CALL ois_new_button(bool pushed)
+/**
+ * Method: Button::Button
+ */
+INV_EXPORT ButtonDescriptor
+INV_CALL new_button()
 {
-	OIS::Button* button = new OIS::Button(fromBool(pushed));
-
-	return ois_descriptor_of_button(button, button);
+	InvHandle handle = newHandleOf<OIS::Button>();
+	
+	return descriptor_of_button(handle);
 }
 
-INV_EXPORT void INV_CALL ois_delete_button(OIS::Button* self)
+/**
+ * Method: Button::Button
+ */
+INV_EXPORT ButtonDescriptor
+INV_CALL new_button_by_pushed(_bool pushed)
 {
-	if (self == NULL)
-		return;
-
-	delete self;
+	InvHandle handle = newHandleOf<OIS::Button, bool>(fromBool(pushed));
+	
+	return descriptor_of_button(handle);
 }
+

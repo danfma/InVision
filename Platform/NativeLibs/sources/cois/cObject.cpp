@@ -1,56 +1,97 @@
-#include "cObject.h"
+#include "cOIS.h"
+
+using namespace invision;
+
+inline OIS::Object* asObject(InvHandle handle)
+{
+	return castHandle<OIS::Object>(handle);
+}
+
 
 INV_EXPORT void
-INV_CALL ois_delete_object(OIS::Object* self)
+INV_CALL delete_object(InvHandle self)
 {
-	if (self)
-		delete self;
+	destroyHandle(self);
 }
 
-INV_EXPORT OIS::Type
-INV_CALL ois_object_type(OIS::Object* self)
+/**
+	* Method: Object::getType
+	*/
+INV_EXPORT _int
+INV_CALL object_get_type(InvHandle self)
 {
-	return self->type();
+	return asObject(self)->type();
 }
 
+/**
+	* Method: Object::getVendor
+	*/
 INV_EXPORT _string
-INV_CALL ois_object_vendor(OIS::Object* self)
+INV_CALL object_get_vendor(InvHandle self)
 {
-	return copyString(self->vendor());
+	const std::string& str = asObject(self)->vendor();
+	
+	return copyString(str);
 }
 
-INV_EXPORT bool
-INV_CALL ois_object_get_buffered(OIS::Object* self)
+/**
+	* Method: Object::isBuffered
+	*/
+INV_EXPORT _bool
+INV_CALL object_is_buffered(InvHandle self)
 {
-	return self->buffered();
+	bool buffered = asObject(self)->buffered();
+	
+	return toBool(buffered);
 }
 
+/**
+	* Method: Object::setBuffered
+	*/
 INV_EXPORT void
-INV_CALL ois_object_set_buffered(OIS::Object* self, bool value)
+INV_CALL object_set_buffered(InvHandle self, _bool value)
 {
-	self->setBuffered(value);
+	bool buffered = fromBool(value);
+	
+	return asObject(self)->setBuffered(buffered);
 }
 
-INV_EXPORT OIS::InputManager*
-INV_CALL ois_object_get_creator(OIS::Object* self)
+/**
+	* Method: Object::getCreator
+	*/
+INV_EXPORT InvHandle
+INV_CALL object_get_creator(InvHandle self)
 {
-	return self->getCreator();
+	OIS::InputManager* creator = asObject(self)->getCreator();
+	
+	return getOrAddHandleByObject<OIS::InputManager>(creator);
 }
 
+/**
+	* Method: Object::capture
+	*/
 INV_EXPORT void
-INV_CALL ois_object_capture(OIS::Object* self)
+INV_CALL object_capture(InvHandle self)
 {
-	self->capture();
+	asObject(self)->capture();
 }
 
-INV_EXPORT int
-INV_CALL ois_object_get_id(OIS::Object* self)
+/**
+	* Method: Object::getID
+	*/
+INV_EXPORT _int
+INV_CALL object_get_id(InvHandle self)
 {
-	return self->getID();
+	return asObject(self)->getID();
 }
 
-INV_EXPORT OIS::Interface*
-INV_CALL ois_object_query_interface(OIS::Object* self, OIS::Interface::IType itype)
+/**
+	* Method: Object::queryInterface
+	*/
+INV_EXPORT InvHandle
+INV_CALL object_query_interface(InvHandle self, _int interfaceType)
 {
-	return self->queryInterface(itype);
+	OIS::Interface* interface = asObject(self)->queryInterface((OIS::Interface::IType)interfaceType);
+	
+	return getOrAddHandleByObject<OIS::Interface>(interface);
 }

@@ -184,6 +184,22 @@ inline InvHandle newHandleOf(P1 param1)
 	return HandleManager::getInstance().createHandle<T*>(data);
 }
 
+template<typename T, typename P1, typename P2>
+inline InvHandle newHandleOf(P1 param1, P2 param2)
+{
+	T* data = new T(param1, param2);
+
+	return HandleManager::getInstance().createHandle<T*>(data);
+}
+
+template<typename T, typename P1, typename P2, typename P3>
+inline InvHandle newHandleOf(P1 param1, P2 param2, P3 param3)
+{
+	T* data = new T(param1, param2, param3);
+
+	return HandleManager::getInstance().createHandle<T*>(data);
+}
+
 template<typename T>
 inline T* castHandle(InvHandle handle)
 {
@@ -198,6 +214,12 @@ inline void removeHandle(InvHandle handle)
 inline void destroyHandle(InvHandle handle)
 {
 	HandleManager::getInstance().destroyHandle(handle);
+}
+
+template<typename T>
+inline InvHandle getOrAddHandleByObject(T* data)
+{
+	return 0; // TODO Implement in the right way
 }
 
 

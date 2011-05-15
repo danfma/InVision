@@ -1,30 +1,26 @@
-#include "cAxis.h"
+#include "cOIS.h"
+
+using namespace invision;
 
 AxisDescriptor
-ois_descriptor_of_axis(_any handle, OIS::Axis* axis)
+descriptor_of_axis(InvHandle handle)
 {
+	OIS::Axis* axis = castHandle<OIS::Axis>(handle);
+	
 	AxisDescriptor descriptor;
-	descriptor.base = ois_descriptor_of_component(handle, axis);
-	descriptor.abs = &axis->abs;
-	descriptor.rel = &axis->rel;
-	descriptor.absOnly = &axis->absOnly;
+	descriptor.base = descriptor_of_component(handle);
+	descriptor.abs = (_int*)&axis->abs;
+	descriptor.rel = (_int*)&axis->rel;
+	descriptor.absOnly = (_bool*)&axis->absOnly;
 
 	return descriptor;
 }
 
 INV_EXPORT AxisDescriptor
-INV_CALL ois_new_axis()
+INV_CALL new_axis()
 {
-	OIS::Axis* axis = new OIS::Axis();
+	InvHandle handle = newHandleOf<OIS::Axis>();
 
-	return ois_descriptor_of_axis(axis, axis);
+	return descriptor_of_axis(handle);
 }
 
-INV_EXPORT void
-INV_CALL ois_delete_axis(OIS::Axis* self)
-{
-	if (self == NULL)
-		return;
-
-	delete self;
-}

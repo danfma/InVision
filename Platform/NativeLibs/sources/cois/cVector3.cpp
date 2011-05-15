@@ -1,11 +1,15 @@
-#include "cVector3.h"
+#include "cOIS.h"
+
+using namespace invision;
 
 
 Vector3Descriptor
-ois_descriptor_of_vector3(_any self, OIS::Vector3* data)
+descriptor_of_vector3(InvHandle handle)
 {
+	OIS::Vector3* data = castHandle<OIS::Vector3>(handle);
+	
 	Vector3Descriptor descriptor;
-	descriptor.base = ois_descriptor_of_component(self, data);
+	descriptor.base = descriptor_of_component(handle);
 	descriptor.x = &data->x;
 	descriptor.y = &data->y;
 	descriptor.z = &data->z;
@@ -14,19 +18,17 @@ ois_descriptor_of_vector3(_any self, OIS::Vector3* data)
 }
 
 INV_EXPORT Vector3Descriptor
-INV_CALL ois_new_vector3(float x, float y, float z)
+INV_CALL new_vector3()
 {
-	OIS::Vector3* vector = new OIS::Vector3(x, y, z);
-
-	return ois_descriptor_of_vector3(vector, vector);
+	InvHandle self = newHandleOf<OIS::Vector3>();
+	
+	return descriptor_of_vector3(self);
 }
 
-INV_EXPORT void
-INV_CALL ois_delete_vector3(OIS::Vector3* self)
+INV_EXPORT Vector3Descriptor
+INV_CALL new_vector3_by_x_y_z(_float x, _float y, _float z)
 {
-	if (self == NULL)
-		return;
-
-	delete self;
+	InvHandle self = newHandleOf<OIS::Vector3, float, float, float>(x, y, z);
+	
+	return descriptor_of_vector3(self);
 }
-
