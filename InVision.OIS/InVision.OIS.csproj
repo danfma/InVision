@@ -148,6 +148,7 @@
     <Compile Include="Native\ButtonDescriptor.cs" />
     <Compile Include="Native\ComponentDescriptor.cs" />
     <Compile Include="Native\EventArgDescriptor.cs" />
+    <Compile Include="Native\INativeComponent.cs" />
     <Compile Include="Native\KeyEventDescriptor.cs" />
     <Compile Include="Native\KeyEventHandler.cs" />
     <Compile Include="Native\MouseClickHandler.cs" />

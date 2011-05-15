@@ -2,31 +2,37 @@
 #define CCOMPONENT_H
 
 #include "cOIS.h"
+#include "InvisionHandle.h"
 
 /* OIS::Component */
 
 extern "C"
 {
+	typedef _int COMPONENT_TYPE;
+
 	struct ComponentDescriptor
 	{
 		// reference
-		_any handle;
+		InvHandle handle;
 
 		// field
-		OIS::ComponentType* ctype;
+		COMPONENT_TYPE* ctype;
 	};
 
-	ComponentDescriptor
-	ois_descriptor_of_component(_any self, OIS::Component* component);
+	INV_EXPORT ComponentDescriptor
+	INV_CALL descriptor_of_component(InvHandle handle);
 
 	/*
 	 * OIS::Component
 	 */
 	INV_EXPORT ComponentDescriptor
-	INV_CALL ois_new_component(OIS::ComponentType ctype);
+	INV_CALL new_component();
+
+	INV_EXPORT ComponentDescriptor
+	INV_CALL new_component_by_ctype(COMPONENT_TYPE ctype);
 
 	INV_EXPORT void
-	INV_CALL ois_delete_component(OIS::Component* self);
+	INV_CALL delete_component(InvHandle handle);
 }
 
 #endif // CCOMPONENT_H

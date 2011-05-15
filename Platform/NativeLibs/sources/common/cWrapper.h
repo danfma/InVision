@@ -24,7 +24,7 @@ extern "C"
 	//
 	// .NET DATA TYPES
 	//
-	typedef int32_t _bool;
+	typedef int8_t _bool;
 #define TRUE 1
 #define FALSE 0
 	
@@ -33,6 +33,7 @@ extern "C"
 	typedef uint16_t _wchar;
 	
 	typedef _char* _string;
+	typedef _wchar* _wstring;
 	
 	typedef int8_t _byte;
 	typedef uint8_t _ubyte;

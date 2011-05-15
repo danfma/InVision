@@ -1,3 +1,4 @@
+using System;
 using InVision.Native;
 using InVision.OIS.Native;
 
@@ -27,8 +28,6 @@ namespace InVision.OIS.Components
 			_descriptor = descriptor;
 		}
 
-		#region IComponent Members
-
 		/// <summary>
 		/// Gets the type of the component.
 		/// </summary>
@@ -37,8 +36,6 @@ namespace InVision.OIS.Components
 		{
 			get { return _descriptor.ComponentType; }
 		}
-
-		#endregion
 
 		/// <summary>
 		/// Releases the valid handle.

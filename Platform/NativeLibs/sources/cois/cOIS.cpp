@@ -41,3 +41,9 @@ _int OIS_ERROR_GENERAL							= (_int)OIS::E_General;
 _int OIS_ITYPE_FORCE_FEEDBACK	= (_int)OIS::Interface::ForceFeedback;
 _int OIS_ITYPE_RESERVED			= (_int)OIS::Interface::Reserved;
 
+
+
+/*
+ * GLOBALS
+ */
+RuntimeTypesChecker typesChecker;

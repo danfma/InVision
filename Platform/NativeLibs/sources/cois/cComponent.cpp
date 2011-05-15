@@ -1,35 +1,41 @@
 #include "cComponent.h"
 
+using namespace invision;
 using namespace invision::ois;
 
-
-ComponentDescriptor
-ois_descriptor_of_component(_any self, OIS::Component* component)
-{
-	ComponentDescriptor info;
-	info.handle = self;
-	info.ctype = &component->cType;
-
-	return info;
-}
-
-
-/*
-* OIS::Component
-*/
 INV_EXPORT ComponentDescriptor
-INV_CALL ois_new_component(OIS::ComponentType ctype)
+INV_CALL ois_descriptor_of_component(InvHandle handle)
 {
-	OIS::Component* handle = new OIS::Component(ctype);
+	OIS::Component* cp = castHandle<OIS::Component>(handle);
 
-	return ois_descriptor_of_component(handle, handle);
+	ComponentDescriptor descriptor;
+	descriptor.handle = handle;
+	descriptor.ctype = (COMPONENT_TYPE*)&cp->cType;
+
+	return descriptor;
 }
+
+
+INV_EXPORT ComponentDescriptor
+INV_CALL new_component()
+{
+	InvHandle handle = newHandleOf<OIS::Component>();
+
+	return ois_descriptor_of_component(handle);
+}
+
+
+INV_EXPORT ComponentDescriptor
+INV_CALL new_component_by_ctype(COMPONENT_TYPE ctype)
+{
+	InvHandle handle = newHandleOf<OIS::Component, OIS::ComponentType>(ctype);
+
+	return ois_descriptor_of_component(handle);
+}
+
 
 INV_EXPORT void
-INV_CALL ois_delete_component(OIS::Component* self)
+INV_CALL delete_component(InvHandle handle)
 {
-	if (self == NULL)
-		return;
-
-	delete self;
+	destroyHandle(handle);
 }

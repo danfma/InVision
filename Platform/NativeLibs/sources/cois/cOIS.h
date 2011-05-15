@@ -75,6 +75,37 @@ namespace ois
 		
 		return !isNull;
 	}
+
+
+	class RuntimeTypesChecker
+	{
+	private:
+		static void raiseException(std::string typeX, int sizeX, std::string typeY, int sizeY)
+		{
+			std::string error = "Different size for types: ";
+			error += typeX;
+			error += "(";
+			error += sizeX;
+			error += ") ";
+			error += typeY;
+			error += "(";
+			error += sizeY;
+			error += ")";
+
+			invision::ois::raiseException(error);
+		}
+
+#define SIZE_ASSERT(X, Y) if (sizeof(X) != sizeof(Y)) raiseException(#X, sizeof(X), #Y, sizeof(Y));
+
+	public:
+		RuntimeTypesChecker()
+		{
+			SIZE_ASSERT(_int, OIS::ComponentType)
+			SIZE_ASSERT(_int*, OIS::ComponentType*)
+		}
+	};
+
+	extern RuntimeTypesChecker typesChecker;
 }
 }
 
