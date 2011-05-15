@@ -31,7 +31,7 @@ namespace InVision.OIS.Native
 		}
 	}
 
-	[GeneratorType, FunctionProvider]
+	[GeneratorType, FunctionProvider, TargetCppType("Component", Namespace = "OIS")]
 	internal interface INativeComponent
 	{
 		[Constructor]
