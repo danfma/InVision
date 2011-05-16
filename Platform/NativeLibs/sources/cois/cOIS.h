@@ -42,26 +42,19 @@ extern "C"
 	 */
 	extern _int OIS_ITYPE_FORCE_FEEDBACK;
 	extern _int OIS_ITYPE_RESERVED;
-		
-	
+
+
 	/*
 	 * Descriptors
 	 */
-	ComponentDescriptor 
-	descriptor_of_component(InvHandle handle);
-	
-	ButtonDescriptor 
-	descriptor_of_button(InvHandle handle);
-	
-	AxisDescriptor
-	descriptor_of_axis(InvHandle handle);
-	
-	Vector3Descriptor
-	descriptor_of_vector3(InvHandle handle);
-	
-	EventArgDescriptor
-	descriptor_of_eventarg(InvHandle handle);
+	ComponentDescriptor descriptor_of_component(InvHandle handle);
+	ButtonDescriptor descriptor_of_button(InvHandle handle);
+	AxisDescriptor descriptor_of_axis(InvHandle handle);
+	Vector3Descriptor descriptor_of_vector3(InvHandle handle);
+	EventArgDescriptor descriptor_of_eventarg(InvHandle handle);
+	KeyEventDescriptor descriptor_of_keyevent(InvHandle handle);
 }
+
 
 #ifdef __cplusplus
 # include <string>
@@ -71,22 +64,12 @@ namespace invision
 {
 namespace ois
 {
-	inline void raiseException(std::string message, std::string filename, int line)
-	{
-		_raise_exception((const _string)message.c_str(), (const _string)filename.c_str(), (_int)line);
-	}
-
-	inline void raiseException(std::string message)
-	{
-		_raise_exception((const _string)message.c_str(), NULL, 0);
-	}
-
 	inline bool ensureNotNull(_any handle)
 	{
 		bool isNull = handle == NULL;
 		
 		if (isNull)
-			raiseException("Parameter is null");
+			throws_null_reference(__FILE__, __LINE__);
 		
 		return !isNull;
 	}
@@ -107,7 +90,7 @@ namespace ois
 			error += sizeY;
 			error += ")";
 
-			invision::ois::raiseException(error);
+			raise_exception(error);
 		}
 
 #define SIZE_ASSERT(X, Y) if (sizeof(X) != sizeof(Y)) raiseException(#X, sizeof(X), #Y, sizeof(Y));

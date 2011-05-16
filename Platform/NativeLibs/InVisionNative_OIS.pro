@@ -30,14 +30,9 @@ INCLUDEPATH += sources/common sources/cois
 win32 {
 	DEFINES += WIN32 DEBUG
 
-	INCLUDEPATH += \
-		$$(OGRE_SDK)include\OIS \
-		$$(BOOST_SDK)
+	INCLUDEPATH += $$(OGRE_SDK)include\OIS $$(BOOST_SDK)
 
-	LIBS += \
-		-L$$(OGRE_SDK)lib\debug \
-		-L$$(OGRE_SDK)lib\debug\opt \
-		-lOIS_d
+	LIBS += -L$$(OGRE_SDK)lib\debug -L$$(OGRE_SDK)lib\debug\opt -lOIS_d
 }
 
 macx {

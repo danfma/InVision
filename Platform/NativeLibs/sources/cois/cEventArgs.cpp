@@ -32,5 +32,5 @@ INV_CALL eventarg_get_device(InvHandle self)
 {
 	OIS::EventArg* e = castHandle<OIS::EventArg>(self);
 		
-	return getOrAddHandleByObject<OIS::Object>(e->device);
+	return getOrCreateHandle<OIS::Object>(e->device);
 }

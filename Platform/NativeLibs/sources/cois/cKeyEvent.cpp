@@ -1,12 +1,13 @@
-#include "cKeyEvent.h"
+#include "cOIS.h"
 
-INV_EXPORT KeyEventDescriptor
-INV_CALL ois_descriptor_of_keyevent(Handle self, OIS::KeyEvent* e)
+KeyEventDescriptor descriptor_of_keyevent(InvHandle handle)
 {
+	OIS::KeyEvent* obj = castHandle< OIS::KeyEvent >(handle);
+
 	KeyEventDescriptor x;
-	x.base = ois_descriptor_of_eventarg(self, e);
-	x.key = const_cast<OIS::KeyCode*>(&e->key);
-	x.text = &e->text;
+	x.base = descriptor_of_eventarg(handle);
+	x.key = (KEY_CODE*)const_cast<OIS::KeyCode*>(&obj->key);
+	x.text = &obj->text;
 
 	return x;
 }

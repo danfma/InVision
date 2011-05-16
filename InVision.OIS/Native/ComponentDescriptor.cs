@@ -5,7 +5,6 @@ using InVision.OIS.Components;
 
 namespace InVision.OIS.Native
 {
-	[GeneratorType, ValueObject]
 	[StructLayout(LayoutKind.Sequential)]
 	internal unsafe struct ComponentDescriptor
 	{

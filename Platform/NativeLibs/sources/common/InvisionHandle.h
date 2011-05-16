@@ -1,226 +1,319 @@
-#ifndef CHANDLE_H
-#define CHANDLE_H
+#ifndef INVISION_HANDLE_H
+#define INVISION_HANDLE_H
 
 #include "cWrapper.h"
 
+#ifdef __cplusplus
+#include <typeinfo>
+#include <boost/unordered_map.hpp>
+#endif // __cplusplus
 
 extern "C"
 {
 	typedef _uint InvHandle;
+	typedef _ushort TypeID;
+
+	INV_EXPORT TypeID
+	INV_CALL get_registered_typeid_by_name(const char* type);
+
+	INV_EXPORT TypeID
+	INV_CALL register_type_by_name(const char* type);
+
+#ifdef __cplusplus
+
+	INV_EXPORT TypeID
+	INV_CALL get_registered_typeid(const std::type_info& type);
+
+	INV_EXPORT TypeID
+	INV_CALL register_typeid(const std::type_info& type);
+
+#endif // __cplusplus
+
 }
 
 #ifdef __cplusplus
-#include <boost/unordered_map.hpp>
 
 namespace invision
 {
-
-class IHandleData
-{
-public:
-	virtual void deleteData() = 0;
-};
-
-
-
-template<typename T>
-class HandleData : public IHandleData
-{
-private:
-	T _data;
-	bool _isPointer;
-
-public:
-	HandleData(T data, bool isPointer = true)
-		: _data(data), _isPointer(isPointer)
-	{ }
-
-	T data()
+	class IHandleData
 	{
-		return _data;
-	}
+	public:
+		virtual TypeID getTypeId() = 0;
+		virtual bool contains(void* data) = 0;
+		virtual void deleteData() = 0;
+	};
 
-	void deleteData()
+	typedef boost::unordered_map<InvHandle, IHandleData*> HandleRegistry;
+
+
+	template<typename T>
+	class HandleData : public IHandleData
 	{
-		if (_isPointer)
-			delete _data;
-	}
-};
+	private:
+		T* _data;
+
+	public:
+		HandleData(T* data)
+			: _data(data)
+		{ }
+
+		T* data()
+		{
+			return _data;
+		}
+
+		virtual TypeID getTypeId()
+		{
+			return (TypeID)get_registered_typeid(typeid(T));
+		}
+
+		virtual bool contains(void* data)
+		{
+			return _data == data;
+		}
+
+		void deleteData()
+		{
+			if (_data != NULL) {
+				delete _data;
+				_data = NULL;
+			}
+		}
+	};
 
 
-
-typedef boost::unordered_map<InvHandle, IHandleData*> HandleRegistry;
-
-
-
-class IHandleGenerator
-{
-public:
-	virtual InvHandle next() = 0;
-};
-
-
-
-class SequentialHandleGenerator : public IHandleGenerator
-{
-private:
-	InvHandle _next;
-
-public:
-	SequentialHandleGenerator()
-		: _next(1)
-	{ }
-
-	InvHandle next()
+	class IHandleGenerator
 	{
-		return _next++;
-	}
-};
+	public:
+		virtual _ushort next() = 0;
+	};
 
 
 
-class HandleManager
-{
-private:
-	IHandleGenerator* _generator;
-	HandleRegistry _registry;
-
-public:
-	HandleManager(IHandleGenerator* generator = NULL)
+	class SequentialHandleGenerator : public IHandleGenerator
 	{
-		if (generator == NULL)
-			generator = new SequentialHandleGenerator();
+	private:
+		_ushort _next;
 
-		_generator = generator;
-	}
+	public:
+		SequentialHandleGenerator()
+			: _next(1)
+		{ }
 
-	~HandleManager()
+		_ushort next()
+		{
+			return _next++;
+		}
+	};
+
+
+	class HandleManager
 	{
-		if (_generator != NULL)
-			delete _generator;
+	private:
+		IHandleGenerator* _generator;
+		HandleRegistry _registry;
 
-		for (HandleRegistry::iterator it = _registry.begin(); it != _registry.end(); it++) {
+
+		template<typename T>
+		InvHandle nextHandle()
+		{
+			return _generator->next() << 16 | get_registered_typeid(typeid(T));
+		}
+
+	public:
+		HandleManager(IHandleGenerator* generator = NULL)
+		{
+			if (generator == NULL)
+				generator = new SequentialHandleGenerator();
+
+			_generator = generator;
+		}
+
+		~HandleManager()
+		{
+			if (_generator != NULL) {
+				delete _generator;
+				_generator = NULL;
+			}
+
+			for (HandleRegistry::iterator it = _registry.begin(); it != _registry.end(); it++) {
+				IHandleData* hdata = (*it).second;
+
+				hdata->deleteData();
+				delete hdata;
+				hdata = NULL;
+			}
+		}
+
+		/**
+		 * Creates a new handle for the specified data
+		 */
+		template<typename T>
+		InvHandle createHandle(T* data)
+		{
+			IHandleData* hdata = new HandleData<T>(data);
+
+			HandleRegistry::value_type entry(nextHandle<T>(), hdata);
+			_registry.insert(entry);
+
+			return entry.first;
+		}
+
+		/**
+		 * Removes the specified handle without deleting the data it holds
+		 */
+		void removeHandle(InvHandle handle)
+		{
+			HandleRegistry::const_iterator it = _registry.find(handle);
+
+			if (it == _registry.end())
+				return;
+
 			IHandleData* hdata = (*it).second;
+
+			_registry.erase_return_void(it);
+			delete hdata;
+			hdata = NULL;
+		}
+
+		/**
+		 * Destroy the specified handle by removing it from this instance and deleting the data it
+		 * holds.
+		 */
+		void destroyHandle(InvHandle handle)
+		{
+			if (handle == 0)
+				return;
+
+			HandleRegistry::const_iterator it = _registry.find(handle);
+
+			if (it == _registry.end())
+				return;
+
+			IHandleData* hdata = (*it).second;
+
+			_registry.erase_return_void(it);
+			hdata->deleteData();
 			delete hdata;
 		}
+
+		/**
+		 * Gets the data holded by the specified handle
+		 */
+		template<typename T>
+		T* get(InvHandle handle)
+		{
+			try
+			{
+				IHandleData* hdata = _registry.at(handle);
+
+				if (hdata == NULL)
+					throws_key_not_found("" + handle);
+
+				HandleData<T>* converted = dynamic_cast<HandleData<T>* >(hdata);
+
+				if (converted == NULL)
+					throws_invalid_cast(hdata->getTypeId(), get_registered_typeid(typeid(T)));
+
+				return converted->data();
+			}
+			catch (std::bad_cast& e)
+			{
+				raise_exception(e.what(), INVALID_CAST_ERROR);
+			}
+
+			return NULL;
+		}
+
+		template<typename T>
+		InvHandle find(T* data)
+		{
+			HandleRegistry::iterator it;
+
+			for (it = _registry.begin(); it != _registry.end(); it++) {
+				IHandleData* hdata = (*it).second;
+
+				if (hdata->contains(data))
+					return (*it).first;
+			}
+
+			return 0;
+		}
+
+		static HandleManager& getInstance()
+		{
+			static HandleManager handleManager;
+
+			return handleManager;
+		}
+	};
+
+
+
+	template<typename T>
+	inline InvHandle newHandleOf()
+	{
+		T* data = new T();
+
+		return HandleManager::getInstance().createHandle<T>(data);
+	}
+
+	template<typename T, typename P1>
+	inline InvHandle newHandleOf(P1 param1)
+	{
+		T* data = new T(param1);
+
+		return HandleManager::getInstance().createHandle<T>(data);
+	}
+
+	template<typename T, typename P1, typename P2>
+	inline InvHandle newHandleOf(P1 param1, P2 param2)
+	{
+		T* data = new T(param1, param2);
+
+		return HandleManager::getInstance().createHandle<T>(data);
+	}
+
+	template<typename T, typename P1, typename P2, typename P3>
+	inline InvHandle newHandleOf(P1 param1, P2 param2, P3 param3)
+	{
+		T* data = new T(param1, param2, param3);
+
+		return HandleManager::getInstance().createHandle<T>(data);
 	}
 
 	template<typename T>
-	InvHandle createHandle(T data, bool isPointer = true)
+	inline T* castHandle(InvHandle handle)
 	{
-		IHandleData* hdata = new HandleData<T>(data, isPointer);
-
-		HandleRegistry::value_type entry(_generator->next(), hdata);
-		_registry.insert(entry);
-
-		return entry.first;
+		return HandleManager::getInstance().get<T>(handle);
 	}
 
-	void removeHandle(InvHandle handle)
+	inline void removeHandle(InvHandle handle)
 	{
-		if (handle == 0)
-			return;
-
-		HandleRegistry::const_iterator it = _registry.find(handle);
-
-		if (it == _registry.end())
-			return;
-
-		IHandleData* hdata = (*it).second;
-
-		_registry.erase_return_void(it);
-		delete hdata;
+		HandleManager::getInstance().removeHandle(handle);
 	}
 
-	void destroyHandle(InvHandle handle)
+	inline void destroyHandle(InvHandle handle)
 	{
-		if (handle == 0)
-			return;
-
-		HandleRegistry::const_iterator it = _registry.find(handle);
-
-		if (it == _registry.end())
-			return;
-
-		IHandleData* hdata = (*it).second;
-
-		_registry.erase_return_void(it);
-		hdata->deleteData();
-		delete hdata;
+		HandleManager::getInstance().destroyHandle(handle);
 	}
 
 	template<typename T>
-	T get(InvHandle handle)
+	inline InvHandle createHandle(T* data)
 	{
-		IHandleData* hdata = _registry.at(handle);
-		HandleData<T>* converted = dynamic_cast<HandleData<T>* >(hdata);
-
-		return converted->data();
+		return HandleManager::getInstance().createHandle<T>(data);
 	}
 
-	static HandleManager& getInstance()
+	template<typename T>
+	inline InvHandle getOrCreateHandle(T* data)
 	{
-		static HandleManager handleManager;
+		InvHandle handle = HandleManager::getInstance().find<T>(data);
 
-		return handleManager;
+		if (handle == 0)
+			handle = createHandle<T>(data);
+
+		return handle;
 	}
-};
-
-
-
-template<typename T>
-inline InvHandle newHandleOf()
-{
-	T* data = new T();
-
-	return HandleManager::getInstance().createHandle<T*>(data);
-}
-
-template<typename T, typename P1>
-inline InvHandle newHandleOf(P1 param1)
-{
-	T* data = new T(param1);
-
-	return HandleManager::getInstance().createHandle<T*>(data);
-}
-
-template<typename T, typename P1, typename P2>
-inline InvHandle newHandleOf(P1 param1, P2 param2)
-{
-	T* data = new T(param1, param2);
-
-	return HandleManager::getInstance().createHandle<T*>(data);
-}
-
-template<typename T, typename P1, typename P2, typename P3>
-inline InvHandle newHandleOf(P1 param1, P2 param2, P3 param3)
-{
-	T* data = new T(param1, param2, param3);
-
-	return HandleManager::getInstance().createHandle<T*>(data);
-}
-
-template<typename T>
-inline T* castHandle(InvHandle handle)
-{
-	return HandleManager::getInstance().get<T*>(handle);
-}
-
-inline void removeHandle(InvHandle handle)
-{
-	HandleManager::getInstance().removeHandle(handle);
-}
-
-inline void destroyHandle(InvHandle handle)
-{
-	HandleManager::getInstance().destroyHandle(handle);
-}
-
-template<typename T>
-inline InvHandle getOrAddHandleByObject(T* data)
-{
-	return 0; // TODO Implement in the right way
-}
 
 
 } // namespace invision
@@ -228,4 +321,4 @@ inline InvHandle getOrAddHandleByObject(T* data)
 #endif // __cplusplus
 
 
-#endif // CHANDLE_H
+#endif // INVISION_HANDLE_H

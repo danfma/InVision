@@ -1,5 +1,8 @@
-﻿namespace InVision.OIS.Components
+﻿using InVision.Native.Ext;
+
+namespace InVision.OIS.Components
 {
+	[CppEnumerationAttribute(Namespace = "OIS")]
 	public enum ComponentType
 	{
 		Unknown = 0,

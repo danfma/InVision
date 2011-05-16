@@ -1,8 +1,11 @@
-﻿namespace InVision.OIS
+﻿using InVision.Native.Ext;
+
+namespace InVision.OIS
 {
 	/// <summary>
 	/// 
 	/// </summary>
+	[GeneratorModel]
 	public enum AddOnFactory
 	{
 		/// <summary>

@@ -6,12 +6,12 @@ AxisDescriptor
 descriptor_of_axis(InvHandle handle)
 {
 	OIS::Axis* axis = castHandle<OIS::Axis>(handle);
-	
+
 	AxisDescriptor descriptor;
 	descriptor.base = descriptor_of_component(handle);
-	descriptor.abs = (_int*)&axis->abs;
-	descriptor.rel = (_int*)&axis->rel;
-	descriptor.absOnly = (_bool*)&axis->absOnly;
+	descriptor.absolute = (_int*)&axis->abs;
+	descriptor.relative = (_int*)&axis->rel;
+	descriptor.absoluteOnly = (_bool*)&axis->absOnly;
 
 	return descriptor;
 }

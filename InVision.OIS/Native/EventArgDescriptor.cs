@@ -4,7 +4,6 @@ using InVision.Native.Ext;
 
 namespace InVision.OIS.Native
 {
-	[GeneratorType, ValueObject]
 	[StructLayout(LayoutKind.Sequential)]
 	internal struct EventArgDescriptor
 	{

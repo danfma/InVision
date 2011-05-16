@@ -2,32 +2,27 @@
 
 using namespace invision;
 
-inline OIS::Object* asObject(InvHandle handle)
-{
-	return castHandle<OIS::Object>(handle);
-}
-
 
 INV_EXPORT void
-INV_CALL delete_object(InvHandle self)
+INV_CALL delete_device(InvHandle self)
 {
 	destroyHandle(self);
 }
 
 /**
-	* Method: Object::getType
+	* Method: device::getType
 	*/
 INV_EXPORT _int
-INV_CALL object_get_type(InvHandle self)
+INV_CALL device_get_type(InvHandle self)
 {
 	return asObject(self)->type();
 }
 
 /**
-	* Method: Object::getVendor
+	* Method: device::getVendor
 	*/
 INV_EXPORT _string
-INV_CALL object_get_vendor(InvHandle self)
+INV_CALL device_get_vendor(InvHandle self)
 {
 	const std::string& str = asObject(self)->vendor();
 	
@@ -35,10 +30,10 @@ INV_CALL object_get_vendor(InvHandle self)
 }
 
 /**
-	* Method: Object::isBuffered
+	* Method: device::isBuffered
 	*/
 INV_EXPORT _bool
-INV_CALL object_is_buffered(InvHandle self)
+INV_CALL device_is_buffered(InvHandle self)
 {
 	bool buffered = asObject(self)->buffered();
 	
@@ -46,10 +41,10 @@ INV_CALL object_is_buffered(InvHandle self)
 }
 
 /**
-	* Method: Object::setBuffered
+	* Method: device::setBuffered
 	*/
 INV_EXPORT void
-INV_CALL object_set_buffered(InvHandle self, _bool value)
+INV_CALL device_set_buffered(InvHandle self, _bool value)
 {
 	bool buffered = fromBool(value);
 	
@@ -57,41 +52,41 @@ INV_CALL object_set_buffered(InvHandle self, _bool value)
 }
 
 /**
-	* Method: Object::getCreator
+	* Method: device::getCreator
 	*/
 INV_EXPORT InvHandle
-INV_CALL object_get_creator(InvHandle self)
+INV_CALL device_get_creator(InvHandle self)
 {
 	OIS::InputManager* creator = asObject(self)->getCreator();
 	
-	return getOrAddHandleByObject<OIS::InputManager>(creator);
+	return getOrCreateHandle<OIS::InputManager>(creator);
 }
 
 /**
-	* Method: Object::capture
+	* Method: device::capture
 	*/
 INV_EXPORT void
-INV_CALL object_capture(InvHandle self)
+INV_CALL device_capture(InvHandle self)
 {
 	asObject(self)->capture();
 }
 
 /**
-	* Method: Object::getID
+	* Method: device::getID
 	*/
 INV_EXPORT _int
-INV_CALL object_get_id(InvHandle self)
+INV_CALL device_get_id(InvHandle self)
 {
 	return asObject(self)->getID();
 }
 
 /**
-	* Method: Object::queryInterface
+	* Method: device::queryInterface
 	*/
 INV_EXPORT InvHandle
-INV_CALL object_query_interface(InvHandle self, _int interfaceType)
+INV_CALL device_query_interface(InvHandle self, _int interfaceType)
 {
 	OIS::Interface* interface = asObject(self)->queryInterface((OIS::Interface::IType)interfaceType);
 	
-	return getOrAddHandleByObject<OIS::Interface>(interface);
+	return getOrCreateHandle<OIS::Interface>(interface);
 }

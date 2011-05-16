@@ -2,8 +2,8 @@
 
 namespace InVision.Native.Ext
 {
-	public class FunctionProviderAttribute : Attribute
+	public class GeneratorModelAttribute : Attribute
 	{
-		
+
 	}
 }

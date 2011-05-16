@@ -1,9 +1,8 @@
-﻿using System.Runtime.InteropServices;
-using InVision.Native.Ext;
+﻿using System;
+using System.Runtime.InteropServices;
 
 namespace InVision.OIS.Native
 {
-	[GeneratorType, ValueObject]
 	[StructLayout(LayoutKind.Sequential)]
 	internal unsafe struct Vector3Descriptor
 	{

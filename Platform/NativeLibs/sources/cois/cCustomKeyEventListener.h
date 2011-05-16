@@ -2,9 +2,8 @@
 #define CUSTOMKEYEVENTLISTENER_H
 
 #include "cOIS.h"
-#include "cKeyEvent.h"
 
-typedef bool (INV_CALL *KeyEventHandler)(KeyEventDescriptor e);
+typedef bool (INV_CALL *KeyEventHandler)(InvHandle e);
 
 class CustomKeyListener : public OIS::KeyListener
 {
@@ -18,9 +17,10 @@ public:
 
 		if (keyPressedHandler != NULL) {
 			OIS::KeyEvent* keyEvent = const_cast<OIS::KeyEvent*>(&arg);
-			KeyEventDescriptor e = ois_descriptor_of_keyevent(keyEvent, keyEvent);
+			InvHandle keyHandle = createHandle<OIS::KeyEvent>(keyEvent);
 
-			result = keyPressedHandler(e);
+			result = keyPressedHandler(keyHandle);
+			removeHandle(keyHandle);
 		}
 
 		return result;
@@ -32,9 +32,10 @@ public:
 
 		if (keyReleasedHandler != NULL) {
 			OIS::KeyEvent* keyEvent = const_cast<OIS::KeyEvent*>(&arg);
-			KeyEventDescriptor e = ois_descriptor_of_keyevent(keyEvent, keyEvent);
+			InvHandle keyHandle = createHandle<OIS::KeyEvent>(keyEvent);
 
-			result = keyReleasedHandler(e);
+			result = keyReleasedHandler(keyHandle);
+			removeHandle(keyHandle);
 		}
 
 		return result;

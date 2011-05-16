@@ -5,7 +5,6 @@ using InVision.OIS.Components;
 
 namespace InVision.OIS.Native
 {
-	[GeneratorType, FunctionProvider, TargetCppType("Component", Namespace = "OIS")]
 	internal class NativeComponent : NativeOIS
 	{
 		/// <summary>
@@ -24,6 +23,6 @@ namespace InVision.OIS.Native
 		/// </summary>
 		/// <param name="handle">The handle.</param>
 		[DllImport(OISLibrary, EntryPoint = "delete_component")]
-		public static extern void Delete(Handle handle);
+        public static extern void Delete(Handle handle);
 	}
 }

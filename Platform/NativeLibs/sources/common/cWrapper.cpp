@@ -17,15 +17,17 @@ INV_EXPORT void INV_CALL util_string_delete(const _string data)
  */
 ExceptionHandler exceptionHandler = NULL;
 
-INV_EXPORT void INV_CALL _register_exception_handler(ExceptionHandler handler)
+INV_EXPORT void INV_CALL register_exception_handler(ExceptionHandler handler)
 {
 	exceptionHandler = handler;
 }
 
-INV_EXPORT void INV_CALL _raise_exception(const _string message, const _string filename, _int line)
+INV_EXPORT void INV_CALL raise_exception(std::string message, _int errorType)
 {
 	if (exceptionHandler == NULL)
-		cerr << "Exception (file: " << filename << " line: " << line << "): " << message << endl;
+		cerr << "error: " << errorType << ": " <<  message << endl;
 	else
-		exceptionHandler(message, filename, line);
+		exceptionHandler(const_cast<_string>(message.c_str()), errorType);
+
+	throw exception();
 }

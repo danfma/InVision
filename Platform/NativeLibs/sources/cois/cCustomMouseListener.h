@@ -2,7 +2,6 @@
 #define CUSTOMMOUSELISTENER_H
 
 #include "cOIS.h"
-#include "cMouseEvent.h"
 
 typedef bool (INV_CALL *MouseMovedHandler)(MouseEventDescriptor e);
 typedef bool (INV_CALL *MouseClickHandler)(MouseEventDescriptor e, OIS::MouseButtonID mouseButton);

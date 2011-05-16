@@ -8,8 +8,8 @@ namespace CodeGenerator
 		/// <summary>
 		/// Generates the specified options.
 		/// </summary>
-		/// <param name="options">The options.</param>
+		/// <param name="configOptions">The options.</param>
 		/// <param name="types">The types.</param>
-		void Generate(Options options, IEnumerable<Type> types);
+		void Generate(ConfigOptions configOptions, IEnumerable<Type> types);
 	}
 }

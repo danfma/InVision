@@ -135,6 +135,7 @@
   <ItemGroup>
     <Compile Include="Extensions\CustomAttributeProviderExtensions.cs" />
     <Compile Include="Extensions\ExpressionExtensions.cs" />
+    <Compile Include="Extensions\MethodInfoExtension.cs" />
     <Compile Include="Extensions\NonOverridedAttribute.cs" />
     <Compile Include="Extensions\NumberExtensions.cs" />
     <Compile Include="Extensions\ObjectExtensions.cs" />
@@ -169,13 +170,19 @@
     <Compile Include="Native\Enumerator.cs" />
     <Compile Include="Native\ExceptionRaiser.cs" />
     <Compile Include="Native\Ext\ConstructorAttribute.cs" />
+    <Compile Include="Native\Ext\CppEnumeration.cs" />
+    <Compile Include="Native\Ext\CppImplementationAttribute.cs" />
+    <Compile Include="Native\Ext\CppObject.cs" />
     <Compile Include="Native\Ext\DestructorAttribute.cs" />
-    <Compile Include="Native\Ext\FunctionProviderAttribute.cs" />
-    <Compile Include="Native\Ext\GeneratorTypeAttribute.cs" />
+    <Compile Include="DisposableObject.cs" />
+    <Compile Include="Native\Ext\GeneratorModelAttribute.cs" />
     <Compile Include="Native\Ext\Handle.cs" />
     <Compile Include="Native\Ext\HandleContainer.cs" />
     <Compile Include="Native\Ext\HandleReference.cs" />
-    <Compile Include="Native\Ext\TargetCppTypeAttribute.cs" />
+    <Compile Include="Native\Ext\HandleConverterAttribute.cs" />
+    <Compile Include="Native\Ext\CppTypeAttribute.cs" />
+    <Compile Include="Native\Ext\IBaseTypeDescriptor.cs" />
+    <Compile Include="Native\Ext\NativeFactory.cs" />
     <Compile Include="Native\Ext\ValueObjectAttribute.cs" />
     <Compile Include="Native\Handle.cs" />
     <Compile Include="Native\InVisionException.cs" />
@@ -211,7 +218,6 @@
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>copy "$(TargetDir)*.*" "$(SolutionDir)Samples\Empty\Bin\"</PostBuildEvent>
   </PropertyGroup>

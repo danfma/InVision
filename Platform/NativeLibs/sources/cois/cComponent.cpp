@@ -9,8 +9,8 @@ descriptor_of_component(InvHandle handle)
 	OIS::Component* cp = castHandle<OIS::Component>(handle);
 
 	ComponentDescriptor descriptor;
-	descriptor.handle = handle;
-	descriptor.ctype = (_int*)&cp->cType;
+	descriptor.self = handle;
+	descriptor.componentType = (_int*)&cp->cType;
 
 	return descriptor;
 }
@@ -28,7 +28,8 @@ INV_CALL new_component()
 INV_EXPORT ComponentDescriptor
 INV_CALL new_component_by_ctype(_int ctype)
 {
-	InvHandle handle = newHandleOf<OIS::Component, OIS::ComponentType>((OIS::ComponentType)ctype);
+	OIS::Component* obj = new OIS::Component((OIS::ComponentType)ctype);
+	InvHandle handle = createHandle< OIS::Component >(obj);
 
 	return descriptor_of_component(handle);
 }
