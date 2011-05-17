@@ -19,5 +19,5 @@ Support for Windows, Linux, MacOSX, iOS and Android are aimed.
 - InVision.Collections (Native communication support for collections)
 
 # BUILD:
-TODO 
+Build/build.bat 
 
