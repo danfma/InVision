@@ -23,7 +23,7 @@ namespace CodeGenerator.CSharp
         /// <param name="types">The types.</param>
         protected override void GenerateContent(IEnumerable<Type> types)
         {
-            IEnumerable<Type> wrapperTypes = types.Where(t => t.HasAttribute<CppWrapperAttribute>(true));
+            IEnumerable<Type> wrapperTypes = types.Where(t => t.HasAttribute<CppInterfaceAttribute>(true));
 
             var defaultNamespaces = new[] {
                                               typeof (Handle).Namespace
@@ -97,7 +97,7 @@ namespace CodeGenerator.CSharp
         /// </returns>
         public static bool IsAbstract(Type type)
         {
-            return type.QueryAttribute<CppWrapperAttribute>(attr => attr.IsAbstract);
+            return type.QueryAttribute<CppInterfaceAttribute>(attr => attr.IsAbstract);
         }
 
         /// <summary>
@@ -383,7 +383,7 @@ namespace CodeGenerator.CSharp
         public static Type GetBaseType(Type wrapperType)
         {
             return wrapperType.GetInterfaces().
-                Where(@interface => @interface.QueryAttribute<CppWrapperAttribute>(
+                Where(@interface => @interface.QueryAttribute<CppInterfaceAttribute>(
                     attr => attr.InheritanceBy == InherintanceMode.BaseType)).
                 SingleOrDefault();
         }
@@ -396,7 +396,7 @@ namespace CodeGenerator.CSharp
         public static IEnumerable<Type> GetInterfaces(Type wrapperType)
         {
             return wrapperType.GetInterfaces().
-                Where(@interface => @interface.QueryAttribute<CppWrapperAttribute>(
+                Where(@interface => @interface.QueryAttribute<CppInterfaceAttribute>(
                     attr => attr.InheritanceBy == InherintanceMode.Interface));
         }
     }

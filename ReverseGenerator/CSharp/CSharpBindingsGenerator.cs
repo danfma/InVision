@@ -27,7 +27,7 @@ namespace CodeGenerator.CSharp
         /// <param name="types">The types.</param>
         protected override void GenerateContent(IEnumerable<Type> types)
         {
-            IEnumerable<Type> wrapperTypes = types.Where(t => t.HasAttribute<CppWrapperAttribute>(true));
+            IEnumerable<Type> wrapperTypes = types.Where(t => t.HasAttribute<CppInterfaceAttribute>(true));
 
             var defaultNamespaces = new[] {
                                               typeof (DllImportAttribute).Namespace,

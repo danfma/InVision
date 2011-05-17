@@ -4,7 +4,7 @@ using InVision.Native.Ext;
 
 namespace InVision.GenOIS
 {
-    [CppWrapper]
+    [CppInterface]
     public interface IComponent
     {
         [Constructor]
@@ -91,7 +91,7 @@ namespace InVision.GenOIS
         }
     }
 
-    [CppWrapper]
+    [CppInterface]
     public interface IButton : IComponent
     {
         [Constructor]

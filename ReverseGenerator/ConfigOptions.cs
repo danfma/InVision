@@ -157,7 +157,7 @@ namespace CodeGenerator
         /// <returns></returns>
         public static string GetCppTypename(Type type)
         {
-            if (type.HasAttribute<CppWrapperAttribute>())
+            if (type.HasAttribute<CppInterfaceAttribute>())
                 return type.Name.Substring(1).ToPascalCase();
 
             return type.Name;

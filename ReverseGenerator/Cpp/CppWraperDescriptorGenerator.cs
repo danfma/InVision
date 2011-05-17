@@ -55,10 +55,10 @@ namespace CodeGenerator.Cpp
         private void WriteBaseDescriptorField(SourceWriter writer)
         {
             IEnumerable<Type> parentInterfaces =
-                Type.GetInterfaces().Where(i => i.HasAttribute<CppWrapperAttribute>(true));
+                Type.GetInterfaces().Where(i => i.HasAttribute<CppInterfaceAttribute>(true));
             var baseInterface =
                 (from i in parentInterfaces
-                 let attr = i.GetAttribute<CppWrapperAttribute>(true)
+                 let attr = i.GetAttribute<CppInterfaceAttribute>(true)
                  where attr.InheritanceBy == InherintanceMode.BaseType
                  select new { Interface = i, Attribute = attr }).SingleOrDefault();
 

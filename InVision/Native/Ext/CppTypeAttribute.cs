@@ -53,21 +53,21 @@ namespace InVision.Native.Ext
 		}
 	}
 
-	public class CppWrapperAttribute : CppTypeAttribute
+	public class CppInterfaceAttribute : CppTypeAttribute
 	{
         /// <summary>
-        /// Initializes a new instance of the <see cref="CppWrapperAttribute"/> class.
+        /// Initializes a new instance of the <see cref="CppInterfaceAttribute"/> class.
         /// </summary>
-	    public CppWrapperAttribute()
+	    public CppInterfaceAttribute()
 	    {
 	        
 	    }
 
 		/// <summary>
-		/// Initializes a new instance of the <see cref="CppWrapperAttribute"/> class.
+		/// Initializes a new instance of the <see cref="CppInterfaceAttribute"/> class.
 		/// </summary>
 		/// <param name="typename">The typename.</param>
-		public CppWrapperAttribute(string typename)
+		public CppInterfaceAttribute(string typename)
 			: base(typename)
 		{
 		}
