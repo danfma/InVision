@@ -10,34 +10,34 @@ using InVision.Native.Ext;
 
 namespace InVision.GenOIS
 {
-	internal static class CppComponent
+	internal static class NativeComponent
 	{
 		public const string Library = "InVisionNative_OIS.dll";
 		
-		[DllImport(Library, EntryPoint = "new_component")]
-		public static extern ComponentDescriptor New();
+		[DllImport(Library, EntryPoint = "new_componentcppinstance")]
+		public static extern Handle Component();
 		
-		[DllImport(Library, EntryPoint = "new_component_by_componenttype")]
-		public static extern ComponentDescriptor New(ComponentType componentType);
+		[DllImport(Library, EntryPoint = "new_componentcppinstance_by_ctype")]
+		public static extern Handle Component(ComponentType ctype);
 		
-		[DllImport(Library, EntryPoint = "delete_component")]
-		public static extern void Delete(Handle self);
+		[DllImport(Library, EntryPoint = "delete_componentcppinstance")]
+		public static extern void Dispose(Handle self);
 		
-		[DllImport(Library, EntryPoint = "component_create_descriptor")]
+		[DllImport(Library, EntryPoint = "componentcppinstance_create_descriptor")]
 		public static extern ComponentDescriptor CreateDescriptor(Handle self);
 	}
 	
-	internal static class CppButton
+	internal static class NativeButton
 	{
 		public const string Library = "InVisionNative_OIS.dll";
 		
-		[DllImport(Library, EntryPoint = "new_button")]
-		public static extern ButtonDescriptor New();
+		[DllImport(Library, EntryPoint = "new_buttoncppinstance")]
+		public static extern Handle Button();
 		
-		[DllImport(Library, EntryPoint = "new_button_by_pushed")]
-		public static extern ButtonDescriptor New(bool pushed);
+		[DllImport(Library, EntryPoint = "new_buttoncppinstance_by_pushed")]
+		public static extern Handle Button(bool pushed);
 		
-		[DllImport(Library, EntryPoint = "button_create_descriptor")]
+		[DllImport(Library, EntryPoint = "buttoncppinstance_create_descriptor")]
 		public static extern ButtonDescriptor CreateDescriptor(Handle self);
 	}
 	

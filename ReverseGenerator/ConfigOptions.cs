@@ -157,7 +157,7 @@ namespace CodeGenerator
         /// <returns></returns>
         public static string GetCppTypename(Type type)
         {
-            if (type.HasAttribute<CppWrapperAttribute>())
+            if (type.HasAttribute<CppInterfaceAttribute>())
                 return type.Name.Substring(1).ToPascalCase();
 
             return type.Name;
@@ -228,9 +228,9 @@ namespace CodeGenerator
         /// </summary>
         /// <param name="type">The type.</param>
         /// <returns></returns>
-        public static string GetCsWrapperTypename(Type type)
+        public static string GetCSharpCppInstanceTypename(Type type)
         {
-            return type.Name.Substring(1).ToPascalCase();
+            return type.Name.Substring(1).ToPascalCase() + "CppInstance";
         }
 
         /// <summary>

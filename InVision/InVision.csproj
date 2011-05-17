@@ -173,6 +173,7 @@
     <Compile Include="Native\Ext\CppEnumeration.cs" />
     <Compile Include="Native\Ext\CppImplementationAttribute.cs" />
     <Compile Include="Native\Ext\CppObject.cs" />
+    <Compile Include="Native\Ext\CppWrapper.cs" />
     <Compile Include="Native\Ext\DestructorAttribute.cs" />
     <Compile Include="DisposableObject.cs" />
     <Compile Include="Native\Ext\GeneratorModelAttribute.cs" />

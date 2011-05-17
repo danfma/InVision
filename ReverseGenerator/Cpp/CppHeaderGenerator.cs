@@ -49,14 +49,14 @@ namespace CodeGenerator.Cpp
 
             using (_writer = new SourceWriter(Path.Combine(Path.GetFullPath(ConfigOptions.CppOutputDir), _filename)))
             {
-                IEnumerable<Type> wrapperTypes = types.Where(t => t.HasAttribute<CppWrapperAttribute>(true));
+                IEnumerable<Type> wrapperTypes = types.Where(t => t.HasAttribute<CppInterfaceAttribute>(true));
                 IEnumerable<Type> enumerations = types.Where(t => t.IsEnum);
                 IEnumerable<Type> valueObjects =
                     types.Where(t => t.HasAttribute<ValueObjectAttribute>() && t.IsValueType && !t.IsEnum);
                 IEnumerable<Type> functionProviders =
                     types.Where(
                         t =>
-                        t.HasAttribute<CppTypeAttribute>() && !t.HasAttribute<CppWrapperAttribute>(true) &&
+                        t.HasAttribute<CppTypeAttribute>() && !t.HasAttribute<CppInterfaceAttribute>(true) &&
                         t.IsInterface);
                 IEnumerable<Type> converters = types.Where(t => t.HasAttribute<HandleConverterAttribute>());
 
@@ -556,7 +556,7 @@ namespace CodeGenerator.Cpp
             MethodInfo[] methods = wrapperType.GetMethods(MethodFlags);
 
             _writer.WriteLine("/*");
-            _writer.WriteLine(" * Function group: {0}", ConfigOptions.GetCsWrapperTypename(wrapperType));
+            _writer.WriteLine(" * Function group: {0}", ConfigOptions.GetCSharpCppInstanceTypename(wrapperType));
             _writer.WriteLine(" */");
             _writer.WriteLine();
 
@@ -584,7 +584,7 @@ namespace CodeGenerator.Cpp
             bool isConstructor = false;
             string cppTargetType = targetType;
 
-            targetType = ConfigOptions.GetCsWrapperTypename(methodInfo.DeclaringType);
+            targetType = ConfigOptions.GetCSharpCppInstanceTypename(methodInfo.DeclaringType);
 
             if (methodInfo.HasAttribute<ConstructorAttribute>())
             {
@@ -655,7 +655,7 @@ namespace CodeGenerator.Cpp
         {
             Type wrapperType = method.DeclaringType;
             string functionName;
-            string targetType = ConfigOptions.GetCsWrapperTypename(wrapperType);
+            string targetType = ConfigOptions.GetCSharpCppInstanceTypename(wrapperType);
 
             if (method.HasAttribute<ConstructorAttribute>())
             {

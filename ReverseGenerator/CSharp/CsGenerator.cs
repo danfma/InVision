@@ -17,6 +17,7 @@ namespace CodeGenerator.CSharp
         public void Generate(ConfigOptions configOptions, IEnumerable<Type> types)
         {
             new CSharpBindingsGenerator(configOptions).Generate(types, ".Bindings");
+            new CSharpCppInstanceGenerator(configOptions).Generate(types, ".CppInstances");
         }
 
         #endregion

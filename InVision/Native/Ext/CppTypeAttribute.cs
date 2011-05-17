@@ -53,32 +53,26 @@ namespace InVision.Native.Ext
 		}
 	}
 
-	public class CppWrapperAttribute : CppTypeAttribute
+	public class CppInterfaceAttribute : CppTypeAttribute
 	{
         /// <summary>
-        /// Initializes a new instance of the <see cref="CppWrapperAttribute"/> class.
+        /// Initializes a new instance of the <see cref="CppInterfaceAttribute"/> class.
         /// </summary>
-	    public CppWrapperAttribute()
+	    public CppInterfaceAttribute()
 	    {
 	        
 	    }
 
 		/// <summary>
-		/// Initializes a new instance of the <see cref="CppWrapperAttribute"/> class.
+		/// Initializes a new instance of the <see cref="CppInterfaceAttribute"/> class.
 		/// </summary>
 		/// <param name="typename">The typename.</param>
-		public CppWrapperAttribute(string typename)
+		public CppInterfaceAttribute(string typename)
 			: base(typename)
 		{
 		}
 
 		/// <summary>
-		/// Gets or sets the inheritance by.
-		/// </summary>
-		/// <value>The inheritance by.</value>
-		public InherintanceMode InheritanceBy { get; set; }
-
-        /// <summary>
         /// Gets or sets a value indicating whether this instance is abstract.
         /// </summary>
         /// <value>
@@ -91,6 +85,12 @@ namespace InVision.Native.Ext
         /// </summary>
         /// <value>The type of the descriptor.</value>
 	    public Type DescriptorType { get; set; }
+
+        /// <summary>
+        /// Gets or sets the type of the base.
+        /// </summary>
+        /// <value>The type of the base.</value>
+	    public Type BaseType { get; set; }
 	}
 
 	public enum InherintanceMode

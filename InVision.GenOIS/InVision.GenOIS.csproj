@@ -41,9 +41,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Component.cs" />
     <Compile Include="ComponentType.cs" />
     <Content Include="Generated.cs" />
     <Compile Include="INativeWrappers.cs" />
+    <Compile Include="InVisionNativeOIS.Bindings.cs" />
+    <Content Include="InVisionNativeOIS.CppInstances.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

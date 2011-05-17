@@ -60,7 +60,7 @@
     <Compile Include="Cpp\CppHeaderGenerator.cs" />
     <Compile Include="ReflectionUtility.cs" />
     <Compile Include="SourceWriter.cs" />
-    <Compile Include="CSharp\WrapperClassGenerator.cs" />
+    <Compile Include="CSharp\CSharpCppInstanceGenerator.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\InVision\InVision.csproj">

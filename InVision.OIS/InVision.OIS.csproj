@@ -147,7 +147,6 @@
     <Compile Include="Native\AxisDescriptor.cs" />
     <Compile Include="Native\ButtonDescriptor.cs" />
     <Compile Include="Native\ComponentDescriptor.cs" />
-    <Content Include="Native\InVisionNativeOIS.Bindings.cs" />
     <Compile Include="Native\DeviceTypeItem.cs" />
     <Compile Include="Native\Marshallers\DeviceTypeItemMarshaller.cs" />
     <Compile Include="Native\EventArgDescriptor.cs" />
