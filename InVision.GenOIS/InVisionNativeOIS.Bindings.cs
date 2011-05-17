@@ -14,13 +14,13 @@ namespace InVision.GenOIS
 	{
 		public const string Library = "InVisionNative_OIS.dll";
 		
-		[DllImport(Library, EntryPoint = "new_componentcppinstance")]
+		[DllImport(Library, EntryPoint = "new_component")]
 		public static extern Handle Component();
 		
-		[DllImport(Library, EntryPoint = "new_componentcppinstance_by_ctype")]
-		public static extern Handle Component(ComponentType ctype);
+		[DllImport(Library, EntryPoint = "new_component_by_componenttype")]
+		public static extern Handle Component(ComponentType componentType);
 		
-		[DllImport(Library, EntryPoint = "delete_componentcppinstance")]
+		[DllImport(Library, EntryPoint = "delete_component")]
 		public static extern void Dispose(Handle self);
 		
 		[DllImport(Library, EntryPoint = "componentcppinstance_create_descriptor")]
@@ -31,10 +31,10 @@ namespace InVision.GenOIS
 	{
 		public const string Library = "InVisionNative_OIS.dll";
 		
-		[DllImport(Library, EntryPoint = "new_buttoncppinstance")]
+		[DllImport(Library, EntryPoint = "new_button")]
 		public static extern Handle Button();
 		
-		[DllImport(Library, EntryPoint = "new_buttoncppinstance_by_pushed")]
+		[DllImport(Library, EntryPoint = "new_button_by_pushed")]
 		public static extern Handle Button(bool pushed);
 		
 		[DllImport(Library, EntryPoint = "buttoncppinstance_create_descriptor")]

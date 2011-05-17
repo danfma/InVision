@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace CodeGenerator.CSharp
 {
-    public class CsGenerator : IGenerator
+    public class CSharpGenerator : IGenerator
     {
         private SourceWriter _writer;
 
@@ -16,7 +16,8 @@ namespace CodeGenerator.CSharp
         /// <param name="types">The types.</param>
         public void Generate(ConfigOptions configOptions, IEnumerable<Type> types)
         {
-            new CSharpBindingsGenerator(configOptions).Generate(types, ".Bindings");
+            new CSharpBindingGenerator(configOptions).Generate(types, ".Bindings");
+			new CSharpCppInstanceGenerator(configOptions).Generate(types, ".CppInstances");
             new CSharpCppInstanceGenerator(configOptions).Generate(types, ".CppInstances");
         }
 

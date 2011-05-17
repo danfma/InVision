@@ -49,8 +49,8 @@
     <Compile Include="Cpp\CppValueObjectGenerator.cs" />
     <Compile Include="Cpp\CppValueObjectGeneratorBase.cs" />
     <Compile Include="Cpp\CppWraperDescriptorGenerator.cs" />
-    <Compile Include="CSharp\CsGenerator.cs" />
-    <Compile Include="CSharp\CSharpBindingsGenerator.cs" />
+    <Compile Include="CSharp\CSharpGenerator.cs" />
+    <Compile Include="CSharp\CSharpBindingGenerator.cs" />
     <Compile Include="CSharp\CSharpGeneratorBase.cs" />
     <Compile Include="IGenerator.cs" />
     <Compile Include="CSharp\NamespaceComparer.cs" />

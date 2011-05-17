@@ -284,5 +284,20 @@ namespace CodeGenerator
 
             return string.Empty;
         }
+
+    	public static string GetCSharpCppInstanceTypename(Type wrapperType)
+    	{
+    		return wrapperType.Name.Substring(1).ToPascalCase() + "Impl";
+    	}
+
+    	public static Type GetCppInstanceBaseType(Type wrapperType)
+    	{
+    		return wrapperType.GetAttribute<CppInterfaceAttribute>(false).BaseType;
+    	}
+
+    	public static string GetCSharpNativeTypename(Type wrapperType)
+    	{
+    		return "Native" + wrapperType.Name.Substring(1).ToPascalCase();
+    	}
     }
 }

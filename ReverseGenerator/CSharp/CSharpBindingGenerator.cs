@@ -10,13 +10,13 @@ using InVision.Native.Ext;
 
 namespace CodeGenerator.CSharp
 {
-    public class CSharpBindingsGenerator : CSharpGeneratorBase
+    public class CSharpBindingGenerator : CSharpGeneratorBase
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="CSharpBindingsGenerator"/> class.
+        /// Initializes a new instance of the <see cref="CSharpBindingGenerator"/> class.
         /// </summary>
         /// <param name="configOptions">The config options.</param>
-        public CSharpBindingsGenerator(ConfigOptions configOptions)
+        public CSharpBindingGenerator(ConfigOptions configOptions)
             : base(configOptions)
         {
         }
@@ -144,7 +144,7 @@ namespace CodeGenerator.CSharp
             string returnType = ConfigOptions.GetCSharpTypeString(method.ReturnType);
 
             if (method.HasAttribute<ConstructorAttribute>())
-                returnType = ConfigOptions.GetCSharpTypeString(typeof(Handle));
+                returnType = typeof(Handle).Name;
 
             Writer.BeginLine();
             Writer.Write("public static extern {0} {1}(",

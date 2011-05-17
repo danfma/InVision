@@ -61,7 +61,7 @@ namespace CodeGenerator
         /// <returns></returns>
         private static IEnumerable<IGenerator> GetGenerators()
         {
-            return new IGenerator[] { new CppHeaderGenerator(), new CsGenerator() };
+            return new IGenerator[] { new CppHeaderGenerator(), new CSharpGenerator() };
         }
 
         /// <summary>

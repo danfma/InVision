@@ -59,6 +59,7 @@ namespace CodeGenerator.Cpp
             var baseInterface =
                 (from i in parentInterfaces
                  let attr = i.GetAttribute<CppInterfaceAttribute>(true)
+                 where attr.InheritanceBy == InherintanceMode.BaseType
                  select new { Interface = i, Attribute = attr }).SingleOrDefault();
 
             if (baseInterface != null)
