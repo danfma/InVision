@@ -10,13 +10,13 @@ using InVision.Native.Ext;
 
 namespace CodeGenerator.CSharp
 {
-    public class CSharpBindingsGenerator : CSharpGeneratorBase
+    public class CSharpBindingGenerator : CSharpGeneratorBase
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="CSharpBindingsGenerator"/> class.
+        /// Initializes a new instance of the <see cref="CSharpBindingGenerator"/> class.
         /// </summary>
         /// <param name="configOptions">The config options.</param>
-        public CSharpBindingsGenerator(ConfigOptions configOptions)
+        public CSharpBindingGenerator(ConfigOptions configOptions)
             : base(configOptions)
         {
         }
@@ -27,7 +27,7 @@ namespace CodeGenerator.CSharp
         /// <param name="types">The types.</param>
         protected override void GenerateContent(IEnumerable<Type> types)
         {
-            IEnumerable<Type> wrapperTypes = types.Where(t => t.HasAttribute<CppWrapperAttribute>(true));
+            IEnumerable<Type> wrapperTypes = types.Where(t => t.HasAttribute<CppInterfaceAttribute>(true));
 
             var defaultNamespaces = new[] {
                                               typeof (DllImportAttribute).Namespace,
@@ -68,7 +68,7 @@ namespace CodeGenerator.CSharp
         /// <param name="wrapperType">Type of the wrapper.</param>
         private void WriteWrapperType(Type wrapperType)
         {
-            Writer.WriteLine("internal static class Cpp{0}", wrapperType.Name.Substring(1));
+            Writer.WriteLine("internal static class Native{0}", wrapperType.Name.Substring(1));
             Writer.OpenBlock();
             {
                 Writer.WriteLine("public const string Library = \"{0}.dll\";", ConfigOptions.ProjectName);
@@ -144,7 +144,7 @@ namespace CodeGenerator.CSharp
             string returnType = ConfigOptions.GetCSharpTypeString(method.ReturnType);
 
             if (method.HasAttribute<ConstructorAttribute>())
-                returnType = ConfigOptions.GetCSharpWrapperDescriptorTypename(method.DeclaringType);
+                returnType = typeof(Handle).Name;
 
             Writer.BeginLine();
             Writer.Write("public static extern {0} {1}(",

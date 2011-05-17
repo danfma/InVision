@@ -7,13 +7,14 @@ using InVision.Native.Ext;
 
 namespace CodeGenerator.CSharp
 {
-    public class WrapperClassGenerator : CSharpGeneratorBase
+    public class CSharpCppInstanceGenerator : CSharpGeneratorBase
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="WrapperClassGenerator"/> class.
+        /// Initializes a new instance of the <see cref="CSharpCppInstanceGenerator"/> class.
         /// </summary>
         /// <param name="configOptions">The config options.</param>
-        public WrapperClassGenerator(ConfigOptions configOptions) : base(configOptions)
+        public CSharpCppInstanceGenerator(ConfigOptions configOptions)
+            : base(configOptions)
         {
         }
 
@@ -23,11 +24,11 @@ namespace CodeGenerator.CSharp
         /// <param name="types">The types.</param>
         protected override void GenerateContent(IEnumerable<Type> types)
         {
-            IEnumerable<Type> wrapperTypes = types.Where(t => t.HasAttribute<CppWrapperAttribute>(true));
+            IEnumerable<Type> wrapperTypes = types.Where(t => t.HasAttribute<CppInterfaceAttribute>(true));
 
             var defaultNamespaces = new[] {
-                                              typeof (Handle).Namespace
-                                          };
+                typeof (Handle).Namespace
+            };
 
             IEnumerable<string> namespacesUsed = types.ScanNamespacesInMethodsOf();
             namespacesUsed = namespacesUsed.Union(types.ScanNamespacesInProperties());
@@ -64,25 +65,24 @@ namespace CodeGenerator.CSharp
         /// <param name="wrapperType">Type of the wrapper.</param>
         private void WriteWrapperType(Type wrapperType)
         {
-            string typeName = wrapperType.Name.Substring(1);
+            string typeName = ConfigOptions.GetCSharpCppInstanceTypename(wrapperType);
             Type baseType = GetBaseType(wrapperType);
-            IEnumerable<Type> interfaces = GetInterfaces(wrapperType);
+            IEnumerable<Type> interfaces = GetInterfaces(wrapperType, true);
 
             bool hasBaseType = baseType != null;
             bool hasInterfaces = interfaces.Count() > 0;
 
-            Writer.WriteLine("public {0}partial class {1}",
-                IsAbstract(wrapperType) ? "abstract " : string.Empty,
-                typeName);
+			Writer.WriteLine("[CppImplementation(typeof({0}))]", wrapperType.Name);
+            Writer.WriteLine("internal class {0}", typeName);
 
             WriteInheritance(baseType, interfaces, hasBaseType, hasInterfaces);
 
             Writer.OpenBlock();
             {
-                WriteFields(wrapperType);
+                //WriteFields(wrapperType);
                 WriteConstructors(wrapperType);
                 WriteDestructor(wrapperType);
-                WriteProperties(wrapperType);
+                //WriteProperties(wrapperType);
                 WriteMethods(wrapperType);
             }
             Writer.CloseBlock();
@@ -97,7 +97,7 @@ namespace CodeGenerator.CSharp
         /// </returns>
         public static bool IsAbstract(Type type)
         {
-            return type.QueryAttribute<CppWrapperAttribute>(attr => attr.IsAbstract);
+            return type.QueryAttribute<CppInterfaceAttribute>(attr => attr.IsAbstract);
         }
 
         /// <summary>
@@ -112,7 +112,7 @@ namespace CodeGenerator.CSharp
             foreach (PropertyInfo property in properties)
             {
                 Writer.WriteLine("private unsafe {0}* {1};", property.PropertyType.Name,
-                                  property.Name.ToUnderscoredCamelCase());
+                                 property.Name.ToUnderscoredCamelCase());
             }
 
             Writer.WriteLine();
@@ -124,37 +124,13 @@ namespace CodeGenerator.CSharp
         /// <param name="wrapperType">Type of the wrapper.</param>
         private void WriteConstructors(Type wrapperType)
         {
-            string typename = wrapperType.Name.Substring(1).ToPascalCase();
-
-            Writer.WriteLine("protected {0}(Handle handle, bool ownsHandle)", typename);
-            Writer.WriteLine("\t: base(handle, ownsHandle)");
-            Writer.WriteLine("{ }");
-            Writer.WriteLine();
-
-            Writer.WriteLine("public {0}({0}Descriptor descriptor, bool ownsHandle)", typename);
-            Writer.WriteLine("\t: this(descriptor.Self, ownsHandle)");
-            Writer.OpenBlock();
-
-            IEnumerable<PropertyInfo> properties =
-                ReflectionUtility.GetProperties(wrapperType).Where(p => p.HasAttribute<FieldAttribute>());
-
-            foreach (PropertyInfo property in properties)
-            {
-                Writer.WriteLine("{0} = descriptor.{1};",
-                                  property.Name.ToUnderscoredCamelCase(),
-                                  property.Name);
-            }
-
-            Writer.CloseBlock();
-            Writer.WriteLine();
-
             IEnumerable<MethodInfo> constructors = ReflectionUtility.GetMethods(wrapperType).
                 Where(m => m.HasAttribute<ConstructorAttribute>());
 
             foreach (MethodInfo constructor in constructors)
             {
                 ParameterInfo[] parameters = constructor.GetParameters();
-                
+
                 string parametersDef =
                     (from p in parameters
                      let paramModification = ConfigOptions.GetCSharpParameterModification(p)
@@ -166,9 +142,20 @@ namespace CodeGenerator.CSharp
 
                 string parametersList = parameters.Select(p => p.Name).Join(", ");
 
-                Writer.WriteLine("public {0}({1})", typename, parametersDef);
-                Writer.WriteLine("\t: this(Cpp{0}.New({1}), true)", typename, parametersList);
-                Writer.WriteLine("{ }");
+                Writer.WriteLine("{0} {0}.{1}({2})", 
+					wrapperType.Name, 
+					constructor.Name, 
+					parametersDef);
+
+                Writer.OpenBlock();
+            	{
+            		Writer.WriteLine("Self = {0}.{1}({2});", 
+						CodeGenerator.ConfigOptions.GetCSharpNativeTypename(wrapperType),
+						constructor.Name,
+						parametersList);
+					Writer.WriteLine("return this;");
+            	}
+				Writer.CloseBlock();
                 Writer.WriteLine();
             }
         }
@@ -185,11 +172,21 @@ namespace CodeGenerator.CSharp
             if (!hasDestructor && hasBaseType)
                 return;
 
-            Writer.WriteLine("protected override void DeleteHandle()");
+        	var destructor = GetDestructor(wrapperType);
+
+            Writer.WriteLine("{0} {1}.{2}()", 
+				CodeGenerator.ConfigOptions.GetCSharpTypeString(destructor.ReturnType),
+				wrapperType.Name,
+				destructor.Name);
+
             Writer.OpenBlock();
             {
                 if (hasDestructor)
-                    Writer.WriteLine("Cpp{0}.Delete(Self);", wrapperType.Name.Substring(1).ToPascalCase());
+                {
+                	Writer.WriteLine("{0}.{1}(Self);", 
+                		CodeGenerator.ConfigOptions.GetCSharpNativeTypename(wrapperType),
+						destructor.Name);
+                }
             }
             Writer.CloseBlock();
             Writer.WriteLine();
@@ -216,11 +213,20 @@ namespace CodeGenerator.CSharp
         /// </returns>
         public static bool HasDestructor(Type wrapperType)
         {
-            return ReflectionUtility.GetMethods(wrapperType).
-                Where(m => m.HasAttribute<DestructorAttribute>(false)).Any();
+            return FindDestructor(wrapperType).Any();
         }
 
-        /// <summary>
+		public static MethodInfo GetDestructor(Type wrapperType)
+		{
+			return FindDestructor(wrapperType).SingleOrDefault();
+		}
+
+    	private static IEnumerable<MethodInfo> FindDestructor(Type wrapperType)
+    	{
+    		return ReflectionUtility.GetMethods(wrapperType).Where(m => m.HasAttribute<DestructorAttribute>(false));
+    	}
+
+    	/// <summary>
         /// Writes the properties.
         /// </summary>
         /// <param name="wrapperType">Type of the wrapper.</param>
@@ -297,7 +303,7 @@ namespace CodeGenerator.CSharp
             {
                 var methodAttr = method.GetAttribute<MethodAttribute>(true);
                 ParameterInfo[] parameters = method.GetParameters();
-                
+
                 string parametersDef =
                     (from p in parameters
                      let paramModification = ConfigOptions.GetCSharpParameterModification(p)
@@ -311,11 +317,11 @@ namespace CodeGenerator.CSharp
 
                 bool returnVoid = method.ReturnType == typeof(void);
 
-                Writer.WriteLine("public {0}{1} {2}({3})",
-                                  methodAttr.IsStatic ? "static " : string.Empty,
-                                  ConfigOptions.GetCSharpTypeString(method.ReturnType),
-                                  method.Name,
-                                  parametersDef);
+                Writer.WriteLine("{0} {1}.{2}({3})",
+                                 ConfigOptions.GetCSharpTypeString(method.ReturnType),
+								 wrapperType.Name,
+                                 method.Name,
+                                 parametersDef);
 
                 Writer.OpenBlock();
                 {
@@ -326,11 +332,11 @@ namespace CodeGenerator.CSharp
                                                        parametersList);
                     }
 
-                    Writer.WriteLine("{0}Cpp{1}.{2}({3});",
-                                      returnVoid ? string.Empty : "return ",
-                                      typename,
-                                      method.Name,
-                                      parametersList);
+                    Writer.WriteLine("{0}{1}.{2}({3});",
+                                     returnVoid ? string.Empty : "return ",
+                                     CodeGenerator.ConfigOptions.GetCSharpNativeTypename(wrapperType),
+                                     method.Name,
+                                     parametersList);
                 }
                 Writer.CloseBlock();
                 Writer.WriteLine();
@@ -351,12 +357,12 @@ namespace CodeGenerator.CSharp
             if (hasBaseType)
             {
                 Writer.BeginLine();
-                Writer.Write(": {0}", baseType.Name.Substring(1));
+                Writer.Write(": {0}", CodeGenerator.ConfigOptions.GetCSharpCppInstanceTypename(baseType));
             }
             else
             {
                 Writer.BeginLine();
-                Writer.Write(": HandleContainer");
+                Writer.Write(": CppInstance");
             }
 
             if (hasInterfaces)
@@ -382,22 +388,24 @@ namespace CodeGenerator.CSharp
 
         public static Type GetBaseType(Type wrapperType)
         {
-            return wrapperType.GetInterfaces().
-                Where(@interface => @interface.QueryAttribute<CppWrapperAttribute>(
-                    attr => attr.InheritanceBy == InherintanceMode.BaseType)).
-                SingleOrDefault();
+        	return ConfigOptions.GetCppInstanceBaseType(wrapperType);
         }
 
-        /// <summary>
-        /// Gets the interfaces.
-        /// </summary>
-        /// <param name="wrapperType">Type of the wrapper.</param>
-        /// <returns></returns>
-        public static IEnumerable<Type> GetInterfaces(Type wrapperType)
+        public static IEnumerable<Type> GetInterfaces(Type wrapperType, bool includeWrapperType)
         {
-            return wrapperType.GetInterfaces().
-                Where(@interface => @interface.QueryAttribute<CppWrapperAttribute>(
-                    attr => attr.InheritanceBy == InherintanceMode.Interface));
+        	var baseType = GetBaseType(wrapperType);
+
+            var @interfaces = 
+				wrapperType.GetInterfaces().
+                Where(@interface => @interface.HasAttribute<CppInterfaceAttribute>() && @interface != baseType);
+
+			if (includeWrapperType)
+				yield return wrapperType;
+
+        	foreach (var @interface in interfaces)
+        	{
+        		yield return @interface;
+        	}
         }
     }
 }

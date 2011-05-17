@@ -49,14 +49,14 @@ namespace CodeGenerator.Cpp
 
             using (_writer = new SourceWriter(Path.Combine(Path.GetFullPath(ConfigOptions.CppOutputDir), _filename)))
             {
-                IEnumerable<Type> wrapperTypes = types.Where(t => t.HasAttribute<CppWrapperAttribute>(true));
+                IEnumerable<Type> wrapperTypes = types.Where(t => t.HasAttribute<CppInterfaceAttribute>(true));
                 IEnumerable<Type> enumerations = types.Where(t => t.IsEnum);
                 IEnumerable<Type> valueObjects =
                     types.Where(t => t.HasAttribute<ValueObjectAttribute>() && t.IsValueType && !t.IsEnum);
                 IEnumerable<Type> functionProviders =
                     types.Where(
                         t =>
-                        t.HasAttribute<CppTypeAttribute>() && !t.HasAttribute<CppWrapperAttribute>(true) &&
+                        t.HasAttribute<CppTypeAttribute>() && !t.HasAttribute<CppInterfaceAttribute>(true) &&
                         t.IsInterface);
                 IEnumerable<Type> converters = types.Where(t => t.HasAttribute<HandleConverterAttribute>());
 

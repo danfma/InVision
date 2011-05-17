@@ -49,8 +49,8 @@
     <Compile Include="Cpp\CppValueObjectGenerator.cs" />
     <Compile Include="Cpp\CppValueObjectGeneratorBase.cs" />
     <Compile Include="Cpp\CppWraperDescriptorGenerator.cs" />
-    <Compile Include="CSharp\CsGenerator.cs" />
-    <Compile Include="CSharp\CSharpBindingsGenerator.cs" />
+    <Compile Include="CSharp\CSharpGenerator.cs" />
+    <Compile Include="CSharp\CSharpBindingGenerator.cs" />
     <Compile Include="CSharp\CSharpGeneratorBase.cs" />
     <Compile Include="IGenerator.cs" />
     <Compile Include="CSharp\NamespaceComparer.cs" />
@@ -60,7 +60,7 @@
     <Compile Include="Cpp\CppHeaderGenerator.cs" />
     <Compile Include="ReflectionUtility.cs" />
     <Compile Include="SourceWriter.cs" />
-    <Compile Include="CSharp\WrapperClassGenerator.cs" />
+    <Compile Include="CSharp\CSharpCppInstanceGenerator.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\InVision\InVision.csproj">

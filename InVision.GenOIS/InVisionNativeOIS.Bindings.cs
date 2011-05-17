@@ -10,32 +10,32 @@ using InVision.Native.Ext;
 
 namespace InVision.GenOIS
 {
-	internal static class CppComponent
+	internal static class NativeComponent
 	{
 		public const string Library = "InVisionNative_OIS.dll";
 		
 		[DllImport(Library, EntryPoint = "new_component")]
-		public static extern ComponentDescriptor New();
+		public static extern Handle Component();
 		
 		[DllImport(Library, EntryPoint = "new_component_by_componenttype")]
-		public static extern ComponentDescriptor New(ComponentType componentType);
+		public static extern Handle Component(ComponentType componentType);
 		
 		[DllImport(Library, EntryPoint = "delete_component")]
-		public static extern void Delete(Handle self);
+		public static extern void Dispose(Handle self);
 		
 		[DllImport(Library, EntryPoint = "component_create_descriptor")]
 		public static extern ComponentDescriptor CreateDescriptor(Handle self);
 	}
 	
-	internal static class CppButton
+	internal static class NativeButton
 	{
 		public const string Library = "InVisionNative_OIS.dll";
 		
 		[DllImport(Library, EntryPoint = "new_button")]
-		public static extern ButtonDescriptor New();
+		public static extern Handle Button();
 		
 		[DllImport(Library, EntryPoint = "new_button_by_pushed")]
-		public static extern ButtonDescriptor New(bool pushed);
+		public static extern Handle Button(bool pushed);
 		
 		[DllImport(Library, EntryPoint = "button_create_descriptor")]
 		public static extern ButtonDescriptor CreateDescriptor(Handle self);
