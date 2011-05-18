@@ -19,8 +19,7 @@ INV_CALL get_registered_typeid_by_name(const char* type)
 	}
 	catch (std::exception& ex)
 	{
-		raise_exception(ex.what(), KEY_NOT_FOUND_ERROR);
-		return 0;
+		return register_type_by_name(type);
 	}
 }
 
