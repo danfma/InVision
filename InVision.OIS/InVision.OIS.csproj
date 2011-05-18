@@ -111,8 +111,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AddOnFactory.cs" />
-    <Compile Include="Components\AxisComponent.cs" />
-    <Compile Include="Components\ButtonComponent.cs" />
+    <Compile Include="Components\Axis.cs" />
+    <Compile Include="Components\Button.cs" />
     <Compile Include="Components\ComponentType.cs" />
     <Compile Include="DeviceInfo.cs" />
     <Compile Include="DeviceList.cs" />
@@ -148,8 +148,11 @@
     <Compile Include="Native\ButtonDescriptor.cs" />
     <Compile Include="Native\ComponentDescriptor.cs" />
     <Compile Include="Native\DeviceTypeItem.cs" />
-    <Compile Include="Native\Marshallers\DeviceTypeItemMarshaller.cs" />
     <Compile Include="Native\EventArgDescriptor.cs" />
+    <Compile Include="Native\IAxis.cs" />
+    <Compile Include="Native\IButton.cs" />
+    <Compile Include="Native\IComponent.cs" />
+    <Compile Include="Native\IVector3.cs" />
     <Compile Include="Native\KeyEventDescriptor.cs" />
     <Compile Include="Native\KeyEventHandler.cs" />
     <Compile Include="Native\MouseClickHandler.cs" />
@@ -183,7 +186,7 @@
     <Compile Include="TextTranslationMode.cs" />
     <Compile Include="Components\Component.cs" />
     <Compile Include="Unknown.cs" />
-    <Compile Include="Components\Vector3Component.cs" />
+    <Compile Include="Components\Vector3.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
@@ -205,4 +208,7 @@
   <PropertyGroup>
     <PostBuildEvent>copy "$(TargetDir)*.*" "$(SolutionDir)Samples\Empty\Bin\"</PostBuildEvent>
   </PropertyGroup>
+  <Target Name="AfterBuild">
+    <!--<Exec Command="&quot;$(SolutionDir)ReverseGenerator\\bin\\$(Configuration)\\ReverseGenerator.exe&quot; -a:&quot;$(TargetPath)&quot; -p:InVisionNative_OIS -cpp:&quot;$(SolutionDir)Platform\\NativeLibs\\sources\\cois&quot; -cs:&quot;$(TargetDir)&quot;" />-->
+  </Target>
 </Project>

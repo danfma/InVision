@@ -5,7 +5,7 @@ using InVision.OIS.Native;
 
 namespace InVision.OIS
 {
-	public class DeviceObject : Handle
+	public class DeviceObject : SafeHandle
 	{
 		private static readonly Dictionary<DeviceType, Type> DeviceTypes;
 

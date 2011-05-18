@@ -18,22 +18,26 @@ descriptor_of_button(InvHandle handle)
 /**
  * Method: Button::Button
  */
-INV_EXPORT ButtonDescriptor
-INV_CALL new_button()
+INV_EXPORT InvHandle
+INV_CALL new_button_by_descriptor(ButtonDescriptor* descriptor)
 {
-	InvHandle handle = newHandleOf<OIS::Button>();
-	
-	return descriptor_of_button(handle);
+	OIS::Button* obj = new OIS::Button();
+	InvHandle self = createHandle< OIS::Button >(obj);
+	*descriptor = descriptor_of_button(self);
+
+	return self;
 }
 
 /**
  * Method: Button::Button
  */
-INV_EXPORT ButtonDescriptor
-INV_CALL new_button_by_pushed(_bool pushed)
+INV_EXPORT InvHandle
+INV_CALL new_button_by_descriptor_pushed(ButtonDescriptor* descriptor, _bool pushed)
 {
-	InvHandle handle = newHandleOf<OIS::Button, bool>(fromBool(pushed));
-	
-	return descriptor_of_button(handle);
+	OIS::Button* obj = new OIS::Button(pushed);
+	InvHandle self = createHandle< OIS::Button >(obj);
+	*descriptor = descriptor_of_button(self);
+
+	return self;
 }
 

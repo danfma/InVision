@@ -131,6 +131,14 @@ namespace CodeGenerator
             if (TranslatedTypes.TryGetValue(fieldType, out translatedType))
                 return translatedType;
 
+            if (fieldType.IsByRef)
+            {
+                string pointedTypename = fieldType.FullName.Substring(0, fieldType.FullName.Length - 1);
+                Type pointedType = fieldType.Assembly.GetType(pointedTypename);
+
+                return TranslateType(fieldInfo, pointedType) + "*";
+            }
+
             if (fieldType.IsArray)
             {
                 return TranslateType(fieldInfo, fieldType.GetElementType()) + "*";
@@ -224,16 +232,6 @@ namespace CodeGenerator
         }
 
         /// <summary>
-        /// Gets the cs wrapper typename.
-        /// </summary>
-        /// <param name="type">The type.</param>
-        /// <returns></returns>
-        public static string GetCSharpCppInstanceTypename(Type type)
-        {
-            return type.Name.Substring(1).ToPascalCase() + "CppInstance";
-        }
-
-        /// <summary>
         /// Gets the C sharp type string.
         /// </summary>
         /// <param name="type">The type.</param>
@@ -245,17 +243,17 @@ namespace CodeGenerator
             if (CSharpTypes.TryGetValue(type, out csharpType))
                 return csharpType;
 
-            if (type.IsArray)
-            {
-                return GetCSharpTypeString(type.GetElementType()) + "[]";
-            }
-
             if (type.IsByRef)
             {
                 string pointedTypename = type.FullName.Substring(0, type.FullName.Length - 1);
                 Type pointedType = type.Assembly.GetType(pointedTypename);
 
-                return "ref " + GetCSharpTypeString(pointedType);
+                return GetCSharpTypeString(pointedType);
+            }
+
+            if (type.IsArray)
+            {
+                return GetCSharpTypeString(type.GetElementType()) + "[]";
             }
 
             if (type.IsPointer)
@@ -281,6 +279,9 @@ namespace CodeGenerator
 
             if (parameter.IsOut)
                 return "out";
+
+            if (parameter.ParameterType.IsByRef)
+                return "ref";
 
             return string.Empty;
         }

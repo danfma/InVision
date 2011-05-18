@@ -2,20 +2,18 @@
 <Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>8.0.30703</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{E27F975A-EE9E-4DA4-ACDF-995FF6E752B5}</ProjectGuid>
-    <OutputType>Exe</OutputType>
+    <ProjectGuid>{CF8FC602-FD36-41DF-8FC6-08E9BB5593DC}</ProjectGuid>
+    <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>CodeGenerator</RootNamespace>
-    <AssemblyName>CodeGenerator</AssemblyName>
+    <RootNamespace>InVision.OIS.Native</RootNamespace>
+    <AssemblyName>InVision.OIS.Native</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
-    <TargetFrameworkProfile>Client</TargetFrameworkProfile>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
-    <PlatformTarget>x86</PlatformTarget>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
@@ -24,8 +22,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
-    <PlatformTarget>x86</PlatformTarget>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
@@ -34,9 +31,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="NDesk.Options">
-      <HintPath>..\Libs\Mono\NDesk.Options.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -46,23 +40,15 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Cpp\CppValueObjectGenerator.cs" />
-    <Compile Include="Cpp\CppValueObjectGeneratorBase.cs" />
-    <Compile Include="Cpp\CppWraperDescriptorGenerator.cs" />
-    <Compile Include="CSharp\CSharpGenerator.cs" />
-    <Compile Include="CSharp\CSharpBindingGenerator.cs" />
-    <Compile Include="CSharp\CSharpGeneratorBase.cs" />
-    <Compile Include="IGenerator.cs" />
-    <Compile Include="CSharp\NamespaceComparer.cs" />
-    <Compile Include="ConfigOptions.cs" />
-    <Compile Include="Program.cs" />
+    <Compile Include="InVisionNativeOIS.Bindings.cs" />
+    <Compile Include="InVisionNativeOIS.CppInstances.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Cpp\CppHeaderGenerator.cs" />
-    <Compile Include="ReflectionUtility.cs" />
-    <Compile Include="SourceWriter.cs" />
-    <Compile Include="CSharp\CSharpCppInstanceGenerator.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\InVision.OIS\InVision.OIS.csproj">
+      <Project>{059527B2-32AF-4983-A27F-12407C88BE0B}</Project>
+      <Name>InVision.OIS</Name>
+    </ProjectReference>
     <ProjectReference Include="..\InVision\InVision.csproj">
       <Project>{4A69EB8E-6E49-415C-ACB4-9CB904EA54DB}</Project>
       <Name>InVision</Name>

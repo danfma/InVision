@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Concurrent;
 using System.Linq;
+using System.Reflection;
 using InVision.Extensions;
 
 namespace InVision.Native.Ext
@@ -36,8 +37,10 @@ namespace InVision.Native.Ext
         /// <returns></returns>
         private static Type SearchImplementationType(Type interfaceType)
         {
+            var targetAssembly = interfaceType.Assembly.GetName().Name + ".Native";
+
             var query =
-                from t in interfaceType.Assembly.GetTypes()
+                from t in Assembly.Load(targetAssembly).GetTypes()
                 where t.QueryAttribute<CppImplementationAttribute>(a => a.TargetInterface == interfaceType)
                 select t;
 

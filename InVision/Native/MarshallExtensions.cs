@@ -13,35 +13,35 @@ namespace InVision.Native
 		/// <summary>
 		/// Registers the handle.
 		/// </summary>
-		/// <param name="handle">The handle.</param>
+		/// <param name="safeHandle">The handle.</param>
 		/// <returns></returns>
-		public static bool RegisterHandle(this Handle handle)
+		public static bool RegisterHandle(this SafeHandle safeHandle)
 		{
-			return Handles.TryAdd(handle.DangerousGetHandle(), new WeakReference(handle));
+			return Handles.TryAdd(safeHandle.DangerousGetHandle(), new WeakReference(safeHandle));
 		}
 
 		/// <summary>
 		/// Unregisters the handle.
 		/// </summary>
-		/// <param name="handle">The handle.</param>
+		/// <param name="safeHandle">The handle.</param>
 		/// <returns></returns>
-		public static bool UnregisterHandle(this Handle handle)
+		public static bool UnregisterHandle(this SafeHandle safeHandle)
 		{
 			WeakReference weakRef;
 
-			return Handles.TryRemove(handle.DangerousGetHandle(), out weakRef);
+			return Handles.TryRemove(safeHandle.DangerousGetHandle(), out weakRef);
 		}
 
 		/// <summary>
 		/// Changes the type of the handle.
 		/// </summary>
 		/// <typeparam name="T"></typeparam>
-		/// <param name="handle">The handle.</param>
+		/// <param name="safeHandle">The handle.</param>
 		/// <param name="creator">The creator.</param>
 		/// <returns></returns>
-		public static T ChangeHandleType<T>(this Handle handle, Func<IntPtr, T> creator)
+		public static T ChangeHandleType<T>(this SafeHandle safeHandle, Func<IntPtr, T> creator)
 		{
-			IntPtr pHandle = handle.DangerousGetHandle();
+			IntPtr pHandle = safeHandle.DangerousGetHandle();
 
 			if (pHandle == IntPtr.Zero)
 				return default(T);
@@ -63,7 +63,7 @@ namespace InVision.Native
 				}
 				finally
 				{
-					handle.GiveUpHandleOwnership();
+					safeHandle.GiveUpHandleOwnership();
 				}
 			}
 		}
@@ -76,7 +76,7 @@ namespace InVision.Native
 		/// <param name = "creator">The creator.</param>
 		/// <returns></returns>
 		public static T AsHandle<T>(this IntPtr pHandle, Func<IntPtr, T> creator)
-			where T : Handle
+			where T : SafeHandle
 		{
 			if (pHandle == IntPtr.Zero)
 				return default(T);

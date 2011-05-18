@@ -5,7 +5,7 @@ using InVision.OIS.Native;
 
 namespace InVision.OIS
 {
-	public class InputManager : Handle
+	public class InputManager : SafeHandle
 	{
 		private static uint? _versionNumber;
 		private string _inputSystemName;

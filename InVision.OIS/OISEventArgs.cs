@@ -3,7 +3,7 @@ using InVision.Native;
 
 namespace InVision.OIS
 {
-	public class OISEventArgs : ReferenceHandle
+	public class OISEventArgs : ReferenceSafeHandle
 	{
 		/// <summary>
 		/// Initializes a new instance of the <see cref="OISEventArgs"/> class.

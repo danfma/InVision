@@ -3,7 +3,7 @@ using InVision.Native.Ext;
 
 namespace InVision.OIS.Native
 {
-    [ValueObject]
+    [CppValueObject]
     [StructLayout(LayoutKind.Sequential)]
     internal struct DeviceTypeItem
     {

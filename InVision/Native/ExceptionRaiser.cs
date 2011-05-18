@@ -46,15 +46,14 @@ namespace InVision.Native
 			PlatformInvoke.RegisterExceptionHandler(null);
 		}
 
-		/// <summary>
-		/// Raises the exception.
-		/// </summary>
-		/// <param name="message">The message.</param>
-		/// <param name="filename">The filename.</param>
-		/// <param name="line">The line.</param>
-		private static void RaiseException(string message, string filename, int line)
+        /// <summary>
+        /// Raises the exception.
+        /// </summary>
+        /// <param name="message">The message.</param>
+        /// <param name="errorType">Type of the error.</param>
+		private static void RaiseException(string message, int errorType)
 		{
-			throw new InVisionNativeException(message, filename, line);
+			throw new InVisionNativeException(message, errorType);
 		}
 	}
 }

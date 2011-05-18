@@ -24,7 +24,7 @@ namespace InVision.Native
 			initialized = true;
 		}
 
-		[DllImport(CommonLibrary, EntryPoint = "_register_exception_handler")]
+		[DllImport(CommonLibrary, EntryPoint = "register_exception_handler")]
 		public static extern void RegisterExceptionHandler(RaiseExceptionHandler exceptionHandler);
 
 		[DllImport(CommonLibrary, EntryPoint = "util_string_delete")]

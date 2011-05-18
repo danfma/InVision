@@ -9,34 +9,40 @@ descriptor_of_component(InvHandle handle)
 	OIS::Component* cp = castHandle<OIS::Component>(handle);
 
 	ComponentDescriptor descriptor;
-	descriptor.self = handle;
-	descriptor.componentType = (_int*)&cp->cType;
+	descriptor.ctype = (_int*)&cp->cType;
 
 	return descriptor;
 }
 
 
-INV_EXPORT ComponentDescriptor
-INV_CALL new_component()
+INV_EXPORT InvHandle
+INV_CALL new_component_by_descriptor(ComponentDescriptor* descriptor)
 {
-	InvHandle handle = newHandleOf<OIS::Component>();
+	OIS::Component* obj = new OIS::Component();
+	InvHandle self = createHandle< OIS::Component >(obj);
+	*descriptor = descriptor_of_component(self);
 
-	return descriptor_of_component(handle);
+	return self;
 }
 
-
-INV_EXPORT ComponentDescriptor
-INV_CALL new_component_by_ctype(_int ctype)
+/**
+ * Method: Component::Component
+ */
+INV_EXPORT InvHandle
+INV_CALL new_component_by_descriptor_ctype(ComponentDescriptor* descriptor, COMPONENT_TYPE ctype)
 {
 	OIS::Component* obj = new OIS::Component((OIS::ComponentType)ctype);
-	InvHandle handle = createHandle< OIS::Component >(obj);
+	InvHandle self = createHandle< OIS::Component >(obj);
+	*descriptor = descriptor_of_component(self);
 
-	return descriptor_of_component(handle);
+	return self;
 }
 
-
+/**
+ * Method: Component::~Component
+ */
 INV_EXPORT void
-INV_CALL delete_component(InvHandle handle)
+INV_CALL delete_component(InvHandle self)
 {
-	destroyHandle(handle);
+	destroyHandle(self);
 }

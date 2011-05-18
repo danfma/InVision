@@ -102,7 +102,7 @@ namespace CodeGenerator.Cpp
 
             return
                 from propertyInfo in properties
-                where propertyInfo.PropertyType.HasAttribute<ValueObjectAttribute>(true)
+                where propertyInfo.PropertyType.HasAttribute<CppValueObjectAttribute>(true)
                 select ConfigOptions.GetCppTypename(propertyInfo.PropertyType) into cppTypename
                 select ConfigOptions.AdditionalInclude(cppTypename);
         }

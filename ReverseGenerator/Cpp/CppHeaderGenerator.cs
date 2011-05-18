@@ -52,7 +52,7 @@ namespace CodeGenerator.Cpp
                 IEnumerable<Type> wrapperTypes = types.Where(t => t.HasAttribute<CppInterfaceAttribute>(true));
                 IEnumerable<Type> enumerations = types.Where(t => t.IsEnum);
                 IEnumerable<Type> valueObjects =
-                    types.Where(t => t.HasAttribute<ValueObjectAttribute>() && t.IsValueType && !t.IsEnum);
+                    types.Where(t => t.HasAttribute<CppValueObjectAttribute>() && t.IsValueType && !t.IsEnum);
                 IEnumerable<Type> functionProviders =
                     types.Where(
                         t =>
@@ -77,13 +77,13 @@ namespace CodeGenerator.Cpp
                 _writer.WriteLine();
 
                 WriteFunctionProviders(functionProviders);
-                //WriteWrappersMethods(wrapperTypes);
+                WriteWrappersMethods(wrapperTypes);
 
                 _writer.Deindent();
                 _writer.WriteLine("}");
                 _writer.WriteLine();
 
-                WriteInlineConverters(converters);
+                WriteInlineConverters(converters.Union(wrapperTypes).Distinct());
                 WriteFooter();
 
                 _writer.Close();
@@ -105,7 +105,7 @@ namespace CodeGenerator.Cpp
 
             IEnumerable<string> fileDefinitions =
                 (from type in converters
-                 select type.GetAttribute<HandleConverterAttribute>(true).DefinitionFile).Distinct();
+                 select type.GetAttribute<CppTypeAttribute>(true).DefinitionFile).Distinct();
 
             foreach (string fileDefinition in fileDefinitions)
             {
@@ -127,15 +127,17 @@ namespace CodeGenerator.Cpp
         /// <summary>
         /// Writes the inline converter.
         /// </summary>
-        /// <param name="converter">The converter.</param>
-        private void WriteInlineConverter(Type converter)
+        /// <param name="type">The converter.</param>
+        private void WriteInlineConverter(Type type)
         {
-            var attribute = converter.GetAttribute<HandleConverterAttribute>(true);
+            var attribute = type.GetAttribute<CppTypeAttribute>(true);
 
-            _writer.WriteLine("inline {0}* as{1}(InvHandle self) {{", attribute.FullTypeName,
-                              attribute.CustomOrTypeName());
+            _writer.WriteLine("inline {0}* as{1}(InvHandle self) {{", 
+                attribute.GetCppFullName(type.Name),
+                attribute.Typename);
+
             _writer.Indent();
-            _writer.WriteLine("return castHandle< {0} >(self);", attribute.FullTypeName);
+            _writer.WriteLine("return castHandle< {0} >(self);", attribute.GetCppFullName(type.Name));
             _writer.Deindent();
             _writer.WriteLine("}");
             _writer.WriteLine();
@@ -556,7 +558,7 @@ namespace CodeGenerator.Cpp
             MethodInfo[] methods = wrapperType.GetMethods(MethodFlags);
 
             _writer.WriteLine("/*");
-            _writer.WriteLine(" * Function group: {0}", ConfigOptions.GetCSharpCppInstanceTypename(wrapperType));
+            _writer.WriteLine(" * Function group: {0}", wrapperType);
             _writer.WriteLine(" */");
             _writer.WriteLine();
 
@@ -584,7 +586,7 @@ namespace CodeGenerator.Cpp
             bool isConstructor = false;
             string cppTargetType = targetType;
 
-            targetType = ConfigOptions.GetCSharpCppInstanceTypename(methodInfo.DeclaringType);
+            targetType = ConfigOptions.GetCppTypename(methodInfo.DeclaringType);
 
             if (methodInfo.HasAttribute<ConstructorAttribute>())
             {
@@ -634,7 +636,7 @@ namespace CodeGenerator.Cpp
             string returnedType = ConfigOptions.TranslateType(methodInfo.ReturnParameter, methodInfo.ReturnType);
 
             if (isConstructor)
-                returnedType = ConfigOptions.GetCppWrapperDescriptorTypename(methodInfo.DeclaringType);
+                returnedType = "InvHandle";
 
             _writer.WriteLine("/**");
             _writer.WriteLine(" * Method: {0}::{1}", cppTargetType, targetMethod);
@@ -655,7 +657,7 @@ namespace CodeGenerator.Cpp
         {
             Type wrapperType = method.DeclaringType;
             string functionName;
-            string targetType = ConfigOptions.GetCSharpCppInstanceTypename(wrapperType);
+            string targetType = ConfigOptions.GetCppTypename(wrapperType);
 
             if (method.HasAttribute<ConstructorAttribute>())
             {

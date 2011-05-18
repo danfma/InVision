@@ -4,7 +4,7 @@ using InVision.OIS.Native;
 
 namespace InVision.OIS
 {
-	public class MouseState : ReferenceHandle
+	public class MouseState : ReferenceSafeHandle
 	{
 		private MouseStateDescriptor _descriptor;
 
@@ -15,10 +15,10 @@ namespace InVision.OIS
 		internal MouseState(MouseStateDescriptor descriptor)
 			: base(descriptor.Self)
 		{
-			_descriptor = descriptor;
-			X = new AxisComponent(descriptor.X);
-			Y = new AxisComponent(descriptor.Y);
-			Z = new AxisComponent(descriptor.Z);
+            //_descriptor = descriptor;
+            //X = new Axis(descriptor.X);
+            //Y = new Axis(descriptor.Y);
+            //Z = new Axis(descriptor.Z);
 		}
 
 		/// <summary>
@@ -45,19 +45,19 @@ namespace InVision.OIS
 		/// Gets or sets the X.
 		/// </summary>
 		/// <value>The X.</value>
-		public AxisComponent X { get; private set; }
+		public Axis X { get; private set; }
 
 		/// <summary>
 		/// Gets or sets the Y.
 		/// </summary>
 		/// <value>The Y.</value>
-		public AxisComponent Y { get; private set; }
+		public Axis Y { get; private set; }
 
 		/// <summary>
 		/// Gets or sets the Z.
 		/// </summary>
 		/// <value>The Z.</value>
-		public AxisComponent Z { get; private set; }
+		public Axis Z { get; private set; }
 
 		/// <summary>
 		/// Gets the buttons.

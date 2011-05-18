@@ -6,7 +6,9 @@ using System.Runtime.InteropServices;
 using System.Text;
 using CodeGenerator.Cpp;
 using InVision.Extensions;
+using InVision.Native;
 using InVision.Native.Ext;
+using Handle = InVision.Native.Ext.Handle;
 
 namespace CodeGenerator.CSharp
 {
@@ -68,10 +70,20 @@ namespace CodeGenerator.CSharp
         /// <param name="wrapperType">Type of the wrapper.</param>
         private void WriteWrapperType(Type wrapperType)
         {
-            Writer.WriteLine("internal static class Native{0}", wrapperType.Name.Substring(1));
+            Writer.WriteLine("internal sealed class Native{0} : {1}", 
+                wrapperType.Name.Substring(1), 
+                typeof(PlatformInvoke).FullName);
             Writer.OpenBlock();
             {
                 Writer.WriteLine("public const string Library = \"{0}.dll\";", ConfigOptions.ProjectName);
+                Writer.WriteLine();
+                Writer.WriteLine("static Native{0}()", wrapperType.Name.Substring(1));
+                Writer.OpenBlock();
+                {
+                    Writer.WriteLine("Init();");
+                }
+                Writer.CloseBlock();
+                Writer.WriteLine();
 
                 foreach (MethodInfo method in ReflectionUtility.GetMethods(wrapperType))
                 {

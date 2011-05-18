@@ -17,18 +17,30 @@ descriptor_of_vector3(InvHandle handle)
 	return descriptor;
 }
 
-INV_EXPORT Vector3Descriptor
-INV_CALL new_vector3()
+/**
+ * Method: Vector3::Vector3
+ */
+INV_EXPORT InvHandle
+INV_CALL new_vector3_by_descriptor(Vector3Descriptor* descriptor)
 {
-	InvHandle self = newHandleOf<OIS::Vector3>();
-	
-	return descriptor_of_vector3(self);
+	OIS::Vector3* obj = new OIS::Vector3();
+
+	InvHandle self = createHandle< OIS::Vector3 >(obj);
+	*descriptor = descriptor_of_vector3(self);
+
+	return self;
 }
 
-INV_EXPORT Vector3Descriptor
-INV_CALL new_vector3_by_x_y_z(_float x, _float y, _float z)
+/**
+ * Method: Vector3::Vector3
+ */
+INV_EXPORT InvHandle
+INV_CALL new_vector3_by_descriptor_x_y_z(Vector3Descriptor* descriptor, _float x, _float y, _float z)
 {
-	InvHandle self = newHandleOf<OIS::Vector3, float, float, float>(x, y, z);
-	
-	return descriptor_of_vector3(self);
+	OIS::Vector3* obj = new OIS::Vector3(x, y, z);
+
+	InvHandle self = createHandle< OIS::Vector3 >(obj);
+	*descriptor = descriptor_of_vector3(self);
+
+	return self;
 }

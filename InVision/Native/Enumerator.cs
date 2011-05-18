@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace InVision.Native
 {
-	internal class Enumerator<T> : Handle, IEnumerator<KeyValuePair<IntPtr, T>>
+	internal class Enumerator<T> : SafeHandle, IEnumerator<KeyValuePair<IntPtr, T>>
 	{
 		private Func<IntPtr, T> converter;
 

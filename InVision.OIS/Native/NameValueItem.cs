@@ -4,7 +4,7 @@ using InVision.Native.Ext;
 
 namespace InVision.OIS.Native
 {
-	[GeneratorModel, ValueObject]
+	[GeneratorModel, CppValueObject]
 	[StructLayout(LayoutKind.Sequential)]
 	internal struct NameValueItem
 	{

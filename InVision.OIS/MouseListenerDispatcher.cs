@@ -4,7 +4,7 @@ using InVision.OIS.Native;
 
 namespace InVision.OIS
 {
-	public class MouseListenerDispatcher : Handle
+	public class MouseListenerDispatcher : SafeHandle
 	{
 		private readonly List<IMouseListener> _listeners;
 		private readonly Native.MouseMovedHandler _mouseMoved;

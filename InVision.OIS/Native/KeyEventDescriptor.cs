@@ -4,7 +4,7 @@ using InVision.Native.Ext;
 
 namespace InVision.OIS.Native
 {
-    [CppType("KeyEventDescriptor"), ValueObject]
+    [CppType("KeyEventDescriptor"), CppValueObject]
     [StructLayout(LayoutKind.Sequential)]
     internal unsafe struct KeyEventDescriptor
     {

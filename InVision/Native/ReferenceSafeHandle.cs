@@ -2,21 +2,21 @@
 
 namespace InVision.Native
 {
-	public abstract class ReferenceHandle : Handle
+	public abstract class ReferenceSafeHandle : SafeHandle
 	{
 		/// <summary>
-		/// 	Initializes a new instance of the <see cref = "ReferenceHandle" /> class.
+		/// 	Initializes a new instance of the <see cref = "ReferenceSafeHandle" /> class.
 		/// </summary>
 		/// <param name = "pSelf">The p self.</param>
-		protected ReferenceHandle(IntPtr pSelf)
+		protected ReferenceSafeHandle(IntPtr pSelf)
 			: base(pSelf)
 		{
 		}
 
 		/// <summary>
-		/// 	Initializes a new instance of the <see cref = "ReferenceHandle" /> class.
+		/// 	Initializes a new instance of the <see cref = "ReferenceSafeHandle" /> class.
 		/// </summary>
-		protected ReferenceHandle()
+		protected ReferenceSafeHandle()
 			: base(false)
 		{
 		}

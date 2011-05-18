@@ -7,29 +7,21 @@ namespace InVision.Native
 	/// </summary>
 	public class InVisionNativeException : Exception
 	{
-		/// <summary>
-		/// Initializes a new instance of the <see cref="InVisionNativeException"/> class.
-		/// </summary>
-		/// <param name="message">The message.</param>
-		/// <param name="filename">The filename.</param>
-		/// <param name="line">The line.</param>
-		public InVisionNativeException(string message, string filename, int line)
+        /// <summary>
+        /// Initializes a new instance of the <see cref="InVisionNativeException"/> class.
+        /// </summary>
+        /// <param name="message">The message.</param>
+        /// <param name="errorType">Type of the error.</param>
+		public InVisionNativeException(string message, int errorType)
 			: base(message)
-		{
-			Filename = filename;
-			Line = line;
-		}
+        {
+            ErrorType = errorType;
+        }
 
-		/// <summary>
-		/// Gets or sets the filename.
-		/// </summary>
-		/// <value>The filename.</value>
-		public string Filename { get; private set; }
-
-		/// <summary>
-		/// Gets or sets the line.
-		/// </summary>
-		/// <value>The line.</value>
-		public int Line { get; private set; }
+        /// <summary>
+        /// Gets or sets the type of the error.
+        /// </summary>
+        /// <value>The type of the error.</value>
+	    public int ErrorType { get; private set; }
 	}
 }

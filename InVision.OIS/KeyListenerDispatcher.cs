@@ -4,7 +4,7 @@ using InVision.OIS.Native;
 
 namespace InVision.OIS
 {
-	public class KeyListenerDispatcher : Handle
+	public class KeyListenerDispatcher : SafeHandle
 	{
 		private readonly Native.KeyEventHandler _keyPressedHandler;
 		private readonly Native.KeyEventHandler _keyReleasedHandler;

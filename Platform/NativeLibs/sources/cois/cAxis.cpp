@@ -9,18 +9,23 @@ descriptor_of_axis(InvHandle handle)
 
 	AxisDescriptor descriptor;
 	descriptor.base = descriptor_of_component(handle);
-	descriptor.absolute = (_int*)&axis->abs;
-	descriptor.relative = (_int*)&axis->rel;
-	descriptor.absoluteOnly = (_bool*)&axis->absOnly;
+	descriptor.abs = (_int*)&axis->abs;
+	descriptor.rel = (_int*)&axis->rel;
+	descriptor.absOnly = (_bool*)&axis->absOnly;
 
 	return descriptor;
 }
 
-INV_EXPORT AxisDescriptor
-INV_CALL new_axis()
+/**
+ * Method: Axis::Axis
+ */
+INV_EXPORT InvHandle
+INV_CALL new_axis_by_descriptor(AxisDescriptor* descriptor)
 {
-	InvHandle handle = newHandleOf<OIS::Axis>();
+	OIS::Axis* axis = new OIS::Axis();
 
-	return descriptor_of_axis(handle);
+	InvHandle self = createHandle<OIS::Axis>(axis);
+	*descriptor = descriptor_of_axis(self);
+
+	return self;
 }
-

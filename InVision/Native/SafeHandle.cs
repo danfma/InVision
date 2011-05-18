@@ -3,14 +3,14 @@ using System.Runtime.InteropServices;
 
 namespace InVision.Native
 {
-	public abstract class Handle : SafeHandle, IEquatable<Handle>
+	public abstract class SafeHandle : System.Runtime.InteropServices.SafeHandle, IEquatable<SafeHandle>
 	{
 		/// <summary>
-		/// 	Initializes a new instance of the <see cref = "Handle" /> class.
+		/// 	Initializes a new instance of the <see cref = "SafeHandle" /> class.
 		/// </summary>
 		/// <param name = "pSelf">The p self.</param>
 		/// <param name = "ownsHandle">if set to <c>true</c> [owns handle].</param>
-		protected Handle(IntPtr pSelf, bool ownsHandle = false)
+		protected SafeHandle(IntPtr pSelf, bool ownsHandle = false)
 			: base(IntPtr.Zero, ownsHandle)
 		{
 			SetHandle(pSelf);
@@ -21,10 +21,10 @@ namespace InVision.Native
 		}
 
 		/// <summary>
-		/// 	Initializes a new instance of the <see cref = "Handle" /> class.
+		/// 	Initializes a new instance of the <see cref = "SafeHandle" /> class.
 		/// </summary>
 		/// <param name = "ownsHandle">if set to <c>true</c> [owns handle].</param>
-		protected Handle(bool ownsHandle = true)
+		protected SafeHandle(bool ownsHandle = true)
 			: base(IntPtr.Zero, ownsHandle)
 		{
 			OwnsHandle = ownsHandle;
@@ -59,7 +59,7 @@ namespace InVision.Native
 		/// 	true if the current object is equal to the <paramref name = "other" /> parameter; otherwise, false.
 		/// </returns>
 		/// <param name = "other">An object to compare with this object.</param>
-		public bool Equals(Handle other)
+		public bool Equals(SafeHandle other)
 		{
 			return !ReferenceEquals(null, other);
 		}
@@ -125,7 +125,7 @@ namespace InVision.Native
 		/// </returns>
 		public override bool Equals(object obj)
 		{
-			return obj is Handle && handle == ((Handle) obj).handle;
+			return obj is SafeHandle && handle == ((SafeHandle) obj).handle;
 		}
 
 		/// <summary>
@@ -146,7 +146,7 @@ namespace InVision.Native
 		/// <param name = "left">The left.</param>
 		/// <param name = "right">The right.</param>
 		/// <returns>The result of the operator.</returns>
-		public static bool operator ==(Handle left, Handle right)
+		public static bool operator ==(SafeHandle left, SafeHandle right)
 		{
 			return Equals(left, right);
 		}
@@ -157,7 +157,7 @@ namespace InVision.Native
 		/// <param name = "left">The left.</param>
 		/// <param name = "right">The right.</param>
 		/// <returns>The result of the operator.</returns>
-		public static bool operator !=(Handle left, Handle right)
+		public static bool operator !=(SafeHandle left, SafeHandle right)
 		{
 			return !Equals(left, right);
 		}

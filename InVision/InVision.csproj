@@ -175,7 +175,6 @@
     <Compile Include="Native\Ext\CppInstance.cs" />
     <Compile Include="Native\Ext\CppInterfaceAttribute.cs" />
     <Compile Include="Native\Ext\CppWrapper.cs" />
-    <Compile Include="Native\Ext\CppWrapper.cs" />
     <Compile Include="Native\Ext\DestructorAttribute.cs" />
     <Compile Include="DisposableObject.cs" />
     <Compile Include="Native\Ext\FieldAttribute.cs" />
@@ -191,14 +190,14 @@
     <Compile Include="Native\Ext\InherintanceMode.cs" />
     <Compile Include="Native\Ext\MethodAttribute.cs" />
     <Compile Include="Native\Ext\NativeFactory.cs" />
-    <Compile Include="Native\Ext\ValueObjectAttribute.cs" />
-    <Compile Include="Native\Handle.cs" />
+    <Compile Include="Native\Ext\CppValueObjectAttribute.cs" />
+    <Compile Include="Native\SafeHandle.cs" />
     <Compile Include="Native\InVisionException.cs" />
     <Compile Include="Native\MarshallExtensions.cs" />
     <Compile Include="Native\NativeEnumerator.cs" />
     <Compile Include="Native\PlatformInvoke.cs" />
     <Compile Include="Native\RaiseExceptionHandler.cs" />
-    <Compile Include="Native\ReferenceHandle.cs" />
+    <Compile Include="Native\ReferenceSafeHandle.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="VersionInfo.cs" />
   </ItemGroup>

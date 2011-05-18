@@ -72,7 +72,7 @@ namespace CodeGenerator.CSharp
             bool hasBaseType = baseType != null;
             bool hasInterfaces = interfaces.Count() > 0;
 
-			Writer.WriteLine("[CppImplementation(typeof({0}))]", wrapperType.Name);
+            Writer.WriteLine("[CppImplementation(typeof({0}))]", wrapperType.Name);
             Writer.WriteLine("internal class {0}", typeName);
 
             WriteInheritance(baseType, interfaces, hasBaseType, hasInterfaces);
@@ -136,26 +136,32 @@ namespace CodeGenerator.CSharp
                      let paramModification = ConfigOptions.GetCSharpParameterModification(p)
                      select string.Format(
                          "{0}{1} {2}",
-                         string.IsNullOrEmpty(paramModification) ? paramModification : paramModification + " ",
+                         string.IsNullOrEmpty(paramModification)
+                                 ? string.Empty
+                                 : string.Format("{0} ", paramModification),
                          ConfigOptions.GetCSharpTypeString(p.ParameterType),
                          p.Name)).Join(", ");
 
-                string parametersList = parameters.Select(p => p.Name).Join(", ");
+                string parametersList =
+                    (from p in parameters
+                     let paramModification = CodeGenerator.ConfigOptions.GetCSharpParameterModification(p)
+                     select string.Format("{0}{1}", string.IsNullOrEmpty(paramModification) ? string.Empty : paramModification + " ", p.Name)).
+                    Join(", ");
 
-                Writer.WriteLine("{0} {0}.{1}({2})", 
-					wrapperType.Name, 
-					constructor.Name, 
-					parametersDef);
+                Writer.WriteLine("{0} {0}.{1}({2})",
+                    wrapperType.Name,
+                    constructor.Name,
+                    parametersDef);
 
                 Writer.OpenBlock();
-            	{
-            		Writer.WriteLine("Self = {0}.{1}({2});", 
-						CodeGenerator.ConfigOptions.GetCSharpNativeTypename(wrapperType),
-						constructor.Name,
-						parametersList);
-					Writer.WriteLine("return this;");
-            	}
-				Writer.CloseBlock();
+                {
+                    Writer.WriteLine("Self = {0}.{1}({2});",
+                        CodeGenerator.ConfigOptions.GetCSharpNativeTypename(wrapperType),
+                        constructor.Name,
+                        parametersList);
+                    Writer.WriteLine("return this;");
+                }
+                Writer.CloseBlock();
                 Writer.WriteLine();
             }
         }
@@ -172,20 +178,20 @@ namespace CodeGenerator.CSharp
             if (!hasDestructor && hasBaseType)
                 return;
 
-        	var destructor = GetDestructor(wrapperType);
+            var destructor = GetDestructor(wrapperType);
 
-            Writer.WriteLine("{0} {1}.{2}()", 
-				CodeGenerator.ConfigOptions.GetCSharpTypeString(destructor.ReturnType),
-				wrapperType.Name,
-				destructor.Name);
+            Writer.WriteLine("{0} {1}.{2}()",
+                CodeGenerator.ConfigOptions.GetCSharpTypeString(destructor.ReturnType),
+                wrapperType.Name,
+                destructor.Name);
 
             Writer.OpenBlock();
             {
                 if (hasDestructor)
                 {
-                	Writer.WriteLine("{0}.{1}(Self);", 
-                		CodeGenerator.ConfigOptions.GetCSharpNativeTypename(wrapperType),
-						destructor.Name);
+                    Writer.WriteLine("{0}.{1}(Self);",
+                        CodeGenerator.ConfigOptions.GetCSharpNativeTypename(wrapperType),
+                        destructor.Name);
                 }
             }
             Writer.CloseBlock();
@@ -216,17 +222,17 @@ namespace CodeGenerator.CSharp
             return FindDestructor(wrapperType).Any();
         }
 
-		public static MethodInfo GetDestructor(Type wrapperType)
-		{
-			return FindDestructor(wrapperType).SingleOrDefault();
-		}
+        public static MethodInfo GetDestructor(Type wrapperType)
+        {
+            return FindDestructor(wrapperType).SingleOrDefault();
+        }
 
-    	private static IEnumerable<MethodInfo> FindDestructor(Type wrapperType)
-    	{
-    		return ReflectionUtility.GetMethods(wrapperType).Where(m => m.HasAttribute<DestructorAttribute>(false));
-    	}
+        private static IEnumerable<MethodInfo> FindDestructor(Type wrapperType)
+        {
+            return ReflectionUtility.GetMethods(wrapperType).Where(m => m.HasAttribute<DestructorAttribute>(false));
+        }
 
-    	/// <summary>
+        /// <summary>
         /// Writes the properties.
         /// </summary>
         /// <param name="wrapperType">Type of the wrapper.</param>
@@ -313,13 +319,17 @@ namespace CodeGenerator.CSharp
                          ConfigOptions.GetCSharpTypeString(p.ParameterType),
                          p.Name)).Join(", ");
 
-                string parametersList = parameters.Select(p => p.Name).Join(", ");
+                string parametersList =
+                    (from p in parameters
+                     let paramModification = CodeGenerator.ConfigOptions.GetCSharpParameterModification(p)
+                     select string.Format("{0}{1}", string.IsNullOrEmpty(paramModification) ? string.Empty : paramModification + " ", p.Name)).
+                    Join(", ");
 
                 bool returnVoid = method.ReturnType == typeof(void);
 
                 Writer.WriteLine("{0} {1}.{2}({3})",
                                  ConfigOptions.GetCSharpTypeString(method.ReturnType),
-								 wrapperType.Name,
+                                 wrapperType.Name,
                                  method.Name,
                                  parametersDef);
 
@@ -388,24 +398,24 @@ namespace CodeGenerator.CSharp
 
         public static Type GetBaseType(Type wrapperType)
         {
-        	return ConfigOptions.GetCppInstanceBaseType(wrapperType);
+            return ConfigOptions.GetCppInstanceBaseType(wrapperType);
         }
 
         public static IEnumerable<Type> GetInterfaces(Type wrapperType, bool includeWrapperType)
         {
-        	var baseType = GetBaseType(wrapperType);
+            var baseType = GetBaseType(wrapperType);
 
-            var @interfaces = 
-				wrapperType.GetInterfaces().
+            var @interfaces =
+                wrapperType.GetInterfaces().
                 Where(@interface => @interface.HasAttribute<CppInterfaceAttribute>() && @interface != baseType);
 
-			if (includeWrapperType)
-				yield return wrapperType;
+            if (includeWrapperType)
+                yield return wrapperType;
 
-        	foreach (var @interface in interfaces)
-        	{
-        		yield return @interface;
-        	}
+            foreach (var @interface in interfaces)
+            {
+                yield return @interface;
+            }
         }
     }
 }
