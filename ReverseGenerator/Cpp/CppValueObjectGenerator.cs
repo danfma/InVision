@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Reflection;
 
-namespace CodeGenerator.Cpp
+namespace ReverseGenerator.Cpp
 {
     public class CppValueObjectGenerator : CppValueObjectGeneratorBase
     {

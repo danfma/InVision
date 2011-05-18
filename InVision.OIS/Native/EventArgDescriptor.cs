@@ -6,7 +6,7 @@ namespace InVision.OIS.Native
 {
     [CppValueObject]
 	[StructLayout(LayoutKind.Sequential)]
-	internal struct EventArgDescriptor
+    public struct EventArgDescriptor
 	{
 		private readonly Handle _self;
 

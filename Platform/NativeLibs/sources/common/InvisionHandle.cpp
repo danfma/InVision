@@ -29,7 +29,7 @@ INV_CALL register_type_by_name(const char* type)
 {
 	_ushort typeId;
 
-	typeRegistry[type] = typeId = nextTypeIndex++;
+	typeRegistry[type] = typeId = ++nextTypeIndex;
 
 	return typeId;
 }

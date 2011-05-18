@@ -11,6 +11,7 @@ extern "C"
 	 */
 	struct ComponentDescriptor
 	{
+		InvHandle self;
 		COMPONENT_TYPE* ctype;
 	};
 }

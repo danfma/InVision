@@ -2,6 +2,7 @@
 #define __INVISIONNATIVE_OIS_KEY_EVENT_DESCRIPTOR_H__
 
 #include <InvisionHandle.h>
+#include "invisionnative_ois_event_arg_descriptor.h"
 #include "invisionnative_ois.h"
 
 extern "C"

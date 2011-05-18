@@ -3,11 +3,11 @@ using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
 using System.Runtime.InteropServices;
-using CodeGenerator.Cpp;
 using InVision.Extensions;
 using InVision.Native.Ext;
+using ReverseGenerator.Cpp;
 
-namespace CodeGenerator
+namespace ReverseGenerator
 {
     public class ConfigOptions
     {

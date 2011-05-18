@@ -1,13 +1,11 @@
-﻿using System;
-
 namespace InVision.Native.Ext
 {
-    public abstract class CppInstance
+    public interface ICppInterface
     {
         /// <summary>
         /// Gets or sets the self.
         /// </summary>
         /// <value>The self.</value>
-        public Handle Self { get; set; }
+        Handle Self { get; set; }
     }
 }

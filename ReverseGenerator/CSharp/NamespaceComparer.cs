@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace CodeGenerator.CSharp
+namespace ReverseGenerator.CSharp
 {
     public class NamespaceComparer : IComparer<string>
     {

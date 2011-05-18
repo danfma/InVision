@@ -52,6 +52,63 @@ namespace InVision.OIS.Native
 		
 	}
 	
+	[CppImplementation(typeof(IInterface))]
+	internal class InterfaceImpl
+		: CppInstance, IInterface
+	{
+		void IInterface.Dispose()
+		{
+			NativeInterface.Dispose(Self);
+		}
+		
+	}
+	
+	[CppImplementation(typeof(IObject))]
+	internal class ObjectImpl
+		: InterfaceImpl, IObject
+	{
+		ComponentType IObject.Type()
+		{
+			return NativeObject.Type(Self);
+		}
+		
+		String IObject.Vendor()
+		{
+			return NativeObject.Vendor(Self);
+		}
+		
+		bool IObject.Buffered()
+		{
+			return NativeObject.Buffered(Self);
+		}
+		
+		void IObject.SetBuffered(bool value)
+		{
+			NativeObject.SetBuffered(Self, value);
+		}
+		
+		Handle IObject.GetCreator()
+		{
+			return NativeObject.GetCreator(Self);
+		}
+		
+		void IObject.Capture()
+		{
+			NativeObject.Capture(Self);
+		}
+		
+		int IObject.GetID()
+		{
+			return NativeObject.GetID(Self);
+		}
+		
+		Handle IObject.QueryInterface(InterfaceType interfaceType)
+		{
+			return NativeObject.QueryInterface(Self, interfaceType);
+		}
+		
+	}
+	
 	[CppImplementation(typeof(IButton))]
 	internal class ButtonImpl
 		: ComponentImpl, IButton
@@ -78,6 +135,23 @@ namespace InVision.OIS.Native
 		{
 			Self = NativeAxis.Axis(ref descriptor);
 			return this;
+		}
+		
+	}
+	
+	[CppImplementation(typeof(IMouseState))]
+	internal class MouseStateImpl
+		: CppInstance, IMouseState
+	{
+		IMouseState IMouseState.MouseState(ref MouseStateDescriptor descriptor)
+		{
+			Self = NativeMouseState.MouseState(ref descriptor);
+			return this;
+		}
+		
+		void IMouseState.Dispose()
+		{
+			NativeMouseState.Dispose(Self);
 		}
 		
 	}

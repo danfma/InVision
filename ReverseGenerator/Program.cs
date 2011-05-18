@@ -2,13 +2,13 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using CodeGenerator.Cpp;
-using CodeGenerator.CSharp;
 using InVision.Extensions;
 using InVision.Native.Ext;
 using NDesk.Options;
+using ReverseGenerator.Cpp;
+using ReverseGenerator.CSharp;
 
-namespace CodeGenerator
+namespace ReverseGenerator
 {
     internal class Program
     {

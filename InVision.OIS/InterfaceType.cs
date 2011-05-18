@@ -2,10 +2,10 @@
 
 namespace InVision.OIS
 {
-	[GeneratorModel]
-	public enum InterfaceType
-	{
-		ForceFeedback,
-		Reserved
-	}
+    [CppEnumeration]
+    public enum InterfaceType
+    {
+        ForceFeedback,
+        Reserved
+    }
 }

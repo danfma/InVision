@@ -6,7 +6,7 @@ using System.Reflection;
 using InVision.Extensions;
 using InVision.Native.Ext;
 
-namespace CodeGenerator.Cpp
+namespace ReverseGenerator.Cpp
 {
     public abstract class CppValueObjectGeneratorBase
     {
@@ -60,13 +60,13 @@ namespace CodeGenerator.Cpp
                 writer.WriteLine("#define {0}", deffilename);
                 writer.WriteLine();
                 writer.WriteLine("#include <InvisionHandle.h>");
+
+                foreach (string include in ScanIncludes())
+                {
+                    writer.WriteLine("#include \"{0}\"", include);
+                }
+
                 writer.WriteLine("#include \"{0}\"", ConfigOptions.IncludeCppHeader);
-
-                //foreach (string include in ScanIncludes())
-                //{
-                //    writer.WriteLine("#include \"{0}\"", include);
-                //}
-
                 writer.WriteLine();
 
                 writer.WriteLine("extern \"C\"");
@@ -84,6 +84,17 @@ namespace CodeGenerator.Cpp
         }
 
         /// <summary>
+        /// Generates the specified writer.
+        /// </summary>
+        /// <param name="writer">The writer.</param>
+        public void Generate(SourceWriter writer)
+        {
+            string cppTypename = GetTypename();
+
+            GenerateType(writer, cppTypename);
+        }
+
+        /// <summary>
         /// Gets the typename.
         /// </summary>
         /// <returns></returns>
@@ -98,13 +109,15 @@ namespace CodeGenerator.Cpp
         /// <returns></returns>
         protected virtual IEnumerable<string> ScanIncludes()
         {
-            IEnumerable<PropertyInfo> properties = ReflectionUtility.GetProperties(Type);
+            IEnumerable<FieldInfo> fields = ReflectionUtility.GetFields(Type);
 
-            return
-                from propertyInfo in properties
-                where propertyInfo.PropertyType.HasAttribute<CppValueObjectAttribute>(true)
-                select ConfigOptions.GetCppTypename(propertyInfo.PropertyType) into cppTypename
+            var includes = 
+                from field in fields
+                where field.FieldType.HasAttribute<CppValueObjectAttribute>(true)
+                select ConfigOptions.GetCppTypename(field.FieldType) into cppTypename
                 select ConfigOptions.AdditionalInclude(cppTypename);
+
+            return includes.Distinct();
         }
 
         /// <summary>

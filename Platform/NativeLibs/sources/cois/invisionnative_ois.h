@@ -182,6 +182,19 @@ extern "C"
 	#define INTERFACE_TYPE_RESERVED 0x1
 	
 	/*
+	 * Enumeration MOUSE_BUTTON
+	 */
+	#define MOUSE_BUTTON _int
+	#define MOUSE_BUTTON_LEFT 0x0
+	#define MOUSE_BUTTON_RIGHT 0x1
+	#define MOUSE_BUTTON_MIDDLE 0x2
+	#define MOUSE_BUTTON_BUTTON3 0x3
+	#define MOUSE_BUTTON_BUTTON4 0x4
+	#define MOUSE_BUTTON_BUTTON5 0x5
+	#define MOUSE_BUTTON_BUTTON6 0x6
+	#define MOUSE_BUTTON_BUTTON7 0x7
+	
+	/*
 	 * Enumeration DEVICE_TYPE
 	 */
 	#define DEVICE_TYPE _int
@@ -199,6 +212,7 @@ extern "C"
 	struct EventArgDescriptor;
 	struct ComponentDescriptor;
 	struct Vector3Descriptor;
+	struct MouseStateDescriptor;
 	struct DeviceTypeItem;
 	struct ButtonDescriptor;
 	struct AxisDescriptor;
@@ -208,11 +222,13 @@ extern "C"
 	#include "invisionnative_ois_event_arg_descriptor.h"
 	#include "invisionnative_ois_component_descriptor.h"
 	#include "invisionnative_ois_vector3_descriptor.h"
+	#include "invisionnative_ois_mouse_state_descriptor.h"
 	#include "invisionnative_ois_device_type_item.h"
 	#include "invisionnative_ois_button_descriptor.h"
 	#include "invisionnative_ois_axis_descriptor.h"
 	#include "invisionnative_ois_key_event_descriptor.h"
 	#include "invisionnative_ois_name_value_item.h"
+	
 	
 	/*
 	 * Function group: InVision.OIS.Native.IComponent
@@ -255,6 +271,70 @@ extern "C"
 	
 	
 	/*
+	 * Function group: InVision.OIS.Native.IInterface
+	 */
+	
+	/**
+	 * Method: Interface::~Interface
+	 */
+	INV_EXPORT void
+	INV_CALL delete_interface(InvHandle self);
+	
+	
+	/*
+	 * Function group: InVision.OIS.Native.IObject
+	 */
+	
+	/**
+	 * Method: Object::type
+	 */
+	INV_EXPORT COMPONENT_TYPE
+	INV_CALL object_type(InvHandle self);
+	
+	/**
+	 * Method: Object::vendor
+	 */
+	INV_EXPORT _string
+	INV_CALL object_vendor(InvHandle self);
+	
+	/**
+	 * Method: Object::buffered
+	 */
+	INV_EXPORT _bool
+	INV_CALL object_buffered(InvHandle self);
+	
+	/**
+	 * Method: Object::setBuffered
+	 */
+	INV_EXPORT void
+	INV_CALL object_set_buffered(InvHandle self, _bool value);
+	
+	/**
+	 * Method: Object::getCreator
+	 */
+	INV_EXPORT InvHandle
+	INV_CALL object_get_creator(InvHandle self);
+	
+	/**
+	 * Method: Object::capture
+	 */
+	INV_EXPORT void
+	INV_CALL object_capture(InvHandle self);
+	
+	/**
+	 * Method: Object::getID
+	 */
+	INV_EXPORT _int
+	INV_CALL object_get_id(InvHandle self);
+	
+	/**
+	 * Method: Object::queryInterface
+	 */
+	INV_EXPORT InvHandle
+	INV_CALL object_query_interface(InvHandle self, INTERFACE_TYPE interfaceType);
+	
+	
+	/*
 	 * Function group: InVision.OIS.Native.IButton
 	 */
 	
@@ -282,6 +362,23 @@ extern "C"
 	INV_CALL new_axis_by_descriptor(AxisDescriptor* descriptor);
 	
 	
+	/*
+	 * Function group: InVision.OIS.Native.IMouseState
+	 */
+	
+	/**
+	 * Method: MouseState::MouseState
+	 */
+	INV_EXPORT InvHandle
+	INV_CALL new_mousestate_by_descriptor(MouseStateDescriptor* descriptor);
+	
+	/**
+	 * Method: MouseState::~MouseState
+	 */
+	INV_EXPORT void
+	INV_CALL delete_mousestate(InvHandle self);
+	
+	
 }
 
 
@@ -298,12 +395,24 @@ inline OIS::Vector3* asVector3(InvHandle self) {
 	return castHandle< OIS::Vector3 >(self);
 }
 
+inline OIS::Interface* asInterface(InvHandle self) {
+	return castHandle< OIS::Interface >(self);
+}
+
+inline OIS::Object* asObject(InvHandle self) {
+	return castHandle< OIS::Object >(self);
+}
+
 inline OIS::Button* asButton(InvHandle self) {
 	return castHandle< OIS::Button >(self);
 }
 
 inline OIS::Axis* asAxis(InvHandle self) {
 	return castHandle< OIS::Axis >(self);
+}
+
+inline OIS::MouseState* asMouseState(InvHandle self) {
+	return castHandle< OIS::MouseState >(self);
 }
 
 #endif // __cplusplus

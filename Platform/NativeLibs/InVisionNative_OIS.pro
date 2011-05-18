@@ -28,15 +28,18 @@ Debug:DEFINES += DEBUG
 INCLUDEPATH += sources/common sources/cois
 
 win32 {
-	DEFINES += WIN32 DEBUG
+	DEFINES += WIN32
 
-	INCLUDEPATH += $$(OGRE_SDK)include\OIS $$(BOOST_SDK)
+	INCLUDEPATH += $$(OGRE_SDK)include/OIS $$(BOOST_SDK)
 
-	LIBS += -L$$(OGRE_SDK)lib\debug -L$$(OGRE_SDK)lib\debug\opt -lOIS_d
+	LIBS += -L$$(OGRE_SDK)lib/debug
+	LIBS += -L$$(OGRE_SDK)lib/debug/opt
+	LIBS += -L../build_InVisionNative/Bin/Debug/
+	LIBS += -lOIS_d -lInVisionNative
 }
 
 macx {
-	DEFINES += MACOSX DEBUG
+	DEFINES += MACOSX
 	INCLUDEPATH += /Users/danfma/Developer/libraries/OgreSDK/include/OIS
 	LIBS += -L/Users/danfma/Developer/libraries/OgreSDK/lib/release/ -lOIS
 }

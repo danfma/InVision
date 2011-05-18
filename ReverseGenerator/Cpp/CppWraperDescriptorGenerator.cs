@@ -2,11 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using CodeGenerator.CSharp;
 using InVision.Extensions;
 using InVision.Native.Ext;
 
-namespace CodeGenerator.Cpp
+namespace ReverseGenerator.Cpp
 {
     public class CppWraperDescriptorGenerator : CppValueObjectGeneratorBase
     {

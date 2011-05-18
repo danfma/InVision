@@ -5,7 +5,7 @@ using System.Reflection;
 using InVision.Extensions;
 using InVision.Native.Ext;
 
-namespace CodeGenerator.CSharp
+namespace ReverseGenerator.CSharp
 {
     public class CSharpCppInstanceGenerator : CSharpGeneratorBase
     {
@@ -144,7 +144,7 @@ namespace CodeGenerator.CSharp
 
                 string parametersList =
                     (from p in parameters
-                     let paramModification = CodeGenerator.ConfigOptions.GetCSharpParameterModification(p)
+                     let paramModification = ConfigOptions.GetCSharpParameterModification(p)
                      select string.Format("{0}{1}", string.IsNullOrEmpty(paramModification) ? string.Empty : paramModification + " ", p.Name)).
                     Join(", ");
 
@@ -156,7 +156,7 @@ namespace CodeGenerator.CSharp
                 Writer.OpenBlock();
                 {
                     Writer.WriteLine("Self = {0}.{1}({2});",
-                        CodeGenerator.ConfigOptions.GetCSharpNativeTypename(wrapperType),
+                        ConfigOptions.GetCSharpNativeTypename(wrapperType),
                         constructor.Name,
                         parametersList);
                     Writer.WriteLine("return this;");
@@ -181,7 +181,7 @@ namespace CodeGenerator.CSharp
             var destructor = GetDestructor(wrapperType);
 
             Writer.WriteLine("{0} {1}.{2}()",
-                CodeGenerator.ConfigOptions.GetCSharpTypeString(destructor.ReturnType),
+                ConfigOptions.GetCSharpTypeString(destructor.ReturnType),
                 wrapperType.Name,
                 destructor.Name);
 
@@ -190,7 +190,7 @@ namespace CodeGenerator.CSharp
                 if (hasDestructor)
                 {
                     Writer.WriteLine("{0}.{1}(Self);",
-                        CodeGenerator.ConfigOptions.GetCSharpNativeTypename(wrapperType),
+                        ConfigOptions.GetCSharpNativeTypename(wrapperType),
                         destructor.Name);
                 }
             }
@@ -321,7 +321,7 @@ namespace CodeGenerator.CSharp
 
                 string parametersList =
                     (from p in parameters
-                     let paramModification = CodeGenerator.ConfigOptions.GetCSharpParameterModification(p)
+                     let paramModification = ConfigOptions.GetCSharpParameterModification(p)
                      select string.Format("{0}{1}", string.IsNullOrEmpty(paramModification) ? string.Empty : paramModification + " ", p.Name)).
                     Join(", ");
 
@@ -335,7 +335,7 @@ namespace CodeGenerator.CSharp
 
                 Writer.OpenBlock();
                 {
-                    if (!methodAttr.IsStatic)
+                    if (!methodAttr.Static)
                     {
                         parametersList = string.Format("Self{0}{1}",
                                                        parameters.Length > 0 ? ", " : string.Empty,
@@ -344,7 +344,7 @@ namespace CodeGenerator.CSharp
 
                     Writer.WriteLine("{0}{1}.{2}({3});",
                                      returnVoid ? string.Empty : "return ",
-                                     CodeGenerator.ConfigOptions.GetCSharpNativeTypename(wrapperType),
+                                     ConfigOptions.GetCSharpNativeTypename(wrapperType),
                                      method.Name,
                                      parametersList);
                 }
@@ -367,7 +367,7 @@ namespace CodeGenerator.CSharp
             if (hasBaseType)
             {
                 Writer.BeginLine();
-                Writer.Write(": {0}", CodeGenerator.ConfigOptions.GetCSharpCppInstanceTypename(baseType));
+                Writer.Write(": {0}", ConfigOptions.GetCSharpCppInstanceTypename(baseType));
             }
             else
             {

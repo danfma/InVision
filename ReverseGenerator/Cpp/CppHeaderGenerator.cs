@@ -3,11 +3,10 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
-using CodeGenerator.CSharp;
 using InVision.Extensions;
 using InVision.Native.Ext;
 
-namespace CodeGenerator.Cpp
+namespace ReverseGenerator.Cpp
 {
     public class CppHeaderGenerator : IGenerator
     {
@@ -132,7 +131,7 @@ namespace CodeGenerator.Cpp
         {
             var attribute = type.GetAttribute<CppTypeAttribute>(true);
 
-            _writer.WriteLine("inline {0}* as{1}(InvHandle self) {{", 
+            _writer.WriteLine("inline {0}* as{1}(InvHandle self) {{",
                 attribute.GetCppFullName(type.Name),
                 attribute.Typename);
 
@@ -290,10 +289,12 @@ namespace CodeGenerator.Cpp
             foreach (Type type in types)
             {
                 var generator = new CppValueObjectGenerator(ConfigOptions, type);
-                string fileGenerated = generator.Generate();
+                var filename = generator.Generate();
 
-                _writer.WriteLine("#include \"{0}\"", fileGenerated);
+                _writer.WriteLine("#include \"{0}\"", filename);
             }
+
+            _writer.WriteLine();
         }
 
         /// <summary>
@@ -410,7 +411,7 @@ namespace CodeGenerator.Cpp
 
                 parameters = GetParametersString(methodInfo);
 
-                if (!attr.IsStatic)
+                if (!attr.Static)
                     parameters = "InvHandle self" +
                                  (!string.IsNullOrEmpty(parameters) ? (", " + parameters) : parameters);
             }
@@ -624,7 +625,7 @@ namespace CodeGenerator.Cpp
 
                 parameters = GetParametersString(methodInfo);
 
-                if (!attr.IsStatic)
+                if (!attr.Static)
                     parameters = "InvHandle self" +
                                  (!string.IsNullOrEmpty(parameters) ? (", " + parameters) : parameters);
             }

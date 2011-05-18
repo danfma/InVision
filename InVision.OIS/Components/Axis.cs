@@ -31,6 +31,18 @@ namespace InVision.OIS.Components
         }
 
         /// <summary>
+        /// Initializes a new instance of the <see cref="Axis"/> class.
+        /// </summary>
+        /// <param name="descriptor">The descriptor.</param>
+        internal Axis(AxisDescriptor descriptor)
+            : this(CreateCppInstance<IAxis>())
+        {
+            Native.Self = descriptor.Base.Self;
+
+            Initialize(descriptor);
+        }
+
+        /// <summary>
         /// Initializes the specified descriptor.
         /// </summary>
         /// <param name="descriptor">The descriptor.</param>

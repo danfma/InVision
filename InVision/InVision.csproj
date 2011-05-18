@@ -185,6 +185,7 @@
     <Compile Include="Native\Ext\HandleConverterAttribute.cs" />
     <Compile Include="Native\Ext\CppTypeAttribute.cs" />
     <Compile Include="Native\Ext\IBaseTypeDescriptor.cs" />
+    <Compile Include="Native\Ext\ICppInterface.cs" />
     <Compile Include="Native\Ext\IDerivedDescriptor.cs" />
     <Compile Include="Native\Ext\IDescriptor.cs" />
     <Compile Include="Native\Ext\InherintanceMode.cs" />

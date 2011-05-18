@@ -2,6 +2,7 @@
 #define __INVISIONNATIVE_OIS_BUTTON_DESCRIPTOR_H__
 
 #include <InvisionHandle.h>
+#include "invisionnative_ois_component_descriptor.h"
 #include "invisionnative_ois.h"
 
 extern "C"

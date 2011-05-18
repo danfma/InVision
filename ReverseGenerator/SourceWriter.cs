@@ -1,9 +1,8 @@
 ﻿using System;
 using System.IO;
 using System.Text;
-using InVision.Extensions;
 
-namespace CodeGenerator
+namespace ReverseGenerator
 {
     public class SourceWriter : IDisposable
     {

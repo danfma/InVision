@@ -35,6 +35,8 @@ extern "C"
 
 namespace invision
 {
+	const InvHandle INVALID_HANDLE = 0;
+	
 	class IHandleData
 	{
 	public:
@@ -47,17 +49,14 @@ namespace invision
 
 
 	template<typename T>
-	class HandleData : public IHandleData
+	class HandleReference : public IHandleData
 	{
-	private:
-		T* _data;
-
 	public:
-		HandleData(T* data)
+		HandleReference(T* data)
 			: _data(data)
 		{ }
 
-		T* data()
+		inline T* data()
 		{
 			return _data;
 		}
@@ -74,12 +73,33 @@ namespace invision
 
 		void deleteData()
 		{
-			if (_data != NULL) {
-				delete _data;
+			if (_data != NULL)
 				_data = NULL;
+		}
+
+	protected:
+		T* _data;
+	};
+
+
+	template<typename T>
+	class HandleData : public HandleReference<T>
+	{
+	public:
+		HandleData(T* data)
+			: HandleReference<T>(data)
+		{ }
+
+		void deleteData()
+		{
+			if (this->_data != NULL) {
+				delete this->_data;
+				this->_data = NULL;
 			}
 		}
 	};
+
+
 
 
 	class IHandleGenerator
@@ -119,6 +139,7 @@ namespace invision
 		{
 			return _generator->next() << 16 | get_registered_typeid(typeid(T));
 		}
+
 
 	public:
 		HandleManager(IHandleGenerator* generator = NULL)
@@ -160,20 +181,17 @@ namespace invision
 		}
 
 		/**
-		 * Removes the specified handle without deleting the data it holds
+		 * Creates a new handle for the specified data
 		 */
-		void removeHandle(InvHandle handle)
+		template<typename T>
+		InvHandle createReference(T* data)
 		{
-			HandleRegistry::const_iterator it = _registry.find(handle);
+			IHandleData* hdata = new HandleReference<T>(data);
 
-			if (it == _registry.end())
-				return;
+			HandleRegistry::value_type entry(nextHandle<T>(), hdata);
+			_registry.insert(entry);
 
-			IHandleData* hdata = (*it).second;
-
-			_registry.erase_return_void(it);
-			delete hdata;
-			hdata = NULL;
+			return entry.first;
 		}
 
 		/**
@@ -210,7 +228,7 @@ namespace invision
 				if (hdata == NULL)
 					throws_key_not_found("" + handle);
 
-				HandleData<T>* converted = dynamic_cast<HandleData<T>* >(hdata);
+				HandleReference<T>* converted = dynamic_cast<HandleReference<T>* >(hdata);
 
 				if (converted == NULL)
 					throws_invalid_cast(hdata->getTypeId(), get_registered_typeid(typeid(T)));
@@ -288,11 +306,6 @@ namespace invision
 		return HandleManager::getInstance().get<T>(handle);
 	}
 
-	inline void removeHandle(InvHandle handle)
-	{
-		HandleManager::getInstance().removeHandle(handle);
-	}
-
 	inline void destroyHandle(InvHandle handle)
 	{
 		HandleManager::getInstance().destroyHandle(handle);
@@ -301,16 +314,45 @@ namespace invision
 	template<typename T>
 	inline InvHandle createHandle(T* data)
 	{
+		if (data == NULL)
+			return INVALID_HANDLE;
+		
 		return HandleManager::getInstance().createHandle<T>(data);
+	}
+
+	template<typename T>
+	inline InvHandle createReference(T* data)
+	{
+		if (data == NULL)
+			return INVALID_HANDLE;
+
+		return HandleManager::getInstance().createReference<T>(data);
 	}
 
 	template<typename T>
 	inline InvHandle getOrCreateHandle(T* data)
 	{
+		if (data == NULL)
+			return INVALID_HANDLE;
+		
 		InvHandle handle = HandleManager::getInstance().find<T>(data);
 
 		if (handle == 0)
 			handle = createHandle<T>(data);
+
+		return handle;
+	}
+
+	template<typename T>
+	inline InvHandle getOrCreateReference(T* data, bool owner = false)
+	{
+		if (data == NULL)
+			return INVALID_HANDLE;
+
+		InvHandle handle = HandleManager::getInstance().find<T>(data);
+
+		if (handle == 0)
+			handle = createReference<T>(data);
 
 		return handle;
 	}

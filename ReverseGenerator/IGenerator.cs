@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace CodeGenerator
+namespace ReverseGenerator
 {
 	internal interface IGenerator
 	{

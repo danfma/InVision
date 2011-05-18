@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 
-namespace CodeGenerator.CSharp
+namespace ReverseGenerator.CSharp
 {
     public abstract class CSharpGeneratorBase
     {

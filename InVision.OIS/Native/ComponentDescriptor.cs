@@ -9,6 +9,7 @@ namespace InVision.OIS.Native
     [StructLayout(LayoutKind.Sequential)]
     public unsafe struct ComponentDescriptor
     {
+        public Handle Self;
         public ComponentType* Ctype;
     }
 }

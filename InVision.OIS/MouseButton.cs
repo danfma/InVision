@@ -1,5 +1,8 @@
-﻿namespace InVision.OIS
+﻿using InVision.OIS.Attributes;
+
+namespace InVision.OIS
 {
+    [OISEnumeration("MouseButtonID")]
 	public enum MouseButton
 	{
 		Left,

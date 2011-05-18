@@ -1,10 +1,11 @@
 ﻿using InVision.Native.Ext;
+using InVision.OIS.Attributes;
 using InVision.OIS.Components;
 
 namespace InVision.OIS.Native
 {
-    [CppInterface("Component", Namespace = "OIS", DefinitionFile = "OIS.h")]
-    public unsafe interface IComponent
+    [OISInterface("Component")]
+    public unsafe interface IComponent : ICppInterface
     {
         [Constructor]
         IComponent Component(ref ComponentDescriptor descriptor);

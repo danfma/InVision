@@ -4,7 +4,7 @@ using System.Linq;
 using System.Reflection;
 using InVision.Extensions;
 
-namespace CodeGenerator
+namespace ReverseGenerator
 {
     public static class ReflectionUtility
     {
@@ -101,6 +101,17 @@ namespace CodeGenerator
         public static IEnumerable<MethodInfo> GetMethods(this Type type, BindingFlags bindingFlags = DefaultMethodFlags)
         {
             return type.GetMethods(bindingFlags).Where(method => !method.IsPropertyMember());
+        }
+
+        /// <summary>
+        /// Gets the fields.
+        /// </summary>
+        /// <param name="type">The type.</param>
+        /// <param name="bindingFlags">The binding flags.</param>
+        /// <returns></returns>
+        public static IEnumerable<FieldInfo> GetFields(Type type, BindingFlags bindingFlags = DefaultPropertyFlags)
+        {
+            return type.GetFields(bindingFlags);
         }
     }
 }

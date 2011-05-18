@@ -4,13 +4,12 @@ using System.Linq;
 using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Text;
-using CodeGenerator.Cpp;
 using InVision.Extensions;
 using InVision.Native;
 using InVision.Native.Ext;
-using Handle = InVision.Native.Ext.Handle;
+using ReverseGenerator.Cpp;
 
-namespace CodeGenerator.CSharp
+namespace ReverseGenerator.CSharp
 {
     public class CSharpBindingGenerator : CSharpGeneratorBase
     {
@@ -165,7 +164,7 @@ namespace CodeGenerator.CSharp
 
             ParameterInfo[] parameters = method.GetParameters();
             bool firstParam = true;
-            bool isNonStaticMethod = method.QueryAttribute<MethodAttribute>(attr => !attr.IsStatic);
+            bool isNonStaticMethod = method.QueryAttribute<MethodAttribute>(attr => !attr.Static);
             bool isDestructor = method.HasAttribute<DestructorAttribute>();
             bool longParameters = (parameters.Length + (isNonStaticMethod ? 1 : 0)) > 1;
 

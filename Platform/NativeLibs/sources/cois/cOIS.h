@@ -51,12 +51,15 @@ extern "C"
 	ButtonDescriptor descriptor_of_button(InvHandle handle);
 	AxisDescriptor descriptor_of_axis(InvHandle handle);
 	Vector3Descriptor descriptor_of_vector3(InvHandle handle);
+	MouseStateDescriptor descriptor_of_mousestate(InvHandle self);
 }
 
 
 #ifdef __cplusplus
 # include <string>
 # include <OIS.h>
+
+using namespace OIS;
 
 namespace invision
 {
