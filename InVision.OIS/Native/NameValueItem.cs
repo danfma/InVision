@@ -6,7 +6,7 @@ namespace InVision.OIS.Native
 {
 	[GeneratorModel, CppValueObject]
 	[StructLayout(LayoutKind.Sequential)]
-	internal struct NameValueItem
+	public struct NameValueItem
 	{
 		[MarshalAs(UnmanagedType.LPStr)]
 		public string Name;

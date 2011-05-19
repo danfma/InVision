@@ -5,7 +5,7 @@ using InVision.OIS.Components;
 namespace InVision.OIS.Native
 {
     [OISInterface("Component")]
-    public unsafe interface IComponent : ICppInterface
+    public interface IComponent : ICppInterface
     {
         [Constructor]
         IComponent Component(ref ComponentDescriptor descriptor);

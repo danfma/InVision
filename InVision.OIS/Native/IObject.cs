@@ -5,9 +5,12 @@ using InVision.OIS.Components;
 
 namespace InVision.OIS.Native
 {
-    [OISInterface("Object", BaseType = typeof(IInterface))]
-    public interface IObject : IInterface
+    [OISInterface("Object")]
+    public interface IObject : ICppInterface
     {
+		[Destructor]
+		void Dispose();
+
         [Method]
         ComponentType Type();
 

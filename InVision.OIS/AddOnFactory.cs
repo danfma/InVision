@@ -5,7 +5,7 @@ namespace InVision.OIS
 	/// <summary>
 	/// 
 	/// </summary>
-	[GeneratorModel]
+	[CppEnumeration]
 	public enum AddOnFactory
 	{
 		/// <summary>
