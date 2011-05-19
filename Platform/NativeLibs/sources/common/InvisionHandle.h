@@ -344,7 +344,7 @@ namespace invision
 	}
 
 	template<typename T>
-	inline InvHandle getOrCreateReference(T* data, bool owner = false)
+	inline InvHandle getOrCreateReference(T* data)
 	{
 		if (data == NULL)
 			return INVALID_HANDLE;

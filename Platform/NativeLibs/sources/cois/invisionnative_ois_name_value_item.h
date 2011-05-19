@@ -14,6 +14,7 @@ extern "C"
 		_string name;
 		_string value;
 	};
+	
 }
 
 #endif // __INVISIONNATIVE_OIS_NAME_VALUE_ITEM_H__

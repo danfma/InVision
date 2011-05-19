@@ -14,6 +14,7 @@ extern "C"
 		DEVICE_TYPE deviceType;
 		_string name;
 	};
+	
 }
 
 #endif // __INVISIONNATIVE_OIS_DEVICE_TYPE_ITEM_H__

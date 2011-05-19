@@ -6,6 +6,6 @@ namespace InVision.OIS.Native
     public unsafe interface IAxis : IComponent
     {
         [Constructor]
-        IAxis Axis(ref AxisDescriptor descriptor);
+        IAxis Construct(ref AxisDescriptor descriptor);
     }
 }

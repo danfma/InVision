@@ -20,6 +20,9 @@ extern "C"
 		AxisDescriptor y;
 		AxisDescriptor z;
 	};
+	
+	MouseStateDescriptor descriptor_of_mousestate(InvHandle handle);
+	
 }
 
 #endif // __INVISIONNATIVE_OIS_MOUSE_STATE_DESCRIPTOR_H__

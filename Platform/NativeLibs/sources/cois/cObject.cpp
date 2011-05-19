@@ -46,7 +46,7 @@ INV_CALL object_get_creator(InvHandle self)
 {
 	OIS::InputManager* inputManager = asObject(self)->getCreator();
 	
-	return getOrCreateReference<OIS::InputManager>(inputManager, false);
+	return getOrCreateReference<OIS::InputManager>(inputManager);
 }
 
 /**

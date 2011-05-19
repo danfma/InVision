@@ -1,4 +1,5 @@
-﻿using InVision.OIS.Native;
+﻿using System;
+using InVision.OIS.Native;
 
 namespace InVision.OIS
 {
@@ -22,7 +23,7 @@ namespace InVision.OIS
 		/// <value>The key code.</value>
 		public KeyCode KeyCode
 		{
-			get { return _descriptor.Key; }
+			get { throw new NotImplementedException(); }
 		}
 
 		/// <summary>
@@ -31,7 +32,7 @@ namespace InVision.OIS
 		/// <value>The char.</value>
 		public char Char
 		{
-			get { return _descriptor.Char; }
+			get { throw new NotImplementedException(); }
 		}
 	}
 }

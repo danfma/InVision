@@ -16,7 +16,7 @@ descriptor_of_component(InvHandle handle)
 
 
 INV_EXPORT InvHandle
-INV_CALL new_component_by_descriptor(ComponentDescriptor* descriptor)
+INV_CALL new_component_m1(ComponentDescriptor* descriptor)
 {
 	OIS::Component* obj = new OIS::Component();
 	InvHandle self = createHandle< OIS::Component >(obj);
@@ -29,7 +29,7 @@ INV_CALL new_component_by_descriptor(ComponentDescriptor* descriptor)
  * Method: Component::Component
  */
 INV_EXPORT InvHandle
-INV_CALL new_component_by_descriptor_ctype(ComponentDescriptor* descriptor, COMPONENT_TYPE ctype)
+INV_CALL new_component_m2(ComponentDescriptor* descriptor, COMPONENT_TYPE ctype)
 {
 	OIS::Component* obj = new OIS::Component((OIS::ComponentType)ctype);
 	InvHandle self = createHandle< OIS::Component >(obj);

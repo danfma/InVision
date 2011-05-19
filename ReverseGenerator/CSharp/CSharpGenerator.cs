@@ -5,8 +5,6 @@ namespace ReverseGenerator.CSharp
 {
     public class CSharpGenerator : IGenerator
     {
-        private SourceWriter _writer;
-
         #region IGenerator Members
 
         /// <summary>

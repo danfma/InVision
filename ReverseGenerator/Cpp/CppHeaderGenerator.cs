@@ -48,15 +48,21 @@ namespace ReverseGenerator.Cpp
 
             using (_writer = new SourceWriter(Path.Combine(Path.GetFullPath(ConfigOptions.CppOutputDir), _filename)))
             {
+                IEnumerable<Type> functionTypes = types.Where(t => t.HasAttribute<CppFunctionAttribute>());
+
                 IEnumerable<Type> wrapperTypes = types.Where(t => t.HasAttribute<CppInterfaceAttribute>(true));
+
                 IEnumerable<Type> enumerations = types.Where(t => t.IsEnum);
+
                 IEnumerable<Type> valueObjects =
                     types.Where(t => t.HasAttribute<CppValueObjectAttribute>() && t.IsValueType && !t.IsEnum);
+
                 IEnumerable<Type> functionProviders =
                     types.Where(
                         t =>
                         t.HasAttribute<CppTypeAttribute>() && !t.HasAttribute<CppInterfaceAttribute>(true) &&
                         t.IsInterface);
+
                 IEnumerable<Type> converters = types.Where(t => t.HasAttribute<HandleConverterAttribute>());
 
                 WriteHeader();
@@ -69,6 +75,7 @@ namespace ReverseGenerator.Cpp
 
                 WritePrototypes(valueObjects);
                 //WriteWrapperDescriptorPrototypes(wrapperTypes);
+                WriteFunctionHandlers(functionTypes);
 
                 WriteTypeDefinitions(valueObjects);
                 //WriteWrapperDescriptorDefinitions(wrapperTypes);
@@ -90,6 +97,65 @@ namespace ReverseGenerator.Cpp
         }
 
         #endregion
+
+        /// <summary>
+        /// Writes the function handlers.
+        /// </summary>
+        /// <param name="functionTypes">The function types.</param>
+        private void WriteFunctionHandlers(IEnumerable<Type> functionTypes)
+        {
+            foreach (Type functionType in functionTypes)
+            {
+                MethodInfo invoke = functionType.GetMethod("Invoke");
+
+                string returnTypename = ConfigOptions.ToCppTypename(functionType, invoke.ReturnType);
+                string name = functionType.Name;
+                string parameters = ConfigOptions.TranslateToCppParameters(invoke.GetParameters());
+
+                _writer.WriteLine("typedef {0} (INV_CALL *{1})({2});",
+                                  returnTypename,
+                                  name,
+                                  parameters);
+            }
+
+            _writer.WriteLine();
+        }
+
+        /// <summary>
+        /// Gets the name of the external method.
+        /// </summary>
+        /// <param name="method">The method.</param>
+        /// <returns></returns>
+        public static string GetExternalMethodName(MethodInfo method)
+        {
+            Type wrapperType = method.DeclaringType;
+            string functionName;
+            string targetType = ConfigOptions.GetCppTypename(wrapperType);
+
+            if (method.HasAttribute<ConstructorAttribute>())
+            {
+                functionName = "new" + targetType.ToLower().ToPascalCase();
+
+                //ParameterInfo[] ctrParameters = method.GetParameters();
+                //functionName = AddBySuffix(ctrParameters, functionName);
+            }
+            else if (method.HasAttribute<DestructorAttribute>())
+            {
+                functionName = "delete" + targetType.ToLower().ToPascalCase();
+            }
+            else
+            {
+                functionName = targetType.ToLower().ToPascalCase() + method.Name;
+
+                if (IsOverloaded(method))
+                    functionName += GetNumberFromSequence(method);
+            }
+
+            if (IsOverloaded(method))
+                functionName += "_m" + GetNumberFromSequence(method);
+
+            return functionName.ToCStyle();
+        }
 
         #region Converters
 
@@ -132,8 +198,8 @@ namespace ReverseGenerator.Cpp
             var attribute = type.GetAttribute<CppTypeAttribute>(true);
 
             _writer.WriteLine("inline {0}* as{1}(InvHandle self) {{",
-                attribute.GetCppFullName(type.Name),
-                attribute.Typename);
+                              attribute.GetCppFullName(type.Name),
+                              attribute.Typename);
 
             _writer.Indent();
             _writer.WriteLine("return castHandle< {0} >(self);", attribute.GetCppFullName(type.Name));
@@ -289,7 +355,7 @@ namespace ReverseGenerator.Cpp
             foreach (Type type in types)
             {
                 var generator = new CppValueObjectGenerator(ConfigOptions, type);
-                var filename = generator.Generate();
+                string filename = generator.Generate();
 
                 _writer.WriteLine("#include \"{0}\"", filename);
             }
@@ -424,7 +490,7 @@ namespace ReverseGenerator.Cpp
             _writer.WriteLine(" * Method: {0}::{1}", targetType, targetMethod);
             _writer.WriteLine(" */");
             _writer.WriteLine("INV_EXPORT {0}",
-                              ConfigOptions.TranslateType(methodInfo.ReturnParameter, methodInfo.ReturnType));
+                              ConfigOptions.ToCppTypename(methodInfo.ReturnParameter, methodInfo.ReturnType));
             _writer.WriteLine("INV_CALL {0}({1});", functionName.ToCStyle(), parameters);
             _writer.WriteLine();
         }
@@ -516,7 +582,7 @@ namespace ReverseGenerator.Cpp
 
                 parameters += string.Format(
                     "{0} {1}",
-                    ConfigOptions.TranslateType(parameterInfo, parameterInfo.ParameterType),
+                    ConfigOptions.ToCppTypename(parameterInfo, parameterInfo.ParameterType),
                     parameterInfo.Name);
             }
 
@@ -594,8 +660,11 @@ namespace ReverseGenerator.Cpp
                 functionName = "new" + targetType.ToLower().ToPascalCase();
                 targetMethod = targetType;
 
-                ParameterInfo[] ctrParameters = methodInfo.GetParameters();
-                functionName = AddBySuffix(ctrParameters, functionName);
+                //ParameterInfo[] ctrParameters = methodInfo.GetParameters();
+                //functionName = AddBySuffix(ctrParameters, functionName);
+
+                if (IsOverloaded(methodInfo))
+                    functionName += "_m" + GetNumberFromSequence(methodInfo);
 
                 isConstructor = true;
             }
@@ -610,7 +679,7 @@ namespace ReverseGenerator.Cpp
                 targetMethod = methodInfo.Name.ToCamelCase();
 
                 if (IsOverloaded(methodInfo))
-                    functionName += GetNumberFromSequence(methodInfo);
+                    functionName += "_m" + GetNumberFromSequence(methodInfo);
             }
 
             string parameters;
@@ -634,7 +703,7 @@ namespace ReverseGenerator.Cpp
                 parameters = GetParametersString(methodInfo);
             }
 
-            string returnedType = ConfigOptions.TranslateType(methodInfo.ReturnParameter, methodInfo.ReturnType);
+            string returnedType = ConfigOptions.ToCppTypename(methodInfo.ReturnParameter, methodInfo.ReturnType);
 
             if (isConstructor)
                 returnedType = "InvHandle";
@@ -648,38 +717,5 @@ namespace ReverseGenerator.Cpp
         }
 
         #endregion
-
-        /// <summary>
-        /// Gets the name of the external method.
-        /// </summary>
-        /// <param name="method">The method.</param>
-        /// <returns></returns>
-        public static string GetExternalMethodName(MethodInfo method)
-        {
-            Type wrapperType = method.DeclaringType;
-            string functionName;
-            string targetType = ConfigOptions.GetCppTypename(wrapperType);
-
-            if (method.HasAttribute<ConstructorAttribute>())
-            {
-                functionName = "new" + targetType.ToLower().ToPascalCase();
-
-                ParameterInfo[] ctrParameters = method.GetParameters();
-                functionName = AddBySuffix(ctrParameters, functionName);
-            }
-            else if (method.HasAttribute<DestructorAttribute>())
-            {
-                functionName = "delete" + targetType.ToLower().ToPascalCase();
-            }
-            else
-            {
-                functionName = targetType.ToLower().ToPascalCase() + method.Name;
-
-                if (IsOverloaded(method))
-                    functionName += GetNumberFromSequence(method);
-            }
-
-            return functionName.ToCStyle();
-        }
     }
 }

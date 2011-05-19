@@ -28,7 +28,7 @@ namespace InVision.OIS
             : this(CreateCppInstance<IMouseState>())
         {
             var descriptor = new MouseStateDescriptor();
-            _native.MouseState(ref descriptor);
+            _native.Construct(ref descriptor);
 
             Initialize(descriptor);
         }

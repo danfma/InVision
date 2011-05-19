@@ -137,7 +137,7 @@ namespace ReverseGenerator.Cpp
             Type fieldType = fieldInfo.FieldType;
 
             string fieldName = fieldInfo.Name;
-            string translatedType = ConfigOptions.TranslateType(fieldInfo, fieldType);
+            string translatedType = ConfigOptions.ToCppTypename(fieldInfo, fieldType);
 
             WriteField(writer, fieldName, translatedType);
         }

@@ -1,4 +1,7 @@
-﻿namespace InVision.OIS
+﻿using System.Collections.Generic;
+using InVision.OIS.Components;
+
+namespace InVision.OIS
 {
 	public interface IFactoryCreator
 	{
@@ -6,7 +9,7 @@
 		/// Frees the device list.
 		/// </summary>
 		/// <returns></returns>
-		DeviceList FreeDeviceList();
+		IDictionary<ComponentType, string> FreeDeviceList();
 
 		/// <summary>
 		/// Gets the total devices.

@@ -111,16 +111,16 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AddOnFactory.cs" />
+    <Compile Include="Attributes\OISDescriptorAttribute.cs" />
     <Compile Include="Attributes\OISEnumerationAttribute.cs" />
     <Compile Include="Attributes\OISInterfaceAttribute.cs" />
     <Compile Include="Components\Axis.cs" />
     <Compile Include="Components\Button.cs" />
     <Compile Include="Components\ComponentType.cs" />
-    <Compile Include="DeviceInfo.cs" />
-    <Compile Include="DeviceList.cs" />
+    <Compile Include="Native\DeviceList.cs" />
+    <Compile Include="DeviceListItem.cs" />
     <Compile Include="ErrorType.cs" />
     <Compile Include="EventArgs.cs" />
-    <Compile Include="FactoryCreator.cs" />
     <Compile Include="FactoryList.cs" />
     <Compile Include="IDevice.cs" />
     <Compile Include="IDeviceComponent.cs" />
@@ -154,15 +154,25 @@
     <Compile Include="Native\IAxis.cs" />
     <Compile Include="Native\IButton.cs" />
     <Compile Include="Native\IComponent.cs" />
+    <Compile Include="Native\ICustomKeyListener.cs" />
+    <Compile Include="Native\IDeviceList.cs" />
+    <Compile Include="Native\IEventArg.cs" />
+    <Compile Include="Native\IInputManager.cs" />
     <Compile Include="Native\IInterface.cs" />
-    <Compile Include="Native\IMouseListener.cs" />
+    <Compile Include="Native\IKeyboard.cs" />
+    <Compile Include="Native\ICustomMouseListener.cs" />
+    <Compile Include="Native\IKeyEvent.cs" />
+    <Compile Include="Native\IMouse.cs" />
+    <Compile Include="Native\IMouseEvent.cs" />
     <Compile Include="Native\IMouseState.cs" />
     <Compile Include="Native\IObject.cs" />
     <Compile Include="Native\IVector3.cs" />
     <Compile Include="Native\KeyEventDescriptor.cs" />
     <Compile Include="Native\KeyEventHandler.cs" />
+    <Compile Include="Native\MouseClickHandler.cs" />
     <Compile Include="Native\MouseDescriptor.cs" />
     <Compile Include="Native\MouseEventDescriptor.cs" />
+    <Compile Include="Native\MouseMovedHandler.cs" />
     <Compile Include="Native\MouseStateDescriptor.cs" />
     <Compile Include="Native\NameValueItem.cs" />
     <Compile Include="Native\NativeAxis.cs" />

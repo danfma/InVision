@@ -7,9 +7,9 @@ namespace InVision.OIS.Native
     public interface IMouseState : ICppInterface
     {
         [Constructor]
-        IMouseState MouseState(ref MouseStateDescriptor descriptor);
+        IMouseState Construct(ref MouseStateDescriptor descriptor);
 
         [Destructor]
-        void Dispose();
+        void Destruct();
     }
 }

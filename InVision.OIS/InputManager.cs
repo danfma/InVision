@@ -1,6 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
 using InVision.Native;
-using InVision.Native.Collections;
 using InVision.OIS.Native;
 
 namespace InVision.OIS
@@ -10,7 +10,7 @@ namespace InVision.OIS
 		private static uint? _versionNumber;
 		private string _inputSystemName;
 		private string _versionName;
-		private readonly List<WeakReference> _devices = new List<WeakReference>();
+		private readonly InVision.Native.Collections.List<WeakReference> _devices = new InVision.Native.Collections.List<WeakReference>();
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="InputManager"/> class.
@@ -93,7 +93,7 @@ namespace InVision.OIS
 		/// Lists the free devices.
 		/// </summary>
 		/// <returns></returns>
-		public DeviceList ListFreeDevices()
+		public IEnumerable<DeviceListItem> ListFreeDevices()
 		{
 			throw new NotImplementedException();
 		}

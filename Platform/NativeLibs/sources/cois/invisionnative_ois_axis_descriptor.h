@@ -18,6 +18,9 @@ extern "C"
 		_bool* absOnly;
 		_byte* padding;
 	};
+	
+	AxisDescriptor descriptor_of_axis(InvHandle handle);
+	
 }
 
 #endif // __INVISIONNATIVE_OIS_AXIS_DESCRIPTOR_H__

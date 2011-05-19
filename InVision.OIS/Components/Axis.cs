@@ -25,7 +25,7 @@ namespace InVision.OIS.Components
             : this(CreateCppInstance<IAxis>())
         {
             var descriptor = new AxisDescriptor();
-            Native.Axis(ref descriptor);
+            Native.Construct(ref descriptor);
 
             Initialize(descriptor);
         }

@@ -16,6 +16,9 @@ extern "C"
 		KEY_CODE* key;
 		_uint* text;
 	};
+	
+	KeyEventDescriptor descriptor_of_keyevent(InvHandle handle);
+	
 }
 
 #endif // __INVISIONNATIVE_OIS_KEY_EVENT_DESCRIPTOR_H__

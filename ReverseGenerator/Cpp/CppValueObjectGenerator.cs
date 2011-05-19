@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Reflection;
+using InVision.Extensions;
+using InVision.Native.Ext;
 
 namespace ReverseGenerator.Cpp
 {
@@ -37,6 +39,17 @@ namespace ReverseGenerator.Cpp
                 }
             }
             writer.CloseBlock(";");
+            writer.WriteLine();
+
+            var attribute = Type.GetAttribute<CppValueObjectAttribute>(true);
+
+            if (attribute.IsDescriptor)
+            {
+                writer.WriteLine("{0} descriptor_of_{1}(InvHandle handle);",
+                                 cppTypename,
+                                 (attribute.Typename ?? Type.Name.Replace("Descriptor", string.Empty)).ToLower());
+                writer.WriteLine();
+            }
         }
     }
 }

@@ -14,6 +14,9 @@ extern "C"
 		InvHandle self;
 		COMPONENT_TYPE* ctype;
 	};
+	
+	ComponentDescriptor descriptor_of_component(InvHandle handle);
+	
 }
 
 #endif // __INVISIONNATIVE_OIS_COMPONENT_DESCRIPTOR_H__

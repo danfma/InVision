@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Reflection;
 using System.Runtime.InteropServices;
 using InVision.Extensions;
@@ -116,7 +117,7 @@ namespace ReverseGenerator
         /// <param name="fieldInfo">The field info.</param>
         /// <param name="fieldType">Type of the field.</param>
         /// <returns></returns>
-        public static string TranslateType(ICustomAttributeProvider fieldInfo, Type fieldType)
+        public static string ToCppTypename(ICustomAttributeProvider fieldInfo, Type fieldType)
         {
             string translatedType;
 
@@ -136,12 +137,12 @@ namespace ReverseGenerator
                 string pointedTypename = fieldType.FullName.Substring(0, fieldType.FullName.Length - 1);
                 Type pointedType = fieldType.Assembly.GetType(pointedTypename);
 
-                return TranslateType(fieldInfo, pointedType) + "*";
+                return ToCppTypename(fieldInfo, pointedType) + "*";
             }
 
             if (fieldType.IsArray)
             {
-                return TranslateType(fieldInfo, fieldType.GetElementType()) + "*";
+                return ToCppTypename(fieldInfo, fieldType.GetElementType()) + "*";
             }
 
             if (fieldType.IsPointer)
@@ -149,11 +150,14 @@ namespace ReverseGenerator
                 string pointedTypename = fieldType.FullName.Substring(0, fieldType.FullName.Length - 1);
                 Type pointedType = fieldType.Assembly.GetType(pointedTypename);
 
-                return TranslateType(fieldInfo, pointedType) + "*";
+                return ToCppTypename(fieldInfo, pointedType) + "*";
             }
 
             if (fieldType.IsEnum)
                 return GetCppEnumName(fieldType);
+
+            if (fieldType.HasICppInterface())
+                return ToCppTypename(fieldInfo, typeof (Handle));
 
             return GetCppTypename(fieldType);
         }
@@ -272,7 +276,7 @@ namespace ReverseGenerator
         /// </summary>
         /// <param name="parameter">The parameter.</param>
         /// <returns></returns>
-        public static string GetCSharpParameterModification(ParameterInfo parameter)
+        public static string GetCSharpParameterModifier(ParameterInfo parameter)
         {
             if (parameter.IsIn)
                 return "in";
@@ -286,19 +290,43 @@ namespace ReverseGenerator
             return string.Empty;
         }
 
-    	public static string GetCSharpCppInstanceTypename(Type wrapperType)
-    	{
-    		return wrapperType.Name.Substring(1).ToPascalCase() + "Impl";
-    	}
+        public static string GetCSharpCppInstanceTypename(Type wrapperType)
+        {
+            return wrapperType.Name.Substring(1).ToPascalCase() + "Impl";
+        }
 
-    	public static Type GetCppInstanceBaseType(Type wrapperType)
-    	{
-    		return wrapperType.GetAttribute<CppInterfaceAttribute>(false).BaseType;
-    	}
+        public static Type GetCppInstanceBaseType(Type wrapperType)
+        {
+            return wrapperType.GetAttribute<CppInterfaceAttribute>(false).BaseType;
+        }
 
-    	public static string GetCSharpNativeTypename(Type wrapperType)
-    	{
-    		return "Native" + wrapperType.Name.Substring(1).ToPascalCase();
-    	}
+        public static string GetCSharpNativeTypename(Type wrapperType)
+        {
+            return "Native" + wrapperType.Name.Substring(1).ToPascalCase();
+        }
+
+        /// <summary>
+        /// Translates to CPP parameters.
+        /// </summary>
+        /// <param name="parameters">The parameters.</param>
+        /// <returns></returns>
+        public static string TranslateToCppParameters(ParameterInfo[] parameters)
+        {
+            var convertedParameters =
+                from p in parameters
+                select TranslateToCppParameter(p);
+
+            return convertedParameters.Join(", ");
+        }
+
+        /// <summary>
+        /// Translates to CPP parameter.
+        /// </summary>
+        /// <param name="parameter">The parameter.</param>
+        /// <returns></returns>
+        private static string TranslateToCppParameter(ParameterInfo parameter)
+        {
+            return string.Format("{0} {1}", ToCppTypename(parameter, parameter.ParameterType), parameter.Name);
+        }
     }
 }

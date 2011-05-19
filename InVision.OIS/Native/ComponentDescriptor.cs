@@ -5,7 +5,7 @@ using InVision.OIS.Components;
 
 namespace InVision.OIS.Native
 {
-    [CppValueObject]
+    [CppDescriptor]
     [StructLayout(LayoutKind.Sequential)]
     public unsafe struct ComponentDescriptor
     {

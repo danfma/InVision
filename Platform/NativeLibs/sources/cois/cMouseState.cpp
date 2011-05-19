@@ -20,7 +20,7 @@ MouseStateDescriptor descriptor_of_mousestate(InvHandle self)
  * Method: MouseState::MouseState
  */
 INV_EXPORT InvHandle
-INV_CALL new_mousestate_by_descriptor(MouseStateDescriptor* descriptor)
+INV_CALL new_mousestate(MouseStateDescriptor* descriptor)
 {
 	MouseState* obj = new MouseState();
 

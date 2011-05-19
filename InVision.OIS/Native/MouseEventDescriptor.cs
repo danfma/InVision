@@ -1,9 +1,10 @@
-﻿using System.Runtime.InteropServices;
-using InVision.Native.Ext;
+﻿using System;
+using System.Runtime.InteropServices;
+using InVision.OIS.Attributes;
 
 namespace InVision.OIS.Native
 {
-    [CppValueObject]
+    [OISDescriptor]
     [StructLayout(LayoutKind.Sequential)]
     public struct MouseEventDescriptor
     {

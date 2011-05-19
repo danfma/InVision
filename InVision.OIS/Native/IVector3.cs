@@ -1,14 +1,15 @@
 ﻿using InVision.Native.Ext;
+using InVision.OIS.Attributes;
 
 namespace InVision.OIS.Native
 {
-    [CppInterface("Vector3", Namespace = "OIS", DefinitionFile = "OIS.h", BaseType = typeof(IComponent))]
-    public unsafe interface IVector3 : IComponent
+    [OISInterface("Vector3", BaseType = typeof(IComponent))]
+    public interface IVector3 : IComponent
     {
         [Constructor]
-        IVector3 Vector3(ref Vector3Descriptor descriptor);
+        IVector3 Construct(ref Vector3Descriptor descriptor);
 
         [Constructor]
-        IVector3 Vector3(ref Vector3Descriptor descriptor, float x, float y, float z);
+        IVector3 Construct(ref Vector3Descriptor descriptor, float x, float y, float z);
     }
 }

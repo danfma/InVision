@@ -17,6 +17,9 @@ extern "C"
 		_float* y;
 		_float* x;
 	};
+	
+	Vector3Descriptor descriptor_of_vector3(InvHandle handle);
+	
 }
 
 #endif // __INVISIONNATIVE_OIS_VECTOR3_DESCRIPTOR_H__

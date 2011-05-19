@@ -1,5 +1,6 @@
 using System;
 using System.Reflection;
+using InVision.Native.Ext;
 
 namespace InVision.Extensions
 {
@@ -110,6 +111,11 @@ namespace InVision.Extensions
         public static bool HasInterface(this Type type, Type interfaceType)
         {
             return type.GetInterface(interfaceType.FullName) != null;
+        }
+
+        public static bool HasICppInterface(this Type type)
+        {
+            return typeof (ICppInterface).IsAssignableFrom(type);
         }
     }
 }

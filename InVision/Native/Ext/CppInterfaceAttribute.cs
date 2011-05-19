@@ -41,6 +41,10 @@ namespace InVision.Native.Ext
         /// <value>The type of the descriptor.</value>
         public Type DescriptorType { get; set; }
 
+        /// <summary>
+        /// Gets or sets the type of the base.
+        /// </summary>
+        /// <value>The type of the base.</value>
     	public Type BaseType { get; set; }
     }
 }

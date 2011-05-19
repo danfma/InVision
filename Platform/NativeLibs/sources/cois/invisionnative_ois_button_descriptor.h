@@ -15,6 +15,9 @@ extern "C"
 		ComponentDescriptor base;
 		_bool* pushed;
 	};
+	
+	ButtonDescriptor descriptor_of_button(InvHandle handle);
+	
 }
 
 #endif // __INVISIONNATIVE_OIS_BUTTON_DESCRIPTOR_H__

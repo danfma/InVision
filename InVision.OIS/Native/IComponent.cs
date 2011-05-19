@@ -8,12 +8,12 @@ namespace InVision.OIS.Native
     public interface IComponent : ICppInterface
     {
         [Constructor]
-        IComponent Component(ref ComponentDescriptor descriptor);
+        IComponent Construct(ref ComponentDescriptor descriptor);
 
         [Constructor]
-        IComponent Component(ref ComponentDescriptor descriptor, ComponentType ctype);
+        IComponent Construct(ref ComponentDescriptor descriptor, ComponentType ctype);
 
         [Destructor]
-        void Dispose();
+        void Destruct();
     }
 }

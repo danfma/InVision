@@ -3,7 +3,7 @@ using InVision.Native.Ext;
 
 namespace InVision.OIS.Native
 {
-    [CppValueObject]
+    [CppDescriptor]
     [StructLayout(LayoutKind.Sequential)]
     public unsafe struct ButtonDescriptor
     {

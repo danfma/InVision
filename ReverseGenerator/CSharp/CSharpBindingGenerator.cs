@@ -69,8 +69,8 @@ namespace ReverseGenerator.CSharp
         /// <param name="wrapperType">Type of the wrapper.</param>
         private void WriteWrapperType(Type wrapperType)
         {
-            Writer.WriteLine("internal sealed class Native{0} : {1}", 
-                wrapperType.Name.Substring(1), 
+            Writer.WriteLine("internal sealed class Native{0} : {1}",
+                wrapperType.Name.Substring(1),
                 typeof(PlatformInvoke).FullName);
             Writer.OpenBlock();
             {
@@ -154,7 +154,7 @@ namespace ReverseGenerator.CSharp
         {
             string returnType = ConfigOptions.GetCSharpTypeString(method.ReturnType);
 
-            if (method.HasAttribute<ConstructorAttribute>())
+            if (method.HasAttribute<ConstructorAttribute>() || method.ReturnType.HasICppInterface())
                 returnType = typeof(Handle).Name;
 
             Writer.BeginLine();
@@ -204,13 +204,17 @@ namespace ReverseGenerator.CSharp
                     Writer.Write(" ");
                 }
 
-                string paramModification = ConfigOptions.GetCSharpParameterModification(parameter);
+                string paramModification = ConfigOptions.GetCSharpParameterModifier(parameter);
+                var parameterType = parameter.ParameterType;
+
+                if (parameterType.HasICppInterface())
+                    parameterType = typeof(Handle);
 
                 Writer.Write("{0}{1} {2}",
                              string.IsNullOrEmpty(paramModification)
                                  ? string.Empty
                                  : string.Format("{0} ", paramModification),
-                             ConfigOptions.GetCSharpTypeString(parameter.ParameterType),
+                             ConfigOptions.GetCSharpTypeString(parameterType),
                              parameter.Name);
             }
 

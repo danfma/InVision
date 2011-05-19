@@ -7,9 +7,9 @@ namespace InVision.OIS.Native
 	public interface IButton : IComponent
 	{
 		[Constructor]
-		IButton Button(ref ButtonDescriptor descriptor);
+		IButton Construct(ref ButtonDescriptor descriptor);
 
 		[Constructor]
-		IButton Button(ref ButtonDescriptor descriptor, bool pushed);
+		IButton Construct(ref ButtonDescriptor descriptor, bool pushed);
 	}
 }

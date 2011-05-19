@@ -13,6 +13,9 @@ extern "C"
 	{
 		InvHandle self;
 	};
+	
+	EventArgDescriptor descriptor_of_eventarg(InvHandle handle);
+	
 }
 
 #endif // __INVISIONNATIVE_OIS_EVENT_ARG_DESCRIPTOR_H__

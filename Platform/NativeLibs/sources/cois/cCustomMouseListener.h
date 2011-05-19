@@ -3,9 +3,6 @@
 
 #include "cOIS.h"
 
-typedef bool (INV_CALL *MouseMovedHandler)(MouseEventDescriptor e);
-typedef bool (INV_CALL *MouseClickHandler)(MouseEventDescriptor e, OIS::MouseButtonID mouseButton);
-
 class CustomMouseListener : public OIS::MouseListener
 {
 public:
@@ -13,23 +10,27 @@ public:
 	MouseClickHandler mousePressedHandler;
 	MouseClickHandler mouseReleasedHandler;
 
-	CustomMouseListener()
-	{
-		movedHandler = NULL;
-		mousePressedHandler = NULL;
-		mouseReleasedHandler = NULL;
-	}
+	CustomMouseListener(
+		MouseMovedHandler moved = NULL,
+		MouseClickHandler mousePressed = NULL,
+		MouseClickHandler mouseReleased = NULL)
+		: movedHandler(moved), mousePressedHandler(mousePressed), mouseReleasedHandler(mouseReleased)
+	{ }
 
 	bool mouseMoved(const OIS::MouseEvent &arg)
 	{
+		bool result = true;
+
 		if (movedHandler != NULL) {
 			OIS::MouseEvent* e = const_cast<OIS::MouseEvent*>(&arg);
-			MouseEventDescriptor ex = ois_descriptor_of_mouseevent(e, e);
+			InvHandle eventHandle = createReference<OIS::MouseEvent>(e);
+			MouseEventDescriptor descriptor = descriptor_of_mouseevent(eventHandle);
 
-			return movedHandler(ex);
+			result = fromBool( movedHandler(descriptor) ) ;
+			destroyHandle(eventHandle);
 		}
 
-		return true;
+		return result;
 	}
 
 	bool mousePressed(const OIS::MouseEvent &arg, OIS::MouseButtonID id)
@@ -38,9 +39,11 @@ public:
 
 		if (mousePressedHandler != NULL) {
 			OIS::MouseEvent* e = const_cast<OIS::MouseEvent*>(&arg);
-			MouseEventDescriptor ex = ois_descriptor_of_mouseevent(e, e);
+			InvHandle eventHandle = createReference<OIS::MouseEvent>(e);
+			MouseEventDescriptor descriptor = descriptor_of_mouseevent(eventHandle);
 
-			result = mousePressedHandler(ex, id);
+			result = fromBool( mousePressedHandler(descriptor, id) );
+			destroyHandle(eventHandle);
 		}
 
 		return result;
@@ -52,25 +55,15 @@ public:
 
 		if (mouseReleasedHandler != NULL) {
 			OIS::MouseEvent* e = const_cast<OIS::MouseEvent*>(&arg);
-			MouseEventDescriptor ex = ois_descriptor_of_mouseevent(e, e);
+			InvHandle eventHandle = createReference<OIS::MouseEvent>(e);
+			MouseEventDescriptor descriptor = descriptor_of_mouseevent(eventHandle);
 
-			result = mouseReleasedHandler(ex, id);
+			result = fromBool( mouseReleasedHandler(descriptor, id) );
+			destroyHandle(eventHandle);
 		}
 
 		return result;
 	}
 };
-
-extern "C"
-{
-	INV_EXPORT CustomMouseListener*
-	INV_CALL ois_new_custommouselistener(
-		MouseMovedHandler movedHandler,
-		MouseClickHandler pressHandler,
-		MouseClickHandler releaseHandler);
-
-	INV_EXPORT void
-	INV_CALL ois_delete_customouselistener(CustomMouseListener* self);
-}
 
 #endif // CUSTOMMOUSELISTENER_H

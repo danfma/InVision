@@ -7,6 +7,6 @@ namespace InVision.OIS.Native
     public interface IInterface
     {
         [Destructor]
-        void Dispose();
+        void Destruct();
     }
 }

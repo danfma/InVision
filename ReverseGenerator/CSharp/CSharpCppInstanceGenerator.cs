@@ -133,7 +133,7 @@ namespace ReverseGenerator.CSharp
 
                 string parametersDef =
                     (from p in parameters
-                     let paramModification = ConfigOptions.GetCSharpParameterModification(p)
+                     let paramModification = ConfigOptions.GetCSharpParameterModifier(p)
                      select string.Format(
                          "{0}{1} {2}",
                          string.IsNullOrEmpty(paramModification)
@@ -142,11 +142,7 @@ namespace ReverseGenerator.CSharp
                          ConfigOptions.GetCSharpTypeString(p.ParameterType),
                          p.Name)).Join(", ");
 
-                string parametersList =
-                    (from p in parameters
-                     let paramModification = ConfigOptions.GetCSharpParameterModification(p)
-                     select string.Format("{0}{1}", string.IsNullOrEmpty(paramModification) ? string.Empty : paramModification + " ", p.Name)).
-                    Join(", ");
+                string parametersList = GetParametersList(parameters);
 
                 Writer.WriteLine("{0} {0}.{1}({2})",
                     wrapperType.Name,
@@ -175,7 +171,10 @@ namespace ReverseGenerator.CSharp
             bool hasDestructor = HasDestructor(wrapperType);
             bool hasBaseType = HasBaseType(wrapperType);
 
-            if (!hasDestructor && hasBaseType)
+            if (!hasDestructor && !hasBaseType)
+                return;
+
+            if (hasBaseType)
                 return;
 
             var destructor = GetDestructor(wrapperType);
@@ -301,7 +300,6 @@ namespace ReverseGenerator.CSharp
         /// <param name="wrapperType">Type of the wrapper.</param>
         private void WriteMethods(Type wrapperType)
         {
-            string typename = wrapperType.Name.Substring(1).ToPascalCase();
             IEnumerable<MethodInfo> methods = ReflectionUtility.GetMethods(wrapperType).
                 Where(m => m.QueryAttribute<MethodAttribute>(attr => string.IsNullOrEmpty(attr.Property)));
 
@@ -312,20 +310,15 @@ namespace ReverseGenerator.CSharp
 
                 string parametersDef =
                     (from p in parameters
-                     let paramModification = ConfigOptions.GetCSharpParameterModification(p)
+                     let paramModification = ConfigOptions.GetCSharpParameterModifier(p)
                      select string.Format(
                          "{0}{1} {2}",
                          string.IsNullOrEmpty(paramModification) ? paramModification : paramModification + " ",
                          ConfigOptions.GetCSharpTypeString(p.ParameterType),
                          p.Name)).Join(", ");
 
-                string parametersList =
-                    (from p in parameters
-                     let paramModification = ConfigOptions.GetCSharpParameterModification(p)
-                     select string.Format("{0}{1}", string.IsNullOrEmpty(paramModification) ? string.Empty : paramModification + " ", p.Name)).
-                    Join(", ");
-
-                bool returnVoid = method.ReturnType == typeof(void);
+                string parametersList = GetParametersList(parameters);
+                bool isProcedure = method.ReturnType == typeof(void);
 
                 Writer.WriteLine("{0} {1}.{2}({3})",
                                  ConfigOptions.GetCSharpTypeString(method.ReturnType),
@@ -343,14 +336,38 @@ namespace ReverseGenerator.CSharp
                     }
 
                     Writer.WriteLine("{0}{1}.{2}({3});",
-                                     returnVoid ? string.Empty : "return ",
+                                     isProcedure ? string.Empty : "var result = ",
                                      ConfigOptions.GetCSharpNativeTypename(wrapperType),
                                      method.Name,
                                      parametersList);
+
+                    if (!isProcedure)
+                    {
+                        Writer.WriteLine();
+
+                        if (method.ReturnType.HasICppInterface())
+                            Writer.WriteLine("return HandleConvert.FromHandle<{0}>(result);", method.ReturnType.Name);
+                        else
+                            Writer.WriteLine("return result;");
+                    }
                 }
                 Writer.CloseBlock();
                 Writer.WriteLine();
             }
+        }
+
+        /// <summary>
+        /// Gets the parameters list.
+        /// </summary>
+        /// <param name="parameters">The parameters.</param>
+        /// <returns></returns>
+        private static string GetParametersList(IEnumerable<ParameterInfo> parameters)
+        {
+            return (from p in parameters
+                    let paramModification = ConfigOptions.GetCSharpParameterModifier(p)
+                    let paramName = p.ParameterType.HasICppInterface() ? string.Format("HandleConvert.ToHandle({0})", p.Name) : p.Name
+                    select string.Format("{0}{1}", string.IsNullOrEmpty(paramModification) ? string.Empty : paramModification + " ", paramName)).
+                Join(", ");
         }
 
         /// <summary>

@@ -9,6 +9,7 @@ namespace InVision.Native.Ext
     public static class NativeFactory
     {
         private static readonly ConcurrentDictionary<Type, Type> TypeInstances;
+        private static readonly ConcurrentDictionary<Type, object> SharedInstances;
 
         /// <summary>
         /// Initializes the <see cref="NativeFactory"/> class.
@@ -16,6 +17,7 @@ namespace InVision.Native.Ext
         static NativeFactory()
         {
             TypeInstances = new ConcurrentDictionary<Type, Type>();
+            SharedInstances = new ConcurrentDictionary<Type, object>();
         }
 
         /// <summary>
@@ -28,6 +30,28 @@ namespace InVision.Native.Ext
             Type type = TypeInstances.GetOrAdd(typeof(T), SearchImplementationType);
 
             return type.CreateInstance<T>();
+        }
+
+        /// <summary>
+        /// Gets this instance.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <returns></returns>
+        public static T Get<T>()
+        {
+            return (T)SharedInstances.GetOrAdd(typeof(T), CreateSharedInstance);
+        }
+
+        /// <summary>
+        /// Creates the shared instance.
+        /// </summary>
+        /// <param name="interfaceType">The type.</param>
+        /// <returns></returns>
+        private static object CreateSharedInstance(Type interfaceType)
+        {
+            var implType = SearchImplementationType(interfaceType);
+
+            return Activator.CreateInstance(implType);
         }
 
         /// <summary>

@@ -3,13 +3,17 @@
 
 #include "cOIS.h"
 
-typedef bool (INV_CALL *KeyEventHandler)(InvHandle e);
-
 class CustomKeyListener : public OIS::KeyListener
 {
-public:
+private:
 	KeyEventHandler keyPressedHandler;
 	KeyEventHandler keyReleasedHandler;
+
+public:
+	CustomKeyListener(KeyEventHandler keyPressed, KeyEventHandler keyReleased)
+		: keyPressedHandler(keyPressed), keyReleasedHandler(keyReleased)
+	{ }
+
 
 	bool keyPressed(const OIS::KeyEvent &arg)
 	{
@@ -17,10 +21,11 @@ public:
 
 		if (keyPressedHandler != NULL) {
 			OIS::KeyEvent* keyEvent = const_cast<OIS::KeyEvent*>(&arg);
-			InvHandle keyHandle = createHandle<OIS::KeyEvent>(keyEvent);
+			InvHandle keyHandle = createReference<OIS::KeyEvent>(keyEvent);
+			KeyEventDescriptor descriptor = descriptor_of_keyevent(keyHandle);
 
-			result = keyPressedHandler(keyHandle);
-			removeHandle(keyHandle);
+			result = keyPressedHandler(descriptor);
+			destroyHandle(keyHandle);
 		}
 
 		return result;
@@ -32,26 +37,15 @@ public:
 
 		if (keyReleasedHandler != NULL) {
 			OIS::KeyEvent* keyEvent = const_cast<OIS::KeyEvent*>(&arg);
-			InvHandle keyHandle = createHandle<OIS::KeyEvent>(keyEvent);
+			InvHandle keyHandle = createReference<OIS::KeyEvent>(keyEvent);
+			KeyEventDescriptor descriptor = descriptor_of_keyevent(keyHandle);
 
-			result = keyReleasedHandler(keyHandle);
-			removeHandle(keyHandle);
+			result = keyReleasedHandler(descriptor);
+			destroyHandle(keyHandle);
 		}
 
 		return result;
 	}
 };
-
-extern "C"
-{
-	INV_EXPORT CustomKeyListener*
-	INV_CALL ois_new_customkeylistener(
-		KeyEventHandler pressedHandler,
-		KeyEventHandler releasedHandler);
-
-	INV_EXPORT void
-	INV_CALL ois_delete_customkeylistener(CustomKeyListener* self);
-
-}
 
 #endif // CUSTOMKEYEVENTLISTENER_H

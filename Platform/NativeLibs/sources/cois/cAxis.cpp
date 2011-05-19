@@ -20,7 +20,7 @@ descriptor_of_axis(InvHandle handle)
  * Method: Axis::Axis
  */
 INV_EXPORT InvHandle
-INV_CALL new_axis_by_descriptor(AxisDescriptor* descriptor)
+INV_CALL new_axis(AxisDescriptor* descriptor)
 {
 	OIS::Axis* axis = new OIS::Axis();
 

@@ -25,7 +25,7 @@ namespace InVision.OIS.Components
             : this(CreateCppInstance<IComponent>())
         {
             var descriptor = new ComponentDescriptor();
-            _native.Component(ref descriptor);
+            _native.Construct(ref descriptor);
 
             Initialize(descriptor);
         }
@@ -37,7 +37,7 @@ namespace InVision.OIS.Components
         public Component(ComponentType ctype)
         {
             var descriptor = new ComponentDescriptor();
-            _native.Component(ref descriptor, ctype);
+            _native.Construct(ref descriptor, ctype);
 
             Initialize(descriptor);
         }
@@ -77,9 +77,8 @@ namespace InVision.OIS.Components
         {
             if (disposing && _native != null)
             {
-                _native.Dispose();
+                _native.Destruct();
                 _native = null;
-
                 _ctype = null;
             }
         }

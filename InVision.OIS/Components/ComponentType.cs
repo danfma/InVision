@@ -1,15 +1,16 @@
-﻿using InVision.Native.Ext;
+﻿using System;
+using InVision.OIS.Attributes;
 
 namespace InVision.OIS.Components
 {
-	[CppEnumerationAttribute(Namespace = "OIS")]
-	public enum ComponentType
-	{
-		Unknown = 0,
-		Button,
-		Axis,
-		Slider,
-		POV,
-		Vector3
-	}
+    [OISEnumeration("ComponentType")]
+    public enum ComponentType
+    {
+        Unknown = 0,
+        Button,
+        Axis,
+        Slider,
+        POV,
+        Vector3
+    }
 }

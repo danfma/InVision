@@ -27,7 +27,7 @@ namespace InVision.OIS.Components
             : this(CreateCppInstance<IVector3>())
         {
             var descriptor = new Vector3Descriptor();
-            Native.Vector3(ref descriptor);
+            Native.Construct(ref descriptor);
 
             Initialize(descriptor);
         }
@@ -39,7 +39,7 @@ namespace InVision.OIS.Components
             : this(CreateCppInstance<IVector3>())
         {
             var descriptor = new Vector3Descriptor();
-            Native.Vector3(ref descriptor, x, y, z);
+            Native.Construct(ref descriptor, x, y, z);
 
             Initialize(descriptor);
         }

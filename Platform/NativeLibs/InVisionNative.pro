@@ -9,11 +9,8 @@ QT       -= core gui
 TARGET = InVisionNative
 TEMPLATE = lib
 
-SOURCES += \
-	$$files(sources/common/*.cpp)
-
-HEADERS += \
-	$$files(sources/common/*.h)
+SOURCES += $$files(sources/common/*.cpp)
+HEADERS += $$files(sources/common/*.h)
 
 Release:DESTDIR = Bin/Release
 Release:OBJECTS_DIR = Bin/Release/.obj
@@ -28,7 +25,7 @@ Debug:RCC_DIR = Bin/Debug/.rcc
 Debug:UI_DIR = Bin/Debug/.ui
 Debug:DEFINES += DEBUG
 
-INCLUDEPATH += sources/common sources/cois $$(BOOST_SDK)
+INCLUDEPATH += sources/common $$(BOOST_SDK)
 
 win32 {
 	DEFINES += WIN32 DEBUG

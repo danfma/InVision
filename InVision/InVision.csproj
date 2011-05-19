@@ -170,7 +170,9 @@
     <Compile Include="Native\Enumerator.cs" />
     <Compile Include="Native\ExceptionRaiser.cs" />
     <Compile Include="Native\Ext\ConstructorAttribute.cs" />
+    <Compile Include="Native\Ext\CppDescriptorAttribute.cs" />
     <Compile Include="Native\Ext\CppEnumerationAttribute.cs" />
+    <Compile Include="Native\Ext\CppFunctionAttribute.cs" />
     <Compile Include="Native\Ext\CppImplementationAttribute.cs" />
     <Compile Include="Native\Ext\CppInstance.cs" />
     <Compile Include="Native\Ext\CppInterfaceAttribute.cs" />
@@ -181,13 +183,11 @@
     <Compile Include="Native\Ext\GeneratorModelAttribute.cs" />
     <Compile Include="Native\Ext\Handle.cs" />
     <Compile Include="Native\Ext\HandleContainer.cs" />
+    <Compile Include="Native\Ext\HandleConvert.cs" />
     <Compile Include="Native\Ext\HandleReference.cs" />
     <Compile Include="Native\Ext\HandleConverterAttribute.cs" />
     <Compile Include="Native\Ext\CppTypeAttribute.cs" />
-    <Compile Include="Native\Ext\IBaseTypeDescriptor.cs" />
     <Compile Include="Native\Ext\ICppInterface.cs" />
-    <Compile Include="Native\Ext\IDerivedDescriptor.cs" />
-    <Compile Include="Native\Ext\IDescriptor.cs" />
     <Compile Include="Native\Ext\InherintanceMode.cs" />
     <Compile Include="Native\Ext\MethodAttribute.cs" />
     <Compile Include="Native\Ext\NativeFactory.cs" />

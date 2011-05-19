@@ -1,7 +1,9 @@
 ﻿using System.Runtime.InteropServices;
+using InVision.Native.Ext;
 
 namespace InVision.OIS.Native
 {
+    [CppFunction]
 	[return: MarshalAs(UnmanagedType.I1)]
-	internal delegate bool KeyEventHandler(KeyEventDescriptor e);
+	public delegate bool KeyEventHandler(KeyEventDescriptor e);
 }

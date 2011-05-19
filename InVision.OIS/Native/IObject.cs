@@ -9,7 +9,7 @@ namespace InVision.OIS.Native
     public interface IObject : ICppInterface
     {
 		[Destructor]
-		void Dispose();
+		void Destruct();
 
         [Method]
         ComponentType Type();

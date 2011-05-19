@@ -90,7 +90,7 @@ namespace ReverseGenerator.Cpp
             foreach (PropertyInfo property in properties)
             {
                 string fieldName = property.Name;
-                string translatedType = ConfigOptions.TranslateType(property, property.PropertyType) + "*";
+                string translatedType = ConfigOptions.ToCppTypename(property, property.PropertyType) + "*";
 
                 WriteField(writer, fieldName, translatedType);
             }

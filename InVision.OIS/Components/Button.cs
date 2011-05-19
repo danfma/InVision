@@ -23,7 +23,7 @@ namespace InVision.OIS.Components
             : base(CreateCppInstance<IButton>())
         {
             var descriptor = new ButtonDescriptor();
-            Native.Button(ref descriptor);
+            Native.Construct(ref descriptor);
 
             Initialize(descriptor);
         }
@@ -36,7 +36,7 @@ namespace InVision.OIS.Components
             : this(CreateCppInstance<IButton>())
         {
             var descriptor = new ButtonDescriptor();
-            Native.Button(ref descriptor, pushed);
+            Native.Construct(ref descriptor, pushed);
 
             Initialize(descriptor);
         }
