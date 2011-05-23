@@ -34,7 +34,7 @@
     <SignAssembly>true</SignAssembly>
   </PropertyGroup>
   <PropertyGroup>
-    <AssemblyOriginatorKeyFile>InVision.pfx</AssemblyOriginatorKeyFile>
+    <AssemblyOriginatorKeyFile>InVision.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug x86|AnyCPU'">
     <DebugSymbols>true</DebugSymbols>
@@ -442,6 +442,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="InVision.pfx" />
+    <None Include="InVision.snk" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\InVision\InVision.csproj">
@@ -451,7 +452,8 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>copy "$(TargetDir)*.*" "$(SolutionDir)Samples\Empty\Bin\"</PostBuildEvent>
+    <PostBuildEvent>
+    </PostBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

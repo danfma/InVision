@@ -7,20 +7,34 @@ namespace InVision.Framework.Scripting
 {
 	public class ScriptManagerFactory
 	{
+		private readonly string _compilerOutput;
+		private readonly ExecutionMode _executionMode;
 		private readonly Dictionary<string, IScriptManager> _managers;
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="ScriptManagerFactory"/> class.
 		/// </summary>
 		/// <param name="compilerOutput">The compiler output.</param>
-		public ScriptManagerFactory(string compilerOutput = null)
+		/// <param name="executionMode">The execution mode.</param>
+		public ScriptManagerFactory(string compilerOutput = null, ExecutionMode executionMode = ExecutionMode.Interpreted)
 		{
+			_compilerOutput = compilerOutput;
+			_executionMode = executionMode;
 			_managers = new Dictionary<string, IScriptManager>();
 
+			LoadManagers();
+		}
+
+		/// <summary>
+		/// Loads the managers.
+		/// </summary>
+		public void LoadManagers()
+		{
 			foreach (Type managerType in FxConfiguration.Instance.Scripting.ScriptManagers)
 			{
 				var manager = (IScriptManager)Activator.CreateInstance(managerType);
-				manager.CompilerOutput = compilerOutput;
+				manager.CompilerOutput = _compilerOutput;
+				manager.PreferredExecution = _executionMode;
 				_managers.Add(manager.TargetExtension, manager);
 			}
 		}

@@ -1,37 +1,38 @@
 using System;
 using System.Runtime.InteropServices;
-using InVision.Native.Ext;
+using InVision.Native;
 using InVision.OIS.Attributes;
+using InVision.OIS.Devices;
 
 namespace InVision.OIS.Native
 {
-    [OISInterface("Keyboard", BaseType = typeof(IObject))]
-    public interface IKeyboard : IObject
-    {
-        [Method]
-        bool IsKeyDown(KeyCode keyCode);
+	[OISInterface("Keyboard", BaseType = typeof(IObject))]
+	public interface IKeyboard : IObject
+	{
+		[Method]
+		bool IsKeyDown(KeyCode keyCode);
 
-        [Method]
-        void SetEventCallback(ICustomKeyListener keyListener);
+		[Method]
+		void SetEventCallback(ICustomKeyListener keyListener);
 
-        [Method]
-        ICustomKeyListener GetEventCallback();
+		[Method]
+		ICustomKeyListener GetEventCallback();
 
-        [Method]
-        void SetTextTranslation(TextTranslationMode translationMode);
+		[Method]
+		void SetTextTranslation(TextTranslationMode translationMode);
 
-        [Method]
-        TextTranslationMode GetTextTranslation();
+		[Method]
+		TextTranslationMode GetTextTranslation();
 
-        [Method]
-        [return: MarshalAs(UnmanagedType.LPStr)]
-        string GetAsString(KeyCode keyCode);
+		[Method]
+		[return: MarshalAs(UnmanagedType.LPStr)]
+		string GetAsString(KeyCode keyCode);
 
-        [Method]
-        bool IsModifierDown(Modifier modifier);
+		[Method]
+		bool IsModifierDown(Modifier modifier);
 
-        [Method]
-        void CopyKeyStates(
-            [MarshalAs(UnmanagedType.LPArray, SizeConst = 256, ArraySubType = UnmanagedType.I1)] bool[] keys);
-    }
+		[Method]
+		void CopyKeyStates(
+			[MarshalAs(UnmanagedType.LPArray, SizeConst = 256, ArraySubType = UnmanagedType.I1)] bool[] keys);
+	}
 }

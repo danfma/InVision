@@ -17,8 +17,7 @@ namespace InVision.OIS
 		/// Initializes a new instance of the <see cref="ParamList"/> class.
 		/// </summary>
 		/// <param name="collection">The collection.</param>
-		public ParamList(IEnumerable<KeyValuePair<string, string>> collection)
-			: base(collection)
+		public ParamList(IEnumerable<KeyValuePair<string, string>> collection) : base(collection)
 		{
 		}
 	}

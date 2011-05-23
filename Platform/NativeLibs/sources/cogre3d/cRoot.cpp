@@ -1,284 +1,236 @@
-#include "Root.h"
-#include "CustomFrameListener.h"
-#include "RenderingEnumerators.h"
-#include "TypeConvert.h"
-#include <Ogre.h>
+#include "cOgre.h"
 
-using namespace invision;
+using namespace Ogre;
 
-/*
- * Creation and destruction
+/**
+ * Method: Root::Root
  */
-
-INV_EXPORT HRoot INV_CALL root_new(const _string pluginFilename, const _string configFilename)
+INV_EXPORT InvHandle
+INV_CALL new_root_m1()
 {
-	return new Ogre::Root(pluginFilename, configFilename);
+	Root* root = new Root();
+
+	return createHandle<Root>(root);
 }
 
-INV_EXPORT HRoot INV_CALL root_new_with_log(const _string pluginFilename, const _string configFilename, const _string logFilename)
-{
-	return new Ogre::Root(pluginFilename, configFilename, logFilename);
-}
-
-INV_EXPORT void INV_CALL root_delete(HRoot self)
-{
-	delete asRoot(self);
-}
-
-
-/*
- * Methods
+/**
+ * Method: Root::Root
  */
+INV_EXPORT InvHandle
+INV_CALL new_root_m2(_string pluginFilename)
+{
+	return createHandle<Root>(new Root(pluginFilename));
+}
 
-INV_EXPORT void INV_CALL root_save_config(HRoot self)
+/**
+ * Method: Root::Root
+ */
+INV_EXPORT InvHandle
+INV_CALL new_root_m3(_string pluginFilename, _string configFilename)
+{
+	return createHandle<Root>(new Root(pluginFilename, configFilename));
+}
+
+/**
+ * Method: Root::Root
+ */
+INV_EXPORT InvHandle
+INV_CALL new_root_m4(_string pluginFilename, _string configFilename, _string logFilename)
+{
+	return createHandle<Root>(new Root(pluginFilename, configFilename, logFilename));
+}
+
+/**
+ * Method: Root::~Root
+ */
+INV_EXPORT void
+INV_CALL delete_root(InvHandle self)
+{
+	destroyHandle(self);
+}
+
+/**
+ * Method: Root::saveConfig
+ */
+INV_EXPORT void
+INV_CALL root_save_config(InvHandle self)
 {
 	asRoot(self)->saveConfig();
 }
 
-INV_EXPORT _bool INV_CALL root_restore_config(HRoot self)
-{
-	return asRoot(self)->restoreConfig() ? TRUE : FALSE;
-}
-
-INV_EXPORT _bool INV_CALL root_show_config_dialog(HRoot self)
-{
-	return asRoot(self)->showConfigDialog() ? TRUE : FALSE;
-}
-
-INV_EXPORT HRenderSystem INV_CALL root_get_rendersystem_by_name(
-	HRoot self,
-	const _string name)
-{
-	return asRoot(self)->getRenderSystemByName(name);
-}
-
-INV_EXPORT HRenderWindow INV_CALL root_initialise_with_title_and_cap(
-	HRoot self,
-	_bool autoCreateWindow,
-	const _string title,
-	const _string capabilitiesConfig)
-{
-	return asRoot(self)->initialise(autoCreateWindow == TRUE, title, capabilitiesConfig);
-}
-
-INV_EXPORT HRenderWindow INV_CALL root_initialise_with_title(HRoot self, _bool autoCreateWindow, const _string title)
-{
-	return asRoot(self)->initialise(autoCreateWindow == TRUE, title);
-}
-
-INV_EXPORT HRenderWindow INV_CALL root_initialise(HRoot self, _bool autoCreateWindow)
-{
-	return asRoot(self)->initialise(autoCreateWindow == TRUE);
-}
-
-INV_EXPORT void INV_CALL root_destroy_scenemanager(
-	HRoot self,
-	HSceneManager sceneManager)
-{
-	asRoot(self)->destroySceneManager((Ogre::SceneManager*)sceneManager);
-}
-
-INV_EXPORT HSceneManager INV_CALL root_get_scenemanager(
-	HRoot self,
-	const _string instanceName)
-{
-	return asRoot(self)->getSceneManager(instanceName);
-}
-
-INV_EXPORT _bool INV_CALL root_has_scenemanager(
-	HRoot self,
-	const _string instanceName)
-{
-	return toBool(asRoot(self)->hasSceneManager(instanceName));
-}
-
-INV_EXPORT HTextureManager INV_CALL root_get_texturemanager(
-	HRoot self)
-{
-	return asRoot(self)->getTextureManager();
-}
-
-INV_EXPORT HMeshManager INV_CALL root_get_meshmanager(
-	HRoot self)
-{
-	return asRoot(self)->getMeshManager();
-}
-
-INV_EXPORT HRenderWindow INV_CALL root_get_auto_created_window(HRoot self)
-{
-	return asRoot(self)->getAutoCreatedWindow();
-}
-
-INV_EXPORT _bool INV_CALL root_is_initialised(HRoot self)
-{
-	return asRoot(self)->isInitialised();
-}
-
-INV_EXPORT void INV_CALL root_start_rendering(HRoot self)
-{
-	asRoot(self)->startRendering();
-}
-
-INV_EXPORT void INV_CALL root_add_framelistener(HRoot self, HFrameListener listener)
-{
-	asRoot(self)->addFrameListener(asCustomFrameListener(listener));
-}
-
-INV_EXPORT void INV_CALL root_remove_framelistener(HRoot self, HFrameListener listener)
-{
-	asRoot(self)->removeFrameListener(asCustomFrameListener(listener));
-}
-
-INV_EXPORT void INV_CALL root_load_plugin(HRoot self, const char *pluginName)
-{
-	asRoot(self)->loadPlugin(pluginName);
-}
-
-INV_EXPORT void INV_CALL root_unload_plugin(HRoot self, const char *pluginName)
-{
-	asRoot(self)->unloadPlugin(pluginName);
-}
-
-INV_EXPORT HEnumerator INV_CALL root_get_available_renderers(HRoot self)
-{
-	Ogre::RenderSystemList list = asRoot(self)->getAvailableRenderers();
-
-	return new RenderSystemEnumerator(list);
-}
-
-/* NEW ********************************************************************************************/
-
-INV_EXPORT _bool INV_CALL root_get_remove_render_queue_structures_on_clear(HRoot self)
-{
-	bool result = asRoot(self)->getRemoveRenderQueueStructuresOnClear();
-
-	return toBool(result);
-}
-
-INV_EXPORT void INV_CALL root_set_remove_render_queue_structures_on_clear(HRoot self, _bool value)
-{
-	asRoot(self)->setRemoveRenderQueueStructuresOnClear(fromBool(value));
-}
-
-INV_EXPORT void INV_CALL root_shutdown(HRoot self)
-{
-	asRoot(self)->shutdown();
-}
-
-INV_EXPORT _bool INV_CALL root_render_one_frame(HRoot self)
-{
-	bool result = asRoot(self)->renderOneFrame();
-	
-	return toBool(result);
-}
-INV_EXPORT _bool INV_CALL root_render_one_frame_with_time(HRoot self, _float timeSinceLastFrame)
-{
-	bool result = asRoot(self)->renderOneFrame(timeSinceLastFrame);
-	
-	return toBool(result);
-}
-
-INV_EXPORT HRenderWindow INV_CALL root_create_renderwindow(
-	HRoot self,
-	const _string name,
-	_uint width, _uint height,
-	_bool fullscreen)
-{
-	return asRoot(self)->createRenderWindow(name, width, height, fromBool(fullscreen));
-}
-
-INV_EXPORT HRenderWindow INV_CALL root_create_renderwindow_with_params(
-	HRoot self,
-	const _string name,
-	_uint width, _uint height,
-	_bool fullscreen,
-	HNameValuePairList pairList)
-{
-	return asRoot(self)->createRenderWindow(
-		name, 
-		width, height, 
-		fromBool(fullscreen),
-		asNameValuePairList(pairList));
-}
-
-INV_EXPORT _ulong INV_CALL root_get_next_frame_number(HRoot self)
-{
-	return asRoot(self)->getNextFrameNumber();
-}
-
-INV_EXPORT HSceneManager INV_CALL root_create_scenemanager_by_typename(
-	HRoot self, 
-	const _string typeName)
-{
-	return asRoot(self)->createSceneManager(typeName);
-}
-
-INV_EXPORT HSceneManager INV_CALL root_create_scenemanager_by_typename2(
-	HRoot self, 
-	const _string typeName, 
-	const _string instanceName)
-{
-	return asRoot(self)->createSceneManager(typeName, instanceName);
-}
-
-INV_EXPORT HSceneManager INV_CALL root_create_scenemanager_by_type(
-	HRoot self, 
-	_uint type)
-{
-	return asRoot(self)->createSceneManager(type);
-}
-
-INV_EXPORT HSceneManager INV_CALL root_create_scenemanager_by_type2(
-	HRoot self, 
-	_uint type, 
-	const _string instanceName)
-{
-	return asRoot(self)->createSceneManager(type, instanceName);
-}
-
-INV_EXPORT const _string INV_CALL root_get_error_description(HRoot self, Int64 errorNumber)
-{
-	return asRoot(self)->getErrorDescription((long)errorNumber).c_str();
-}
-
-INV_EXPORT void INV_CALL root_queue_end_rendering(HRoot self)
-{
-	asRoot(self)->queueEndRendering();
-}
-
-INV_EXPORT void INV_CALL root_clear_event_times(HRoot self)
-{
-	asRoot(self)->clearEventTimes();
-}
-
-INV_EXPORT void INV_CALL root_set_frame_smoothing_period(HRoot self, _float period)
-{
-	asRoot(self)->setFrameSmoothingPeriod(period);
-}
-
-INV_EXPORT _float INV_CALL root_get_frame_smoothing_period(HRoot self)
-{
-	return asRoot(self)->getFrameSmoothingPeriod();
-}
-
-INV_EXPORT _bool INV_CALL root_has_movable_object_factory(HRoot self, const _string typeName)
-{
-	bool result = asRoot(self)->hasMovableObjectFactory(typeName);
-	
-	return toBool(result);
-}
-
-INV_EXPORT _uint INV_CALL root_get_display_monitor_count(HRoot self)
-{
-	return asRoot(self)->getDisplayMonitorCount();
-}
-
-
-/*
- * Static methods
+/**
+ * Method: Root::restoreConfig
  */
-
-INV_EXPORT HRoot INV_CALL root_get_singleton()
+INV_EXPORT _bool
+INV_CALL root_restore_config(InvHandle self)
 {
-	return Ogre::Root::getSingletonPtr();
+	return fromBool(asRoot(self)->restoreConfig());
+}
+
+/**
+ * Method: Root::showConfigDialog
+ */
+INV_EXPORT _bool
+INV_CALL root_show_config_dialog(InvHandle self)
+{
+	return fromBool(asRoot(self)->showConfigDialog());
+}
+
+/**
+ * Method: Root::addRenderSystem
+ */
+INV_EXPORT void
+INV_CALL root_add_render_system(InvHandle self, InvHandle renderSystem)
+{
+	throws_not_implemented();
+}
+
+/**
+ * Method: Root::getRenderSystemByName
+ */
+INV_EXPORT _any
+INV_CALL root_get_render_system_by_name(InvHandle self, _string name)
+{
+	throws_not_implemented();
+	return NULL;
+}
+
+/**
+ * Method: Root::setRenderSystem
+ */
+INV_EXPORT void
+INV_CALL root_set_render_system(InvHandle self, InvHandle renderSystem)
+{
+	throws_not_implemented();
+}
+
+/**
+ * Method: Root::getRenderSystem
+ */
+INV_EXPORT InvHandle
+INV_CALL root_get_render_system(InvHandle self)
+{
+	throws_not_implemented();
+	return 0;
+}
+
+/**
+ * Method: Root::initialize
+ */
+INV_EXPORT InvHandle
+INV_CALL root_initialize_m1(InvHandle self, _bool autoCreateWindow)
+{
+	return getOrCreateReference<RenderWindow>(asRoot(self)->initialise(toBool(autoCreateWindow)));
+}
+
+/**
+ * Method: Root::initialize
+ */
+INV_EXPORT InvHandle
+INV_CALL root_initialize_m2(InvHandle self, _bool autoCreateWindow, _string windowTitle)
+{
+	return getOrCreateReference<RenderWindow>(
+				asRoot(self)->initialise(toBool(autoCreateWindow),
+										 windowTitle));
+}
+
+/**
+ * Method: Root::initialize
+ */
+INV_EXPORT InvHandle
+INV_CALL root_initialize_m3(InvHandle self, _bool autoCreateWindow, _string windowTitle, _string customCapabilities)
+{
+	return getOrCreateReference<RenderWindow>(
+				asRoot(self)->initialise(toBool(autoCreateWindow),
+										 windowTitle,
+										 customCapabilities));
+}
+
+/**
+ * Method: Root::isInitialized
+ */
+INV_EXPORT _bool
+INV_CALL root_is_initialized(InvHandle self)
+{
+	return toBool(asRoot(self)->isInitialised());
+}
+
+/**
+ * Method: Root::useCustomRenderSystemCapabilities
+ */
+INV_EXPORT void
+INV_CALL root_use_custom_render_system_capabilities(InvHandle self, InvHandle capabilities)
+{
+	throws_not_implemented();
+}
+
+/**
+ * Method: Root::getRemoveRenderQueueStructuresOnClear
+ */
+INV_EXPORT _bool
+INV_CALL root_get_remove_render_queue_structures_on_clear(InvHandle self)
+{
+	throws_not_implemented();
+	return FALSE;
+}
+
+/**
+ * Method: Root::setRemoveRenderQueueStructuresOnClear
+ */
+INV_EXPORT void
+INV_CALL root_set_remove_render_queue_structures_on_clear(InvHandle self, _bool value)
+{
+	throws_not_implemented();
+}
+
+/**
+ * Method: Root::addSceneManagerFactory
+ */
+INV_EXPORT void
+INV_CALL root_add_scene_manager_factory(InvHandle self, InvHandle factory)
+{
+	throws_not_implemented();
+}
+
+/**
+ * Method: Root::removeSceneManagerFactory
+ */
+INV_EXPORT void
+INV_CALL root_remove_scene_manager_factory(InvHandle self, InvHandle factory)
+{
+	throws_not_implemented();
+}
+
+/**
+ * Method: Root::createSceneManager
+ */
+INV_EXPORT InvHandle
+INV_CALL root_create_scene_manager_m1(InvHandle self, SCENE_TYPE sceneType)
+{
+	return getOrCreateReference(
+				asRoot(self)->createSceneManager(
+					(SceneTypeMask)sceneType));
+}
+
+/**
+ * Method: Root::createSceneManager
+ */
+INV_EXPORT InvHandle
+INV_CALL root_create_scene_manager_m2(InvHandle self, SCENE_TYPE sceneType, _string instanceName)
+{
+	return getOrCreateReference(
+				asRoot(self)->createSceneManager(
+					(SceneTypeMask)sceneType,
+					instanceName));
+}
+
+/**
+ * Method: Root::getSingleton
+ */
+INV_EXPORT InvHandle
+INV_CALL root_get_singleton()
+{
+	Root* root = Root::getSingletonPtr();
+
+	return getOrCreateReference<Root>(root);
 }

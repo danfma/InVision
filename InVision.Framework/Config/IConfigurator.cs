@@ -1,3 +1,5 @@
+using System;
+
 namespace InVision.Framework.Config
 {
 	public interface IConfigurator

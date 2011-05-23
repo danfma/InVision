@@ -33,6 +33,12 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+  <PropertyGroup>
+    <SignAssembly>false</SignAssembly>
+  </PropertyGroup>
+  <PropertyGroup>
+    <AssemblyOriginatorKeyFile>InVision.snk</AssemblyOriginatorKeyFile>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="Boo.Lang">
       <HintPath>..\Libs\Boo\Boo.Lang.dll</HintPath>
@@ -77,9 +83,12 @@
       <Name>InVision</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup>
+    <None Include="InVision.snk" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>copy "$(TargetDir)*.*" "$(SolutionDir)Samples\Empty\Bin\"</PostBuildEvent>
+    <PostBuildEvent>copy "$(TargetDir)*.*" "$(SolutionDir)Tutano\build\$(Configuration)\Bin\"</PostBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

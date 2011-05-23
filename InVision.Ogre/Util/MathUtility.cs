@@ -13,8 +13,8 @@ namespace InVision.Ogre.Util
 		/// <value>The angle unit.</value>
 		public static AngleUnit AngleUnit
 		{
-			get { return NativeOgreMath.GetAngleUnit(); }
-			set { NativeOgreMath.SetAngleUnit(value); }
+			get { throw new NotImplementedException(); }
+			set { throw new NotImplementedException(); }
 		}
 
 		/// <summary>
@@ -24,7 +24,7 @@ namespace InVision.Ogre.Util
 		/// <returns></returns>
 		public static float RadianToAngleUnit(float radians)
 		{
-			return NativeOgreMath.RadianToAngleUnit(radians);
+			throw new NotImplementedException();
 		}
 
 
@@ -35,7 +35,7 @@ namespace InVision.Ogre.Util
 		/// <returns></returns>
 		public static float DegreeToAngleUnit(float degrees)
 		{
-			return NativeOgreMath.DegreeToAngleUnit(degrees);
+			throw new NotImplementedException();
 		}
 	}
 }

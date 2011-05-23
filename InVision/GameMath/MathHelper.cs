@@ -39,7 +39,7 @@ namespace InVision.GameMath
 		public const float TwoPi = (float)(Math.PI * 2.0);
 		private const float Deg2Rad = (float)(Math.PI / 180f);
 		private const float Rad2Deg = (float)(180f / Math.PI);
-
+        
 		/// <summary>
 		/// Barycentrics the specified value1.
 		/// </summary>

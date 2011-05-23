@@ -70,6 +70,9 @@ namespace InVision.Scripting.Boo
 			booFile.Append(File.ReadAllText(Filename));
 
 			_context = _interpreter.Eval(booFile.ToString());
+
+			if (_context.GeneratedAssembly == null)
+				BooCompiledScript.ThrowError(Filename, _context);
 		}
 
 		/// <summary>
@@ -82,7 +85,7 @@ namespace InVision.Scripting.Boo
 			return
 				from t in _context.GeneratedAssembly.GetTypes()
 				where typeof(T).IsAssignableFrom(t) && !(t.IsAbstract || t.IsInterface)
-				select (T)Activator.CreateInstance(typeof(T));
+				select (T)Activator.CreateInstance(t);
 		}
 	}
 }

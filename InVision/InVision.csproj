@@ -147,6 +147,9 @@
     <Compile Include="GameMath\BoundingFrustum.cs" />
     <Compile Include="GameMath\BoundingSphere.cs" />
     <Compile Include="GameMath\Color.cs" />
+    <Compile Include="GameMath\Endianess\BigEndianColourRepresentation.cs" />
+    <Compile Include="GameMath\Endianess\ColourRepresentation.cs" />
+    <Compile Include="GameMath\Endianess\LittleEndianColourRepresentation.cs" />
     <Compile Include="GameMath\Enums.cs" />
     <Compile Include="GameMath\Gjk.cs" />
     <Compile Include="GameMath\MathHelper.cs" />
@@ -169,31 +172,33 @@
     <Compile Include="Native\Collections\MultiDictionary.cs" />
     <Compile Include="Native\Enumerator.cs" />
     <Compile Include="Native\ExceptionRaiser.cs" />
-    <Compile Include="Native\Ext\ConstructorAttribute.cs" />
-    <Compile Include="Native\Ext\CppDescriptorAttribute.cs" />
-    <Compile Include="Native\Ext\CppEnumerationAttribute.cs" />
-    <Compile Include="Native\Ext\CppFunctionAttribute.cs" />
-    <Compile Include="Native\Ext\CppImplementationAttribute.cs" />
-    <Compile Include="Native\Ext\CppInstance.cs" />
-    <Compile Include="Native\Ext\CppInterfaceAttribute.cs" />
-    <Compile Include="Native\Ext\CppWrapper.cs" />
-    <Compile Include="Native\Ext\DestructorAttribute.cs" />
+    <Compile Include="Native\ConstructorAttribute.cs" />
+    <Compile Include="Native\CppDescriptorAttribute.cs" />
+    <Compile Include="Native\CppEnumerationAttribute.cs" />
+    <Compile Include="Native\CppFunctionAttribute.cs" />
+    <Compile Include="Native\CppImplementationAttribute.cs" />
+    <Compile Include="Native\CppInstance.cs" />
+    <Compile Include="Native\CppInterfaceAttribute.cs" />
+    <Compile Include="Native\CppWrapper.cs" />
+    <Compile Include="Native\DestructorAttribute.cs" />
     <Compile Include="DisposableObject.cs" />
-    <Compile Include="Native\Ext\FieldAttribute.cs" />
-    <Compile Include="Native\Ext\GeneratorModelAttribute.cs" />
-    <Compile Include="Native\Ext\Handle.cs" />
-    <Compile Include="Native\Ext\HandleContainer.cs" />
-    <Compile Include="Native\Ext\HandleConvert.cs" />
-    <Compile Include="Native\Ext\HandleReference.cs" />
-    <Compile Include="Native\Ext\HandleConverterAttribute.cs" />
-    <Compile Include="Native\Ext\CppTypeAttribute.cs" />
-    <Compile Include="Native\Ext\ICppInterface.cs" />
-    <Compile Include="Native\Ext\InherintanceMode.cs" />
-    <Compile Include="Native\Ext\MethodAttribute.cs" />
-    <Compile Include="Native\Ext\NativeFactory.cs" />
-    <Compile Include="Native\Ext\CppValueObjectAttribute.cs" />
+    <Compile Include="Native\FieldAttribute.cs" />
+    <Compile Include="Native\GeneratorModelAttribute.cs" />
+    <Compile Include="Native\Handle.cs" />
+    <Compile Include="Native\HandleConvert.cs" />
+    <Compile Include="Native\HandleConverterAttribute.cs" />
+    <Compile Include="Native\CppTypeAttribute.cs" />
+    <Compile Include="Native\HandleListenerDispatcher.cs" />
+    <Compile Include="Native\HandleListenerHandleDestroyedHandler.cs" />
+    <Compile Include="Native\ICppInterface.cs" />
+    <Compile Include="Native\CppInterfaceType.cs" />
+    <Compile Include="Native\ICppWrapper.cs" />
+    <Compile Include="Native\IHandleManager.cs" />
+    <Compile Include="Native\MethodAttribute.cs" />
+    <Compile Include="Native\NativeFactory.cs" />
+    <Compile Include="Native\CppValueObjectAttribute.cs" />
     <Compile Include="Native\SafeHandle.cs" />
-    <Compile Include="Native\InVisionException.cs" />
+    <Compile Include="Native\InVisionNativeException.cs" />
     <Compile Include="Native\MarshallExtensions.cs" />
     <Compile Include="Native\NativeEnumerator.cs" />
     <Compile Include="Native\PlatformInvoke.cs" />
@@ -227,7 +232,12 @@
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>copy "$(TargetDir)*.*" "$(SolutionDir)Samples\Empty\Bin\"</PostBuildEvent>
+    <PostBuildEvent>
+    </PostBuildEvent>
+  </PropertyGroup>
+  <PropertyGroup>
+    <PreBuildEvent>
+    </PreBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

@@ -1,42 +1,35 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using InVision.Native;
-using InVision.Ogre.Native;
-using MarshallExtensions = InVision.Native.MarshallExtensions;
 
 namespace InVision.Ogre.Listeners
 {
-	public sealed class FrameEventDispatcher : Handle, IFrameListener, IEventDispatcher
+	public sealed class FrameEventDispatcher : IFrameListener, IEventDispatcher
 	{
-		private readonly FrameEventDispatcherHandler frameEndedHandler;
-		private readonly FrameEventDispatcherHandler frameStartedHandler;
-		private readonly List<IFrameListener> listeners;
+		private readonly FrameEventDispatcherHandler _frameEndedHandler;
+		private readonly FrameEventDispatcherHandler _frameStartedHandler;
+		private readonly List<IFrameListener> _listeners;
 
 		/// <summary>
 		/// 	Initializes a new instance of the <see cref = "FrameEventDispatcher" /> class.
 		/// </summary>
 		public FrameEventDispatcher()
 		{
-			frameStartedHandler = new FrameEventDispatcherHandler(OnFrameStarted);
-			frameEndedHandler = new FrameEventDispatcherHandler(OnFrameEnded);
+			_frameStartedHandler = new FrameEventDispatcherHandler(OnFrameStarted);
+			_frameEndedHandler = new FrameEventDispatcherHandler(OnFrameEnded);
 
-			SetHandle(NativeOgreFrameListener.New(frameStartedHandler, frameEndedHandler));
+			//SetHandle(NativeOgreFrameListener.New(frameStartedHandler, frameEndedHandler));
 
-			listeners = new List<IFrameListener>();
+			_listeners = new List<IFrameListener>();
 		}
 
 		/// <summary>
-		/// Releases the unmanaged resources used by the <see cref="T:System.Runtime.InteropServices.SafeHandle"/> class specifying whether to perform a normal dispose operation.
+		/// Gets or sets a value indicating whether this instance is listeners enabled.
 		/// </summary>
-		/// <param name="disposing">true for a normal dispose operation; false to finalize the handle.</param>
-		protected override void Dispose(bool disposing)
-		{
-			if (!IsInvalid && IsListenersEnabled)
-				DisableListeners();
-
-			base.Dispose(disposing);
-		}
+		/// <value>
+		/// 	<c>true</c> if this instance is listeners enabled; otherwise, <c>false</c>.
+		/// </value>
+		public bool IsListenersEnabled { get; private set; }
 
 		#region IFrameListener Members
 
@@ -52,7 +45,7 @@ namespace InVision.Ogre.Listeners
 			if (FrameStarted != null)
 				result = FrameStarted(e);
 
-			return listeners.Aggregate(result, (current, frameListener) => current && frameListener.OnFrameStarted(e));
+			return _listeners.Aggregate(result, (current, frameListener) => current && frameListener.OnFrameStarted(e));
 		}
 
 		/// <summary>
@@ -67,7 +60,7 @@ namespace InVision.Ogre.Listeners
 			if (FrameEnded != null)
 				result = FrameEnded(e);
 
-			return listeners.Aggregate(result, (current, frameListener) => current && frameListener.OnFrameEnded(e));
+			return _listeners.Aggregate(result, (current, frameListener) => current && frameListener.OnFrameEnded(e));
 		}
 
 		#endregion
@@ -79,7 +72,7 @@ namespace InVision.Ogre.Listeners
 		/// <returns></returns>
 		private bool OnFrameStarted(IntPtr pEvent)
 		{
-			var e = MarshallExtensions.AsStructure<FrameEvent>(pEvent);
+			var e = new FrameEvent();
 
 			return OnFrameStarted(e);
 		}
@@ -91,7 +84,7 @@ namespace InVision.Ogre.Listeners
 		/// <returns></returns>
 		private bool OnFrameEnded(IntPtr pEvent)
 		{
-			var e = MarshallExtensions.AsStructure<FrameEvent>(pEvent);
+			var e = new FrameEvent();
 
 			return OnFrameEnded(e);
 		}
@@ -107,21 +100,12 @@ namespace InVision.Ogre.Listeners
 		public event FrameEventHandler FrameEnded;
 
 		/// <summary>
-		/// 	Releases the specified handle.
-		/// </summary>
-		/// <returns></returns>
-		protected override void ReleaseValidHandle()
-		{
-			NativeOgreFrameListener.Delete(handle);
-		}
-
-		/// <summary>
 		/// 	Adds an object to the end of the <see cref = "T:System.Collections.Generic.List`1" />.
 		/// </summary>
 		/// <param name = "item">The object to be added to the end of the <see cref = "T:System.Collections.Generic.List`1" />. The value can be null for reference types.</param>
 		public void Add(IFrameListener item)
 		{
-			listeners.Add(item);
+			_listeners.Add(item);
 		}
 
 		/// <summary>
@@ -133,7 +117,7 @@ namespace InVision.Ogre.Listeners
 		/// <param name = "item">The object to locate in the <see cref = "T:System.Collections.Generic.List`1" />. The value can be null for reference types.</param>
 		public bool Contains(IFrameListener item)
 		{
-			return listeners.Contains(item);
+			return _listeners.Contains(item);
 		}
 
 		/// <summary>
@@ -145,19 +129,7 @@ namespace InVision.Ogre.Listeners
 		/// <param name = "item">The object to remove from the <see cref = "T:System.Collections.Generic.List`1" />. The value can be null for reference types.</param>
 		public bool Remove(IFrameListener item)
 		{
-			return listeners.Remove(item);
-		}
-
-		/// <summary>
-		/// Gets or sets a value indicating whether this instance is listeners enabled.
-		/// </summary>
-		/// <value>
-		/// 	<c>true</c> if this instance is listeners enabled; otherwise, <c>false</c>.
-		/// </value>
-		public bool IsListenersEnabled
-		{
-			get;
-			private set;
+			return _listeners.Remove(item);
 		}
 
 		/// <summary>
@@ -168,7 +140,7 @@ namespace InVision.Ogre.Listeners
 			if (IsListenersEnabled)
 				return;
 
-			Root.Instance.EnableFrameDispatcher(this);
+			//Root.Instance.EnableFrameDispatcher(this);
 			IsListenersEnabled = true;
 		}
 
@@ -180,7 +152,7 @@ namespace InVision.Ogre.Listeners
 			if (!IsListenersEnabled)
 				return;
 
-			Root.Instance.DisableFrameDispatcher(this);
+			//Root.Instance.DisableFrameDispatcher(this);
 			IsListenersEnabled = false;
 		}
 	}

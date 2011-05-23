@@ -88,15 +88,15 @@ INV_CALL inputmanager_list_free_devices(InvHandle self)
 	::DeviceList* list = new ::DeviceList();
 	list->count = deviceList.size();
 
-	DeviceTypeItem* itemList = new DeviceTypeItem[list->count];
+	DeviceListItem* itemList = new DeviceListItem[list->count];
 	list->items = itemList;
 
 	int i = 0;
 
 	for (OIS::DeviceList::iterator it = deviceList.begin(); it != deviceList.end(); it++, i++) {
 		OIS::DeviceList::value_type pair = *it;
-		itemList[i].deviceType = (DEVICE_TYPE)pair.first;
-		itemList[i].name = copyString(pair.second);
+		itemList[i].key = (DEVICE_TYPE)pair.first;
+		itemList[i].value = copyString(pair.second);
 	}
 
 	return list;

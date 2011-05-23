@@ -15,7 +15,7 @@ namespace Framework.Tests.Scripting
 		public void Setup()
 		{
 			var config = FxConfiguration.Create();
-			config.Scripting.ScriptManagers = new[] { typeof(BooScriptManager) };
+			config.Scripting.ScriptManagers.Add(typeof(BooScriptManager));
 		}
 
 		#endregion

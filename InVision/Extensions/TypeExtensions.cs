@@ -1,6 +1,6 @@
 using System;
 using System.Reflection;
-using InVision.Native.Ext;
+using InVision.Native;
 
 namespace InVision.Extensions
 {

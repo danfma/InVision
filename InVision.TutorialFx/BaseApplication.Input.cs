@@ -1,6 +1,6 @@
 ﻿using System;
-using InVision.Ogre;
 using InVision.OIS;
+using InVision.OIS.Devices;
 
 namespace InVision.TutorialFx
 {
@@ -18,10 +18,10 @@ namespace InVision.TutorialFx
 
 			Window.GetCustomAttribute("WINDOW", out windowHnd);
 
-			InputManager inputMgr = InputManager.Create(windowHnd.ToInt32());
+			InputManager inputMgr = InputManager.CreateInstance(windowHnd.ToInt32());
 
-			Keyboard = (Keyboard)inputMgr.CreateInputObject(DeviceType.Keyboard, true);
-			Mouse = (Mouse)inputMgr.CreateInputObject(DeviceType.Mouse, true);
+			Keyboard = (Keyboard) inputMgr.CreateInputObject(DeviceType.Keyboard, true);
+			Mouse = (Mouse) inputMgr.CreateInputObject(DeviceType.Mouse, true);
 
 			Keyboard.KeyPressed += OnKeyPressed;
 			Keyboard.KeyReleased += OnKeyReleased;
@@ -145,7 +145,9 @@ namespace InVision.TutorialFx
 
 		protected virtual bool OnMouseMoved(MouseEventArgs e)
 		{
-			CameraMan.MouseMovement(e.State.X.Relative, e.State.Y.Relative);
+			MouseState mouseState = e.State;
+
+			CameraMan.MouseMovement(mouseState.X.Relative, mouseState.Y.Relative);
 			return true;
 		}
 

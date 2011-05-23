@@ -1,5 +1,5 @@
-#ifndef INVISIONPLATFORM_CWRAPPER_H
-#define INVISIONPLATFORM_CWRAPPER_H
+#ifndef __CWRAPPER_H__
+#define __CWRAPPER_H__
 
 #if defined(__WIN32__) || defined(WIN32)
 #	define INV_CALL __stdcall
@@ -55,6 +55,87 @@ extern "C"
 	typedef double _double;
 
 
+	struct Vector2
+	{
+		float x;
+		float y;
+	};
+
+#ifdef __cplusplus
+
+	inline Vector2 create_vector2f(float x = 0, float y = 0)
+	{
+		Vector2 v;
+		v.x = x;
+		v.y = y;
+
+		return v;
+	}
+
+#endif
+
+	struct Vector4
+	{
+		float x;
+		float y;
+		float z;
+		float w;
+	};
+
+#ifdef __cplusplus
+
+	inline Vector4 create_vector4f(float x = 0, float y = 0, float z = 0, float w = 0)
+	{
+		Vector4 v;
+		v.x = x;
+		v.y = y;
+		v.z = z;
+		v.w = w;
+
+		return v;
+	}
+
+#endif
+
+	typedef Vector4 Vector3;
+
+#ifdef __cplusplus
+
+	inline Vector3 create_vector3f(float x = 0, float y = 0, float z = 0)
+	{
+		Vector3 v;
+		v.x = x;
+		v.y = y;
+		v.z = z;
+
+		return v;
+	}
+
+#endif
+
+	struct Color
+	{
+		float r;
+		float g;
+		float b;
+		float a;
+	};
+
+#ifdef __cplusplus
+
+	inline Color create_color(float r = 1.0, float g = 1.0, float b = 1.0, float a = 1.0)
+	{
+		Color c;
+		c.r = r;
+		c.g = g;
+		c.b = b;
+		c.a = a;
+
+		return c;
+	}
+
+#endif
+
 	
 	/*
 	 * Utilities
@@ -70,6 +151,8 @@ extern "C"
 #define NULL_REFERENCE_ERROR	1
 #define INVALID_CAST_ERROR		2
 #define KEY_NOT_FOUND_ERROR		3
+#define NOT_IMPLEMENTED			4
+#define NOT_SINGLETON_ERROR		5
 
 
 	typedef void (INV_CALL *ExceptionHandler)(const _string message, _int errorType);
@@ -90,6 +173,10 @@ extern "C"
 #include <string.h>
 #include <iostream>
 
+	inline void throws_not_implemented()
+	{
+		raise_exception("Not implemented", NOT_IMPLEMENTED);
+	}
 
 	inline void throws_null_reference(const char* file, int line)
 	{
@@ -111,9 +198,9 @@ extern "C"
 	inline void throws_invalid_cast(_ushort fromType, _ushort targetType)
 	{
 		std::string message = "Invalid cast from ";
-		message += fromType;
+		message += "" + fromType;
 		message += " to ";
-		message += targetType;
+		message += "" + targetType;
 
 		raise_exception(message, INVALID_CAST_ERROR);
 	}
@@ -164,6 +251,6 @@ extern "C"
 		return data;
 	}
 
-#endif
+#endif // __cplusplus
 
-#endif
+#endif // __CWRAPPER_H__

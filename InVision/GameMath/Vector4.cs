@@ -495,6 +495,16 @@ namespace InVision.GameMath
 #endif
 		}
 
+		public static Vector4 Clamp(Vector4 value, float min, float max)
+		{
+			value.X = value.X.Clamp(min, max);
+			value.Y = value.Y.Clamp(min, max);
+			value.Z = value.Z.Clamp(min, max);
+			value.W = value.W.Clamp(min, max);
+
+			return value;
+		}
+
 		public static float Distance(Vector4 value1, Vector4 value2)
 		{
 			float result;
@@ -504,8 +514,8 @@ namespace InVision.GameMath
 
 		public static void Distance(ref Vector4 value1, ref Vector4 value2, out float result)
 		{
-			DistanceSquared (ref value1, ref value2, out result);
-			result = (float) System.Math.Sqrt (result);
+			DistanceSquared(ref value1, ref value2, out result);
+			result = (float)System.Math.Sqrt(result);
 		}
 
 		public static float DistanceSquared(Vector4 value1, Vector4 value2)
@@ -517,8 +527,8 @@ namespace InVision.GameMath
 
 		public static void DistanceSquared(ref Vector4 value1, ref Vector4 value2, out float result)
 		{
-			Subtract (ref value1, ref value2, out value1);
-			result = value1.LengthSquared ();
+			Subtract(ref value1, ref value2, out value1);
+			result = value1.LengthSquared();
 		}
 
 		public static float Dot(Vector4 vector1, Vector4 vector2)
@@ -535,7 +545,7 @@ namespace InVision.GameMath
 
 		public float Length()
 		{
-			return (float) System.Math.Sqrt (LengthSquared ());
+			return (float)System.Math.Sqrt(LengthSquared());
 		}
 
 		public float LengthSquared()
@@ -593,7 +603,7 @@ namespace InVision.GameMath
 		public static void Normalize(ref Vector4 value, out Vector4 result)
 		{
 			var l = value.Length();
-			
+
 			result = value / l;
 		}
 

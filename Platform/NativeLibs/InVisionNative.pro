@@ -10,7 +10,12 @@ TARGET = InVisionNative
 TEMPLATE = lib
 
 SOURCES += $$files(sources/common/*.cpp)
+SOURCES += $$files(sources/cois/*.cpp)
+SOURCES += $$files(sources/cogre3d/*.cpp)
+
 HEADERS += $$files(sources/common/*.h)
+HEADERS += $$files(sources/cois/*.h)
+HEADERS += $$files(sources/cogre3d/*.h)
 
 Release:DESTDIR = Bin/Release
 Release:OBJECTS_DIR = Bin/Release/.obj
@@ -26,9 +31,21 @@ Debug:UI_DIR = Bin/Debug/.ui
 Debug:DEFINES += DEBUG
 
 INCLUDEPATH += sources/common $$(BOOST_SDK)
+INCLUDEPATH += sources/cois
+INCLUDEPATH += sources/cogre3d
+
+DEFINES += InvNativeProject
 
 win32 {
 	DEFINES += WIN32 DEBUG
+
+	INCLUDEPATH += $$(BOOST_SDK)
+	INCLUDEPATH += $$(OGRE_SDK)include\OGRE
+	INCLUDEPATH += $$(OGRE_SDK)include\OIS
+
+	LIBS += -L$$(OGRE_SDK)lib/debug
+	LIBS += -L$$(OGRE_SDK)lib/debug/opt
+	LIBS += -lOgreMain_d -lOIS_d
 }
 
 macx {

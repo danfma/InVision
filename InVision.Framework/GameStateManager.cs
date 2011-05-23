@@ -1,13 +1,14 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 
 namespace InVision.Framework
 {
-	public class GameStateManager
+	public class GameStateManager : IEnumerable<IGameState>
 	{
 		private const int NoneSelected = -1;
 
-		private readonly List<GameState> _states;
+		private readonly List<IGameState> _states;
 		private int _currentStateIndex;
 
 		/// <summary>
@@ -15,7 +16,7 @@ namespace InVision.Framework
 		/// </summary>
 		public GameStateManager()
 		{
-			_states = new List<GameState>();
+			_states = new List<IGameState>();
 			_currentStateIndex = -1;
 		}
 
@@ -23,7 +24,7 @@ namespace InVision.Framework
 		/// Gets the states.
 		/// </summary>
 		/// <value>The states.</value>
-		public IEnumerable<GameState> States
+		public IEnumerable<IGameState> States
 		{
 			get { return _states; }
 		}
@@ -32,7 +33,7 @@ namespace InVision.Framework
 		/// Sets the start.
 		/// </summary>
 		/// <value>The start.</value>
-		public GameState Start
+		public IGameState Start
 		{
 			get { return _currentStateIndex == NoneSelected ? null : _states[_currentStateIndex]; }
 			set { _currentStateIndex = _states.IndexOf(value); }
@@ -53,7 +54,7 @@ namespace InVision.Framework
 		/// Adds an object to the end of the <see cref="T:System.Collections.Generic.List`1"/>.
 		/// </summary>
 		/// <param name="item">The object to be added to the end of the <see cref="T:System.Collections.Generic.List`1"/>. The value can be null for reference types.</param>
-		public void Add(GameState item)
+		public void Add(IGameState item)
 		{
 			_states.Add(item);
 		}
@@ -62,7 +63,7 @@ namespace InVision.Framework
 		/// Adds the elements of the specified collection to the end of the <see cref="T:System.Collections.Generic.List`1"/>.
 		/// </summary>
 		/// <param name="collection">The collection whose elements should be added to the end of the <see cref="T:System.Collections.Generic.List`1"/>. The collection itself cannot be null, but it can contain elements that are null, if type <paramref name="T"/> is a reference type.</param><exception cref="T:System.ArgumentNullException"><paramref name="collection"/> is null.</exception>
-		public void AddRange(IEnumerable<GameState> collection)
+		public void AddRange(IEnumerable<IGameState> collection)
 		{
 			_states.AddRange(collection);
 		}
@@ -82,7 +83,7 @@ namespace InVision.Framework
 		/// true if <paramref name="item"/> is found in the <see cref="T:System.Collections.Generic.List`1"/>; otherwise, false.
 		/// </returns>
 		/// <param name="item">The object to locate in the <see cref="T:System.Collections.Generic.List`1"/>. The value can be null for reference types.</param>
-		public bool Contains(GameState item)
+		public bool Contains(IGameState item)
 		{
 			return _states.Contains(item);
 		}
@@ -94,7 +95,7 @@ namespace InVision.Framework
 		/// true if the <see cref="T:System.Collections.Generic.List`1"/> contains one or more elements that match the conditions defined by the specified predicate; otherwise, false.
 		/// </returns>
 		/// <param name="match">The <see cref="T:System.Predicate`1"/> delegate that defines the conditions of the elements to search for.</param><exception cref="T:System.ArgumentNullException"><paramref name="match"/> is null.</exception>
-		public bool Exists(Predicate<GameState> match)
+		public bool Exists(Predicate<IGameState> match)
 		{
 			return _states.Exists(match);
 		}
@@ -106,7 +107,7 @@ namespace InVision.Framework
 		/// true if <paramref name="item"/> is successfully removed; otherwise, false.  This method also returns false if <paramref name="item"/> was not found in the <see cref="T:System.Collections.Generic.List`1"/>.
 		/// </returns>
 		/// <param name="item">The object to remove from the <see cref="T:System.Collections.Generic.List`1"/>. The value can be null for reference types.</param>
-		public bool Remove(GameState item)
+		public bool Remove(IGameState item)
 		{
 			return _states.Remove(item);
 		}
@@ -118,7 +119,7 @@ namespace InVision.Framework
 		/// The number of elements removed from the <see cref="T:System.Collections.Generic.List`1"/> .
 		/// </returns>
 		/// <param name="match">The <see cref="T:System.Predicate`1"/> delegate that defines the conditions of the elements to remove.</param><exception cref="T:System.ArgumentNullException"><paramref name="match"/> is null.</exception>
-		public int RemoveAll(Predicate<GameState> match)
+		public int RemoveAll(Predicate<IGameState> match)
 		{
 			return _states.RemoveAll(match);
 		}
@@ -139,6 +140,30 @@ namespace InVision.Framework
 		public void RemoveRange(int index, int count)
 		{
 			_states.RemoveRange(index, count);
+		}
+
+		/// <summary>
+		/// Returns an enumerator that iterates through the collection.
+		/// </summary>
+		/// <returns>
+		/// A <see cref="T:System.Collections.Generic.IEnumerator`1"/> that can be used to iterate through the collection.
+		/// </returns>
+		/// <filterpriority>1</filterpriority>
+		public IEnumerator<IGameState> GetEnumerator()
+		{
+			return States.GetEnumerator();
+		}
+
+		/// <summary>
+		/// Returns an enumerator that iterates through a collection.
+		/// </summary>
+		/// <returns>
+		/// An <see cref="T:System.Collections.IEnumerator"/> object that can be used to iterate through the collection.
+		/// </returns>
+		/// <filterpriority>2</filterpriority>
+		IEnumerator IEnumerable.GetEnumerator()
+		{
+			return GetEnumerator();
 		}
 	}
 }

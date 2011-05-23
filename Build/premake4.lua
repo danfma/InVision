@@ -26,16 +26,6 @@ if os.is("windows") then
 		ogredir .. "lib\\release\\",
 		boostdir .. "stage\\lib"
 	}
-	
-	config.debugLinks = {
-		"OgreMain_d",
-		"OIS_d"
-	}
-	
-	config.ndebugLinks = {
-		"OgreMain",
-		"OIS"
-	}
 end
 
 -- Solution description
@@ -48,39 +38,16 @@ solution "NativeLibs"
 		language "C++"
 		files {
 			"../Platform/NativeLibs/sources/common/**.h",
-			"../Platform/NativeLibs/sources/common/**.cpp"
-		}
-		
-		table.insert(config.includes, "../Platform/NativeLibs/sources/common/")
-		
-		includedirs(config.includes)
-		defines(config.defines)
-		
-		configuration "Debug"
-			defines { "DEBUG" }
-			flags { "Symbols" }
-			targetdir "Bin/Debug_x86/Platform/"
-			
-			libdirs(config.libdirs)
-			
-		configuration "Release"
-			defines { "NDEBUG" }
-			flags { "Optimize" }
-			targetdir "Bin/Release_x86/Platform/"
-			
-			libdirs(config.libdirs)
-			
-	project "InVisionNative_OIS"
-		kind "SharedLib"
-		language "C++"
-		files {
-			"../Platform/NativeLibs/sources/common/**.h",
+			"../Platform/NativeLibs/sources/common/**.cpp",
 			"../Platform/NativeLibs/sources/cois/**.h",
-			"../Platform/NativeLibs/sources/cois/**.cpp"
+			"../Platform/NativeLibs/sources/cois/**.cpp",
+			"../Platform/NativeLibs/sources/cogre3d/**.h",
+			"../Platform/NativeLibs/sources/cogre3d/**.cpp"
 		}
 		
 		table.insert(config.includes, "../Platform/NativeLibs/sources/common/")
 		table.insert(config.includes, "../Platform/NativeLibs/sources/cois/")
+		table.insert(config.includes, "../Platform/NativeLibs/sources/cogre/")
 		
 		includedirs(config.includes)
 		defines(config.defines)
@@ -91,7 +58,7 @@ solution "NativeLibs"
 			targetdir "Bin/Debug_x86/Platform/"
 			
 			libdirs(config.libdirs)
-			links({ "OIS", "InVisionNative" })
+			links({ "OIS_d", "OgreMain_d" })
 			
 		configuration "Release"
 			defines { "NDEBUG" }
@@ -99,5 +66,4 @@ solution "NativeLibs"
 			targetdir "Bin/Release_x86/Platform/"
 			
 			libdirs(config.libdirs)
-			links({ "OIS", "InVisionNative" })
-			
+			links({ "OIS", "OgreMain" })

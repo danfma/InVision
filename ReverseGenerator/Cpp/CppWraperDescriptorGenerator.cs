@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using InVision.Extensions;
-using InVision.Native.Ext;
+using InVision.Native;
 
 namespace ReverseGenerator.Cpp
 {
@@ -58,7 +58,7 @@ namespace ReverseGenerator.Cpp
             var baseInterface =
                 (from i in parentInterfaces
                  let attr = i.GetAttribute<CppInterfaceAttribute>(true)
-                 where attr.InheritanceBy == InherintanceMode.BaseType
+                 where attr.CppInterfaceType == CppInterfaceType.Type
                  select new { Interface = i, Attribute = attr }).SingleOrDefault();
 
             if (baseInterface != null)

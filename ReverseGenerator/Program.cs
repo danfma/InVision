@@ -1,82 +1,96 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Reflection;
 using InVision.Extensions;
-using InVision.Native.Ext;
+using InVision.Native;
 using NDesk.Options;
 using ReverseGenerator.Cpp;
 using ReverseGenerator.CSharp;
 
 namespace ReverseGenerator
 {
-    internal class Program
-    {
-        private static void Main(string[] args)
-        {
-            if (args.Count() < 3)
-            {
-                ShowUsage();
-                return;
-            }
+	internal class Program
+	{
+		private static void Main(string[] args)
+		{
+			if (args.Count() < 3)
+			{
+				ShowUsage();
+				return;
+			}
 
-            var options = new ConfigOptions();
-            var optionSet = new OptionSet {
+			var options = new ConfigOptions();
+			var optionSet = new OptionSet {
 				{ "p|project=",		v => options.ProjectName = v },
-				{ "a|assembly=",	v => options.AssembliesToScan.Add(Assembly.LoadFrom(v)) },
+				{ "a|assembly=",	v => options.AddAssembly(v) },
 				{ "cs|csout=",		v => options.CsOutputDir = v },
-				{ "cpp|cppout=",	v => options.CppOutputDir = v }
+				{ "cpp|cppout=",	v => options.CppOutputDir = v },
+				{ "l|library=",		v => options.LibraryName = v }
 			};
 
-            optionSet.Parse(args);
+			optionSet.Parse(args);
 
-            GenerateFiles(options);
-        }
+			bool generateNeeded = false;
 
-        /// <summary>
-        /// Shows the usage.
-        /// </summary>
-        private static void ShowUsage()
-        {
-            Console.WriteLine("Usage: CodeGenerator projectName outputDir assembly [assembly2 assembly3 ...]");
-        }
+			foreach (var assembly in options.AssembliesToScan)
+			{
+				var assemblyTime = File.GetLastWriteTime(assembly.Location);
+				var generatedFileTime = File.GetLastWriteTime(Path.Combine(options.CppOutputDir, options.ProjectName.ToLower() + ".h"));
 
-        /// <summary>
-        /// Generates the files.
-        /// </summary>
-        /// <param name="configOptions">The options.</param>
-        private static void GenerateFiles(ConfigOptions configOptions)
-        {
-            IEnumerable<IGenerator> generators = GetGenerators();
+				if (assemblyTime > generatedFileTime)
+					generateNeeded = true;
+			}
 
-            foreach (IGenerator generator in generators)
-            {
-                generator.Generate(configOptions, GetCppTypes(configOptions.AssembliesToScan));
-            }
-        }
+			if (generateNeeded)
+				GenerateFiles(options);
+		}
 
-        /// <summary>
-        /// Gets the generators.
-        /// </summary>
-        /// <returns></returns>
-        private static IEnumerable<IGenerator> GetGenerators()
-        {
-            return new IGenerator[] { new CppHeaderGenerator(), new CSharpGenerator() };
-        }
+		/// <summary>
+		/// Shows the usage.
+		/// </summary>
+		private static void ShowUsage()
+		{
+			Console.WriteLine("Usage: CodeGenerator projectName outputDir assembly [assembly2 assembly3 ...]");
+		}
 
-        /// <summary>
-        /// Gets the CPP types.
-        /// </summary>
-        /// <param name="assemblies"></param>
-        /// <returns></returns>
-        private static IEnumerable<Type> GetCppTypes(IEnumerable<Assembly> assemblies)
-        {
-            return
-                from assembly in assemblies
-                from type in assembly.GetTypes()
-                let attributes = type.GetAttributes<GeneratorModelAttribute>(true)
-                where attributes.Count() > 0
-                select type;
-        }
-    }
+		/// <summary>
+		/// Generates the files.
+		/// </summary>
+		/// <param name="configOptions">The options.</param>
+		private static void GenerateFiles(ConfigOptions configOptions)
+		{
+			IEnumerable<IGenerator> generators = GetGenerators();
+
+			foreach (IGenerator generator in generators)
+			{
+				generator.Generate(configOptions, GetCppTypes(configOptions.AssembliesToScan));
+			}
+		}
+
+		/// <summary>
+		/// Gets the generators.
+		/// </summary>
+		/// <returns></returns>
+		private static IEnumerable<IGenerator> GetGenerators()
+		{
+			return new IGenerator[] { new CppHeaderGenerator(), new CSharpGenerator() };
+		}
+
+		/// <summary>
+		/// Gets the CPP types.
+		/// </summary>
+		/// <param name="assemblies"></param>
+		/// <returns></returns>
+		private static IEnumerable<Type> GetCppTypes(IEnumerable<Assembly> assemblies)
+		{
+			return
+				from assembly in assemblies
+				from type in assembly.GetTypes()
+				let attributes = type.GetAttributes<GeneratorModelAttribute>(true)
+				where attributes.Count() > 0
+				select type;
+		}
+	}
 }

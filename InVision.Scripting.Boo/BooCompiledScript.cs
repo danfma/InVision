@@ -107,26 +107,34 @@ namespace InVision.Scripting.Boo
 			File.Delete(tmp);
 
 			if (GeneratedAssembly == null)
+				ThrowError(Filename, _context);
+		}
+
+		/// <summary>
+		/// Throws the error.
+		/// </summary>
+		/// <param name="filename">The filename.</param>
+		/// <param name="context">The context.</param>
+		internal static void ThrowError(string filename, CompilerContext context)
+		{
+			var errors = new List<string>();
+
+			using (StreamWriter errorFile = File.CreateText(filename + ".errors"))
 			{
-				var errors = new List<string>();
-
-				using (StreamWriter errorFile = File.CreateText(Filename + ".errors"))
+				foreach (CompilerError error in context.Errors)
 				{
-					foreach (CompilerError error in _context.Errors)
-					{
-						errorFile.WriteLine("= ERROR ========================================================================");
-						errorFile.WriteLine(error);
-						errorFile.WriteLine("================================================================================");
-						errorFile.WriteLine();
+					errorFile.WriteLine("= ERROR ========================================================================");
+					errorFile.WriteLine(error);
+					errorFile.WriteLine("================================================================================");
+					errorFile.WriteLine();
 
-						errors.Add(error.ToString());
-					}
-
-					errorFile.Flush();
+					errors.Add(error.ToString());
 				}
 
-				throw new ScriptErrorException(Filename, errors.ToArray());
+				errorFile.Flush();
 			}
+
+			throw new ScriptErrorException(filename, errors.ToArray());
 		}
 
 		/// <summary>

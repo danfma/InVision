@@ -1,5 +1,6 @@
 ﻿using System.Runtime.InteropServices;
-using InVision.Native.Ext;
+using InVision.Native;
+using InVision.OIS.Devices;
 
 namespace InVision.OIS.Native
 {

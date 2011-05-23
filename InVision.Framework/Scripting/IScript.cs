@@ -31,6 +31,12 @@ namespace InVision.Framework.Scripting
 		void AddReference(Assembly assembly);
 
 		/// <summary>
+		/// Adds the references.
+		/// </summary>
+		/// <param name="assemblies">The assemblies.</param>
+		void AddReferences(IEnumerable<Assembly> assemblies);
+
+		/// <summary>
 		/// Loads (when compiled) or executes (when interpreted) the script.
 		/// </summary>
 		void LoadOrExecute();

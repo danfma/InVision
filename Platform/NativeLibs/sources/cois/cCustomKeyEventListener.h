@@ -24,7 +24,7 @@ public:
 			InvHandle keyHandle = createReference<OIS::KeyEvent>(keyEvent);
 			KeyEventDescriptor descriptor = descriptor_of_keyevent(keyHandle);
 
-			result = keyPressedHandler(descriptor);
+			result = fromBool(keyPressedHandler(descriptor));
 			destroyHandle(keyHandle);
 		}
 
@@ -40,7 +40,7 @@ public:
 			InvHandle keyHandle = createReference<OIS::KeyEvent>(keyEvent);
 			KeyEventDescriptor descriptor = descriptor_of_keyevent(keyHandle);
 
-			result = keyReleasedHandler(descriptor);
+			result = fromBool(keyReleasedHandler(descriptor));
 			destroyHandle(keyHandle);
 		}
 

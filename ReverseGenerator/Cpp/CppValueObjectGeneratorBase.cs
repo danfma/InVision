@@ -4,7 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using InVision.Extensions;
-using InVision.Native.Ext;
+using InVision.Native;
 
 namespace ReverseGenerator.Cpp
 {

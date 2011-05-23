@@ -1,18 +1,18 @@
-﻿using InVision.Native.Ext;
+﻿using InVision.Native;
 using InVision.OIS.Attributes;
 
 namespace InVision.OIS.Native
 {
-    [OISInterface("EventArg")]
-    public interface IEventArg
-    {
-        [Constructor]
-        IEventArg Construct(IObject device);
+	[OISInterface("EventArg")]
+	public interface IEventArg : ICppInterface
+	{
+		[Constructor]
+		IEventArg Construct(IObject device);
 
-        [Destructor]
-        void Destruct();
+		[Destructor]
+		void Destruct();
 
-        [Method]
-        Handle GetDevice();
-    }
+		[Method]
+		IObject GetDevice();
+	}
 }

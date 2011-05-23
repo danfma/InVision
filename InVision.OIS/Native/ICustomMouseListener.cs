@@ -1,5 +1,5 @@
 ﻿using System;
-using InVision.Native.Ext;
+using InVision.Native;
 using InVision.OIS.Attributes;
 
 namespace InVision.OIS.Native

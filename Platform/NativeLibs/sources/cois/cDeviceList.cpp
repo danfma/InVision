@@ -14,9 +14,9 @@ INV_CALL devicelist_delete(_any deviceList)
 	DeviceListItem* items = (DeviceListItem*)pDeviceList->items;
 
 	for (int i = 0; i < pDeviceList->count; i++) {
-		delete[] items[i].name;
+		delete[] items[i].value;
 	}
 
-	delete[] pDeviceList->items;
+	delete[] items;
 	delete pDeviceList;
 }

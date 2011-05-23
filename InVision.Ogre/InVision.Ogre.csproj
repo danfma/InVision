@@ -30,6 +30,12 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+  <PropertyGroup>
+    <SignAssembly>true</SignAssembly>
+  </PropertyGroup>
+  <PropertyGroup>
+    <AssemblyOriginatorKeyFile>InVision.snk</AssemblyOriginatorKeyFile>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -41,18 +47,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AngleUnit.cs" />
-    <Compile Include="Bone.cs" />
-    <Compile Include="Camera.cs" />
-    <Compile Include="Collections\IListItemMarshaller.cs" />
-    <Compile Include="Collections\KeyValueCollection.cs" />
-    <Compile Include="Collections\NameValueCollection.cs" />
-    <Compile Include="Collections\NameValueDictionary.cs" />
-    <Compile Include="Collections\ValueTypeVectorList.cs" />
-    <Compile Include="Collections\VectorList.cs" />
-    <Compile Include="Collections\VectorListItem.cs" />
-    <Compile Include="ColourValue.cs" />
-    <Compile Include="ColourValues.cs" />
-    <Compile Include="ConfigFile.cs" />
+    <Compile Include="Config\PluginConfig.cs" />
+    <Compile Include="Config\PluginsConfig.cs" />
     <Compile Include="Degree.cs" />
     <Compile Include="FrameStats.cs" />
     <Compile Include="IAnimableObject.cs" />
@@ -65,64 +61,39 @@
     <Compile Include="Listeners\FrameEventHandler.cs" />
     <Compile Include="Listeners\IEventDispatcher.cs" />
     <Compile Include="Listeners\IFrameListener.cs" />
-    <Compile Include="LogManager.cs" />
+    <Compile Include="LoggingLevel.cs" />
+    <Compile Include="Logging\ILogListener.cs" />
+    <Compile Include="Logging\Log.cs" />
+    <Compile Include="Logging\LogListenerDispatcher.cs" />
+    <Compile Include="Logging\LogManager.cs" />
+    <Compile Include="Native\ICustomLogListener.cs" />
+    <Compile Include="Native\LogListenerMessageLoggedHandler.cs" />
+    <Compile Include="Singleton.cs" />
     <Compile Include="LogMessageLevel.cs" />
-    <Compile Include="MaterialManager.cs" />
-    <Compile Include="Native\ExceptionRaiser.cs" />
-    <Compile Include="Native\InVisionException.cs" />
-    <Compile Include="Native\MarshallExtensions.cs" />
-    <Compile Include="Native\NameHandlePair.cs" />
-    <Compile Include="Native\NameValuePair.cs" />
-    <Compile Include="Native\NativeEnumerator.cs" />
-    <Compile Include="Native\NativeNameValueCollection.cs" />
-    <Compile Include="Native\NativeNameValuePairList.cs" />
-    <Compile Include="Native\NativeVectorList.cs" />
-    <Compile Include="Native\NativeLogManager.cs" />
-    <Compile Include="Native\NativeOgreCamera.cs" />
-    <Compile Include="Native\NativeOgreConfigFile.cs" />
-    <Compile Include="Native\NativeOgreFrameListener.cs" />
-    <Compile Include="Native\NativeOgreMaterialManager.cs" />
-    <Compile Include="Native\NativeOgreMath.cs" />
-    <Compile Include="Native\NativeOgreNode.cs" />
-    <Compile Include="Native\NativeOgreRenderSystem.cs" />
-    <Compile Include="Native\NativeOgreResourceGroupManager.cs" />
-    <Compile Include="Native\NativeOgreRoot.cs" />
-    <Compile Include="Native\NativeOgreSceneManager.cs" />
-    <Compile Include="Native\NativeOgreTextureManager.cs" />
-    <Compile Include="Native\NativeOgreUtilities.cs" />
-    <Compile Include="Native\NativeOgreViewport.cs" />
-    <Compile Include="Native\NativeOverlay.cs" />
-    <Compile Include="Native\NativeOverlayElement.cs" />
-    <Compile Include="Native\NativeOverlayManager.cs" />
-    <Compile Include="Native\NativeRenderWindow.cs" />
-    <Compile Include="Native\NativeStringInterface.cs" />
-    <Compile Include="Native\PlatformInvoke.cs" />
-    <Compile Include="Native\RaiseExceptionHandler.cs" />
+    <Compile Include="Native\ICamera.cs" />
+    <Compile Include="Native\ILog.cs" />
+    <Compile Include="Native\ILogManager.cs" />
+    <Compile Include="Native\IRenderSystem.cs" />
+    <Compile Include="Native\IRenderSystemCapabilities.cs" />
+    <Compile Include="Native\IRenderWindow.cs" />
+    <Compile Include="Native\IRoot.cs" />
+    <Compile Include="Native\ISceneManager.cs" />
+    <Compile Include="Native\ISceneManagerFactory.cs" />
+    <Compile Include="Native\ISingleton.cs" />
+    <Compile Include="Native\IViewport.cs" />
+    <Compile Include="Native\OgreEnumerationAttribute.cs" />
+    <Compile Include="Native\OgreInterfaceAttribute.cs" />
+    <Compile Include="Native\OgreValueObjectAttribute.cs" />
     <Compile Include="Native\StringArray.cs" />
-    <Compile Include="Node.cs" />
-    <Compile Include="Overlay.cs" />
-    <Compile Include="OverlayElement.cs" />
-    <Compile Include="OverlayManager.cs" />
     <Compile Include="ParameterType.cs" />
     <Compile Include="PolygonMode.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Radian.cs" />
-    <Compile Include="RenderSystem.cs" />
-    <Compile Include="RenderWindow.cs" />
-    <Compile Include="ResourceGroupManager.cs" />
     <Compile Include="Root.cs" />
-    <Compile Include="SceneManager.cs" />
-    <Compile Include="SceneNode.cs" />
     <Compile Include="SceneType.cs" />
-    <Compile Include="StringInterface.cs" />
     <Compile Include="TextureFilterOption.cs" />
-    <Compile Include="TextureManager.cs" />
     <Compile Include="TransformSpace.cs" />
-    <Compile Include="Util\BigEndianColourRepresentation.cs" />
-    <Compile Include="Util\ColourRepresentation.cs" />
-    <Compile Include="Util\LittleEndianColourRepresentation.cs" />
     <Compile Include="Util\MathUtility.cs" />
-    <Compile Include="Viewport.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\InVision\InVision.csproj">
@@ -130,7 +101,14 @@
       <Name>InVision</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup>
+    <None Include="InVision.snk" />
+  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PostBuildEvent>"$(SolutionDir)ReverseGenerator\bin\$(Configuration)\ReverseGenerator.exe" -a:"$(TargetPath)"  -cpp:"$(SolutionDir)Platform\NativeLibs\sources\cogre3d" -p:"InVisionNative_Ogre" -cs:"$(SolutionDir)InVision.Ogre.Native" -l:"InVisionNative"</PostBuildEvent>
+  </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

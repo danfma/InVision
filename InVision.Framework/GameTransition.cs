@@ -1,6 +1,7 @@
 ﻿namespace InVision.Framework
 {
-	public class GameTransition : GameState
+	public abstract class GameTransition
 	{
+		
 	}
 }

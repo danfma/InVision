@@ -4,7 +4,7 @@ namespace InVision.Framework.Scripting
 {
 	public enum ExecutionMode
 	{
-		Interpreted,
-		Compiled
+		Compiled,
+		Interpreted
 	}
 }

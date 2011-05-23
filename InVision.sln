@@ -61,6 +61,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OIS.Tests", "Tests\Bindings
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InVision.Ogre.Native", "InVision.Ogre.Native\InVision.Ogre.Native.csproj", "{316AE104-9284-4BE8-B3F7-5C5EC74B9C80}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InVision.Native", "InVision.Native\InVision.Native.csproj", "{F84D662E-4316-48BB-ABD0-C37E49601ACC}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -333,6 +335,18 @@ Global
 		{316AE104-9284-4BE8-B3F7-5C5EC74B9C80}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{316AE104-9284-4BE8-B3F7-5C5EC74B9C80}.Release|Win32.ActiveCfg = Release|Any CPU
 		{316AE104-9284-4BE8-B3F7-5C5EC74B9C80}.Release|x86.ActiveCfg = Release|Any CPU
+		{F84D662E-4316-48BB-ABD0-C37E49601ACC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F84D662E-4316-48BB-ABD0-C37E49601ACC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F84D662E-4316-48BB-ABD0-C37E49601ACC}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{F84D662E-4316-48BB-ABD0-C37E49601ACC}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{F84D662E-4316-48BB-ABD0-C37E49601ACC}.Debug|Win32.ActiveCfg = Debug|Any CPU
+		{F84D662E-4316-48BB-ABD0-C37E49601ACC}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{F84D662E-4316-48BB-ABD0-C37E49601ACC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F84D662E-4316-48BB-ABD0-C37E49601ACC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F84D662E-4316-48BB-ABD0-C37E49601ACC}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{F84D662E-4316-48BB-ABD0-C37E49601ACC}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{F84D662E-4316-48BB-ABD0-C37E49601ACC}.Release|Win32.ActiveCfg = Release|Any CPU
+		{F84D662E-4316-48BB-ABD0-C37E49601ACC}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -361,12 +375,13 @@ Global
 		{20B137CC-2EF3-402B-8E29-7E38E6606F13} = {203D4274-0E59-4FC7-BAD2-6A07B102A197}
 		{4A69EB8E-6E49-415C-ACB4-9CB904EA54DB} = {CE8D7F5C-FFBD-4B39-8A42-A33157350FBA}
 		{E27F975A-EE9E-4DA4-ACDF-995FF6E752B5} = {CE8D7F5C-FFBD-4B39-8A42-A33157350FBA}
+		{F84D662E-4316-48BB-ABD0-C37E49601ACC} = {CE8D7F5C-FFBD-4B39-8A42-A33157350FBA}
 		{E2696BD7-6F39-482A-98C3-76E4B221DA05} = {29E702E0-9047-4CAB-BAC9-B9BFCD17BC62}
 		{F48E8475-21C6-4124-83B7-3536F2E79EA1} = {3517D935-D619-4821-A127-BF657789BCC1}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		BuildVersion_StartDate = 2011/2/18
 		BuildVersion_BuildVersioningStyle = None.None.Increment.YearDayOfYear
+		BuildVersion_StartDate = 2011/2/18
 	EndGlobalSection
 	GlobalSection(MonoDevelopProperties) = preSolution
 		StartupItem = Tests\InVision.Rendering.Launcher\InVision.Rendering.Launcher.csproj

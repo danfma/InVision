@@ -9,12 +9,8 @@ QT       -= core gui
 TARGET = InVisionNative_Ogre
 TEMPLATE = lib
 
-SOURCES += \
-	$$files(sources/cogre3d/*.cpp)
-
-HEADERS += \
-	$$files(sources/common/*.h) \
-	$$files(sources/cogre3d/*.h)
+SOURCES += $$files(sources/cogre3d/*.cpp)
+HEADERS += $$files(sources/cogre3d/*.h)
 
 Release:DESTDIR = Bin/Release
 Release:OBJECTS_DIR = Bin/Release/.obj
@@ -32,10 +28,14 @@ Debug:DEFINES += DEBUG
 INCLUDEPATH += sources/common sources/cogre3d
 
 win32 {
-	DEFINES += WIN32 DEBUG
+	DEFINES += WIN32
 
 	INCLUDEPATH +=  $$(OGRE_SDK)include\OGRE $$(BOOST_SDK)
-	LIBS += -L$$(OGRE_SDK)lib\debug	-L$$(OGRE_SDK)lib\debug\opt -L$$(BOOST_SDK)lib -lOgreMain_d
+
+	LIBS += -L$$(OGRE_SDK)lib/debug
+	LIBS += -L$$(OGRE_SDK)lib/debug/opt
+	LIBS += -L../build_InVisionNative/Bin/Debug/
+	LIBS += -lOgreMain_d -lOIS_d -lInVisionNative
 }
 
 macx {

@@ -1,6 +1,7 @@
-﻿namespace InVision.Framework
+namespace InVision.Framework
 {
-	public class GameState
+	public abstract class GameState
 	{
+		
 	}
 }

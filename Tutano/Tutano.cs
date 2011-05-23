@@ -1,53 +1,71 @@
 ﻿using System;
-using InVision.Framework.Scripting;
+using System.IO;
+using InVision;
+using InVision.Framework;
+using InVision.Ogre.Config;
 
 namespace Tutano
 {
-	public class Tutano : IDisposable
+	public class Tutano : DisposableObject
 	{
-		public static readonly ScriptManagerFactory ScriptManagerFactory;
-
 		/// <summary>
-		/// Initializes the <see cref="Tutano"/> class.
+		/// Gets or sets the configuration.
 		/// </summary>
-		static Tutano()
-		{
-			ScriptManagerFactory = new ScriptManagerFactory("Scripts/");			
-		}
-
-		/// <summary>
-		/// Initializes a new instance of the <see cref="Tutano"/> class.
-		/// </summary>
-		public Tutano()
-		{
-		}
-
-		/// <summary>
-		/// Releases unmanaged resources and performs other cleanup operations before the
-		/// <see cref="Tutano"/> is reclaimed by garbage collection.
-		/// </summary>
-		~Tutano()
-		{
-			Dispose(false);
-		}
-
-		/// <summary>
-		/// Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
-		/// </summary>
-		/// <filterpriority>2</filterpriority>
-		public void Dispose()
-		{
-			Dispose(true);
-			GC.SuppressFinalize(this);
-		}
+		/// <value>The configuration.</value>
+		public TutanoConfiguration Configuration { get; private set; }
 
 		/// <summary>
 		/// Releases unmanaged and - optionally - managed resources
 		/// </summary>
 		/// <param name="disposing"><c>true</c> to release both managed and unmanaged resources; <c>false</c> to release only unmanaged resources.</param>
-		private void Dispose(bool disposing)
+		protected override void Dispose(bool disposing)
 		{
+			if (disposing)
+			{
+				Configuration = null;
+			}
+		}
 
+		/// <summary>
+		/// Initializes this instance.
+		/// </summary>
+		public void Initialize()
+		{
+			Configuration = new TutanoConfigLoader().Load(this);
+
+			if (string.IsNullOrEmpty(Configuration.GameFlowType))
+				Configuration.GameFlowType = typeof(DefaultGameFlow).AssemblyQualifiedName;
+
+			SetupOgre();
+		}
+
+		/// <summary>
+		/// Setups the ogre.
+		/// </summary>
+		private void SetupOgre()
+		{
+			string ogreConfigDir = Path.GetFullPath("Config/Ogre/");
+
+			if (!Directory.Exists(ogreConfigDir))
+				Directory.CreateDirectory(ogreConfigDir);
+
+			Configuration.Ogre.OgreConfigFilename = Path.Combine(ogreConfigDir, "ogre.cfg");
+			Configuration.Ogre.PluginsFilename = Path.Combine(ogreConfigDir, "plugins.cfg");
+
+			if (File.Exists(Configuration.Ogre.PluginsFilename))
+				return;
+
+			var pluginsConfig = new PluginsConfig {
+				PluginsFolder = Configuration.Ogre.PluginsDirectory ?? Path.GetFullPath(TutanoConfigLoader.NativeDirectory)
+			};
+
+			foreach (var plugin in Configuration.Ogre.Plugins)
+			{
+				var pluginConfig = new PluginConfig(plugin);
+				pluginsConfig.Add(pluginConfig);
+			}
+
+			pluginsConfig.Write(Configuration.Ogre.PluginsFilename);
 		}
 
 		/// <summary>
@@ -55,15 +73,9 @@ namespace Tutano
 		/// </summary>
 		public void Run()
 		{
-			LoadConfiguration();
-		}
-
-		/// <summary>
-		/// Loads the configuration.
-		/// </summary>
-		private void LoadConfiguration()
-		{
-			
+			var app = new GameApplication();
+			app.Initialize(Configuration);
+			app.Execute();
 		}
 	}
 }

@@ -1,34 +1,45 @@
 ﻿using System;
 using System.Collections.Generic;
 using InVision.Native;
+using InVision.OIS.Devices;
 using InVision.OIS.Native;
+using System.Linq;
 
 namespace InVision.OIS
 {
-	public class InputManager : SafeHandle
+	public sealed class InputManager : CppWrapper
 	{
-		private static uint? _versionNumber;
-		private string _inputSystemName;
-		private string _versionName;
-		private readonly InVision.Native.Collections.List<WeakReference> _devices = new InVision.Native.Collections.List<WeakReference>();
+		private static readonly IInputManager Static = CreateCppInstance<IInputManager>();
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="InputManager"/> class.
 		/// </summary>
-		/// <param name="pSelf">The p self.</param>
-		/// <param name="ownsHandle">if set to <c>true</c> [owns handle].</param>
-		private InputManager(IntPtr pSelf, bool ownsHandle)
-			: base(pSelf, ownsHandle)
+		/// <param name="nativeInstance">The native instance.</param>
+		private InputManager(IInputManager nativeInstance)
+			: base(nativeInstance)
 		{
+			nativeInstance.SetOwner(this);
 		}
 
 		/// <summary>
-		/// Gets the name of the input system.
+		/// Gets or sets the native instance.
 		/// </summary>
-		/// <value>The name of the input system.</value>
-		public string InputSystemName
+		/// <value>The native instance.</value>
+		public new IInputManager Native
 		{
-			get { return _inputSystemName ?? (_inputSystemName = NativeInputManager.InputSystemName(handle)); }
+			get { return (IInputManager)base.Native; }
+		}
+
+		/// <summary>
+		/// Releases unmanaged and - optionally - managed resources
+		/// </summary>
+		/// <param name="disposing"><c>true</c> to release both managed and unmanaged resources; <c>false</c> to release only unmanaged resources.</param>
+		protected override void Dispose(bool disposing)
+		{
+			if (Native != null)
+				Native.DestroyInputSystem(Native);
+
+			base.Dispose(disposing);
 		}
 
 		/// <summary>
@@ -37,13 +48,7 @@ namespace InVision.OIS
 		/// <value>The version number.</value>
 		public static uint VersionNumber
 		{
-			get
-			{
-				if (_versionNumber == null)
-					_versionNumber = NativeInputManager.GetVersionNumber();
-
-				return _versionNumber.Value;
-			}
+			get { return Static.GetVersionNumber(); }
 		}
 
 		/// <summary>
@@ -52,110 +57,102 @@ namespace InVision.OIS
 		/// <value>The name of the version.</value>
 		public string VersionName
 		{
-			get { return _versionName ?? (_versionName = NativeInputManager.GetVersionName(handle)); }
+			get { return Native.GetVersionName(); }
 		}
 
 		/// <summary>
-		/// Creates the specified win handle.
+		/// Gets the name.
 		/// </summary>
-		/// <param name="winHandle">The win handle.</param>
-		/// <returns></returns>
-		public static InputManager Create(int winHandle)
+		/// <value>The name.</value>
+		public string Name
 		{
-			return NativeInputManager.CreateInputSystem(winHandle).
-				AsHandle(pt => new InputManager(pt, true));
-		}
-
-		/// <summary>
-		/// Creates the specified param list.
-		/// </summary>
-		/// <param name="paramList">The param list.</param>
-		/// <returns></returns>
-		public static InputManager Create(ParamList paramList)
-		{
-			int count;
-			NameValueItem[] parameters = NameValueItem.ToArray(paramList, out count);
-
-			return NativeInputManager.CreateInputSystem(parameters, count).
-				AsHandle(pt => new InputManager(pt, true));
+			get { return Native.InputSystemName(); }
 		}
 
 		/// <summary>
 		/// Gets the number of devices.
 		/// </summary>
-		/// <value>The number of devices.</value>
-		public int GetNumberOfDevices(DeviceType type)
-		{
-			return NativeInputManager.GetNumberOfDevices(handle, type);
-		}
-
-		/// <summary>
-		/// Lists the free devices.
-		/// </summary>
+		/// <param name="iType">Type of the i.</param>
 		/// <returns></returns>
-		public IEnumerable<DeviceListItem> ListFreeDevices()
+		public int GetNumberOfDevices(DeviceType iType)
 		{
-			throw new NotImplementedException();
+			return Native.GetNumberOfDevices(iType);
 		}
 
-		/// <summary>
-		/// Creates the input object.
-		/// </summary>
-		/// <param name="type">The type.</param>
-		/// <param name="bufferMode">if set to <c>true</c> [buffer mode].</param>
-		/// <param name="vendor">The vendor.</param>
-		/// <returns></returns>
-		public DeviceObject CreateInputObject(DeviceType type, bool bufferMode, string vendor = "")
+		public IDictionary<DeviceType, string> ListFreeDevices()
 		{
-			var objHandle = NativeInputManager.CreateInputObject(handle, type, bufferMode, vendor);
-			var device = objHandle.AsHandle(pt => DeviceObject.Create(type, pt));
+			var pDevices = Native.ListFreeDevices();
+			var deviceItems = DeviceList.ReadData(pDevices);
 
-			_devices.Add(new WeakReference(device));
-
-			return device;
+			return deviceItems.ToDictionary(item => item.Key, item => item.Value);
 		}
 
-		/// <summary>
-		/// Adds the factory creator.
-		/// </summary>
-		/// <param name="factory">The factory.</param>
+		public DeviceObject CreateInputObject(DeviceType iType, bool bufferMode)
+		{
+			var nativeDevice = Native.CreateInputObject(iType, bufferMode);
+
+			if (nativeDevice == null)
+				return null;
+
+			return DeviceObject.Create(this, iType, nativeDevice);
+		}
+
+		public DeviceObject CreateInputObject(DeviceType iType, bool bufferMode, string vendor)
+		{
+			var nativeDevice = Native.CreateInputObject(iType, bufferMode, vendor);
+
+			if (nativeDevice == null)
+				return null;
+
+			return DeviceObject.Create(this, iType, nativeDevice);
+		}
+
 		public void AddFactoryCreator(IFactoryCreator factory)
 		{
-			throw new NotImplementedException();
+			Native.AddFactoryCreator(factory);
 		}
 
-		/// <summary>
-		/// Removes the factory creator.
-		/// </summary>
-		/// <param name="factory">The factory.</param>
 		public void RemoveFactoryCreator(IFactoryCreator factory)
 		{
-			throw new NotImplementedException();
+			Native.RemoveFactoryCreator(factory);
+		}
+
+		public void EnableAddOnFactory(AddOnFactory factory)
+		{
+			Native.EnableAddOnFactory(factory);
 		}
 
 		/// <summary>
-		/// Enables the add on factory.
+		/// Creates the instance.
 		/// </summary>
-		/// <param name="addOnFactory">The add on factory.</param>
-		public void EnableAddOnFactory(AddOnFactory addOnFactory)
+		/// <param name="winHandle">The win handle.</param>
+		/// <returns></returns>
+		public static InputManager CreateInstance(int winHandle)
 		{
-			throw new NotImplementedException();
+			IInputManager native = Static.CreateInputSystem(winHandle);
+
+			if (native == null)
+				throw new OISException("Could not create an InputManager instance");
+
+			return new InputManager(native);
 		}
 
 		/// <summary>
-		/// Releases the valid handle.
+		/// Creates the instance.
 		/// </summary>
-		protected override void ReleaseValidHandle()
+		/// <param name="parameters">The parameters.</param>
+		/// <returns></returns>
+		public static InputManager CreateInstance(ParamList parameters)
 		{
-			foreach (var weakReference in _devices)
-			{
-				if (weakReference.IsAlive)
-					((DeviceObject)weakReference.Target).Dispose();
-			}
+			int count;
+			NameValueItem[] items = NameValueItem.ToArray(parameters, out count);
 
-			_devices.Clear();
+			IInputManager native = Static.CreateInputSystem(items, count);
 
-			NativeInputManager.Destroy(handle);
+			if (native == null)
+				throw new OISException("Could not create an InputManager instance");
+
+			return new InputManager(native);
 		}
 	}
 }

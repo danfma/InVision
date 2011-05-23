@@ -1,6 +1,6 @@
-﻿using InVision.Native.Ext;
+﻿using InVision.Native;
 using InVision.OIS.Attributes;
-using InVision.OIS.Components;
+using InVision.OIS.Devices;
 
 namespace InVision.OIS.Native
 {

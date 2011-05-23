@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
-using InVision.Native.Ext;
+using InVision.Native;
 
 namespace InVision.OIS.Native
 {

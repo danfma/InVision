@@ -1,278 +1,297 @@
 ﻿using System;
-using System.Collections.Generic;
 using InVision.Native;
-using InVision.Ogre.Collections;
-using InVision.Ogre.Listeners;
 using InVision.Ogre.Native;
-using MarshallExtensions = InVision.Native.MarshallExtensions;
 
 namespace InVision.Ogre
 {
-	public sealed class Root : Handle
+	public class Root : CppWrapper<IRoot>
 	{
+		private static readonly IRoot Static = CreateCppInstance<IRoot>();
+
 		/// <summary>
-		/// 	Initializes a new instance of the <see cref = "Root" /> class.
+		/// Initializes a new instance of the <see cref="Root"/> class.
 		/// </summary>
-		/// <param name = "pluginFilename">The plugin filename.</param>
-		/// <param name = "configFilename">The config filename.</param>
-		/// <param name = "logFilename">The log filename.</param>
-		public Root(string pluginFilename = "plugins.cfg", string configFilename = "ogre.cfg", string logFilename = null)
+		/// <param name="native">The native.</param>
+		protected Root(IRoot native)
+			: base(native)
 		{
-			if (Instance != null)
-				throw new InvalidOperationException("Only one instance is allowed");
-
-			IntPtr pRoot;
-
-			if (logFilename == null)
-				pRoot = NativeOgreRoot.New(pluginFilename, configFilename);
-			else
-				pRoot = NativeOgreRoot.NewWithLog(pluginFilename, configFilename, logFilename);
-
-			Instance = this;
-
-			SetHandle(pRoot);
-			InitializeComponents();
 		}
 
 		/// <summary>
-		/// 	Gets or sets the frame event.
+		/// Initializes a new instance of the <see cref="Root"/> class.
 		/// </summary>
-		/// <value>The frame event.</value>
-		public FrameEventDispatcher FrameEvent { get; private set; }
-
-		/// <summary>
-		/// 	Gets the available renderers.
-		/// </summary>
-		/// <value>The available renderers.</value>
-		public IEnumerable<RenderSystem> AvailableRenderers
+		public Root(
+			string pluginFilename = "Ogre-Plugins.cfg",
+			string configFilename = "Ogre.cfg",
+			string logFilename = "Ogre.log")
+			: this(CreateCppInstance<IRoot>())
 		{
-			get { return NativeOgreRoot.GetAvailableRenderers(handle); }
+			Native.Construct(pluginFilename, configFilename, logFilename).SetOwner(this);
 		}
 
 		/// <summary>
-		/// 	Gets the render system.
+		/// Releases unmanaged and - optionally - managed resources
 		/// </summary>
-		/// <value>The render system.</value>
-		public RenderSystem RenderSystem
-		{
-			get { return NativeOgreRoot.GetRenderSystem(handle); }
-		}
-
-		/// <summary>
-		/// 	Gets the instance.
-		/// </summary>
-		/// <value>The instance.</value>
-		public static Root Instance { get; private set; }
-
-		/// <summary>
-		/// 	Initializes this instance.
-		/// </summary>
-		private void InitializeComponents()
-		{
-			FrameEvent = new FrameEventDispatcher();
-		}
-
-		/// <summary>
-		/// 	Releases the unmanaged resources used by the <see cref = "T:System.Runtime.InteropServices.SafeHandle" /> class specifying whether to perform a normal dispose operation.
-		/// </summary>
-		/// <param name = "disposing">true for a normal dispose operation; false to finalize the handle.</param>
+		/// <param name="disposing"><c>true</c> to release both managed and unmanaged resources; <c>false</c> to release only unmanaged resources.</param>
 		protected override void Dispose(bool disposing)
 		{
-			if (FrameEvent != null)
-			{
-				FrameEvent.Dispose();
-				FrameEvent = null;
-			}
+			if (Native != null)
+				Native.Destruct();
 
 			base.Dispose(disposing);
-
-			if (Instance != null && ReferenceEquals(this, Instance))
-				Instance = null;
 		}
 
+		#region IRoot
 
 		/// <summary>
-		/// 	Releases the specified handle.
+		/// Gets the instance.
 		/// </summary>
-		/// <returns></returns>
-		protected override void ReleaseValidHandle()
+		/// <value>The instance.</value>
+		public static Root Instance
 		{
-			NativeOgreRoot.Delete(handle);
+			get
+			{
+				IRoot root = Static.GetSingleton();
+
+				return GetOwner<Root>(root);
+			}
 		}
 
 		/// <summary>
-		/// 	Saves the config.
+		/// Saves the config.
 		/// </summary>
 		public void SaveConfig()
 		{
-			NativeOgreRoot.SaveConfig(handle);
+			Native.SaveConfig();
 		}
 
 		/// <summary>
-		/// 	Restores the config.
+		/// Restores the config.
 		/// </summary>
 		/// <returns></returns>
 		public bool RestoreConfig()
 		{
-			return NativeOgreRoot.RestoreConfig(handle);
+			return Native.RestoreConfig();
 		}
 
 		/// <summary>
-		/// 	Shows the config dialog.
+		/// Shows the config dialog.
 		/// </summary>
 		/// <returns></returns>
 		public bool ShowConfigDialog()
 		{
-			return NativeOgreRoot.ShowConfigDialog(handle);
+			return Native.ShowConfigDialog();
 		}
 
 		/// <summary>
-		/// 	Initialises the specified auto create window.
+		/// Adds the render system.
 		/// </summary>
-		/// <param name = "autoCreateWindow">if set to <c>true</c> [auto create window].</param>
-		/// <param name = "winTitle">The win title.</param>
-		/// <param name = "capabilitiesConfig">The capabilities config.</param>
+		/// <param name="renderSystem">The render system.</param>
+		public void AddRenderSystem(RenderSystem renderSystem)
+		{
+			Native.AddRenderSystem(renderSystem != null ? renderSystem.Native : null);
+		}
+
+		/// <summary>
+		/// Gets the name of the render system by.
+		/// </summary>
+		/// <param name="name">The name.</param>
 		/// <returns></returns>
-		public RenderWindow Initialise(bool autoCreateWindow, string winTitle = null, string capabilitiesConfig = null)
+		public IntPtr GetRenderSystemByName(string name)
 		{
-			IntPtr pRenderWindow;
-
-			if (winTitle == null && capabilitiesConfig == null)
-				pRenderWindow = NativeOgreRoot.Initialise(handle, autoCreateWindow);
-			else if (winTitle != null && capabilitiesConfig == null)
-				pRenderWindow = NativeOgreRoot.InitialiseWithTitle(handle, autoCreateWindow, winTitle);
-			else
-				pRenderWindow = NativeOgreRoot.InitialiseWithTitleAndCap(handle, autoCreateWindow, winTitle, capabilitiesConfig);
-
-			if (pRenderWindow == IntPtr.Zero)
-				return null;
-
-			return MarshallExtensions.AsHandle(pRenderWindow, ptr => new RenderWindow(ptr));
+			return Native.GetRenderSystemByName(name);
 		}
 
 		/// <summary>
-		/// 	Starts the rendering.
+		/// Sets the render system.
 		/// </summary>
-		public void StartRendering()
-		{
-			NativeOgreRoot.StartRendering(handle);
-		}
-
-		/// <summary>
-		/// 	Loads the plugin.
-		/// </summary>
-		/// <param name = "pluginName">Name of the plugin.</param>
-		public void LoadPlugin(string pluginName)
-		{
-			NativeOgreRoot.LoadPlugin(handle, pluginName);
-		}
-
-		/// <summary>
-		/// 	Unloads the plugin.
-		/// </summary>
-		/// <param name = "pluginName">Name of the plugin.</param>
-		public void UnloadPlugin(string pluginName)
-		{
-			NativeOgreRoot.UnloadPlugin(handle, pluginName);
-		}
-
-		/// <summary>
-		/// 	Gets the name of the render system by.
-		/// </summary>
-		/// <param name = "name">The name.</param>
-		/// <returns></returns>
-		public RenderSystem GetRenderSystemByName(string name)
-		{
-			return NativeOgreRoot.GetRenderSystemByName(handle, name);
-		}
-
-		/// <summary>
-		/// 	Sets the render system.
-		/// </summary>
-		/// <param name = "renderSystem">The render system.</param>
+		/// <param name="renderSystem">The render system.</param>
 		public void SetRenderSystem(RenderSystem renderSystem)
 		{
-			NativeOgreRoot.SetRenderSystem(handle, renderSystem.DangerousGetHandle());
+			Native.SetRenderSystem(renderSystem != null ? renderSystem.Native : null);
 		}
 
 		/// <summary>
-		/// 	Enables the frame dispatcher.
+		/// Gets the render system.
 		/// </summary>
-		/// <param name = "dispatcher">The dispatcher.</param>
-		public void EnableFrameDispatcher(FrameEventDispatcher dispatcher)
-		{
-			NativeOgreRoot.AddFrameListener(handle, dispatcher.DangerousGetHandle());
-		}
-
-		/// <summary>
-		/// 	Disables the frame dispatcher.
-		/// </summary>
-		/// <param name = "dispatcher">The dispatcher.</param>
-		public void DisableFrameDispatcher(FrameEventDispatcher dispatcher)
-		{
-			NativeOgreRoot.RemoveFrameListener(handle, dispatcher.DangerousGetHandle());
-		}
-
-		/// <summary>
-		/// 	Creates the render window.
-		/// </summary>
-		/// <param name = "windowName">Name of the window.</param>
-		/// <param name = "width">The width.</param>
-		/// <param name = "height">The height.</param>
-		/// <param name = "fullscreen">if set to <c>true</c> [fullscreen].</param>
-		/// <param name = "options">The options.</param>
 		/// <returns></returns>
-		public RenderWindow CreateRenderWindow(string windowName, int width, int height, bool fullscreen = false,
-											   NameValueDictionary options = null)
+		public RenderSystem GetRenderSystem()
 		{
-			IntPtr pRenderWindow;
-
-			if (options == null)
-				pRenderWindow = NativeOgreRoot.CreateRenderWindow(handle, windowName, width, height, fullscreen);
-			else
-			{
-				options.Flush();
-				pRenderWindow = NativeOgreRoot.CreateRenderWindow(handle, windowName, width, height, fullscreen,
-																  options.DictionaryHandle);
-			}
-
-			return MarshallExtensions.AsHandle(pRenderWindow, ptr => new RenderWindow(ptr));
+			return GetOrCreateOwner(Native.GetRenderSystem(), native => new RenderSystem(native));
 		}
 
 		/// <summary>
-		/// 	Creates the scene manager.
+		/// Initializes the specified auto create window.
 		/// </summary>
-		/// <param name = "sceneType">Type of the scene.</param>
-		/// <param name = "instanceName">Name of the instance.</param>
+		/// <param name="autoCreateWindow">if set to <c>true</c> [auto create window].</param>
 		/// <returns></returns>
-		public SceneManager CreateSceneManager(SceneType sceneType, string instanceName = null)
+		public RenderWindow Initialize(bool autoCreateWindow)
 		{
-			IntPtr pSceneManager;
-
-			if (string.IsNullOrEmpty(instanceName))
-				pSceneManager = NativeOgreRoot.CreateSceneManagerByType(handle, sceneType);
-			else
-				pSceneManager = NativeOgreRoot.CreateSceneManagerByType(handle, sceneType, instanceName);
-
-			return MarshallExtensions.AsHandle(pSceneManager, ptr => new SceneManager(ptr));
+			return GetOrCreateOwner(Native.Initialize(autoCreateWindow), native => new RenderWindow(native));
 		}
 
 		/// <summary>
-		/// 	Creates the scene manager.
+		/// Initializes the specified auto create window.
 		/// </summary>
-		/// <param name = "typeName">Name of the type.</param>
-		/// <param name = "instanceName">Name of the instance.</param>
+		/// <param name="autoCreateWindow">if set to <c>true</c> [auto create window].</param>
+		/// <param name="windowTitle">The window title.</param>
 		/// <returns></returns>
-		public SceneManager CreateSceneManager(string typeName, string instanceName = null)
+		public RenderWindow Initialize(bool autoCreateWindow, string windowTitle)
 		{
-			IntPtr pSceneManager;
+			return GetOrCreateOwner(Native.Initialize(autoCreateWindow, windowTitle), native => new RenderWindow(native));
+		}
 
-			if (string.IsNullOrEmpty(instanceName))
-				pSceneManager = NativeOgreRoot.CreateSceneManagerByTypeName(handle, typeName);
-			else
-				pSceneManager = NativeOgreRoot.CreateSceneManagerByTypeName(handle, typeName, instanceName);
+		/// <summary>
+		/// Initializes the specified auto create window.
+		/// </summary>
+		/// <param name="autoCreateWindow">if set to <c>true</c> [auto create window].</param>
+		/// <param name="windowTitle">The window title.</param>
+		/// <param name="customCapabilities">The custom capabilities.</param>
+		/// <returns></returns>
+		public RenderWindow Initialize(bool autoCreateWindow, string windowTitle, string customCapabilities)
+		{
+			return GetOrCreateOwner(Native.Initialize(autoCreateWindow, windowTitle, customCapabilities),
+									native => new RenderWindow(native));
+		}
 
-			return MarshallExtensions.AsHandle(pSceneManager, ptr => new SceneManager(ptr));
+		/// <summary>
+		/// Determines whether this instance is initialized.
+		/// </summary>
+		/// <returns>
+		/// 	<c>true</c> if this instance is initialized; otherwise, <c>false</c>.
+		/// </returns>
+		public bool IsInitialized()
+		{
+			return Native.IsInitialized();
+		}
+
+		/// <summary>
+		/// Uses the custom render system capabilities.
+		/// </summary>
+		/// <param name="capabilities">The capabilities.</param>
+		public void UseCustomRenderSystemCapabilities(RenderSystemCapabilities capabilities)
+		{
+			Native.UseCustomRenderSystemCapabilities(capabilities != null ? capabilities.Native : null);
+		}
+
+		/// <summary>
+		/// Gets the remove render queue structures on clear.
+		/// </summary>
+		/// <returns></returns>
+		public bool GetRemoveRenderQueueStructuresOnClear()
+		{
+			return Native.GetRemoveRenderQueueStructuresOnClear();
+		}
+
+		/// <summary>
+		/// Sets the remove render queue structures on clear.
+		/// </summary>
+		/// <param name="value">if set to <c>true</c> [value].</param>
+		public void SetRemoveRenderQueueStructuresOnClear(bool value)
+		{
+			Native.SetRemoveRenderQueueStructuresOnClear(value);
+		}
+
+		/// <summary>
+		/// Adds the scene manager factory.
+		/// </summary>
+		/// <param name="factory">The factory.</param>
+		public void AddSceneManagerFactory(SceneManagerFactory factory)
+		{
+			Native.AddSceneManagerFactory(factory != null ? factory.Native : null);
+		}
+
+		/// <summary>
+		/// Removes the scene manager factory.
+		/// </summary>
+		/// <param name="factory">The factory.</param>
+		public void RemoveSceneManagerFactory(SceneManagerFactory factory)
+		{
+			Native.RemoveSceneManagerFactory(factory != null ? factory.Native : null);
+		}
+
+		/// <summary>
+		/// Creates the scene manager.
+		/// </summary>
+		/// <param name="sceneType">Type of the scene.</param>
+		/// <returns></returns>
+		public SceneManager CreateSceneManager(SceneType sceneType)
+		{
+			return GetOrCreateOwner(Native.CreateSceneManager(sceneType), native => new SceneManager(native));
+		}
+
+		/// <summary>
+		/// Creates the scene manager.
+		/// </summary>
+		/// <param name="sceneType">Type of the scene.</param>
+		/// <param name="instanceName">Name of the instance.</param>
+		/// <returns></returns>
+		public SceneManager CreateSceneManager(SceneType sceneType, string instanceName)
+		{
+			return GetOrCreateOwner(Native.CreateSceneManager(sceneType, instanceName),
+									native => new SceneManager(native));
+		}
+
+		#endregion
+	}
+
+	public class SceneManager : CppWrapper<ISceneManager>
+	{
+		/// <summary>
+		/// Initializes a new instance of the <see cref="SceneManager"/> class.
+		/// </summary>
+		/// <param name="nativeInstance">The native instance.</param>
+		public SceneManager(ISceneManager nativeInstance)
+			: base(nativeInstance)
+		{
+		}
+	}
+
+	public class SceneManagerFactory : CppWrapper<ISceneManagerFactory>
+	{
+		/// <summary>
+		/// Initializes a new instance of the <see cref="SceneManagerFactory"/> class.
+		/// </summary>
+		/// <param name="nativeInstance">The native instance.</param>
+		public SceneManagerFactory(ISceneManagerFactory nativeInstance)
+			: base(nativeInstance)
+		{
+		}
+	}
+
+	public class RenderSystemCapabilities : CppWrapper<IRenderSystemCapabilities>
+	{
+		/// <summary>
+		/// Initializes a new instance of the <see cref="RenderSystemCapabilities"/> class.
+		/// </summary>
+		/// <param name="nativeInstance">The native instance.</param>
+		public RenderSystemCapabilities(IRenderSystemCapabilities nativeInstance)
+			: base(nativeInstance)
+		{
+		}
+	}
+
+	public class RenderWindow : CppWrapper<IRenderWindow>
+	{
+		/// <summary>
+		/// Initializes a new instance of the <see cref="RenderWindow"/> class.
+		/// </summary>
+		/// <param name="nativeInstance">The native instance.</param>
+		public RenderWindow(IRenderWindow nativeInstance)
+			: base(nativeInstance)
+		{
+		}
+	}
+
+	public class RenderSystem : CppWrapper<IRenderSystem>
+	{
+		/// <summary>
+		/// Initializes a new instance of the <see cref="RenderSystem"/> class.
+		/// </summary>
+		/// <param name="nativeInstance">The native instance.</param>
+		public RenderSystem(IRenderSystem nativeInstance)
+			: base(nativeInstance)
+		{
 		}
 	}
 }

@@ -11,7 +11,8 @@
     <RootNamespace>Tutano</RootNamespace>
     <AssemblyName>Tutano</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
-    <TargetFrameworkProfile>Client</TargetFrameworkProfile>
+    <TargetFrameworkProfile>
+    </TargetFrameworkProfile>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
@@ -19,7 +20,7 @@
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
+    <OutputPath>build\Debug\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -28,7 +29,7 @@
     <PlatformTarget>x86</PlatformTarget>
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
+    <OutputPath>build\Release\</OutputPath>
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -46,17 +47,114 @@
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Tutano.cs" />
-    <Compile Include="TutanoApplication.cs" />
+    <Compile Include="TutanoConfigLoader.cs" />
+    <Compile Include="TutanoConfiguration.cs" />
+    <Compile Include="TutanoLauncher.cs" />
+    <Compile Include="Util\ScriptColorRestore.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\InVision.Framework\InVision.Framework.csproj">
       <Project>{2104F696-0FF2-4634-89D1-56613AEB7E7C}</Project>
       <Name>InVision.Framework</Name>
     </ProjectReference>
+    <ProjectReference Include="..\InVision.Native\InVision.Native.csproj">
+      <Project>{F84D662E-4316-48BB-ABD0-C37E49601ACC}</Project>
+      <Name>InVision.Native</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\InVision.Ogre.Native\InVision.Ogre.Native.csproj">
+      <Project>{316AE104-9284-4BE8-B3F7-5C5EC74B9C80}</Project>
+      <Name>InVision.Ogre.Native</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\InVision.Ogre\InVision.Ogre.csproj">
+      <Project>{5D60C1BB-506C-4A0A-8561-C1669FAFBC5B}</Project>
+      <Name>InVision.Ogre</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\InVision.OIS.Native\InVision.OIS.Native.csproj">
+      <Project>{CF8FC602-FD36-41DF-8FC6-08E9BB5593DC}</Project>
+      <Name>InVision.OIS.Native</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\InVision\InVision.csproj">
+      <Project>{4A69EB8E-6E49-415C-ACB4-9CB904EA54DB}</Project>
+      <Name>InVision</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Bin\Native\Windows-32bit\cg.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Bin\Native\Windows-32bit\InVisionNative.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Bin\Native\Windows-32bit\InVisionNative.pdb">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Bin\Native\Windows-32bit\OgreMain_d.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Bin\Native\Windows-32bit\OgrePaging_d.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Bin\Native\Windows-32bit\OgreProperty_d.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Bin\Native\Windows-32bit\OgreRTShaderSystem_d.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Bin\Native\Windows-32bit\OgreTerrain_d.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Bin\Native\Windows-32bit\OIS_d.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Bin\Native\Windows-32bit\Plugin_BSPSceneManager_d.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Bin\Native\Windows-32bit\Plugin_CgProgramManager_d.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Bin\Native\Windows-32bit\Plugin_OctreeSceneManager_d.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Bin\Native\Windows-32bit\Plugin_OctreeZone_d.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Bin\Native\Windows-32bit\Plugin_ParticleFX_d.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Bin\Native\Windows-32bit\Plugin_PCZSceneManager_d.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Bin\Native\Windows-32bit\RenderSystem_Direct3D9_d.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Bin\Native\Windows-32bit\RenderSystem_GL_d.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Config\Tutano.config.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Config\Tutano.config.boo">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Bin\Native\Linux-32bit\" />
+    <Folder Include="Bin\Native\MacOSX-32bit\" />
+    <Folder Include="Libraries\" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="app.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>copy "$(TargetDir)*.*" "$(SolutionDir)Samples\Empty\Bin\"</PostBuildEvent>
+    <PostBuildEvent>move "$(TargetDir)InVision*" "$(TargetDir)Bin\"
+move "$(TargetDir)Mono*" "$(TargetDir)Bin\"</PostBuildEvent>
+  </PropertyGroup>
+  <PropertyGroup>
+    <PreBuildEvent>copy "$(SolutionDir)Build\Bin\Debug_x86\Platform\InVisionNative.dll" "$(ProjectDir)Bin\Native\Windows-32bit\"
+copy "$(SolutionDir)Build\Bin\Debug_x86\Platform\InVisionNative.pdb" "$(ProjectDir)Bin\Native\Windows-32bit\"</PreBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

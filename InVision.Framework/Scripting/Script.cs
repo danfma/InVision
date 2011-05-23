@@ -79,6 +79,18 @@ namespace InVision.Framework.Scripting
 		}
 
 		/// <summary>
+		/// Adds the references.
+		/// </summary>
+		/// <param name="assemblies">The assemblies.</param>
+		public virtual void AddReferences(IEnumerable<Assembly> assemblies)
+		{
+			foreach (var assembly in assemblies)
+			{
+				AddReference(assembly);
+			}
+		}
+
+		/// <summary>
 		/// Loads this instance.
 		/// </summary>
 		public abstract void LoadOrExecute();

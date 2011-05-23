@@ -16,9 +16,8 @@ namespace InVision.Extensions
 		/// <returns></returns>
 		public static TAttribute GetAttribute<TAttribute>(this ICustomAttributeProvider @this, bool inherited)
 				where TAttribute : Attribute
-		{			
-			return @this.GetCustomAttributes(typeof(TAttribute), inherited).
-					Cast<TAttribute>().FirstOrDefault();
+		{
+			return @this.GetAttributes<TAttribute>().FirstOrDefault();
 		}
 
 		/// <summary>
@@ -31,7 +30,9 @@ namespace InVision.Extensions
 		public static IEnumerable<TAttribute> GetAttributes<TAttribute>(this ICustomAttributeProvider @this, bool inherited = false)
 			where TAttribute : Attribute
 		{
-			return @this.GetCustomAttributes(typeof(TAttribute), inherited).Cast<TAttribute>();
+			var attributes = @this.GetCustomAttributes(inherited);
+
+			return attributes.Where(attr => attr is TAttribute).Cast<TAttribute>();
 		}
 
 		/// <summary>

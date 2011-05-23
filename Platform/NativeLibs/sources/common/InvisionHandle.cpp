@@ -4,11 +4,16 @@ using namespace invision;
 
 typedef boost::unordered_map<const char*, TypeID> TypeRegistry;
 
+
 //
 // GLOBALS
 //
 TypeID nextTypeIndex = 0;
 TypeRegistry typeRegistry;
+
+//
+// EXPORTED C FUNCTIONS
+//
 
 INV_EXPORT TypeID
 INV_CALL get_registered_typeid_by_name(const char* type)
@@ -17,7 +22,7 @@ INV_CALL get_registered_typeid_by_name(const char* type)
 	{
 		return typeRegistry.at(type);
 	}
-	catch (std::exception& ex)
+	catch (std::exception&)
 	{
 		return register_type_by_name(type);
 	}

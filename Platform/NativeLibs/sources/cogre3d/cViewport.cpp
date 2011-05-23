@@ -1,28 +1,10 @@
-#include "Viewport.h"
-#include "TypeConvert.h"
+#include "cOgre.h"
 
-using namespace invision;
-
-INV_EXPORT ColorValue INV_CALL viewport_get_bgcolor(HViewport self)
+/**
+ * Method: Viewport::setBackgroundColor
+ */
+INV_EXPORT void
+INV_CALL viewport_set_background_color(InvHandle self, Color color)
 {
-	Ogre::ColourValue color = asViewport(self)->getBackgroundColour();
-
-	return toColorValue(color);
-}
-
-INV_EXPORT void INV_CALL viewport_set_bgcolor(HViewport self, ColorValue color)
-{
-	Ogre::ColourValue c = fromColorValue(color);
-
-	asViewport(self)->setBackgroundColour(c);
-}
-
-INV_EXPORT _int INV_CALL viewport_get_actual_width(HViewport self)
-{
-	return asViewport(self)->getActualWidth();
-}
-
-INV_EXPORT _int INV_CALL viewport_get_actual_height(HViewport self)
-{
-	return asViewport(self)->getActualHeight();
+	asViewport(self)->setBackgroundColour(color_convert_to_ogre(color));
 }

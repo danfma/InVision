@@ -1,143 +1,553 @@
-// 
-// Color.cs
-//  
-// Author:
-//       Michael Hutchinson <mhutchinson@novell.com>
-// 
-// Copyright (c) 2010 Novell, Inc.
-// 
-// Permission is hereby granted, free of charge, to any person obtaining a copy
-// of this software and associated documentation files (the "Software"), to deal
-// in the Software without restriction, including without limitation the rights
-// to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-// copies of the Software, and to permit persons to whom the Software is
-// furnished to do so, subject to the following conditions:
-// 
-// The above copyright notice and this permission notice shall be included in
-// all copies or substantial portions of the Software.
-// 
-// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-// AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-// LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-// OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-// THE SOFTWARE.
-using System;
+﻿using System;
+using System.Diagnostics;
 using System.Runtime.InteropServices;
+using System.Security;
+using System.Xml;
+using System.Xml.Linq;
+using System.Xml.Schema;
+using System.Xml.Serialization;
+using InVision.GameMath.Endianess;
 
 namespace InVision.GameMath
 {
-	[Serializable]
-	[CLSCompliant(true)]
-	[StructLayout(LayoutKind.Sequential)]
-	public struct Color : IEquatable<Color>
+	/// <summary>
+	/// 	Class representing colour.
+	/// 	<remarks>
+	/// 		Colour is represented as 4 components, each of which is a floating-point value from 0.0 to 1.0.
+	/// 		The 3 'normal' colour components are red, green and blue, a higher number indicating greater amounts of that component in the colour. The forth component is the 'alpha' value, which represents transparency. In this case, 0.0 is completely transparent and 1.0 is fully opaque.
+	/// 	</remarks>
+	/// </summary>
+	[Serializable, StructLayout(LayoutKind.Sequential)]
+	[XmlRoot("color")]
+	public struct Color : IEquatable<Color>, IXmlSerializable
 	{
-		private const uint RMask = 0x000000FF;
-		private const uint GMask = 0x0000FF00;
-		private const uint BMask = 0x00FF0000;
-		private const uint AMask = 0xFF000000;
-		private const int RShift = 0;
-		private const int GShift = 8;
-		private const int BShift = 16;
-		private const int AShift = 24;
-		private const float IntToFloat = 1f / 255f;
+		private Vector4 values;
 
-		private uint packed;
+		/// <summary>
+		/// Gets the R.
+		/// </summary>
+		/// <value>The R.</value>
+		public float R
+		{
+			get { return values.X; }
+			set { values.X = value; }
+		}
 
-		#region Constructors
+		/// <summary>
+		/// Gets the G.
+		/// </summary>
+		/// <value>The G.</value>
+		public float G
+		{
+			get { return values.Y; }
+			set { values.Y = value; }
+		}
 
-		public Color(int r, int g, int b)
-			: this(r, g, b, 255)
+		/// <summary>
+		/// Gets the B.
+		/// </summary>
+		/// <value>The B.</value>
+		public float B
+		{
+			get { return values.Z; }
+			set { values.Z = value; }
+		}
+
+		/// <summary>
+		/// Gets the A.
+		/// </summary>
+		/// <value>The A.</value>
+		public float A
+		{
+			get { return values.W; }
+			set { values.W = value; }
+		}
+
+		/// <summary>
+		/// 	Initializes a new instance of the <see cref = "Color" /> struct.
+		/// </summary>
+		/// <param name = "red">The red.</param>
+		/// <param name = "green">The green.</param>
+		/// <param name = "blue">The blue.</param>
+		/// <param name = "alpha">The alpha.</param>
+		public Color(byte red, byte green, byte blue, byte alpha)
+			: this(red / 255f, green / 255f, blue / 255f, alpha / 255f)
 		{
 		}
 
-		public Color(int r, int g, int b, int a)
+		/// <summary>
+		/// 	Initializes a new instance of the <see cref = "Color" /> struct.
+		/// </summary>
+		/// <param name = "r">The red.</param>
+		/// <param name = "g">The green.</param>
+		/// <param name = "b">The blue.</param>
+		/// <param name = "a">The alpha.</param>
+		public Color(float r = 1f, float g = 1f, float b = 1f, float a = 1f)
+			: this()
 		{
-			packed =
-				(((uint)r) << RShift) |
-				(((uint)g) << GShift) |
-				(((uint)b) << BShift) |
-				(((uint)a) << AShift);
+			values = new Vector4(r, g, b, a);
 		}
 
-		public Color(float r, float g, float b)
-			: this(new Vector3(r, g, b))
+		/// <summary>
+		/// 	Gets the RGBA.
+		/// </summary>
+		/// <value>The RGBA.</value>
+		public uint RGBA
 		{
+			get
+			{
+				return ColourRepresentation.Instance.ToInt32(R, G, B, A);
+			}
+			set
+			{
+				float r, g, b, a;
+
+				ColourRepresentation.Instance.FromInt32(value, out r, out g, out b, out a);
+				values = new Vector4(r, g, b, a);
+			}
 		}
 
-		public Color(float r, float g, float b, float a)
-			: this(new Vector4(r, g, b, a))
+		/// <summary>
+		/// 	Gets or sets the ARGB.
+		/// </summary>
+		/// <value>The ARGB.</value>
+		public uint ARGB
 		{
+			get { return ColourRepresentation.Instance.ToInt32(A, R, G, B); }
+			set
+			{
+				float r, g, b, a;
+
+				ColourRepresentation.Instance.FromInt32(value, out a, out r, out g, out b);
+				values = new Vector4(r, g, b, a);
+			}
 		}
 
-		public Color(Vector3 vector)
-			: this(vector.X, vector.Y, vector.Z)
+		/// <summary>
+		/// 	Gets or sets the BGRA.
+		/// </summary>
+		/// <value>The BGRA.</value>
+		public uint BGRA
 		{
-			Vector3 one = Vector3.One, zero = Vector3.Zero;
-			Vector3.Clamp(ref vector, ref zero, ref one, out vector);
-			Vector3.Multiply(ref vector, 255f, out vector);
+			get { return ColourRepresentation.Instance.ToInt32(B, G, R, A); }
+			set
+			{
+				float r, g, b, a;
 
-			packed =
-				(((uint)vector.X) << RShift) |
-				(((uint)vector.Y) << GShift) |
-				(((uint)vector.Z) << BShift) |
-				AMask;
+				ColourRepresentation.Instance.FromInt32(value, out b, out g, out r, out a);
+				values = new Vector4(r, g, b, a);
+			}
 		}
 
-		public Color(Vector4 vector)
+		/// <summary>
+		/// 	Gets or sets the ABGR.
+		/// </summary>
+		/// <value>The ABGR.</value>
+		public uint ABGR
 		{
-			Vector4 one = Vector4.One, zero = Vector4.Zero;
-			Vector4.Clamp(ref vector, ref zero, ref one, out vector);
-			Vector4.Multiply(ref vector, 255f, out vector);
+			get { return ColourRepresentation.Instance.ToInt32(A, B, G, R); }
+			set
+			{
+				float r, g, b, a;
 
-			packed =
-				(((uint)vector.X) << RShift) |
-				(((uint)vector.Y) << GShift) |
-				(((uint)vector.Z) << BShift) |
-				(((uint)vector.W) << AShift);
+				ColourRepresentation.Instance.FromInt32(value, out a, out b, out g, out r);
+				values = new Vector4(r, g, b, a);
+			}
 		}
 
-		#endregion
-
-		public uint PackedValue
+		/// <summary>
+		/// 	Gets or sets the <see cref = "System.Single" /> at the specified index.
+		/// </summary>
+		/// <value></value>
+		public float this[int index]
 		{
-			get { return packed; }
-			set { packed = value; }
+			get
+			{
+				switch (index)
+				{
+					case 0:
+						return R;
+
+					case 1:
+						return G;
+
+					case 2:
+						return B;
+
+					case 3:
+						return A;
+
+					default:
+						throw new IndexOutOfRangeException();
+				}
+			}
+			set
+			{
+				switch (index)
+				{
+					case 0:
+						R = value;
+						break;
+
+					case 1:
+						G = value;
+						break;
+
+					case 2:
+						B = value;
+						break;
+
+					case 3:
+						A = value;
+						break;
+
+					default:
+						throw new IndexOutOfRangeException();
+				}
+			}
 		}
 
-		#region Components
-
-		public byte R
+		/// <summary>
+		/// Toes the HSB.
+		/// </summary>
+		/// <returns></returns>
+		public float[] ToHSB()
 		{
-			get { return (byte)((packed & RMask) >> RShift); }
-			set { packed = (packed & ~RMask) | (((uint)value) << RShift); }
+			float h, s, b;
+
+			GetHSB(out h, out s, out b);
+
+			return new[] { h, s, b };
 		}
 
-		public byte G
+		/// <summary>
+		/// Froms the HSB.
+		/// </summary>
+		/// <param name="value">The value.</param>
+		public void FromHSB(float[] value)
 		{
-			get { return (byte)((packed & GMask) >> GShift); }
-			set { packed = (packed & ~GMask) | (((uint)value) << GShift); }
+			SetHSB(value[0], value[1], value[2]);
 		}
 
-		public byte B
+		/// <summary>
+		/// 	Saturates this instance.
+		/// </summary>
+		public void Saturate()
 		{
-			get { return (byte)((packed & BMask) >> BShift); }
-			set { packed = (packed & ~BMask) | (((uint)value) << BShift); }
+			R = R.Clamp(0, 1);
+			G = G.Clamp(0, 1);
+			B = B.Clamp(0, 1);
+			A = A.Clamp(0, 1);
 		}
 
-		public byte A
+		/// <summary>
+		/// 	Saturates the copy.
+		/// </summary>
+		/// <returns></returns>
+		public Color SaturateCopy()
 		{
-			get { return (byte)((packed & AMask) >> AShift); }
-			set { packed = (packed & ~AMask) | (((uint)value) << AShift); }
+			Color copy = this;
+			copy.Saturate();
+
+			return copy;
 		}
 
-		#endregion
-
-		public static Color FromNonPremultiplied(int r, int g, int b, int a)
+		/// <summary>
+		/// 	Sets the HSB.
+		/// </summary>
+		/// <param name = "hue">The hue.</param>
+		/// <param name = "saturation">The saturation.</param>
+		/// <param name = "brightness">The brightness.</param>
+		public void SetHSB(float hue, float saturation, float brightness)
 		{
-			float scale = a * IntToFloat;
-			return new Color((int)(r * scale), (int)(g * scale), (int)(b * scale), a);
+			if (hue > 1f)
+				hue -= (int)hue;
+			else if (hue < 0f)
+				hue += (int)hue + 1;
+
+			// clamp saturation / brightness
+			saturation = saturation.Clamp(0, 1);
+			brightness = brightness.Clamp(0, 1);
+
+			if (brightness == 0)
+			{
+				R = G = B = 0f;
+				return;
+			}
+
+			if (saturation == 0)
+			{
+				R = G = B = brightness;
+				return;
+			}
+
+			float hueDomain = hue * 6f;
+
+			if (hueDomain >= 6f)
+				hueDomain = 0f; // wrap around and allow mathematical errors
+
+			var domain = (ushort)hueDomain;
+
+			float f1 = brightness * (1 - saturation);
+			float f2 = brightness * (1 - saturation * (hueDomain - domain));
+			float f3 = brightness * (1 - saturation * (1 - (hueDomain - domain)));
+
+			switch (domain)
+			{
+				case 0:
+					// red domain: green ascends
+					R = brightness;
+					G = f3;
+					B = f1;
+					break;
+
+				case 1:
+					// yellow domain: red descends
+					R = f2;
+					G = brightness;
+					B = f1;
+					break;
+
+				case 2:
+					// green domain: blue ascends
+					R = f1;
+					G = brightness;
+					B = f2;
+					break;
+
+				case 3:
+					// cyan domain: green descends
+					R = f1;
+					G = f2;
+					B = brightness;
+					break;
+
+				case 4:
+					// blue domain: red ascends
+					R = f3;
+					G = f1;
+					B = brightness;
+					break;
+
+				case 5:
+					// magenta domain: blue descends
+					R = brightness;
+					G = f1;
+					B = f2;
+					break;
+			}
+		}
+
+		/// <summary>
+		/// 	Gets the HSB.
+		/// </summary>
+		/// <param name = "hue">The hue.</param>
+		/// <param name = "saturation">The saturation.</param>
+		/// <param name = "brightness">The brightness.</param>
+		public void GetHSB(out float hue, out float saturation, out float brightness)
+		{
+			float vMin = Math.Min(R, Math.Min(G, B));
+			float vMax = Math.Max(R, Math.Max(G, B));
+			float delta = vMax - vMin;
+
+			brightness = vMax;
+
+			if (delta.Equal(0f, (float)1e-6))
+			{
+				hue = 0;
+				saturation = 0;
+			}
+			else
+			{
+				hue = 0;
+				saturation = delta / vMax;
+
+				float deltaR = (((vMax - R) / 6f) + (delta / 2f)) / delta;
+				float deltaG = (((vMax - G) / 6f) + (delta / 2f)) / delta;
+				float deltaB = (((vMax - B) / 6f) + (delta / 2f)) / delta;
+
+				if (R.Equal(vMax))
+					hue = deltaB - deltaG;
+				else if (G.Equal(vMax))
+					hue = 0.3333333f + deltaR - deltaB;
+				else if (brightness.Equal(vMax))
+					hue = 0.6666667f + deltaG - deltaR;
+
+				if (hue < 0f)
+					hue += 1f;
+
+				if (hue > 1f)
+					hue -= 1f;
+			}
+		}
+
+		/// <summary>
+		/// 	Adds the specified scalar.
+		/// </summary>
+		/// <param name = "scalar">The scalar.</param>
+		public Color Add(float scalar)
+		{
+			return Add(ref this, scalar);
+		}
+
+		/// <summary>
+		/// 	Adds the specified other.
+		/// </summary>
+		/// <param name = "other">The other.</param>
+		/// <returns></returns>
+		public Color Add(Color other)
+		{
+			return Add(ref this, ref other);
+		}
+
+		/// <summary>
+		/// 	Subtracts the specified scalar.
+		/// </summary>
+		/// <param name = "scalar">The scalar.</param>
+		/// <returns></returns>
+		public Color Subtract(float scalar)
+		{
+			return Subtract(ref this, scalar);
+		}
+
+		/// <summary>
+		/// 	Subtracts the specified other.
+		/// </summary>
+		/// <param name = "other">The other.</param>
+		/// <returns></returns>
+		public Color Subtract(Color other)
+		{
+			return Subtract(ref this, ref other);
+		}
+
+		/// <summary>
+		/// 	Multiplies the specified scalar.
+		/// </summary>
+		/// <param name = "scalar">The scalar.</param>
+		/// <returns></returns>
+		public Color Multiply(float scalar)
+		{
+			return Multiply(ref this, scalar);
+		}
+
+		/// <summary>
+		/// 	Multiplies the specified other.
+		/// </summary>
+		/// <param name = "other">The other.</param>
+		/// <returns></returns>
+		public Color Multiply(Color other)
+		{
+			return Multiply(ref this, ref other);
+		}
+
+		/// <summary>
+		/// 	Divides the specified scalar.
+		/// </summary>
+		/// <param name = "scalar">The scalar.</param>
+		/// <returns></returns>
+		public Color Divide(float scalar)
+		{
+			return Divide(ref this, scalar);
+		}
+
+		/// <summary>
+		/// 	Divides the specified other.
+		/// </summary>
+		/// <param name = "other">The other.</param>
+		/// <returns></returns>
+		public Color Divide(Color other)
+		{
+			return Divide(ref this, ref other);
+		}
+
+		/// <summary>
+		/// 	Returns a <see cref = "System.String" /> that represents this instance.
+		/// </summary>
+		/// <returns>
+		/// 	A <see cref = "System.String" /> that represents this instance.
+		/// </returns>
+		public override string ToString()
+		{
+			return string.Format("Color({0}, {1}, {2}, {3})", R, G, B, A);
+		}
+
+		/// <summary>
+		/// 	Indicates whether the current object is equal to another object of the same type.
+		/// </summary>
+		/// <returns>
+		/// 	true if the current object is equal to the <paramref name = "other" /> parameter; otherwise, false.
+		/// </returns>
+		/// <param name = "other">An object to compare with this object.</param>
+		public bool Equals(Color other)
+		{
+			return other.R.Equals(R) && other.G.Equals(G) && other.B.Equals(B) && other.A.Equals(A);
+		}
+
+		/// <summary>
+		/// 	Indicates whether this instance and a specified object are equal.
+		/// </summary>
+		/// <returns>
+		/// 	true if <paramref name = "obj" /> and this instance are the same type and represent the same value; otherwise, false.
+		/// </returns>
+		/// <param name = "obj">Another object to compare to. </param>
+		/// <filterpriority>2</filterpriority>
+		public override bool Equals(object obj)
+		{
+			if (ReferenceEquals(null, obj)) return false;
+			if (obj.GetType() != typeof(Color)) return false;
+
+			return Equals((Color)obj);
+		}
+
+		/// <summary>
+		/// 	Returns the hash code for this instance.
+		/// </summary>
+		/// <returns>
+		/// 	A 32-bit signed integer that is the hash code for this instance.
+		/// </returns>
+		/// <filterpriority>2</filterpriority>
+		public override int GetHashCode()
+		{
+			unchecked
+			{
+				int result = R.GetHashCode();
+				result = (result * 397) ^ G.GetHashCode();
+				result = (result * 397) ^ B.GetHashCode();
+				result = (result * 397) ^ A.GetHashCode();
+
+				return result;
+			}
+		}
+
+		/// <summary>
+		/// Bytes to float.
+		/// </summary>
+		/// <param name="value">The value.</param>
+		/// <returns></returns>
+		private static float ByteToFloat(byte value)
+		{
+			const float convertion = 1f / 255f;
+
+			return value * convertion;
+		}
+
+		/// <summary>
+		/// Floats to byte.
+		/// </summary>
+		/// <param name="value">The value.</param>
+		/// <returns></returns>
+		private static byte FloatToByte(float value)
+		{
+			const float convertion = 255f;
+
+			return (byte)(value * convertion).Clamp(0, 255f);
+		}
+
+		public static Color FromNonPremultiplied(byte r, byte g, byte b, byte a)
+		{
+			float scale = ByteToFloat(a);
+
+			return new Color((byte)(r * scale), (byte)(g * scale), (byte)(b * scale), a);
 		}
 
 		public static Color FromNonPremultiplied(Vector4 vector)
@@ -148,10 +558,10 @@ namespace InVision.GameMath
 		public static Color Lerp(Color value1, Color value2, float amount)
 		{
 			return new Color(
-				Lerp(value1.R, value2.R, amount),
-				Lerp(value1.G, value2.G, amount),
-				Lerp(value1.B, value2.B, amount),
-				Lerp(value1.A, value2.A, amount));
+				Lerp(FloatToByte(value1.R), FloatToByte(value2.R), amount),
+				Lerp(FloatToByte(value1.G), FloatToByte(value2.G), amount),
+				Lerp(FloatToByte(value1.B), FloatToByte(value2.B), amount),
+				Lerp(FloatToByte(value1.A), FloatToByte(value2.A), amount));
 		}
 
 		private static int Lerp(int i1, int i2, float amount)
@@ -159,771 +569,1109 @@ namespace InVision.GameMath
 			return i1 + (int)((i2 - i1) * amount);
 		}
 
-		public static Color Multiply(Color value, float scale)
-		{
-			return new Color(
-				(int)(value.R * scale),
-				(int)(value.G * scale),
-				(int)(value.B * scale),
-				(int)(value.A * scale));
-		}
-
-		public static Color operator *(Color value, float scale)
-		{
-			return Multiply(value, scale);
-		}
-
-		public Vector3 ToVector3()
-		{
-			return new Vector3(R * IntToFloat, G * IntToFloat, B * IntToFloat);
-		}
-
-		public Vector4 ToVector4()
-		{
-			return new Vector4(R * IntToFloat, G * IntToFloat, B * IntToFloat, A * IntToFloat);
-		}
-
-		public override string ToString()
-		{
-			return string.Format("{{R:{0} G:{1} B:{2} A:{3}}}", R, G, B, A);
-		}
-
-		#region Static properties
-
-		public static Color AliceBlue
-		{
-			get { return new Color(240, 248, 255, 255); }
-		}
-
-		public static Color AntiqueWhite
-		{
-			get { return new Color(250, 235, 215, 255); }
-		}
-
-		public static Color Aqua
-		{
-			get { return new Color(0, 255, 255, 255); }
-		}
-
-		public static Color Aquamarine
-		{
-			get { return new Color(127, 255, 212, 255); }
-		}
-
-		public static Color Azure
-		{
-			get { return new Color(240, 255, 255, 255); }
-		}
-
-		public static Color Beige
-		{
-			get { return new Color(245, 245, 220, 255); }
-		}
-
-		public static Color Bisque
-		{
-			get { return new Color(255, 228, 196, 255); }
-		}
-
-		public static Color Black
-		{
-			get { return new Color(0, 0, 0, 255); }
-		}
-
-		public static Color BlanchedAlmond
-		{
-			get { return new Color(255, 235, 205, 255); }
-		}
-
-		public static Color Blue
-		{
-			get { return new Color(0, 0, 255, 255); }
-		}
-
-		public static Color BlueViolet
-		{
-			get { return new Color(138, 43, 226, 255); }
-		}
-
-		public static Color Brown
-		{
-			get { return new Color(165, 42, 42, 255); }
-		}
-
-		public static Color BurlyWood
-		{
-			get { return new Color(222, 184, 135, 255); }
-		}
-
-		public static Color CadetBlue
-		{
-			get { return new Color(95, 158, 160, 255); }
-		}
-
-		public static Color Chartreuse
-		{
-			get { return new Color(127, 255, 0, 255); }
-		}
-
-		public static Color Chocolate
-		{
-			get { return new Color(210, 105, 30, 255); }
-		}
-
-		public static Color Coral
-		{
-			get { return new Color(255, 127, 80, 255); }
-		}
-
-		public static Color CornflowerBlue
-		{
-			get { return new Color(100, 149, 237, 255); }
-		}
-
-		public static Color Cornsilk
-		{
-			get { return new Color(255, 248, 220, 255); }
-		}
-
-		public static Color Crimson
-		{
-			get { return new Color(220, 20, 60, 255); }
-		}
-
-		public static Color Cyan
-		{
-			get { return new Color(0, 255, 255, 255); }
-		}
-
-		public static Color DarkBlue
-		{
-			get { return new Color(0, 0, 139, 255); }
-		}
-
-		public static Color DarkCyan
-		{
-			get { return new Color(0, 139, 139, 255); }
-		}
-
-		public static Color DarkGoldenrod
-		{
-			get { return new Color(184, 134, 11, 255); }
-		}
-
-		public static Color DarkGray
-		{
-			get { return new Color(169, 169, 169, 255); }
-		}
-
-		public static Color DarkGreen
-		{
-			get { return new Color(0, 100, 0, 255); }
-		}
-
-		public static Color DarkKhaki
-		{
-			get { return new Color(189, 183, 107, 255); }
-		}
-
-		public static Color DarkMagenta
-		{
-			get { return new Color(139, 0, 139, 255); }
-		}
-
-		public static Color DarkOliveGreen
-		{
-			get { return new Color(85, 107, 47, 255); }
-		}
-
-		public static Color DarkOrange
-		{
-			get { return new Color(255, 140, 0, 255); }
-		}
-
-		public static Color DarkOrchid
-		{
-			get { return new Color(153, 50, 204, 255); }
-		}
-
-		public static Color DarkRed
-		{
-			get { return new Color(139, 0, 0, 255); }
-		}
-
-		public static Color DarkSalmon
-		{
-			get { return new Color(233, 150, 122, 255); }
-		}
-
-		public static Color DarkSeaGreen
-		{
-			get { return new Color(143, 188, 139, 255); }
-		}
-
-		public static Color DarkSlateBlue
-		{
-			get { return new Color(72, 61, 139, 255); }
-		}
-
-		public static Color DarkSlateGray
-		{
-			get { return new Color(47, 79, 79, 255); }
-		}
-
-		public static Color DarkTurquoise
-		{
-			get { return new Color(0, 206, 209, 255); }
-		}
-
-		public static Color DarkViolet
-		{
-			get { return new Color(148, 0, 211, 255); }
-		}
-
-		public static Color DeepPink
-		{
-			get { return new Color(255, 20, 147, 255); }
-		}
-
-		public static Color DeepSkyBlue
-		{
-			get { return new Color(0, 191, 255, 255); }
-		}
-
-		public static Color DimGray
-		{
-			get { return new Color(105, 105, 105, 255); }
-		}
-
-		public static Color DodgerBlue
-		{
-			get { return new Color(30, 144, 255, 255); }
-		}
-
-		public static Color Firebrick
-		{
-			get { return new Color(178, 34, 34, 255); }
-		}
-
-		public static Color FloralWhite
-		{
-			get { return new Color(255, 250, 240, 255); }
-		}
-
-		public static Color ForestGreen
-		{
-			get { return new Color(34, 139, 34, 255); }
-		}
-
-		public static Color Fuchsia
-		{
-			get { return new Color(255, 0, 255, 255); }
-		}
-
-		public static Color Gainsboro
-		{
-			get { return new Color(220, 220, 220, 255); }
-		}
-
-		public static Color GhostWhite
-		{
-			get { return new Color(248, 248, 255, 255); }
-		}
-
-		public static Color Gold
-		{
-			get { return new Color(255, 215, 0, 255); }
-		}
-
-		public static Color Goldenrod
-		{
-			get { return new Color(218, 165, 32, 255); }
-		}
-
-		public static Color Gray
-		{
-			get { return new Color(128, 128, 128, 255); }
-		}
+		/// <summary>
+		/// 	Adds the specified colour.
+		/// </summary>
+		/// <param name = "colour">The colour.</param>
+		/// <param name = "scalar">The scalar.</param>
+		/// <returns></returns>
+		public static Color Add(ref Color colour, float scalar)
+		{
+			colour.R += scalar;
+			colour.G += scalar;
+			colour.B += scalar;
+			colour.A += scalar;
 
-		public static Color Green
-		{
-			get { return new Color(0, 128, 0, 255); }
-		}
-
-		public static Color GreenYellow
-		{
-			get { return new Color(173, 255, 47, 255); }
-		}
-
-		public static Color Honeydew
-		{
-			get { return new Color(240, 255, 240, 255); }
-		}
-
-		public static Color HotPink
-		{
-			get { return new Color(255, 105, 180, 255); }
-		}
-
-		public static Color IndianRed
-		{
-			get { return new Color(205, 92, 92, 255); }
-		}
-
-		public static Color Indigo
-		{
-			get { return new Color(75, 0, 130, 255); }
-		}
-
-		public static Color Ivory
-		{
-			get { return new Color(255, 255, 240, 255); }
-		}
-
-		public static Color Khaki
-		{
-			get { return new Color(240, 230, 140, 255); }
-		}
-
-		public static Color Lavender
-		{
-			get { return new Color(230, 230, 250, 255); }
-		}
-
-		public static Color LavenderBlush
-		{
-			get { return new Color(255, 240, 245, 255); }
-		}
-
-		public static Color LawnGreen
-		{
-			get { return new Color(124, 252, 0, 255); }
-		}
-
-		public static Color LemonChiffon
-		{
-			get { return new Color(255, 250, 205, 255); }
-		}
-
-		public static Color LightBlue
-		{
-			get { return new Color(173, 216, 230, 255); }
-		}
-
-		public static Color LightCoral
-		{
-			get { return new Color(240, 128, 128, 255); }
-		}
-
-		public static Color LightCyan
-		{
-			get { return new Color(224, 255, 255, 255); }
-		}
-
-		public static Color LightGoldenrodYellow
-		{
-			get { return new Color(250, 250, 210, 255); }
-		}
-
-		public static Color LightGray
-		{
-			get { return new Color(211, 211, 211, 255); }
-		}
-
-		public static Color LightGreen
-		{
-			get { return new Color(144, 238, 144, 255); }
-		}
-
-		public static Color LightPink
-		{
-			get { return new Color(255, 182, 193, 255); }
-		}
-
-		public static Color LightSalmon
-		{
-			get { return new Color(255, 160, 122, 255); }
-		}
-
-		public static Color LightSeaGreen
-		{
-			get { return new Color(32, 178, 170, 255); }
-		}
-
-		public static Color LightSkyBlue
-		{
-			get { return new Color(135, 206, 250, 255); }
-		}
-
-		public static Color LightSlateGray
-		{
-			get { return new Color(119, 136, 153, 255); }
-		}
-
-		public static Color LightSteelBlue
-		{
-			get { return new Color(176, 196, 222, 255); }
-		}
-
-		public static Color LightYellow
-		{
-			get { return new Color(255, 255, 224, 255); }
-		}
-
-		public static Color Lime
-		{
-			get { return new Color(0, 255, 0, 255); }
-		}
-
-		public static Color LimeGreen
-		{
-			get { return new Color(50, 205, 50, 255); }
-		}
-
-		public static Color Linen
-		{
-			get { return new Color(250, 240, 230, 255); }
-		}
-
-		public static Color Magenta
-		{
-			get { return new Color(255, 0, 255, 255); }
-		}
-
-		public static Color Maroon
-		{
-			get { return new Color(128, 0, 0, 255); }
-		}
-
-		public static Color MediumAquamarine
-		{
-			get { return new Color(102, 205, 170, 255); }
-		}
-
-		public static Color MediumBlue
-		{
-			get { return new Color(0, 0, 205, 255); }
-		}
-
-		public static Color MediumOrchid
-		{
-			get { return new Color(186, 85, 211, 255); }
-		}
-
-		public static Color MediumPurple
-		{
-			get { return new Color(147, 112, 219, 255); }
-		}
-
-		public static Color MediumSeaGreen
-		{
-			get { return new Color(60, 179, 113, 255); }
-		}
-
-		public static Color MediumSlateBlue
-		{
-			get { return new Color(123, 104, 238, 255); }
-		}
-
-		public static Color MediumSpringGreen
-		{
-			get { return new Color(0, 250, 154, 255); }
-		}
-
-		public static Color MediumTurquoise
-		{
-			get { return new Color(72, 209, 204, 255); }
-		}
-
-		public static Color MediumVioletRed
-		{
-			get { return new Color(199, 21, 133, 255); }
-		}
-
-		public static Color MidnightBlue
-		{
-			get { return new Color(25, 25, 112, 255); }
-		}
-
-		public static Color MintCream
-		{
-			get { return new Color(245, 255, 250, 255); }
-		}
-
-		public static Color MistyRose
-		{
-			get { return new Color(255, 228, 225, 255); }
-		}
-
-		public static Color Moccasin
-		{
-			get { return new Color(255, 228, 181, 255); }
-		}
-
-		public static Color NavajoWhite
-		{
-			get { return new Color(255, 222, 173, 255); }
-		}
-
-		public static Color Navy
-		{
-			get { return new Color(0, 0, 128, 255); }
-		}
-
-		public static Color OldLace
-		{
-			get { return new Color(253, 245, 230, 255); }
-		}
-
-		public static Color Olive
-		{
-			get { return new Color(128, 128, 0, 255); }
-		}
-
-		public static Color OliveDrab
-		{
-			get { return new Color(107, 142, 35, 255); }
-		}
-
-		public static Color Orange
-		{
-			get { return new Color(255, 165, 0, 255); }
-		}
+			return colour;
+		}
+
+		/// <summary>
+		/// 	Adds the specified scalar.
+		/// </summary>
+		/// <param name = "scalar">The scalar.</param>
+		/// <param name = "colour">The colour.</param>
+		/// <returns></returns>
+		public static Color Add(float scalar, ref Color colour)
+		{
+			colour.R = scalar + colour.R;
+			colour.G = scalar + colour.G;
+			colour.B = scalar + colour.B;
+			colour.A = scalar + colour.A;
 
-		public static Color OrangeRed
-		{
-			get { return new Color(255, 69, 0, 255); }
-		}
+			return colour;
+		}
+
+		/// <summary>
+		/// 	Adds the specified a.
+		/// </summary>
+		/// <param name = "a">A.</param>
+		/// <param name = "b">The b.</param>
+		/// <returns></returns>
+		public static Color Add(ref Color a, ref Color b)
+		{
+			a.R += b.R;
+			a.G += b.G;
+			a.B += b.B;
+			a.A += b.A;
 
-		public static Color Orchid
-		{
-			get { return new Color(218, 112, 214, 255); }
+			return a;
+		}
+
+		/// <summary>
+		/// 	Subtracts the specified colour.
+		/// </summary>
+		/// <param name = "colour">The colour.</param>
+		/// <param name = "scalar">The scalar.</param>
+		/// <returns></returns>
+		public static Color Subtract(ref Color colour, float scalar)
+		{
+			colour.R -= scalar;
+			colour.G -= scalar;
+			colour.B -= scalar;
+			colour.A -= scalar;
+
+			return colour;
 		}
 
-		public static Color PaleGoldenrod
-		{
-			get { return new Color(238, 232, 170, 255); }
+		/// <summary>
+		/// 	Subtracts the specified scalar.
+		/// </summary>
+		/// <param name = "scalar">The scalar.</param>
+		/// <param name = "colour">The colour.</param>
+		/// <returns></returns>
+		public static Color Subtract(float scalar, ref Color colour)
+		{
+			colour.R = scalar - colour.R;
+			colour.G = scalar - colour.G;
+			colour.B = scalar - colour.B;
+			colour.A = scalar - colour.A;
+
+			return colour;
 		}
 
-		public static Color PaleGreen
-		{
-			get { return new Color(152, 251, 152, 255); }
+		/// <summary>
+		/// 	Substracts the specified a.
+		/// </summary>
+		/// <param name = "a">A.</param>
+		/// <param name = "b">The b.</param>
+		/// <returns></returns>
+		public static Color Subtract(ref Color a, ref Color b)
+		{
+			a.R -= b.R;
+			a.G -= b.G;
+			a.B -= b.B;
+			a.A -= b.A;
+
+			return a;
 		}
 
-		public static Color PaleTurquoise
+		/// <summary>
+		/// 	Multiplies the specified colour.
+		/// </summary>
+		/// <param name = "colour">The colour.</param>
+		/// <param name = "scalar">The scalar.</param>
+		/// <returns></returns>
+		public static Color Multiply(ref Color colour, float scalar)
 		{
-			get { return new Color(175, 238, 238, 255); }
-		}
+			colour.R *= scalar;
+			colour.G *= scalar;
+			colour.B *= scalar;
+			colour.A *= scalar;
 
-		public static Color PaleVioletRed
-		{
-			get { return new Color(219, 112, 147, 255); }
+			return colour;
 		}
 
-		public static Color PapayaWhip
+		/// <summary>
+		/// 	Multiplies the specified scalar.
+		/// </summary>
+		/// <param name = "scalar">The scalar.</param>
+		/// <param name = "colour">The colour.</param>
+		/// <returns></returns>
+		public static Color Multiply(float scalar, ref Color colour)
 		{
-			get { return new Color(255, 239, 213, 255); }
-		}
+			colour.R = scalar * colour.R;
+			colour.G = scalar * colour.G;
+			colour.B = scalar * colour.B;
+			colour.A = scalar * colour.A;
 
-		public static Color PeachPuff
-		{
-			get { return new Color(255, 218, 185, 255); }
+			return colour;
 		}
 
-		public static Color Peru
+		/// <summary>
+		/// 	Multiplies the specified a.
+		/// </summary>
+		/// <param name = "a">A.</param>
+		/// <param name = "b">The b.</param>
+		/// <returns></returns>
+		public static Color Multiply(ref Color a, ref Color b)
 		{
-			get { return new Color(205, 133, 63, 255); }
-		}
+			a.R *= b.R;
+			a.G *= b.G;
+			a.B *= b.B;
+			a.A *= b.A;
 
-		public static Color Pink
-		{
-			get { return new Color(255, 192, 203, 255); }
+			return a;
 		}
 
-		public static Color Plum
+		/// <summary>
+		/// 	Divides the specified colour.
+		/// </summary>
+		/// <param name = "colour">The colour.</param>
+		/// <param name = "scalar">The scalar.</param>
+		/// <returns></returns>
+		public static Color Divide(ref Color colour, float scalar)
 		{
-			get { return new Color(221, 160, 221, 255); }
-		}
+			Debug.Assert(scalar != 0);
 
-		public static Color PowderBlue
-		{
-			get { return new Color(176, 224, 230, 255); }
-		}
+			colour.R /= scalar;
+			colour.G /= scalar;
+			colour.B /= scalar;
+			colour.A /= scalar;
 
-		public static Color Purple
-		{
-			get { return new Color(128, 0, 128, 255); }
+			return colour;
 		}
 
-		public static Color Red
+		/// <summary>
+		/// 	Divides the specified scalar.
+		/// </summary>
+		/// <param name = "scalar">The scalar.</param>
+		/// <param name = "colour">The colour.</param>
+		/// <returns></returns>
+		public static Color Divide(float scalar, ref Color colour)
 		{
-			get { return new Color(255, 0, 0, 255); }
-		}
+			colour.R = scalar / colour.R;
+			colour.G = scalar / colour.G;
+			colour.B = scalar / colour.B;
+			colour.A = scalar / colour.A;
 
-		public static Color RosyBrown
-		{
-			get { return new Color(188, 143, 143, 255); }
+			return colour;
 		}
 
-		public static Color RoyalBlue
+		/// <summary>
+		/// 	Divides the specified a.
+		/// </summary>
+		/// <param name = "a">A.</param>
+		/// <param name = "b">The b.</param>
+		/// <returns></returns>
+		public static Color Divide(ref Color a, ref Color b)
 		{
-			get { return new Color(65, 105, 225, 255); }
-		}
+			a.R /= b.R;
+			a.G /= b.G;
+			a.B /= b.B;
+			a.A /= b.A;
 
-		public static Color SaddleBrown
-		{
-			get { return new Color(139, 69, 19, 255); }
+			return a;
 		}
 
-		public static Color Salmon
-		{
-			get { return new Color(250, 128, 114, 255); }
-		}
 
-		public static Color SandyBrown
+		/// <summary>
+		/// 	Implements the operator +.
+		/// </summary>
+		/// <param name = "colour">The colour.</param>
+		/// <param name = "scalar">The scalar.</param>
+		/// <returns>The result of the operator.</returns>
+		public static Color operator +(Color colour, float scalar)
 		{
-			get { return new Color(244, 164, 96, 255); }
+			return Add(ref colour, scalar);
 		}
 
-		public static Color SeaGreen
+		/// <summary>
+		/// 	Implements the operator +.
+		/// </summary>
+		/// <param name = "scalar">The scalar.</param>
+		/// <param name = "colour">The colour.</param>
+		/// <returns>The result of the operator.</returns>
+		public static Color operator +(float scalar, Color colour)
 		{
-			get { return new Color(46, 139, 87, 255); }
+			return Add(scalar, ref colour);
 		}
 
-		public static Color SeaShell
+		/// <summary>
+		/// 	Implements the operator +.
+		/// </summary>
+		/// <param name = "a">A.</param>
+		/// <param name = "b">The b.</param>
+		/// <returns>The result of the operator.</returns>
+		public static Color operator +(Color a, Color b)
 		{
-			get { return new Color(255, 245, 238, 255); }
+			return Add(ref a, ref b);
 		}
 
-		public static Color Sienna
+		/// <summary>
+		/// 	Implements the operator -.
+		/// </summary>
+		/// <param name = "colour">The colour.</param>
+		/// <param name = "scalar">The scalar.</param>
+		/// <returns>The result of the operator.</returns>
+		public static Color operator -(Color colour, float scalar)
 		{
-			get { return new Color(160, 82, 45, 255); }
+			return Subtract(ref colour, scalar);
 		}
 
-		public static Color Silver
+		/// <summary>
+		/// 	Implements the operator -.
+		/// </summary>
+		/// <param name = "scalar">The scalar.</param>
+		/// <param name = "colour">The colour.</param>
+		/// <returns>The result of the operator.</returns>
+		public static Color operator -(float scalar, Color colour)
 		{
-			get { return new Color(192, 192, 192, 255); }
+			return Subtract(scalar, ref colour);
 		}
 
-		public static Color SkyBlue
+		/// <summary>
+		/// 	Implements the operator -.
+		/// </summary>
+		/// <param name = "a">A.</param>
+		/// <param name = "b">The b.</param>
+		/// <returns>The result of the operator.</returns>
+		public static Color operator -(Color a, Color b)
 		{
-			get { return new Color(135, 206, 235, 255); }
+			return Subtract(ref a, ref b);
 		}
 
-		public static Color SlateBlue
+		/// <summary>
+		/// 	Implements the operator *.
+		/// </summary>
+		/// <param name = "colour">The colour.</param>
+		/// <param name = "scalar">The scalar.</param>
+		/// <returns>The result of the operator.</returns>
+		public static Color operator *(Color colour, float scalar)
 		{
-			get { return new Color(106, 90, 205, 255); }
+			return Multiply(ref colour, scalar);
 		}
 
-		public static Color SlateGray
+		/// <summary>
+		/// 	Implements the operator *.
+		/// </summary>
+		/// <param name = "scalar">The scalar.</param>
+		/// <param name = "colour">The colour.</param>
+		/// <returns>The result of the operator.</returns>
+		public static Color operator *(float scalar, Color colour)
 		{
-			get { return new Color(112, 128, 144, 255); }
+			return Multiply(scalar, ref colour);
 		}
 
-		public static Color Snow
+		/// <summary>
+		/// 	Implements the operator *.
+		/// </summary>
+		/// <param name = "a">A.</param>
+		/// <param name = "b">The b.</param>
+		/// <returns>The result of the operator.</returns>
+		public static Color operator *(Color a, Color b)
 		{
-			get { return new Color(255, 250, 250, 255); }
+			return Multiply(ref a, ref b);
 		}
 
-		public static Color SpringGreen
+		/// <summary>
+		/// 	Implements the operator /.
+		/// </summary>
+		/// <param name = "colour">The colour.</param>
+		/// <param name = "scalar">The scalar.</param>
+		/// <returns>The result of the operator.</returns>
+		public static Color operator /(Color colour, float scalar)
 		{
-			get { return new Color(0, 255, 127, 255); }
+			return Divide(ref colour, scalar);
 		}
 
-		public static Color SteelBlue
+		/// <summary>
+		/// 	Implements the operator /.
+		/// </summary>
+		/// <param name = "scalar">The scalar.</param>
+		/// <param name = "colour">The colour.</param>
+		/// <returns>The result of the operator.</returns>
+		public static Color operator /(float scalar, Color colour)
 		{
-			get { return new Color(70, 130, 180, 255); }
+			return Divide(scalar, ref colour);
 		}
 
-		public static Color Tan
+		/// <summary>
+		/// 	Implements the operator /.
+		/// </summary>
+		/// <param name = "a">A.</param>
+		/// <param name = "b">The b.</param>
+		/// <returns>The result of the operator.</returns>
+		public static Color operator /(Color a, Color b)
 		{
-			get { return new Color(210, 180, 140, 255); }
+			return Divide(ref a, ref b);
 		}
 
-		public static Color Teal
+		/// <summary>
+		/// 	Implements the operator ==.
+		/// </summary>
+		/// <param name = "left">The left.</param>
+		/// <param name = "right">The right.</param>
+		/// <returns>The result of the operator.</returns>
+		public static bool operator ==(Color left, Color right)
 		{
-			get { return new Color(0, 128, 128, 255); }
+			return left.Equals(right);
 		}
 
-		public static Color Thistle
+		/// <summary>
+		/// 	Implements the operator !=.
+		/// </summary>
+		/// <param name = "left">The left.</param>
+		/// <param name = "right">The right.</param>
+		/// <returns>The result of the operator.</returns>
+		public static bool operator !=(Color left, Color right)
 		{
-			get { return new Color(216, 191, 216, 255); }
+			return !left.Equals(right);
 		}
 
-		public static Color Tomato
-		{
-			get { return new Color(255, 99, 71, 255); }
-		}
+		#region Pre-defined colors
 
-		public static Color Transparent
+		public static Color Zero
 		{
 			get { return new Color(0, 0, 0, 0); }
 		}
 
+		public static Color Transparent
+		{
+			get { return new Color(0xff, 0xff, 0xff, 0); }
+		}
+
+		public static Color AliceBlue
+		{
+			get { return new Color(240, 0xf8, 0xff, 0xff); }
+		}
+
+		public static Color AntiqueWhite
+		{
+			get { return new Color(250, 0xeb, 0xd7, 0xff); }
+		}
+
+		public static Color Aqua
+		{
+			get { return new Color(0, 0xff, 0xff, 0xff); }
+		}
+
+		public static Color Aquamarine
+		{
+			get { return new Color(0x7f, 0xff, 0xd4, 0xff); }
+		}
+
+		public static Color Azure
+		{
+			get { return new Color(240, 0xff, 0xff, 0xff); }
+		}
+
+		public static Color Beige
+		{
+			get { return new Color(0xf5, 0xf5, 220, 0xff); }
+		}
+
+		public static Color Bisque
+		{
+			get { return new Color(0xff, 0xe4, 0xc4, 0xff); }
+		}
+
+		public static Color Black
+		{
+			get { return new Color(0, 0, 0, 0xff); }
+		}
+
+		public static Color BlanchedAlmond
+		{
+			get { return new Color(0xff, 0xeb, 0xcd, 0xff); }
+		}
+
+		public static Color Blue
+		{
+			get { return new Color(0, 0, 0xff, 0xff); }
+		}
+
+		public static Color BlueViolet
+		{
+			get { return new Color(0x8a, 0x2b, 0xe2, 0xff); }
+		}
+
+		public static Color Brown
+		{
+			get { return new Color(0xa5, 0x2a, 0x2a, 0xff); }
+		}
+
+		public static Color BurlyWood
+		{
+			get { return new Color(0xde, 0xb8, 0x87, 0xff); }
+		}
+
+		public static Color CadetBlue
+		{
+			get { return new Color(0x5f, 0x9e, 160, 0xff); }
+		}
+
+		public static Color Chartreuse
+		{
+			get { return new Color(0x7f, 0xff, 0, 0xff); }
+		}
+
+		public static Color Chocolate
+		{
+			get { return new Color(210, 0x69, 30, 0xff); }
+		}
+
+		public static Color Coral
+		{
+			get { return new Color(0xff, 0x7f, 80, 0xff); }
+		}
+
+		public static Color CornflowerBlue
+		{
+			get { return new Color(100, 0x95, 0xed, 0xff); }
+		}
+
+		public static Color Cornsilk
+		{
+			get { return new Color(0xff, 0xf8, 220, 0xff); }
+		}
+
+		public static Color Crimson
+		{
+			get { return new Color(220, 20, 60, 0xff); }
+		}
+
+		public static Color Cyan
+		{
+			get { return new Color(0, 0xff, 0xff, 0xff); }
+		}
+
+		public static Color DarkBlue
+		{
+			get { return new Color(0, 0, 0x8b, 0xff); }
+		}
+
+		public static Color DarkCyan
+		{
+			get { return new Color(0, 0x8b, 0x8b, 0xff); }
+		}
+
+		public static Color DarkGoldenrod
+		{
+			get { return new Color(0xb8, 0x86, 11, 0xff); }
+		}
+
+		public static Color DarkGray
+		{
+			get { return new Color(0xa9, 0xa9, 0xa9, 0xff); }
+		}
+
+		public static Color DarkGreen
+		{
+			get { return new Color(0, 100, 0, 0xff); }
+		}
+
+		public static Color DarkKhaki
+		{
+			get { return new Color(0xbd, 0xb7, 0x6b, 0xff); }
+		}
+
+		public static Color DarkMagenta
+		{
+			get { return new Color(0x8b, 0, 0x8b, 0xff); }
+		}
+
+		public static Color DarkOliveGreen
+		{
+			get { return new Color(0x55, 0x6b, 0x2f, 0xff); }
+		}
+
+		public static Color DarkOrange
+		{
+			get { return new Color(0xff, 140, 0, 0xff); }
+		}
+
+		public static Color DarkOrchid
+		{
+			get { return new Color(0x99, 50, 0xcc, 0xff); }
+		}
+
+		public static Color DarkRed
+		{
+			get { return new Color(0x8b, 0, 0, 0xff); }
+		}
+
+		public static Color DarkSalmon
+		{
+			get { return new Color(0xe9, 150, 0x7a, 0xff); }
+		}
+
+		public static Color DarkSeaGreen
+		{
+			get { return new Color(0x8f, 0xbc, 0x8b, 0xff); }
+		}
+
+		public static Color DarkSlateBlue
+		{
+			get { return new Color(0x48, 0x3d, 0x8b, 0xff); }
+		}
+
+		public static Color DarkSlateGray
+		{
+			get { return new Color(0x2f, 0x4f, 0x4f, 0xff); }
+		}
+
+		public static Color DarkTurquoise
+		{
+			get { return new Color(0, 0xce, 0xd1, 0xff); }
+		}
+
+		public static Color DarkViolet
+		{
+			get { return new Color(0x94, 0, 0xd3, 0xff); }
+		}
+
+		public static Color DeepPink
+		{
+			get { return new Color(0xff, 20, 0x93, 0xff); }
+		}
+
+		public static Color DeepSkyBlue
+		{
+			get { return new Color(0, 0xbf, 0xff, 0xff); }
+		}
+
+		public static Color DimGray
+		{
+			get { return new Color(0x69, 0x69, 0x69, 0xff); }
+		}
+
+		public static Color DodgerBlue
+		{
+			get { return new Color(30, 0x90, 0xff, 0xff); }
+		}
+
+		public static Color Firebrick
+		{
+			get { return new Color(0xb2, 0x22, 0x22, 0xff); }
+		}
+
+		public static Color FloralWhite
+		{
+			get { return new Color(0xff, 250, 240, 0xff); }
+		}
+
+		public static Color ForestGreen
+		{
+			get { return new Color(0x22, 0x8b, 0x22, 0xff); }
+		}
+
+		public static Color Fuchsia
+		{
+			get { return new Color(0xff, 0, 0xff, 0xff); }
+		}
+
+		public static Color Gainsboro
+		{
+			get { return new Color(220, 220, 220, 0xff); }
+		}
+
+		public static Color GhostWhite
+		{
+			get { return new Color(0xf8, 0xf8, 0xff, 0xff); }
+		}
+
+		public static Color Gold
+		{
+			get { return new Color(0xff, 0xd7, 0, 0xff); }
+		}
+
+		public static Color Goldenrod
+		{
+			get { return new Color(0xda, 0xa5, 0x20, 0xff); }
+		}
+
+		public static Color Gray
+		{
+			get { return new Color(0x80, 0x80, 0x80, 0xff); }
+		}
+
+		public static Color Green
+		{
+			get { return new Color(0, 0x80, 0, 0xff); }
+		}
+
+		public static Color GreenYellow
+		{
+			get { return new Color(0xad, 0xff, 0x2f, 0xff); }
+		}
+
+		public static Color Honeydew
+		{
+			get { return new Color(240, 0xff, 240, 0xff); }
+		}
+
+		public static Color HotPink
+		{
+			get { return new Color(0xff, 0x69, 180, 0xff); }
+		}
+
+		public static Color IndianRed
+		{
+			get { return new Color(0xcd, 0x5c, 0x5c, 0xff); }
+		}
+
+		public static Color Indigo
+		{
+			get { return new Color(0x4b, 0, 130, 0xff); }
+		}
+
+		public static Color Ivory
+		{
+			get { return new Color(0xff, 0xff, 240, 0xff); }
+		}
+
+		public static Color Khaki
+		{
+			get { return new Color(240, 230, 140, 0xff); }
+		}
+
+		public static Color Lavender
+		{
+			get { return new Color(230, 230, 250, 0xff); }
+		}
+
+		public static Color LavenderBlush
+		{
+			get { return new Color(0xff, 240, 0xf5, 0xff); }
+		}
+
+		public static Color LawnGreen
+		{
+			get { return new Color(0x7c, 0xfc, 0, 0xff); }
+		}
+
+		public static Color LemonChiffon
+		{
+			get { return new Color(0xff, 250, 0xcd, 0xff); }
+		}
+
+		public static Color LightBlue
+		{
+			get { return new Color(0xad, 0xd8, 230, 0xff); }
+		}
+
+		public static Color LightCoral
+		{
+			get { return new Color(240, 0x80, 0x80, 0xff); }
+		}
+
+		public static Color LightCyan
+		{
+			get { return new Color(0xe0, 0xff, 0xff, 0xff); }
+		}
+
+		public static Color LightGoldenrodYellow
+		{
+			get { return new Color(250, 250, 210, 0xff); }
+		}
+
+		public static Color LightGreen
+		{
+			get { return new Color(0x90, 0xee, 0x90, 0xff); }
+		}
+
+		public static Color LightGray
+		{
+			get { return new Color(0xd3, 0xd3, 0xd3, 0xff); }
+		}
+
+		public static Color LightPink
+		{
+			get { return new Color(0xff, 0xb6, 0xc1, 0xff); }
+		}
+
+		public static Color LightSalmon
+		{
+			get { return new Color(0xff, 160, 0x7a, 0xff); }
+		}
+
+		public static Color LightSeaGreen
+		{
+			get { return new Color(0x20, 0xb2, 170, 0xff); }
+		}
+
+		public static Color LightSkyBlue
+		{
+			get { return new Color(0x87, 0xce, 250, 0xff); }
+		}
+
+		public static Color LightSlateGray
+		{
+			get { return new Color(0x77, 0x88, 0x99, 0xff); }
+		}
+
+		public static Color LightSteelBlue
+		{
+			get { return new Color(0xb0, 0xc4, 0xde, 0xff); }
+		}
+
+		public static Color LightYellow
+		{
+			get { return new Color(0xff, 0xff, 0xe0, 0xff); }
+		}
+
+		public static Color Lime
+		{
+			get { return new Color(0, 0xff, 0, 0xff); }
+		}
+
+		public static Color LimeGreen
+		{
+			get { return new Color(50, 0xcd, 50, 0xff); }
+		}
+
+		public static Color Linen
+		{
+			get { return new Color(250, 240, 230, 0xff); }
+		}
+
+		public static Color Magenta
+		{
+			get { return new Color(0xff, 0, 0xff, 0xff); }
+		}
+
+		public static Color Maroon
+		{
+			get { return new Color(0x80, 0, 0, 0xff); }
+		}
+
+		public static Color MediumAquamarine
+		{
+			get { return new Color(0x66, 0xcd, 170, 0xff); }
+		}
+
+		public static Color MediumBlue
+		{
+			get { return new Color(0, 0, 0xcd, 0xff); }
+		}
+
+		public static Color MediumOrchid
+		{
+			get { return new Color(0xba, 0x55, 0xd3, 0xff); }
+		}
+
+		public static Color MediumPurple
+		{
+			get { return new Color(0x93, 0x70, 0xdb, 0xff); }
+		}
+
+		public static Color MediumSeaGreen
+		{
+			get { return new Color(60, 0xb3, 0x71, 0xff); }
+		}
+
+		public static Color MediumSlateBlue
+		{
+			get { return new Color(0x7b, 0x68, 0xee, 0xff); }
+		}
+
+		public static Color MediumSpringGreen
+		{
+			get { return new Color(0, 250, 0x9a, 0xff); }
+		}
+
+		public static Color MediumTurquoise
+		{
+			get { return new Color(0x48, 0xd1, 0xcc, 0xff); }
+		}
+
+		public static Color MediumVioletRed
+		{
+			get { return new Color(0xc7, 0x15, 0x85, 0xff); }
+		}
+
+		public static Color MidnightBlue
+		{
+			get { return new Color(0x19, 0x19, 0x70, 0xff); }
+		}
+
+		public static Color MintCream
+		{
+			get { return new Color(0xf5, 0xff, 250, 0xff); }
+		}
+
+		public static Color MistyRose
+		{
+			get { return new Color(0xff, 0xe4, 0xe1, 0xff); }
+		}
+
+		public static Color Moccasin
+		{
+			get { return new Color(0xff, 0xe4, 0xb5, 0xff); }
+		}
+
+		public static Color NavajoWhite
+		{
+			get { return new Color(0xff, 0xde, 0xad, 0xff); }
+		}
+
+		public static Color Navy
+		{
+			get { return new Color(0, 0, 0x80, 0xff); }
+		}
+
+		public static Color OldLace
+		{
+			get { return new Color(0xfd, 0xf5, 230, 0xff); }
+		}
+
+		public static Color Olive
+		{
+			get { return new Color(0x80, 0x80, 0, 0xff); }
+		}
+
+		public static Color OliveDrab
+		{
+			get { return new Color(0x6b, 0x8e, 0x23, 0xff); }
+		}
+
+		public static Color Orange
+		{
+			get { return new Color(0xff, 0xa5, 0, 0xff); }
+		}
+
+		public static Color OrangeRed
+		{
+			get { return new Color(0xff, 0x45, 0, 0xff); }
+		}
+
+		public static Color Orchid
+		{
+			get { return new Color(0xda, 0x70, 0xd6, 0xff); }
+		}
+
+		public static Color PaleGoldenrod
+		{
+			get { return new Color(0xee, 0xe8, 170, 0xff); }
+		}
+
+		public static Color PaleGreen
+		{
+			get { return new Color(0x98, 0xfb, 0x98, 0xff); }
+		}
+
+		public static Color PaleTurquoise
+		{
+			get { return new Color(0xaf, 0xee, 0xee, 0xff); }
+		}
+
+		public static Color PaleVioletRed
+		{
+			get { return new Color(0xdb, 0x70, 0x93, 0xff); }
+		}
+
+		public static Color PapayaWhip
+		{
+			get { return new Color(0xff, 0xef, 0xd5, 0xff); }
+		}
+
+		public static Color PeachPuff
+		{
+			get { return new Color(0xff, 0xda, 0xb9, 0xff); }
+		}
+
+		public static Color Peru
+		{
+			get { return new Color(0xcd, 0x85, 0x3f, 0xff); }
+		}
+
+		public static Color Pink
+		{
+			get { return new Color(0xff, 0xc0, 0xcb, 0xff); }
+		}
+
+		public static Color Plum
+		{
+			get { return new Color(0xdd, 160, 0xdd, 0xff); }
+		}
+
+		public static Color PowderBlue
+		{
+			get { return new Color(0xb0, 0xe0, 230, 0xff); }
+		}
+
+		public static Color Purple
+		{
+			get { return new Color(0x80, 0, 0x80, 0xff); }
+		}
+
+		public static Color Red
+		{
+			get { return new Color(0xff, 0, 0, 0xff); }
+		}
+
+		public static Color RosyBrown
+		{
+			get { return new Color(0xbc, 0x8f, 0x8f, 0xff); }
+		}
+
+		public static Color RoyalBlue
+		{
+			get { return new Color(0x41, 0x69, 0xe1, 0xff); }
+		}
+
+		public static Color SaddleBrown
+		{
+			get { return new Color(0x8b, 0x45, 0x13, 0xff); }
+		}
+
+		public static Color Salmon
+		{
+			get { return new Color(250, 0x80, 0x72, 0xff); }
+		}
+
+		public static Color SandyBrown
+		{
+			get { return new Color(0xf4, 0xa4, 0x60, 0xff); }
+		}
+
+		public static Color SeaGreen
+		{
+			get { return new Color(0x2e, 0x8b, 0x57, 0xff); }
+		}
+
+		public static Color SeaShell
+		{
+			get { return new Color(0xff, 0xf5, 0xee, 0xff); }
+		}
+
+		public static Color Sienna
+		{
+			get { return new Color(160, 0x52, 0x2d, 0xff); }
+		}
+
+		public static Color Silver
+		{
+			get { return new Color(0xc0, 0xc0, 0xc0, 0xff); }
+		}
+
+		public static Color SkyBlue
+		{
+			get { return new Color(0x87, 0xce, 0xeb, 0xff); }
+		}
+
+		public static Color SlateBlue
+		{
+			get { return new Color(0x6a, 90, 0xcd, 0xff); }
+		}
+
+		public static Color SlateGray
+		{
+			get { return new Color(0x70, 0x80, 0x90, 0xff); }
+		}
+
+		public static Color Snow
+		{
+			get { return new Color(0xff, 250, 250, 0xff); }
+		}
+
+		public static Color SpringGreen
+		{
+			get { return new Color(0, 0xff, 0x7f, 0xff); }
+		}
+
+		public static Color SteelBlue
+		{
+			get { return new Color(70, 130, 180, 0xff); }
+		}
+
+		public static Color Tan
+		{
+			get { return new Color(210, 180, 140, 0xff); }
+		}
+
+		public static Color Teal
+		{
+			get { return new Color(0, 0x80, 0x80, 0xff); }
+		}
+
+		public static Color Thistle
+		{
+			get { return new Color(0xd8, 0xbf, 0xd8, 0xff); }
+		}
+
+		public static Color Tomato
+		{
+			get { return new Color(0xff, 0x63, 0x47, 0xff); }
+		}
+
 		public static Color Turquoise
 		{
-			get { return new Color(64, 224, 208, 255); }
+			get { return new Color(0x40, 0xe0, 0xd0, 0xff); }
 		}
 
 		public static Color Violet
 		{
-			get { return new Color(238, 130, 238, 255); }
+			get { return new Color(0xee, 130, 0xee, 0xff); }
 		}
 
 		public static Color Wheat
 		{
-			get { return new Color(245, 222, 179, 255); }
+			get { return new Color(0xf5, 0xde, 0xb3, 0xff); }
 		}
 
 		public static Color White
 		{
-			get { return new Color(255, 255, 255, 255); }
+			get { return new Color(0xff, 0xff, 0xff, 0xff); }
 		}
 
 		public static Color WhiteSmoke
 		{
-			get { return new Color(245, 245, 245, 255); }
+			get { return new Color(0xf5, 0xf5, 0xf5, 0xff); }
 		}
 
 		public static Color Yellow
 		{
-			get { return new Color(255, 255, 0, 255); }
+			get { return new Color(0xff, 0xff, 0, 0xff); }
 		}
 
 		public static Color YellowGreen
 		{
-			get { return new Color(154, 205, 50, 255); }
+			get { return new Color(0x9a, 0xcd, 50, 0xff); }
 		}
 
 		#endregion
 
-		#region Equality
-
-		public bool Equals(Color other)
+		/// <summary>
+		/// This method is reserved and should not be used. When implementing the IXmlSerializable interface, you should return null (Nothing in Visual Basic) from this method, and instead, if specifying a custom schema is required, apply the <see cref="T:System.Xml.Serialization.XmlSchemaProviderAttribute"/> to the class.
+		/// </summary>
+		/// <returns>
+		/// An <see cref="T:System.Xml.Schema.XmlSchema"/> that describes the XML representation of the object that is produced by the <see cref="M:System.Xml.Serialization.IXmlSerializable.WriteXml(System.Xml.XmlWriter)"/> method and consumed by the <see cref="M:System.Xml.Serialization.IXmlSerializable.ReadXml(System.Xml.XmlReader)"/> method.
+		/// </returns>
+		public XmlSchema GetSchema()
 		{
-			return other == this;
+			return null;
 		}
 
-		public override bool Equals(object obj)
+		/// <summary>
+		/// Generates an object from its XML representation.
+		/// </summary>
+		/// <param name="reader">The <see cref="T:System.Xml.XmlReader"/> stream from which the object is deserialized. </param>
+		public void ReadXml(XmlReader reader)
 		{
-			return obj is Color && ((Color)obj) == this;
+			if (!reader.MoveToAttribute("value"))
+				throw new XmlSyntaxException("Expected value attribute");
+
+			var value = reader.Value;
+
+			if (!value.StartsWith("#"))
+				throw new XmlSyntaxException("Expected value in format #00000000 (RGBA)");
+
+			for (int i = value.Length; i < 9; i++)
+			{
+				value += "0";
+			}
+
+			RGBA = Convert.ToUInt32(value.Substring(1), 16);
 		}
 
-		public override int GetHashCode()
+		/// <summary>
+		/// Converts an object into its XML representation.
+		/// </summary>
+		/// <param name="writer">The <see cref="T:System.Xml.XmlWriter"/> stream to which the object is serialized. </param>
+		public void WriteXml(XmlWriter writer)
 		{
-			return packed.GetHashCode();
+			writer.WriteAttributeString("value", "#" + RGBA.ToString("X"));
 		}
-
-		public static bool operator ==(Color a, Color b)
-		{
-			return a.packed == b.packed;
-		}
-
-		public static bool operator !=(Color a, Color b)
-		{
-			return a.packed != b.packed;
-		}
-
-		# endregion
 	}
 }

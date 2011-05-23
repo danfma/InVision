@@ -5,16 +5,16 @@
 
 using System;
 using System.Runtime.InteropServices;
-using InVision.Native.Ext;
+using InVision.Native;
 using InVision.OIS;
-using InVision.OIS.Components;
+using InVision.OIS.Devices;
 using InVision.OIS.Native;
 
 namespace InVision.OIS.Native
 {
 	internal sealed class NativeMouseState : InVision.Native.PlatformInvoke
 	{
-		public const string Library = "InVisionNative_OIS.dll";
+		public const string Library = "InVisionNative.dll";
 		
 		static NativeMouseState()
 		{
@@ -29,66 +29,9 @@ namespace InVision.OIS.Native
 		public static extern void Destruct(Handle self);
 	}
 	
-	internal sealed class NativeComponent : InVision.Native.PlatformInvoke
-	{
-		public const string Library = "InVisionNative_OIS.dll";
-		
-		static NativeComponent()
-		{
-			Init();
-		}
-		
-		
-		[DllImport(Library, EntryPoint = "new_component_m1")]
-		public static extern Handle Construct(ref ComponentDescriptor descriptor);
-		
-		[DllImport(Library, EntryPoint = "new_component_m2")]
-		public static extern Handle Construct(
-			ref ComponentDescriptor descriptor, 
-			ComponentType ctype);
-		
-		[DllImport(Library, EntryPoint = "delete_component")]
-		public static extern void Destruct(Handle self);
-	}
-	
-	internal sealed class NativeVector3 : InVision.Native.PlatformInvoke
-	{
-		public const string Library = "InVisionNative_OIS.dll";
-		
-		static NativeVector3()
-		{
-			Init();
-		}
-		
-		
-		[DllImport(Library, EntryPoint = "new_vector3_m1")]
-		public static extern Handle Construct(ref Vector3Descriptor descriptor);
-		
-		[DllImport(Library, EntryPoint = "new_vector3_m2")]
-		public static extern Handle Construct(
-			ref Vector3Descriptor descriptor, 
-			float x, 
-			float y, 
-			float z);
-	}
-	
-	internal sealed class NativeInterface : InVision.Native.PlatformInvoke
-	{
-		public const string Library = "InVisionNative_OIS.dll";
-		
-		static NativeInterface()
-		{
-			Init();
-		}
-		
-		
-		[DllImport(Library, EntryPoint = "delete_interface")]
-		public static extern void Destruct(Handle self);
-	}
-	
 	internal sealed class NativeObject : InVision.Native.PlatformInvoke
 	{
-		public const string Library = "InVisionNative_OIS.dll";
+		public const string Library = "InVisionNative.dll";
 		
 		static NativeObject()
 		{
@@ -100,7 +43,7 @@ namespace InVision.OIS.Native
 		public static extern void Destruct(Handle self);
 		
 		[DllImport(Library, EntryPoint = "object_type")]
-		public static extern ComponentType Type(Handle self);
+		public static extern DeviceType Type(Handle self);
 		
 		[DllImport(Library, EntryPoint = "object_vendor")]
 		[return: MarshalAs(UnmanagedType.LPStr)]
@@ -130,42 +73,9 @@ namespace InVision.OIS.Native
 			InterfaceType interfaceType);
 	}
 	
-	internal sealed class NativeButton : InVision.Native.PlatformInvoke
-	{
-		public const string Library = "InVisionNative_OIS.dll";
-		
-		static NativeButton()
-		{
-			Init();
-		}
-		
-		
-		[DllImport(Library, EntryPoint = "new_button_m1")]
-		public static extern Handle Construct(ref ButtonDescriptor descriptor);
-		
-		[DllImport(Library, EntryPoint = "new_button_m2")]
-		public static extern Handle Construct(
-			ref ButtonDescriptor descriptor, 
-			bool pushed);
-	}
-	
-	internal sealed class NativeAxis : InVision.Native.PlatformInvoke
-	{
-		public const string Library = "InVisionNative_OIS.dll";
-		
-		static NativeAxis()
-		{
-			Init();
-		}
-		
-		
-		[DllImport(Library, EntryPoint = "new_axis")]
-		public static extern Handle Construct(ref AxisDescriptor descriptor);
-	}
-	
 	internal sealed class NativeKeyboard : InVision.Native.PlatformInvoke
 	{
-		public const string Library = "InVisionNative_OIS.dll";
+		public const string Library = "InVisionNative.dll";
 		
 		static NativeKeyboard()
 		{
@@ -211,49 +121,86 @@ namespace InVision.OIS.Native
 			[MarshalAs(UnmanagedType.LPArray, SizeConst = 256, ArraySubType = UnmanagedType.I1)] bool[] keys);
 	}
 	
-	internal sealed class NativeCustomMouseListener : InVision.Native.PlatformInvoke
+	internal sealed class NativeComponent : InVision.Native.PlatformInvoke
 	{
-		public const string Library = "InVisionNative_OIS.dll";
+		public const string Library = "InVisionNative.dll";
 		
-		static NativeCustomMouseListener()
+		static NativeComponent()
 		{
 			Init();
 		}
 		
 		
-		[DllImport(Library, EntryPoint = "new_custommouselistener")]
-		public static extern Handle Construct(
-			MouseMovedHandler mouseMoved, 
-			MouseClickHandler mousePressed, 
-			MouseClickHandler mouseReleased);
+		[DllImport(Library, EntryPoint = "new_component_m1")]
+		public static extern Handle Construct(ref ComponentDescriptor descriptor);
 		
-		[DllImport(Library, EntryPoint = "delete_custommouselistener")]
+		[DllImport(Library, EntryPoint = "new_component_m2")]
+		public static extern Handle Construct(
+			ref ComponentDescriptor descriptor, 
+			ComponentType ctype);
+		
+		[DllImport(Library, EntryPoint = "delete_component")]
 		public static extern void Destruct(Handle self);
 	}
 	
-	internal sealed class NativeMouseEvent : InVision.Native.PlatformInvoke
+	internal sealed class NativeVector3 : InVision.Native.PlatformInvoke
 	{
-		public const string Library = "InVisionNative_OIS.dll";
+		public const string Library = "InVisionNative.dll";
 		
-		static NativeMouseEvent()
+		static NativeVector3()
 		{
 			Init();
 		}
 		
 		
-		[DllImport(Library, EntryPoint = "new_mouseevent")]
-		public static extern Handle Construct(
-			ref MouseEventDescriptor descriptor, 
-			Handle obj, 
-			Handle mouseState);
+		[DllImport(Library, EntryPoint = "new_vector3_m1")]
+		public static extern Handle Construct(ref Vector3Descriptor descriptor);
 		
-		[DllImport(Library, EntryPoint = "delete_mouseevent")]
+		[DllImport(Library, EntryPoint = "new_vector3_m2")]
+		public static extern Handle Construct(
+			ref Vector3Descriptor descriptor, 
+			float x, 
+			float y, 
+			float z);
+	}
+	
+	internal sealed class NativeInterface : InVision.Native.PlatformInvoke
+	{
+		public const string Library = "InVisionNative.dll";
+		
+		static NativeInterface()
+		{
+			Init();
+		}
+		
+		
+		[DllImport(Library, EntryPoint = "delete_interface")]
 		public static extern void Destruct(Handle self);
+	}
+	
+	internal sealed class NativeEventArg : InVision.Native.PlatformInvoke
+	{
+		public const string Library = "InVisionNative.dll";
+		
+		static NativeEventArg()
+		{
+			Init();
+		}
+		
+		
+		[DllImport(Library, EntryPoint = "new_eventarg")]
+		public static extern Handle Construct(Handle device);
+		
+		[DllImport(Library, EntryPoint = "delete_eventarg")]
+		public static extern void Destruct(Handle self);
+		
+		[DllImport(Library, EntryPoint = "eventarg_get_device")]
+		public static extern Handle GetDevice(Handle self);
 	}
 	
 	internal sealed class NativeMouse : InVision.Native.PlatformInvoke
 	{
-		public const string Library = "InVisionNative_OIS.dll";
+		public const string Library = "InVisionNative.dll";
 		
 		static NativeMouse()
 		{
@@ -273,66 +220,26 @@ namespace InVision.OIS.Native
 		public static extern Handle GetMouseState(Handle self);
 	}
 	
-	internal sealed class NativeEventArg : InVision.Native.PlatformInvoke
+	internal sealed class NativeMouseEvent : InVision.Native.PlatformInvoke
 	{
-		public const string Library = "InVisionNative_OIS.dll";
+		public const string Library = "InVisionNative.dll";
 		
-		static NativeEventArg()
+		static NativeMouseEvent()
 		{
 			Init();
 		}
 		
 		
-		[DllImport(Library, EntryPoint = "new_eventarg")]
-		public static extern Handle Construct(Handle device);
-		
-		[DllImport(Library, EntryPoint = "delete_eventarg")]
-		public static extern void Destruct(Handle self);
-		
-		[DllImport(Library, EntryPoint = "eventarg_get_device")]
-		public static extern Handle GetDevice(Handle self);
-	}
-	
-	internal sealed class NativeKeyEvent : InVision.Native.PlatformInvoke
-	{
-		public const string Library = "InVisionNative_OIS.dll";
-		
-		static NativeKeyEvent()
-		{
-			Init();
-		}
-		
-		
-		[DllImport(Library, EntryPoint = "new_keyevent")]
+		[DllImport(Library, EntryPoint = "new_mouseevent")]
 		public static extern Handle Construct(
-			ref KeyEventDescriptor descriptor, 
-			Handle device, 
-			KeyCode keyCode, 
-			uint text);
-	}
-	
-	internal sealed class NativeCustomKeyListener : InVision.Native.PlatformInvoke
-	{
-		public const string Library = "InVisionNative_OIS.dll";
-		
-		static NativeCustomKeyListener()
-		{
-			Init();
-		}
-		
-		
-		[DllImport(Library, EntryPoint = "new_customkeylistener")]
-		public static extern Handle Construct(
-			KeyEventHandler keyPressed, 
-			KeyEventHandler keyReleased);
-		
-		[DllImport(Library, EntryPoint = "delete_customkeylistener")]
-		public static extern void Destruct(Handle self);
+			ref MouseEventDescriptor descriptor, 
+			Handle obj, 
+			Handle mouseState);
 	}
 	
 	internal sealed class NativeInputManager : InVision.Native.PlatformInvoke
 	{
-		public const string Library = "InVisionNative_OIS.dll";
+		public const string Library = "InVisionNative.dll";
 		
 		static NativeInputManager()
 		{
@@ -406,13 +313,103 @@ namespace InVision.OIS.Native
 	
 	internal sealed class NativeFactoryCreator : InVision.Native.PlatformInvoke
 	{
-		public const string Library = "InVisionNative_OIS.dll";
+		public const string Library = "InVisionNative.dll";
 		
 		static NativeFactoryCreator()
 		{
 			Init();
 		}
 		
+	}
+	
+	internal sealed class NativeCustomKeyListener : InVision.Native.PlatformInvoke
+	{
+		public const string Library = "InVisionNative.dll";
+		
+		static NativeCustomKeyListener()
+		{
+			Init();
+		}
+		
+		
+		[DllImport(Library, EntryPoint = "new_customkeylistener")]
+		public static extern Handle Construct(
+			KeyEventHandler keyPressed, 
+			KeyEventHandler keyReleased);
+		
+		[DllImport(Library, EntryPoint = "delete_customkeylistener")]
+		public static extern void Destruct(Handle self);
+	}
+	
+	internal sealed class NativeCustomMouseListener : InVision.Native.PlatformInvoke
+	{
+		public const string Library = "InVisionNative.dll";
+		
+		static NativeCustomMouseListener()
+		{
+			Init();
+		}
+		
+		
+		[DllImport(Library, EntryPoint = "new_custommouselistener")]
+		public static extern Handle Construct(
+			MouseMovedHandler mouseMoved, 
+			MouseClickHandler mousePressed, 
+			MouseClickHandler mouseReleased);
+		
+		[DllImport(Library, EntryPoint = "delete_custommouselistener")]
+		public static extern void Destruct(Handle self);
+	}
+	
+	internal sealed class NativeButton : InVision.Native.PlatformInvoke
+	{
+		public const string Library = "InVisionNative.dll";
+		
+		static NativeButton()
+		{
+			Init();
+		}
+		
+		
+		[DllImport(Library, EntryPoint = "new_button_m1")]
+		public static extern Handle Construct(ref ButtonDescriptor descriptor);
+		
+		[DllImport(Library, EntryPoint = "new_button_m2")]
+		public static extern Handle Construct(
+			ref ButtonDescriptor descriptor, 
+			bool pushed);
+	}
+	
+	internal sealed class NativeAxis : InVision.Native.PlatformInvoke
+	{
+		public const string Library = "InVisionNative.dll";
+		
+		static NativeAxis()
+		{
+			Init();
+		}
+		
+		
+		[DllImport(Library, EntryPoint = "new_axis")]
+		public static extern Handle Construct(ref AxisDescriptor descriptor);
+	}
+	
+	internal sealed class NativeKeyEvent : InVision.Native.PlatformInvoke
+	{
+		public const string Library = "InVisionNative.dll";
+		
+		static NativeKeyEvent()
+		{
+			Init();
+		}
+		
+		
+		[DllImport(Library, EntryPoint = "new_keyevent")]
+		public static extern Handle Construct(
+			ref KeyEventDescriptor descriptor, 
+			Handle device, 
+			KeyCode keyCode, 
+			uint text);
 	}
 	
 }

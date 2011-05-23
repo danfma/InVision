@@ -11,8 +11,8 @@ extern "C"
 	 */
 	struct DeviceListItem
 	{
-		DEVICE_TYPE type;
-		_string name;
+		DEVICE_TYPE key;
+		_string value;
 	};
 	
 }

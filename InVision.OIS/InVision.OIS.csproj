@@ -114,42 +114,34 @@
     <Compile Include="Attributes\OISDescriptorAttribute.cs" />
     <Compile Include="Attributes\OISEnumerationAttribute.cs" />
     <Compile Include="Attributes\OISInterfaceAttribute.cs" />
-    <Compile Include="Components\Axis.cs" />
-    <Compile Include="Components\Button.cs" />
-    <Compile Include="Components\ComponentType.cs" />
+    <Compile Include="Devices\Axis.cs" />
+    <Compile Include="Devices\Button.cs" />
+    <Compile Include="Devices\ComponentType.cs" />
     <Compile Include="Native\DeviceList.cs" />
-    <Compile Include="DeviceListItem.cs" />
     <Compile Include="ErrorType.cs" />
-    <Compile Include="EventArgs.cs" />
-    <Compile Include="FactoryList.cs" />
-    <Compile Include="IDevice.cs" />
-    <Compile Include="IDeviceComponent.cs" />
-    <Compile Include="IFactoryCreator.cs" />
-    <Compile Include="IHandleHolder.cs" />
-    <Compile Include="IKeyListener.cs" />
-    <Compile Include="IMouseListener.cs" />
+    <Compile Include="Devices\EventArgs.cs" />
+    <Compile Include="Devices\IKeyListener.cs" />
+    <Compile Include="Devices\IMouseListener.cs" />
     <Compile Include="InputManager.cs" />
-    <Compile Include="DeviceType.cs" />
-    <Compile Include="InterfaceType.cs" />
-    <Compile Include="InvalidInputObjectCastException.cs" />
-    <Compile Include="Joystick.cs" />
-    <Compile Include="Keyboard.cs" />
-    <Compile Include="KeyCode.cs" />
-    <Compile Include="KeyEventArgs.cs" />
-    <Compile Include="KeyEventHandler.cs" />
-    <Compile Include="KeyListenerDispatcher.cs" />
-    <Compile Include="Modifier.cs" />
-    <Compile Include="Mouse.cs" />
-    <Compile Include="MouseButton.cs" />
-    <Compile Include="MouseClickHandler.cs" />
-    <Compile Include="MouseEventArgs.cs" />
-    <Compile Include="MouseListenerDispatcher.cs" />
-    <Compile Include="MouseMovedHandler.cs" />
-    <Compile Include="MouseState.cs" />
+    <Compile Include="Devices\DeviceType.cs" />
+    <Compile Include="Devices\InterfaceType.cs" />
+    <Compile Include="Devices\Keyboard.cs" />
+    <Compile Include="Devices\KeyCode.cs" />
+    <Compile Include="Devices\KeyEventArgs.cs" />
+    <Compile Include="Devices\KeyEventHandler.cs" />
+    <Compile Include="Devices\KeyListenerDispatcher.cs" />
+    <Compile Include="Devices\Modifier.cs" />
+    <Compile Include="Devices\Mouse.cs" />
+    <Compile Include="Devices\MouseButton.cs" />
+    <Compile Include="Devices\MouseClickHandler.cs" />
+    <Compile Include="Devices\MouseEventArgs.cs" />
+    <Compile Include="Devices\MouseListenerDispatcher.cs" />
+    <Compile Include="Devices\MouseMovedHandler.cs" />
+    <Compile Include="Devices\MouseState.cs" />
     <Compile Include="Native\AxisDescriptor.cs" />
     <Compile Include="Native\ButtonDescriptor.cs" />
     <Compile Include="Native\ComponentDescriptor.cs" />
-    <Compile Include="Native\DeviceTypeItem.cs" />
+    <Compile Include="Native\DeviceListItem.cs" />
     <Compile Include="Native\EventArgDescriptor.cs" />
     <Compile Include="Native\IAxis.cs" />
     <Compile Include="Native\IButton.cs" />
@@ -175,32 +167,15 @@
     <Compile Include="Native\MouseMovedHandler.cs" />
     <Compile Include="Native\MouseStateDescriptor.cs" />
     <Compile Include="Native\NameValueItem.cs" />
-    <Compile Include="Native\NativeAxis.cs" />
-    <Compile Include="Native\NativeButton.cs" />
-    <Compile Include="Native\NativeComponent.cs" />
-    <Compile Include="Native\NativeMouse.cs" />
-    <Compile Include="Native\NativeMouseListener.cs" />
-    <Compile Include="Native\NativeEventArgs.cs" />
-    <Compile Include="Native\NativeInputManager.cs" />
-    <Compile Include="Native\NativeKeyboard.cs" />
-    <Compile Include="Native\NativeKeyListener.cs" />
-    <Compile Include="Native\NativeMouseEvent.cs" />
-    <Compile Include="Native\NativeMouseState.cs" />
-    <Compile Include="Native\NativeObject.cs" />
-    <Compile Include="Native\NativeOIS.cs" />
-    <Compile Include="Native\NativeVector3.cs" />
     <Compile Include="Native\Vector3Descriptor.cs" />
-    <Compile Include="DeviceObject.cs" />
-    <Compile Include="OISEventArgs.cs" />
+    <Compile Include="Devices\DeviceObject.cs" />
     <Compile Include="OISException.cs" />
+    <Compile Include="OisTypeId.cs" />
     <Compile Include="ParamList.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="RaiseExceptionHandler.cs" />
-    <Compile Include="Tablet.cs" />
-    <Compile Include="TextTranslationMode.cs" />
-    <Compile Include="Components\Component.cs" />
-    <Compile Include="Unknown.cs" />
-    <Compile Include="Components\Vector3.cs" />
+    <Compile Include="Devices\TextTranslationMode.cs" />
+    <Compile Include="Devices\Component.cs" />
+    <Compile Include="Devices\Vector3.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
@@ -221,7 +196,7 @@
   </ItemGroup>
   <ItemGroup />
   <PropertyGroup>
-    <PostBuildEvent>copy "$(TargetDir)*.*" "$(SolutionDir)Samples\Empty\Bin\"</PostBuildEvent>
+    <PostBuildEvent>"$(SolutionDir)ReverseGenerator\bin\$(Configuration)\ReverseGenerator.exe" -a:"$(TargetPath)"  -cpp:"../../../Platform/NativeLibs/sources/cois/" -p:"InVisionNative_OIS" -cs:"$(ProjectDir)..\$(ProjectName).Native" -l:"InVisionNative"</PostBuildEvent>
   </PropertyGroup>
   <Target Name="AfterBuild">
     <!--<Exec Command="&quot;$(SolutionDir)ReverseGenerator\\bin\\$(Configuration)\\ReverseGenerator.exe&quot; -a:&quot;$(TargetPath)&quot; -p:InVisionNative_OIS -cpp:&quot;$(SolutionDir)Platform\\NativeLibs\\sources\\cois&quot; -cs:&quot;$(TargetDir)&quot;" />-->

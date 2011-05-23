@@ -1,15 +1,12 @@
-﻿using InVision.Native.Ext;
+﻿using InVision.Native;
 using InVision.OIS.Attributes;
 
 namespace InVision.OIS.Native
 {
-    [OISInterface("MouseEvent")]
-    public interface IMouseEvent : ICppInterface
-    {
-        [Constructor]
-        IMouseEvent Construct(ref MouseEventDescriptor descriptor, IObject obj, IMouseState mouseState);
-
-        [Destructor]
-        void Destruct();
-    }
+	[OISInterface("MouseEvent", BaseType = typeof(IEventArg))]
+	public interface IMouseEvent : IEventArg
+	{
+		[Constructor]
+		IMouseEvent Construct(ref MouseEventDescriptor descriptor, IObject obj, IMouseState mouseState);
+	}
 }

@@ -1,7 +1,9 @@
 ﻿using System;
+using InVision.Ogre.Native;
 
 namespace InVision.Ogre
 {
+	[OgreEnumeration("SceneTypeMask")]
 	[Flags]
 	public enum SceneType : uint
 	{

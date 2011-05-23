@@ -1,12 +1,7 @@
-#ifndef INVISION_HANDLE_H
-#define INVISION_HANDLE_H
+#ifndef __INVISION_HANDLE_H__
+#define __INVISION_HANDLE_H__
 
 #include "cWrapper.h"
-
-#ifdef __cplusplus
-#include <typeinfo>
-#include <boost/unordered_map.hpp>
-#endif // __cplusplus
 
 extern "C"
 {
@@ -18,20 +13,17 @@ extern "C"
 
 	INV_EXPORT TypeID
 	INV_CALL register_type_by_name(const char* type);
-
-#ifdef __cplusplus
-
-	INV_EXPORT TypeID
-	INV_CALL get_registered_typeid(const std::type_info& type);
-
-	INV_EXPORT TypeID
-	INV_CALL register_typeid(const std::type_info& type);
-
-#endif // __cplusplus
-
 }
 
 #ifdef __cplusplus
+#include <typeinfo>
+#include <boost/unordered_map.hpp>
+
+INV_EXPORT TypeID
+INV_CALL get_registered_typeid(const std::type_info& type);
+
+INV_EXPORT TypeID
+INV_CALL register_typeid(const std::type_info& type);
 
 namespace invision
 {
@@ -126,20 +118,27 @@ namespace invision
 		}
 	};
 
-
 	class HandleManager
 	{
 	private:
+		typedef void (INV_CALL *HandleDestroyedHandler)(InvHandle handle);
 		IHandleGenerator* _generator;
 		HandleRegistry _registry;
+		HandleDestroyedHandler _handleDestroyed;
 
 
-		template<typename T>
-		InvHandle nextHandle()
+		InvHandle nextHandle(const std::type_info& type)
 		{
-			return _generator->next() << 16 | get_registered_typeid(typeid(T));
+			return _generator->next() << 16 | get_registered_typeid(type);
 		}
 
+		InvHandle registerHandle(IHandleData* hdata, const std::type_info& type)
+		{
+			HandleRegistry::value_type entry(nextHandle(type), hdata);
+			_registry.insert(entry);
+
+			return entry.first;
+		}
 
 	public:
 		HandleManager(IHandleGenerator* generator = NULL)
@@ -157,6 +156,8 @@ namespace invision
 				_generator = NULL;
 			}
 
+			_handleDestroyed = NULL;
+
 			for (HandleRegistry::iterator it = _registry.begin(); it != _registry.end(); it++) {
 				IHandleData* hdata = (*it).second;
 
@@ -166,38 +167,11 @@ namespace invision
 			}
 		}
 
-		/**
-		 * Creates a new handle for the specified data
-		 */
-		template<typename T>
-		InvHandle createHandle(T* data)
+		void setHandleDestroyedListener(HandleDestroyedHandler handleDestroyed)
 		{
-			IHandleData* hdata = new HandleData<T>(data);
-
-			HandleRegistry::value_type entry(nextHandle<T>(), hdata);
-			_registry.insert(entry);
-
-			return entry.first;
+			_handleDestroyed = handleDestroyed;
 		}
 
-		/**
-		 * Creates a new handle for the specified data
-		 */
-		template<typename T>
-		InvHandle createReference(T* data)
-		{
-			IHandleData* hdata = new HandleReference<T>(data);
-
-			HandleRegistry::value_type entry(nextHandle<T>(), hdata);
-			_registry.insert(entry);
-
-			return entry.first;
-		}
-
-		/**
-		 * Destroy the specified handle by removing it from this instance and deleting the data it
-		 * holds.
-		 */
 		void destroyHandle(InvHandle handle)
 		{
 			if (handle == 0)
@@ -213,6 +187,31 @@ namespace invision
 			_registry.erase_return_void(it);
 			hdata->deleteData();
 			delete hdata;
+
+			if (_handleDestroyed != NULL)
+				_handleDestroyed(handle);
+		}
+
+		/**
+		 * Creates a new handle for the specified data
+		 */
+		template<typename T>
+		InvHandle createHandle(T* data)
+		{
+			IHandleData* hdata = new HandleData<T>(data);
+
+			return registerHandle(hdata, typeid(T));
+		}
+
+		/**
+		 * Creates a new handle for the specified data
+		 */
+		template<typename T>
+		InvHandle createReference(T* data)
+		{
+			IHandleData* hdata = new HandleReference<T>(data);
+
+			return registerHandle(hdata, typeid(T));
 		}
 
 		/**
@@ -258,14 +257,13 @@ namespace invision
 			return 0;
 		}
 
-		static HandleManager& getInstance()
+		static HandleManager* getInstance()
 		{
-			static HandleManager handleManager;
+			static HandleManager instance;
 
-			return handleManager;
+			return &instance;
 		}
 	};
-
 
 
 	template<typename T>
@@ -273,7 +271,7 @@ namespace invision
 	{
 		T* data = new T();
 
-		return HandleManager::getInstance().createHandle<T>(data);
+		return HandleManager::getInstance()->createHandle<T>(data);
 	}
 
 	template<typename T, typename P1>
@@ -281,7 +279,7 @@ namespace invision
 	{
 		T* data = new T(param1);
 
-		return HandleManager::getInstance().createHandle<T>(data);
+		return HandleManager::getInstance()->createHandle<T>(data);
 	}
 
 	template<typename T, typename P1, typename P2>
@@ -289,7 +287,7 @@ namespace invision
 	{
 		T* data = new T(param1, param2);
 
-		return HandleManager::getInstance().createHandle<T>(data);
+		return HandleManager::getInstance()->createHandle<T>(data);
 	}
 
 	template<typename T, typename P1, typename P2, typename P3>
@@ -297,18 +295,18 @@ namespace invision
 	{
 		T* data = new T(param1, param2, param3);
 
-		return HandleManager::getInstance().createHandle<T>(data);
+		return HandleManager::getInstance()->createHandle<T>(data);
 	}
 
 	template<typename T>
 	inline T* castHandle(InvHandle handle)
 	{
-		return HandleManager::getInstance().get<T>(handle);
+		return HandleManager::getInstance()->get<T>(handle);
 	}
 
 	inline void destroyHandle(InvHandle handle)
 	{
-		HandleManager::getInstance().destroyHandle(handle);
+		HandleManager::getInstance()->destroyHandle(handle);
 	}
 
 	template<typename T>
@@ -316,8 +314,8 @@ namespace invision
 	{
 		if (data == NULL)
 			return INVALID_HANDLE;
-		
-		return HandleManager::getInstance().createHandle<T>(data);
+
+		return HandleManager::getInstance()->createHandle<T>(data);
 	}
 
 	template<typename T>
@@ -326,7 +324,7 @@ namespace invision
 		if (data == NULL)
 			return INVALID_HANDLE;
 
-		return HandleManager::getInstance().createReference<T>(data);
+		return HandleManager::getInstance()->createReference<T>(data);
 	}
 
 	template<typename T>
@@ -334,8 +332,8 @@ namespace invision
 	{
 		if (data == NULL)
 			return INVALID_HANDLE;
-		
-		InvHandle handle = HandleManager::getInstance().find<T>(data);
+
+		InvHandle handle = HandleManager::getInstance()->find<T>(data);
 
 		if (handle == 0)
 			handle = createHandle<T>(data);
@@ -349,7 +347,7 @@ namespace invision
 		if (data == NULL)
 			return INVALID_HANDLE;
 
-		InvHandle handle = HandleManager::getInstance().find<T>(data);
+		InvHandle handle = HandleManager::getInstance()->find<T>(data);
 
 		if (handle == 0)
 			handle = createReference<T>(data);
@@ -357,10 +355,7 @@ namespace invision
 		return handle;
 	}
 
-
 } // namespace invision
 
 #endif // __cplusplus
-
-
-#endif // INVISION_HANDLE_H
+#endif // __INVISION_HANDLE_H__

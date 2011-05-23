@@ -230,7 +230,7 @@ namespace InVision.Ogre
 
 		public static Radian FromDegrees(float degrees)
 		{
-			return new Radian(MathUtility.DegreeToRadian(degrees));
+			return new Radian(degrees.ToRadian());
 		}
 
 		public static Radian Add(ref Radian r)
