@@ -7,6 +7,7 @@ using InVision;
 using InVision.Framework;
 using InVision.Framework.Config;
 using InVision.Framework.Scripting;
+using InVision.Framework.States;
 
 namespace Tutano
 {
@@ -68,6 +69,12 @@ namespace Tutano
 		}
 
 		/// <summary>
+		/// Gets or sets the scripts.
+		/// </summary>
+		/// <value>The scripts.</value>
+		public List<IScript> Scripts { get; protected set; }
+
+		/// <summary>
 		/// Runs this instance.
 		/// </summary>
 		public void Run()
@@ -87,19 +94,13 @@ namespace Tutano
 			CreateDefaultDirectories();
 			SetNativeDirectoriesToPath();
 
-			Configuration = TutanoConfiguration.LoadOrCreate<TutanoConfiguration>("Config/Tutano.config.xml");
+			Configuration = InVision.Framework.Config.Configuration.LoadOrCreate<TutanoConfiguration>("Config/Tutano.config.xml");
 
 			LoadCustomLibraries();
 			ScriptManagerFactory.Initialize(Configuration, Path.GetFullPath("Bin/CompiledScripts"));
 
 			LoadScripts();
 		}
-
-		/// <summary>
-		/// Gets or sets the scripts.
-		/// </summary>
-		/// <value>The scripts.</value>
-		public List<IScript> Scripts { get; protected set; }
 
 		/// <summary>
 		/// Creates the default directories.
@@ -204,16 +205,16 @@ namespace Tutano
 		{
 			Scripts = new List<IScript>();
 
-			foreach (var allowedScriptExtension in ScriptManagerFactory.Instance.AllowedScriptExtensions)
+			foreach (string allowedScriptExtension in ScriptManagerFactory.Instance.AllowedScriptExtensions)
 			{
 				Console.WriteLine("Searching for '{0}' scripts...", allowedScriptExtension);
 
 				string fileMatch = string.Format("*{0}", allowedScriptExtension);
 
-				var files = FindFiles("Config", fileMatch);
+				IEnumerable<string> files = FindFiles("Config", fileMatch);
 				files = files.Union(FindFiles("Scripts", fileMatch));
 
-				foreach (var configFile in files)
+				foreach (string configFile in files)
 				{
 					LoadScript(configFile);
 				}
@@ -222,17 +223,18 @@ namespace Tutano
 
 		private void LoadScript(string configFile)
 		{
-			var scriptManager = ScriptManagerFactory.Instance.GetScriptManagerFor(configFile);
+			IScriptManager scriptManager = ScriptManagerFactory.Instance.GetScriptManagerFor(configFile);
 
 			if (scriptManager != null)
 			{
 				Console.WriteLine("=> Found script: {0}", Path.GetFileName(configFile));
 
-				var script = scriptManager.LoadScript(configFile);
+				IScript script = scriptManager.LoadScript(configFile);
 
 				script.AddReferences(AppDomain.CurrentDomain.GetAssemblies());
 				script.AssemblyPrefix =
-					Path.GetDirectoryName(configFile).Substring(Environment.CurrentDirectory.Length + 1).Replace(Path.DirectorySeparatorChar, '_') + "_";
+					Path.GetDirectoryName(configFile).Substring(Environment.CurrentDirectory.Length + 1).Replace(
+						Path.DirectorySeparatorChar, '_') + "_";
 				script.LoadOrExecute();
 				Scripts.Add(script);
 			}
@@ -243,9 +245,9 @@ namespace Tutano
 		/// </summary>
 		public void ApplyCustomConfigurators()
 		{
-			var configurators = Scripts.SelectMany(s => s.FindServices<ICustomConfigurator>());
+			IEnumerable<ICustomConfigurator> configurators = Scripts.SelectMany(s => s.FindServices<ICustomConfigurator>());
 
-			foreach (var configurator in configurators)
+			foreach (ICustomConfigurator configurator in configurators)
 			{
 				configurator.Configure(Configuration);
 			}
@@ -258,16 +260,16 @@ namespace Tutano
 		{
 			Console.WriteLine("Searching for GameStates...");
 
-			foreach (var script in Scripts)
+			foreach (IScript script in Scripts)
 			{
-				foreach (var gameState in script.FindServices<IGameState>())
+				foreach (IGameState gameState in script.FindServices<IGameState>())
 				{
 					_app.StateMachine.Add(gameState.Name, gameState);
 					Console.WriteLine("=> Game State found: {0}", gameState.Name);
 				}
 			}
 
-			var stateManagerConfigurator =
+			ICustomGameStateConfigurator stateManagerConfigurator =
 				Scripts.SelectMany(s => s.FindServices<ICustomGameStateConfigurator>()).SingleOrDefault();
 
 			if (stateManagerConfigurator != null)
@@ -275,16 +277,13 @@ namespace Tutano
 		}
 
 		/// <summary>
-		/// Loads the game components.
+		/// Initializes the game states.
 		/// </summary>
-		public void LoadGameComponents()
+		public void InitializeGameStates()
 		{
-			foreach (var script in Scripts)
+			foreach (var gameState in _app.StateMachine.Values)
 			{
-				foreach (var gameComponent in script.FindServices<IGameComponent>())
-				{
-					_app.Components.Add(gameComponent.Name, gameComponent);
-				}
+				gameState.Initialize();
 			}
 		}
 	}

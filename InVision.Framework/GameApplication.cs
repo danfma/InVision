@@ -2,7 +2,9 @@
 using System.Collections.Generic;
 using System.Dynamic;
 using System.Linq;
+using InVision.Framework.Components;
 using InVision.Framework.Config;
+using InVision.Framework.States;
 using InVision.Ogre;
 using InVision.Ogre.Logging;
 
@@ -17,9 +19,9 @@ namespace InVision.Framework
 		/// </summary>
 		public GameApplication()
 		{
-			StateMachine = new GameStateMachine();
+			StateMachine = new GameStateMachine(this);
 			Components = new GameComponentCollection();
-			AppVariables = new ExpandoObject();
+			GlobalVariables = new ExpandoObject();
 			Configurators = new List<ICustomConfigurator>();
 			Timer = new ElapsedTime();
 		}
@@ -42,14 +44,14 @@ namespace InVision.Framework
 			if (StateMachine != null)
 				StateMachine.Dispose();
 
-			if (AppVariables != null)
+			if (GlobalVariables != null)
 				DisposeOgre();
 
 			if (disposing)
 			{
 				Configurators = null;
 				StateMachine = null;
-				AppVariables = null;
+				GlobalVariables = null;
 				Configuration = null;
 				Timer = default(ElapsedTime);
 			}
@@ -79,7 +81,7 @@ namespace InVision.Framework
 		/// Gets the global vars.
 		/// </summary>
 		/// <value>The global vars.</value>
-		public dynamic AppVariables { get; private set; }
+		public dynamic GlobalVariables { get; private set; }
 
 		/// <summary>
 		/// Gets or sets the configuration.
@@ -113,10 +115,11 @@ namespace InVision.Framework
 		/// <param name="config">The config.</param>
 		public void Configure(Configuration config)
 		{
-			AppVariables.Config = config;
-			AppVariables.StateManager = StateMachine;
-			AppVariables.Ogre = new ExpandoObject();
-			AppVariables.Components = Components;
+			GlobalVariables.Game = this;
+			GlobalVariables.Config = config;
+			GlobalVariables.StateManager = StateMachine;
+			GlobalVariables.Ogre = new ExpandoObject();
+			GlobalVariables.Components = Components;
 
 			foreach (ICustomConfigurator configurator in Configurators)
 			{
@@ -138,13 +141,13 @@ namespace InVision.Framework
 			Configuration config = Configuration;
 
 			var logManager = new LogManager();
-			AppVariables.Ogre.LogManager = logManager;
+			GlobalVariables.Ogre.LogManager = logManager;
 
 			Log logger = logManager.CreateLog("OGRE.log", true, false, false);
-			AppVariables.Ogre.Logger = logger;
+			GlobalVariables.Ogre.Logger = logger;
 
 			var root = new Root(config.Ogre.PluginsFilename, config.Ogre.OgreConfigFilename);
-			AppVariables.Ogre.Root = root;
+			GlobalVariables.Ogre.Root = root;
 
 			CreateWindow(root);
 		}
@@ -154,7 +157,7 @@ namespace InVision.Framework
 		/// </summary>
 		protected virtual void DisposeOgre()
 		{
-			dynamic ogre = AppVariables.Ogre;
+			dynamic ogre = GlobalVariables.Ogre;
 
 			if (ogre.RenderWindow != null)
 				ogre.RenderWindow.Dispose();
@@ -220,7 +223,7 @@ namespace InVision.Framework
 				}
 			}
 
-			AppVariables.Ogre.RenderWindow = window;
+			GlobalVariables.Ogre.RenderWindow = window;
 		}
 
 		/// <summary>
@@ -247,8 +250,8 @@ namespace InVision.Framework
 		/// </summary>
 		public void EndScene()
 		{
-			var root = (Root)AppVariables.Ogre.Root;
-			var window = (RenderWindow)AppVariables.Ogre.RenderWindow;
+			var root = (Root)GlobalVariables.Ogre.Root;
+			var window = (RenderWindow)GlobalVariables.Ogre.RenderWindow;
 
 			IsRunning = IsRunning && root.RenderOneFrame() && !window.IsClosed;
 			Timer.EndFrame();

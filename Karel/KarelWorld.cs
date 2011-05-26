@@ -1,7 +1,9 @@
 ﻿using System;
 using InVision.Extensions;
 using InVision.Framework;
+using InVision.Framework.Components;
 using InVision.GameMath;
+using System.Linq;
 
 namespace Karel
 {
@@ -26,7 +28,7 @@ namespace Karel
 			{
 				for (int j = 0; j < columns; j++)
 				{
-					string spaceName = string.Format("Karel:WorldSpace{0}x{1}", i, j);
+					string spaceName = string.Format("KarelWorldSpace_{0}x{1}", i, j);
 
 					_spaces[i, j] = new WorldSpace();
 					Children.Add(spaceName, _spaces[i, j]);
@@ -86,7 +88,7 @@ namespace Karel
 		protected bool AddChildAtSpace<T>(int x, int y) where T : KarelWorldComponent, new()
 		{
 			var child = new T();
-			string childName = string.Format("{0}:{1}x{2}", typeof(T).Name, x, y);
+			string childName = string.Format("{0}_{1}x{2}", typeof(T).Name, x, y);
 
 			return this[x, y].TryAdd(childName, child);
 		}
@@ -110,6 +112,16 @@ namespace Karel
 		public bool AddBeeperAt(int x, int y)
 		{
 			return AddChildAtSpace<KarelBeeper>(x, y);
+		}
+
+		/// <summary>
+		/// Sets the deposit at.
+		/// </summary>
+		/// <param name="x">The x.</param>
+		/// <param name="y">The y.</param>
+		public void SetDepositAt(int x, int y)
+		{
+			SetDepositAt(x, y, Color.Red);
 		}
 
 		/// <summary>
@@ -150,7 +162,7 @@ namespace Karel
 			const string karelChildName = "KarelRobot";
 
 			var karel = (KarelRobot)Children.GetOrAdd(karelChildName, key => _karelModelType.CreateInstance<KarelRobot>());
-			karel.WorldPosition = new Vector2(x, y);
+			karel.WorldPosition = new Point(x, y);
 			Karel = karel;
 		}
 
@@ -172,6 +184,19 @@ namespace Karel
 		/// <param name="elapsedTime">The elapsed time.</param>
 		protected override void UpdateSelf(ElapsedTime elapsedTime)
 		{
+			var remainingBeepers =
+				(from child in Children.AsParallel()
+				 from beeper in child.Children
+				 where beeper is KarelBeeper
+				 select beeper).Count();
+
+			bool karelIsOnCheckpoint = this[Karel.WorldPosition.X, Karel.WorldPosition.Y].Checkpoint;
+
+			if (remainingBeepers == 0 && Karel.IsOff && karelIsOnCheckpoint)
+			{
+				Console.WriteLine("CONGRATULATIONS!! You have won!!");
+				GameApplication.Exit();
+			}
 		}
 	}
 }

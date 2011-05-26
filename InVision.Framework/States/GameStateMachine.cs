@@ -2,7 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 
-namespace InVision.Framework
+namespace InVision.Framework.States
 {
 	public class GameStateMachine : DisposableObject, IEnumerable<KeyValuePair<string, IGameState>>
 	{
@@ -13,8 +13,10 @@ namespace InVision.Framework
 		/// <summary>
 		/// Initializes a new instance of the <see cref="GameStateMachine"/> class.
 		/// </summary>
-		public GameStateMachine()
+		/// <param name="gameApplication"></param>
+		public GameStateMachine(GameApplication gameApplication)
 		{
+			GameApplication = gameApplication;
 			_statesRegistry = new Dictionary<string, IGameState>();
 			CurrentStateName = null;
 		}
@@ -45,6 +47,12 @@ namespace InVision.Framework
 		#endregion
 
 		/// <summary>
+		/// Gets or sets the game application.
+		/// </summary>
+		/// <value>The game application.</value>
+		public GameApplication GameApplication { get; private set; }
+
+		/// <summary>
 		/// Sets the start.
 		/// </summary>
 		/// <value>The start.</value>
@@ -59,77 +67,6 @@ namespace InVision.Framework
 		/// </summary>
 		/// <value>The name of the current state.</value>
 		public string CurrentStateName { get; set; }
-
-
-		/// <summary>
-		/// Returns an enumerator that iterates through the collection.
-		/// </summary>
-		/// <returns>
-		/// A <see cref="T:System.Collections.Generic.IEnumerator`1"/> that can be used to iterate through the collection.
-		/// </returns>
-		/// <filterpriority>1</filterpriority>
-		public IEnumerator<KeyValuePair<string, IGameState>> GetEnumerator()
-		{
-			return _statesRegistry.GetEnumerator();
-		}
-
-		/// <summary>
-		/// Returns an enumerator that iterates through a collection.
-		/// </summary>
-		/// <returns>
-		/// An <see cref="T:System.Collections.IEnumerator"/> object that can be used to iterate through the collection.
-		/// </returns>
-		/// <filterpriority>2</filterpriority>
-		IEnumerator IEnumerable.GetEnumerator()
-		{
-			return GetEnumerator();
-		}
-
-		/// <summary>
-		/// Determines whether the <see cref="T:System.Collections.Generic.IDictionary`2"/> contains an element with the specified key.
-		/// </summary>
-		/// <returns>
-		/// true if the <see cref="T:System.Collections.Generic.IDictionary`2"/> contains an element with the key; otherwise, false.
-		/// </returns>
-		/// <param name="key">The key to locate in the <see cref="T:System.Collections.Generic.IDictionary`2"/>.</param><exception cref="T:System.ArgumentNullException"><paramref name="key"/> is null.</exception>
-		public bool ContainsKey(string key)
-		{
-			return _statesRegistry.ContainsKey(key);
-		}
-
-		/// <summary>
-		/// Adds an element with the provided key and value to the <see cref="T:System.Collections.Generic.IDictionary`2"/>.
-		/// </summary>
-		/// <param name="key">The object to use as the key of the element to add.</param><param name="value">The object to use as the value of the element to add.</param><exception cref="T:System.ArgumentNullException"><paramref name="key"/> is null.</exception><exception cref="T:System.ArgumentException">An element with the same key already exists in the <see cref="T:System.Collections.Generic.IDictionary`2"/>.</exception><exception cref="T:System.NotSupportedException">The <see cref="T:System.Collections.Generic.IDictionary`2"/> is read-only.</exception>
-		public void Add(string key, IGameState value)
-		{
-			_statesRegistry.Add(key, value);
-			value.StateMachine = this;
-		}
-
-		/// <summary>
-		/// Removes the element with the specified key from the <see cref="T:System.Collections.Generic.IDictionary`2"/>.
-		/// </summary>
-		/// <returns>
-		/// true if the element is successfully removed; otherwise, false.  This method also returns false if <paramref name="key"/> was not found in the original <see cref="T:System.Collections.Generic.IDictionary`2"/>.
-		/// </returns>
-		/// <param name="key">The key of the element to remove.</param><exception cref="T:System.ArgumentNullException"><paramref name="key"/> is null.</exception><exception cref="T:System.NotSupportedException">The <see cref="T:System.Collections.Generic.IDictionary`2"/> is read-only.</exception>
-		public bool Remove(string key)
-		{
-			return _statesRegistry.Remove(key);
-		}
-
-		/// <summary>
-		/// Gets the value associated with the specified key.
-		/// </summary>
-		/// <returns>
-		/// true if the object that implements <see cref="T:System.Collections.Generic.IDictionary`2"/> contains an element with the specified key; otherwise, false.
-		/// </returns>
-		/// <param name="key">The key whose value to get.</param><param name="value">When this method returns, the value associated with the specified key, if the key is found; otherwise, the default value for the type of the <paramref name="value"/> parameter. This parameter is passed uninitialized.</param><exception cref="T:System.ArgumentNullException"><paramref name="key"/> is null.</exception>
-		public bool TryGetValue(string key, out IGameState value)
-		{
-			return _statesRegistry.TryGetValue(key, out value);
-		}
 
 		/// <summary>
 		/// Gets or sets the element with the specified key.
@@ -163,6 +100,81 @@ namespace InVision.Framework
 		public ICollection<IGameState> Values
 		{
 			get { return _statesRegistry.Values; }
+		}
+
+		#region IEnumerable<KeyValuePair<string,IGameState>> Members
+
+		/// <summary>
+		/// Returns an enumerator that iterates through the collection.
+		/// </summary>
+		/// <returns>
+		/// A <see cref="T:System.Collections.Generic.IEnumerator`1"/> that can be used to iterate through the collection.
+		/// </returns>
+		/// <filterpriority>1</filterpriority>
+		public IEnumerator<KeyValuePair<string, IGameState>> GetEnumerator()
+		{
+			return _statesRegistry.GetEnumerator();
+		}
+
+		/// <summary>
+		/// Returns an enumerator that iterates through a collection.
+		/// </summary>
+		/// <returns>
+		/// An <see cref="T:System.Collections.IEnumerator"/> object that can be used to iterate through the collection.
+		/// </returns>
+		/// <filterpriority>2</filterpriority>
+		IEnumerator IEnumerable.GetEnumerator()
+		{
+			return GetEnumerator();
+		}
+
+		#endregion
+
+		/// <summary>
+		/// Determines whether the <see cref="T:System.Collections.Generic.IDictionary`2"/> contains an element with the specified key.
+		/// </summary>
+		/// <returns>
+		/// true if the <see cref="T:System.Collections.Generic.IDictionary`2"/> contains an element with the key; otherwise, false.
+		/// </returns>
+		/// <param name="key">The key to locate in the <see cref="T:System.Collections.Generic.IDictionary`2"/>.</param><exception cref="T:System.ArgumentNullException"><paramref name="key"/> is null.</exception>
+		public bool ContainsKey(string key)
+		{
+			return _statesRegistry.ContainsKey(key);
+		}
+
+		/// <summary>
+		/// Adds an element with the provided key and value to the <see cref="T:System.Collections.Generic.IDictionary`2"/>.
+		/// </summary>
+		/// <param name="key">The object to use as the key of the element to add.</param><param name="value">The object to use as the value of the element to add.</param><exception cref="T:System.ArgumentNullException"><paramref name="key"/> is null.</exception><exception cref="T:System.ArgumentException">An element with the same key already exists in the <see cref="T:System.Collections.Generic.IDictionary`2"/>.</exception><exception cref="T:System.NotSupportedException">The <see cref="T:System.Collections.Generic.IDictionary`2"/> is read-only.</exception>
+		public void Add(string key, IGameState value)
+		{
+			_statesRegistry.Add(key, value);
+			value.StateMachine = this;
+			value.GameApplication = GameApplication;
+		}
+
+		/// <summary>
+		/// Removes the element with the specified key from the <see cref="T:System.Collections.Generic.IDictionary`2"/>.
+		/// </summary>
+		/// <returns>
+		/// true if the element is successfully removed; otherwise, false.  This method also returns false if <paramref name="key"/> was not found in the original <see cref="T:System.Collections.Generic.IDictionary`2"/>.
+		/// </returns>
+		/// <param name="key">The key of the element to remove.</param><exception cref="T:System.ArgumentNullException"><paramref name="key"/> is null.</exception><exception cref="T:System.NotSupportedException">The <see cref="T:System.Collections.Generic.IDictionary`2"/> is read-only.</exception>
+		public bool Remove(string key)
+		{
+			return _statesRegistry.Remove(key);
+		}
+
+		/// <summary>
+		/// Gets the value associated with the specified key.
+		/// </summary>
+		/// <returns>
+		/// true if the object that implements <see cref="T:System.Collections.Generic.IDictionary`2"/> contains an element with the specified key; otherwise, false.
+		/// </returns>
+		/// <param name="key">The key whose value to get.</param><param name="value">When this method returns, the value associated with the specified key, if the key is found; otherwise, the default value for the type of the <paramref name="value"/> parameter. This parameter is passed uninitialized.</param><exception cref="T:System.ArgumentNullException"><paramref name="key"/> is null.</exception>
+		public bool TryGetValue(string key, out IGameState value)
+		{
+			return _statesRegistry.TryGetValue(key, out value);
 		}
 	}
 }

@@ -1,4 +1,4 @@
-﻿namespace InVision.Framework
+﻿namespace InVision.Framework.States
 {
 	public abstract class GameTransition
 	{

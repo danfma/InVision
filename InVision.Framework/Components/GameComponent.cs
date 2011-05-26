@@ -1,9 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using InVision.Framework.Actions;
+using System.Linq;
+using InVision.Framework.Components.Actions;
 using InVision.GameMath;
 
-namespace InVision.Framework
+namespace InVision.Framework.Components
 {
 	public abstract class GameComponent : DisposableObject, IGameComponent
 	{
@@ -15,7 +16,14 @@ namespace InVision.Framework
 		protected GameComponent()
 		{
 			Children = new GameComponentCollection();
+			ActionProcessor = new ActionProcessor(UpdateBySteps());
 		}
+
+		/// <summary>
+		/// Gets or sets the action processor.
+		/// </summary>
+		/// <value>The action processor.</value>
+		protected ActionProcessor ActionProcessor { get; private set; }
 
 		/// <summary>
 		/// Releases unmanaged and - optionally - managed resources
@@ -34,7 +42,10 @@ namespace InVision.Framework
 			}
 
 			if (disposing)
+			{
 				Children = null;
+				ActionProcessor = null;
+			}
 		}
 
 		#endregion
@@ -60,6 +71,12 @@ namespace InVision.Framework
 		public virtual Vector3 Position { get; set; }
 
 		/// <summary>
+		/// Gets or sets a value indicating whether [repeat update steps].
+		/// </summary>
+		/// <value><c>true</c> if [repeat update steps]; otherwise, <c>false</c>.</value>
+		public bool RepeatUpdateSteps { get; set; }
+
+		/// <summary>
 		/// Gets the children.
 		/// </summary>
 		/// <value>The children.</value>
@@ -70,6 +87,33 @@ namespace InVision.Framework
 		/// </summary>
 		/// <value><c>true</c> if initialized; otherwise, <c>false</c>.</value>
 		public bool Initialized { get; private set; }
+
+		/// <summary>
+		/// Gets a value indicating whether this instance is dead.
+		/// </summary>
+		/// <value><c>true</c> if this instance is dead; otherwise, <c>false</c>.</value>
+		public bool IsDead
+		{
+			get { return !ActionProcessor.IsProcessing && !RepeatUpdateSteps; }
+		}
+
+		/// <summary>
+		/// Gets or sets the game application.
+		/// </summary>
+		/// <value>The game application.</value>
+		public GameApplication GameApplication { get; set; }
+
+		/// <summary>
+		/// Gets or sets the game variables.
+		/// </summary>
+		/// <value>The game variables.</value>
+		public dynamic GameVariables { get; set; }
+
+		/// <summary>
+		/// Gets or sets the state variables.
+		/// </summary>
+		/// <value>The state variables.</value>
+		public dynamic StateVariables { get; set; }
 
 		/// <summary>
 		/// Initializes the specified app.
@@ -96,11 +140,30 @@ namespace InVision.Framework
 		/// <summary>
 		/// Updates the by steps.
 		/// </summary>
+		/// <returns></returns>
+		public virtual IEnumerable<UpdateAction> UpdateBySteps()
+		{
+			return Enumerable.Empty<UpdateAction>();
+		}
+
+		/// <summary>
+		/// Waits the by.
+		/// </summary>
+		/// <param name="milliseconds">The milliseconds.</param>
+		/// <returns></returns>
+		public UpdateAction WaitBy(long milliseconds)
+		{
+			return new WaitTimeUpdateAction(milliseconds);
+		}
+
+		/// <summary>
+		/// Waits the by.
+		/// </summary>
 		/// <param name="time">The time.</param>
 		/// <returns></returns>
-		public virtual IEnumerable<UpdateAction> UpdateBySteps(ElapsedTime time)
+		public UpdateAction WaitBy(TimeSpan time)
 		{
-			yield break;
+			return new WaitTimeUpdateAction((long)time.TotalMilliseconds);
 		}
 
 		#endregion
@@ -126,12 +189,25 @@ namespace InVision.Framework
 		}
 
 		/// <summary>
+		/// Gets or sets the elapsed time.
+		/// </summary>
+		/// <value>The elapsed time.</value>
+		protected ElapsedTime ElapsedTime { get; private set; }
+
+		/// <summary>
 		/// Updates the self.
 		/// </summary>
 		/// <param name="elapsedTime">The elapsed time.</param>
 		protected virtual void UpdateSelf(ElapsedTime elapsedTime)
 		{
+			ElapsedTime = elapsedTime;
+			ActionProcessor.Step(elapsedTime);
 
+			if (ActionProcessor.IsProcessing)
+				return;
+
+			if (RepeatUpdateSteps)
+				ActionProcessor.Reset();
 		}
 
 		/// <summary>

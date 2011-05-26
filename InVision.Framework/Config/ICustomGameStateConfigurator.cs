@@ -1,4 +1,6 @@
-﻿namespace InVision.Framework.Config
+﻿using InVision.Framework.States;
+
+namespace InVision.Framework.Config
 {
 	public interface ICustomGameStateConfigurator
 	{

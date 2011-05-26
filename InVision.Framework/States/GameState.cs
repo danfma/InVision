@@ -1,6 +1,8 @@
 using System;
+using System.Dynamic;
+using InVision.Framework.Components;
 
-namespace InVision.Framework
+namespace InVision.Framework.States
 {
 	public abstract class GameState : DisposableObject, IGameState
 	{
@@ -14,6 +16,7 @@ namespace InVision.Framework
 		{
 			Name = name;
 			Components = new GameComponentCollection();
+			StateVariables = new ExpandoObject();
 		}
 
 		/// <summary>
@@ -25,11 +28,13 @@ namespace InVision.Framework
 			if (Components != null)
 				Components.Dispose();
 
-			if (disposing)
-			{
-				Name = null;
-				Components = null;
-			}
+			if (!disposing) 
+				return;
+
+			Name = null;
+			Components = null;
+			StateVariables = null;
+			GameApplication = null;
 		}
 
 		#endregion
@@ -41,6 +46,12 @@ namespace InVision.Framework
 		/// </summary>
 		/// <value>The name.</value>
 		public string Name { get; protected set; }
+
+		/// <summary>
+		/// Gets the state variables.
+		/// </summary>
+		/// <value>The state variables.</value>
+		public dynamic StateVariables { get; private set; }
 
 		/// <summary>
 		/// Gets the components.
@@ -55,20 +66,35 @@ namespace InVision.Framework
 		public GameStateMachine StateMachine { get; set; }
 
 		/// <summary>
+		/// Gets or sets the game application.
+		/// </summary>
+		/// <value>The game application.</value>
+		public GameApplication GameApplication { get; set; }
+
+		/// <summary>
 		/// Initializes this instance.
 		/// </summary>
-		public abstract void Initialize();
+		public virtual void Initialize()
+		{
+			foreach (var component in Components)
+			{
+				component.GameApplication = GameApplication;
+				component.GameVariables = GameApplication.GlobalVariables;
+				component.StateVariables = StateVariables;
+			}
+		}
 
 		/// <summary>
-		/// Begins the frame.
+		/// Updates the specified elapsed time.
 		/// </summary>
-		/// <param name="timer"></param>
-		public virtual void BeginFrame(ElapsedTime timer = default(ElapsedTime)) { }
-
-		/// <summary>
-		/// Ends the frame.
-		/// </summary>
-		public virtual void EndFrame() { }
+		/// <param name="elapsedTime">The elapsed time.</param>
+		public virtual void Update(ElapsedTime elapsedTime)
+		{
+			foreach (var component in Components)
+			{
+				component.Update(elapsedTime);
+			}
+		}
 
 		#endregion
 	}

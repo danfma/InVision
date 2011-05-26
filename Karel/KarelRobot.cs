@@ -1,11 +1,17 @@
 ﻿using System;
-using InVision.Framework;
-using InVision.GameMath;
 
 namespace Karel
 {
 	public class KarelRobot : KarelWorldComponent
 	{
+		/// <summary>
+		/// Initializes a new instance of the <see cref="KarelRobot"/> class.
+		/// </summary>
+		public KarelRobot()
+		{
+			IsOff = true;
+		}
+
 		/// <summary>
 		/// Gets or sets the direction.
 		/// </summary>
@@ -55,6 +61,12 @@ namespace Karel
 		/// 	<c>true</c> if this instance has beeper; otherwise, <c>false</c>.
 		/// </value>
 		public bool HasBeeper { get; private set; }
+
+		/// <summary>
+		/// Gets or sets a value indicating whether this instance is off.
+		/// </summary>
+		/// <value><c>true</c> if this instance is off; otherwise, <c>false</c>.</value>
+		public bool IsOff { get; private set; }
 
 		/// <summary>
 		/// Lookings to.
@@ -128,15 +140,6 @@ namespace Karel
 		/// </summary>
 		public void PutBeeper()
 		{
-		}
-
-		/// <summary>
-		/// Updates the self.
-		/// </summary>
-		/// <param name="elapsedTime">The elapsed time.</param>
-		protected override void UpdateSelf(ElapsedTime elapsedTime)
-		{
-			throw new NotImplementedException();
 		}
 	}
 }

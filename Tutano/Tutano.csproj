@@ -52,6 +52,7 @@
     <Compile Include="TutanoConfiguration.cs" />
     <Compile Include="TutanoGameFlow.cs" />
     <Compile Include="TutanoLauncher.cs" />
+    <Compile Include="Util\MyGameComponent.cs" />
     <Compile Include="Util\ScriptColorRestore.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -154,6 +155,7 @@
     <None Include="Config\Ogre\plugins_d.cfg">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Include="Scripts\Answer1World1.boo" />
     <None Include="Scripts\States\States.Config.boo">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>

@@ -1,4 +1,5 @@
 ﻿using InVision.Framework;
+using InVision.Framework.Components;
 using InVision.GameMath;
 
 namespace Karel
@@ -9,7 +10,7 @@ namespace Karel
 		/// Gets or sets the world position.
 		/// </summary>
 		/// <value>The world position.</value>
-		public Vector2 WorldPosition { get; set; }
+		public Point WorldPosition { get; set; }
 
 		/// <summary>
 		/// Updates the self.

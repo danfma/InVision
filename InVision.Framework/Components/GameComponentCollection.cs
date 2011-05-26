@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 
-namespace InVision.Framework
+namespace InVision.Framework.Components
 {
 	public class GameComponentCollection : DisposableObject, IEnumerable<IGameComponent>
 	{

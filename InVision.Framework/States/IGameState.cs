@@ -1,6 +1,7 @@
 ﻿using System;
+using InVision.Framework.Components;
 
-namespace InVision.Framework
+namespace InVision.Framework.States
 {
 	public interface IGameState : IDisposable
 	{
@@ -9,6 +10,12 @@ namespace InVision.Framework
 		/// </summary>
 		/// <value>The name.</value>
 		string Name { get; }
+
+		/// <summary>
+		/// Gets the state variables.
+		/// </summary>
+		/// <value>The state variables.</value>
+		dynamic StateVariables { get; }
 
 		/// <summary>
 		/// Gets the components.
@@ -23,19 +30,20 @@ namespace InVision.Framework
 		GameStateMachine StateMachine { get; set; }
 
 		/// <summary>
+		/// Gets or sets the game application.
+		/// </summary>
+		/// <value>The game application.</value>
+		GameApplication GameApplication { get; set; }
+
+		/// <summary>
 		/// Initializes this instance.
 		/// </summary>
 		void Initialize();
 
 		/// <summary>
-		/// Begins the frame.
+		/// Updates the specified elapsed time.
 		/// </summary>
-		/// <param name="timer"></param>
-		void BeginFrame(ElapsedTime timer = default(ElapsedTime));
-
-		/// <summary>
-		/// Ends the frame.
-		/// </summary>
-		void EndFrame();
+		/// <param name="elapsedTime">The elapsed time.</param>
+		void Update(ElapsedTime elapsedTime);
 	}
 }

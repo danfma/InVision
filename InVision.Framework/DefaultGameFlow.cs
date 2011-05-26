@@ -32,17 +32,10 @@ namespace InVision.Framework
 					break;
 
 				app.BeginScene();
-
-				var gameTime = app.Timer;
-
-				state.BeginFrame(gameTime);
-
-				foreach (var component in state.Components)
 				{
-					component.Update(gameTime);
+					var gameTime = app.Timer;
+					state.Update(gameTime);
 				}
-
-				state.EndFrame();
 				app.EndScene();
 			}
 		}

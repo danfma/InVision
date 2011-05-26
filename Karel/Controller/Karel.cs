@@ -45,7 +45,7 @@ namespace Karel.Controller
 		/// Gets or sets the world position.
 		/// </summary>
 		/// <value>The world position.</value>
-		public Vector2 WorldPosition
+		public Point WorldPosition
 		{
 			get { return KarelInstance.WorldPosition; }
 			set { KarelInstance.WorldPosition = value; }

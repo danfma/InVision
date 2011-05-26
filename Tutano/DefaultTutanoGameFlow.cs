@@ -21,9 +21,10 @@ namespace Tutano
 		{
 			TutanoApp.ApplyCustomConfigurators();
 			TutanoApp.LoadGameStates();
-			TutanoApp.LoadGameComponents();
 
 			app.Configure(TutanoApp.Configuration);
+
+			TutanoApp.InitializeGameStates();
 
 			while (app.IsRunning)
 			{
@@ -34,8 +35,7 @@ namespace Tutano
 					if (currentState == null)
 						break;
 
-					var gameTime = app.Timer;
-					currentState.EndFrame();
+					currentState.Update(app.Timer);
 				}
 				app.EndScene();
 			}

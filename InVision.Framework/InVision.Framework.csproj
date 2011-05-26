@@ -44,6 +44,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Components\Actions\ActionProcessor.cs" />
+    <Compile Include="Components\Actions\NothingAction.cs" />
+    <Compile Include="Components\Actions\WaitTimeUpdateAction.cs" />
     <Compile Include="Config\CustomConfiguratorDispatcher.cs" />
     <Compile Include="Config\Configuration.cs" />
     <Compile Include="Config\GameConfiguration.cs" />
@@ -57,19 +60,19 @@
     <Compile Include="ContentManager.cs" />
     <Compile Include="DefaultGameFlow.cs" />
     <Compile Include="GameApplication.cs" />
-    <Compile Include="GameComponent.cs" />
-    <Compile Include="GameComponentCollection.cs" />
+    <Compile Include="Components\GameComponent.cs" />
+    <Compile Include="Components\GameComponentCollection.cs" />
     <Compile Include="GameFlow.cs" />
     <Compile Include="ElapsedTime.cs" />
-    <Compile Include="IGameComponent.cs" />
-    <Compile Include="IGameLogic.cs" />
-    <Compile Include="IGameState.cs" />
-    <Compile Include="GameStateMachine.cs" />
+    <Compile Include="Components\IGameComponent.cs" />
+    <Compile Include="States\IGameState.cs" />
+    <Compile Include="States\GameStateMachine.cs" />
     <Compile Include="IGameFlow.cs" />
-    <Compile Include="GameTransition.cs" />
-    <Compile Include="GameState.cs" />
+    <Compile Include="States\GameTransition.cs" />
+    <Compile Include="States\GameState.cs" />
     <Compile Include="Config\ICustomGameStateConfigurator.cs" />
     <Compile Include="IServiceManager.cs" />
+    <Compile Include="Components\IUpdateActionCreator.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Scripting\ExecutionMode.cs" />
     <Compile Include="Scripting\InvalidScriptFileException.cs" />
@@ -81,7 +84,7 @@
     <Compile Include="Scripting\ScriptManagerFactory.cs" />
     <Compile Include="Scripting\ScriptNotLoadedException.cs" />
     <Compile Include="ServiceInfo.cs" />
-    <Compile Include="StepAction.cs" />
+    <Compile Include="Components\Actions\UpdateAction.cs" />
     <Compile Include="Util\ConsoleColorRestore.cs" />
   </ItemGroup>
   <ItemGroup>
