@@ -25,6 +25,12 @@ namespace InVision.Framework.Scripting
 		string CompilerOutput { set; }
 
 		/// <summary>
+		/// Gets or sets the assembly prefix.
+		/// </summary>
+		/// <value>The assembly prefix.</value>
+		string AssemblyPrefix { get; set; }
+
+		/// <summary>
 		/// Adds the reference.
 		/// </summary>
 		/// <param name="assembly">The assembly.</param>

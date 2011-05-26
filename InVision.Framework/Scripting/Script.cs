@@ -14,7 +14,8 @@ namespace InVision.Framework.Scripting
 		/// Initializes a new instance of the <see cref="Script"/> class.
 		/// </summary>
 		/// <param name="filename">The filename.</param>
-		protected Script(string filename)
+		/// <param name="compilerOutput">The compiler output.</param>
+		protected Script(string filename, string compilerOutput)
 		{
 			CheckFilename(filename);
 
@@ -22,6 +23,7 @@ namespace InVision.Framework.Scripting
 
 			_references = new List<Assembly>();
 			_fileLastChange = File.GetLastWriteTime(filename);
+			CompilerOutput = compilerOutput;
 		}
 
 		/// <summary>
@@ -67,6 +69,12 @@ namespace InVision.Framework.Scripting
 		/// </summary>
 		/// <value>The compiler output.</value>
 		public string CompilerOutput { protected get; set; }
+
+		/// <summary>
+		/// Gets or sets the assembly prefix.
+		/// </summary>
+		/// <value>The assembly prefix.</value>
+		public string AssemblyPrefix { get; set; }
 
 		/// <summary>
 		/// Adds the reference.

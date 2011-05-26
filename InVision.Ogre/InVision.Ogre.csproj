@@ -68,6 +68,14 @@
     <Compile Include="Logging\LogManager.cs" />
     <Compile Include="Native\ICustomLogListener.cs" />
     <Compile Include="Native\LogListenerMessageLoggedHandler.cs" />
+    <Compile Include="Native\NameValuePair.cs" />
+    <Compile Include="Native\NameValuePairList.cs" />
+    <Compile Include="RenderSystem.cs" />
+    <Compile Include="RenderSystemCapabilities.cs" />
+    <Compile Include="RenderWindow.cs" />
+    <Compile Include="RenderWindowParameters.cs" />
+    <Compile Include="SceneManager.cs" />
+    <Compile Include="SceneManagerFactory.cs" />
     <Compile Include="Singleton.cs" />
     <Compile Include="LogMessageLevel.cs" />
     <Compile Include="Native\ICamera.cs" />
@@ -94,6 +102,8 @@
     <Compile Include="TextureFilterOption.cs" />
     <Compile Include="TransformSpace.cs" />
     <Compile Include="Util\MathUtility.cs" />
+    <Compile Include="Viewport.cs" />
+    <Compile Include="WindowBorder.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\InVision\InVision.csproj">

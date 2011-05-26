@@ -18,8 +18,9 @@ namespace InVision.Scripting.Lua
 		/// Initializes a new instance of the <see cref="LuaInterpretedScript"/> class.
 		/// </summary>
 		/// <param name="filename">The filename.</param>
-		public LuaInterpretedScript(string filename)
-			: base(filename)
+		/// <param name="compilerOutput">The compiler output.</param>
+		public LuaInterpretedScript(string filename, string compilerOutput)
+			: base(filename, compilerOutput)
 		{
 			Reset();
 		}
@@ -85,7 +86,7 @@ namespace InVision.Scripting.Lua
 			var function = (LuaFunction)service["Configure"];
 
 			dynamic obj = new ExpandoObject();
-			obj.Configure = new Action<FxConfiguration>(cfg => function.Call(service, cfg));
+			obj.Configure = new Action<Configuration>(cfg => function.Call(service, cfg));
 
 			return obj;
 		}

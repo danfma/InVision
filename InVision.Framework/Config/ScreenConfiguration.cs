@@ -21,14 +21,21 @@ namespace InVision.Framework.Config
 		/// </summary>
 		/// <value>The width.</value>
 		[XmlElement("width")]
-		public int Width { get; set; }
+		public uint Width { get; set; }
 
 		/// <summary>
 		/// Gets or sets the height.
 		/// </summary>
 		/// <value>The height.</value>
 		[XmlElement("height")]
-		public int Height { get; set; }
+		public uint Height { get; set; }
+
+		/// <summary>
+		/// Gets or sets a value indicating whether this <see cref="ScreenConfiguration"/> is fullscreen.
+		/// </summary>
+		/// <value><c>true</c> if fullscreen; otherwise, <c>false</c>.</value>
+		[XmlElement("fullscreen")]
+		public bool Fullscreen { get; set; }
 
 		/// <summary>
 		/// Gets or sets the color of the background.

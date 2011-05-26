@@ -22,3 +22,12 @@ INV_CALL renderwindow_add_viewport(InvHandle self, InvHandle camera, _int zOrder
 					asCamera(camera),
 					zOrder, left, top, width, height));
 }
+
+/**
+ * Method: RenderWindow::isClosed
+ */
+INV_EXPORT _bool
+INV_CALL renderwindow_is_closed(InvHandle self)
+{
+	return toBool(asRenderWindow(self)->isClosed());
+}

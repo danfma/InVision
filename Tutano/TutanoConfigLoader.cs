@@ -4,8 +4,6 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using InVision.Framework.Config;
-using InVision.Framework.Scripting;
-using Tutano.Util;
 
 namespace Tutano
 {
@@ -27,52 +25,18 @@ namespace Tutano
 		/// <summary>
 		/// Loads this instance.
 		/// </summary>
-		/// <param name="tutano">The tutano.</param>
+		/// <param name="tutanoApplication">The tutano.</param>
 		/// <returns></returns>
-		public TutanoConfiguration Load(Tutano tutano)
+		public Configuration Load(TutanoApplication tutanoApplication)
 		{
 			CreateDefaultDirectories();
 			SetNativeDirectoriesToPath();
 
-			var config = FxConfiguration.LoadOrCreate<TutanoConfiguration>("Config/Tutano.config.xml");
+			var config = Configuration.LoadOrCreate<Configuration>("Config/Tutano.config.xml");
 
 			LoadLibraries();
-			SetupScriptFactory(config);
-			ApplyCustomConfigScripts(config);
 
 			return config;
-		}
-
-		/// <summary>
-		/// Applies the custom config scripts.
-		/// </summary>
-		/// <param name="config">The config.</param>
-		private void ApplyCustomConfigScripts(TutanoConfiguration config)
-		{
-			ScriptManagerFactory factory = config.Scripting.ManagerFactory;
-
-			string configDir = Path.GetFullPath("Config");
-
-			foreach (string configScript in Directory.GetFiles(configDir, "*.config.*"))
-			{
-				IScriptManager scriptManager = factory.GetScriptManagerFor(configScript);
-
-				if (scriptManager == null)
-					continue;
-
-				IScript script = scriptManager.LoadScript(configScript);
-
-				script.AddReferences(AppDomain.CurrentDomain.GetAssemblies());
-				script.LoadOrExecute();
-
-				IEnumerable<IConfigurator> configurators = script.FindServices<IConfigurator>();
-				var configurator = new ConfiguratorDispatcher(configurators);
-
-				using (new ScriptColorRestore())
-				{
-					configurator.Configure(config);
-				}
-			}
 		}
 
 		/// <summary>
@@ -99,37 +63,6 @@ namespace Tutano
 				else
 					Console.WriteLine("=> Directory '{0}': OK", directory);
 			}
-		}
-
-		/// <summary>
-		/// Loads the script factory.
-		/// </summary>
-		/// <param name="config">The config.</param>
-		private void SetupScriptFactory(TutanoConfiguration config)
-		{
-			const string outputDir = "Libraries/Scripts";
-
-			if (!Directory.Exists(outputDir))
-				Directory.CreateDirectory(outputDir);
-
-			Console.WriteLine("Loading pre-defined script managers");
-
-			string binDir = Path.GetFullPath("Bin");
-
-			foreach (string assemblyFile in Directory.GetFiles(binDir, "InVision.Scripting.*.dll"))
-			{
-				Assembly assembly = Assembly.LoadFrom(assemblyFile);
-				Console.WriteLine("=> Loaded assembly: {0}", assembly.GetName().Name);
-
-				foreach (Type type in
-					assembly.GetTypes().Where(
-						type => typeof(IScriptManager).IsAssignableFrom(type) && !type.IsAbstract && !type.IsInterface))
-				{
-					config.Scripting.AddScriptManagerType(type);
-				}
-			}
-
-			config.Scripting.CreateFactory(outputDir, ExecutionMode.Compiled);
 		}
 
 		/// <summary>

@@ -1,6 +1,13 @@
 #include "cOgre.h"
 
-using namespace Ogre;
+/**
+ * Method: Root::checkWindowMessages
+ */
+INV_EXPORT void
+INV_CALL root_check_window_messages(InvHandle self)
+{
+	Ogre::WindowEventUtilities::messagePump();
+}
 
 /**
  * Method: Root::Root
@@ -8,9 +15,9 @@ using namespace Ogre;
 INV_EXPORT InvHandle
 INV_CALL new_root_m1()
 {
-	Root* root = new Root();
+	Ogre::Root* root = new Ogre::Root();
 
-	return createHandle<Root>(root);
+	return createHandle<Ogre::Root>(root);
 }
 
 /**
@@ -19,7 +26,7 @@ INV_CALL new_root_m1()
 INV_EXPORT InvHandle
 INV_CALL new_root_m2(_string pluginFilename)
 {
-	return createHandle<Root>(new Root(pluginFilename));
+	return createHandle<Ogre::Root>(new Ogre::Root(pluginFilename));
 }
 
 /**
@@ -28,7 +35,7 @@ INV_CALL new_root_m2(_string pluginFilename)
 INV_EXPORT InvHandle
 INV_CALL new_root_m3(_string pluginFilename, _string configFilename)
 {
-	return createHandle<Root>(new Root(pluginFilename, configFilename));
+	return createHandle<Ogre::Root>(new Ogre::Root(pluginFilename, configFilename));
 }
 
 /**
@@ -37,7 +44,7 @@ INV_CALL new_root_m3(_string pluginFilename, _string configFilename)
 INV_EXPORT InvHandle
 INV_CALL new_root_m4(_string pluginFilename, _string configFilename, _string logFilename)
 {
-	return createHandle<Root>(new Root(pluginFilename, configFilename, logFilename));
+	return createHandle<Ogre::Root>(new Ogre::Root(pluginFilename, configFilename, logFilename));
 }
 
 /**
@@ -120,7 +127,7 @@ INV_CALL root_get_render_system(InvHandle self)
 INV_EXPORT InvHandle
 INV_CALL root_initialize_m1(InvHandle self, _bool autoCreateWindow)
 {
-	return getOrCreateReference<RenderWindow>(asRoot(self)->initialise(toBool(autoCreateWindow)));
+	return getOrCreateReference<Ogre::RenderWindow>(asRoot(self)->initialise(toBool(autoCreateWindow)));
 }
 
 /**
@@ -129,7 +136,7 @@ INV_CALL root_initialize_m1(InvHandle self, _bool autoCreateWindow)
 INV_EXPORT InvHandle
 INV_CALL root_initialize_m2(InvHandle self, _bool autoCreateWindow, _string windowTitle)
 {
-	return getOrCreateReference<RenderWindow>(
+	return getOrCreateReference<Ogre::RenderWindow>(
 				asRoot(self)->initialise(toBool(autoCreateWindow),
 										 windowTitle));
 }
@@ -140,7 +147,7 @@ INV_CALL root_initialize_m2(InvHandle self, _bool autoCreateWindow, _string wind
 INV_EXPORT InvHandle
 INV_CALL root_initialize_m3(InvHandle self, _bool autoCreateWindow, _string windowTitle, _string customCapabilities)
 {
-	return getOrCreateReference<RenderWindow>(
+	return getOrCreateReference<Ogre::RenderWindow>(
 				asRoot(self)->initialise(toBool(autoCreateWindow),
 										 windowTitle,
 										 customCapabilities));
@@ -207,9 +214,9 @@ INV_CALL root_remove_scene_manager_factory(InvHandle self, InvHandle factory)
 INV_EXPORT InvHandle
 INV_CALL root_create_scene_manager_m1(InvHandle self, SCENE_TYPE sceneType)
 {
-	return getOrCreateReference(
+	return getOrCreateReference<Ogre::SceneManager>(
 				asRoot(self)->createSceneManager(
-					(SceneTypeMask)sceneType));
+					(Ogre::SceneTypeMask)sceneType));
 }
 
 /**
@@ -218,10 +225,69 @@ INV_CALL root_create_scene_manager_m1(InvHandle self, SCENE_TYPE sceneType)
 INV_EXPORT InvHandle
 INV_CALL root_create_scene_manager_m2(InvHandle self, SCENE_TYPE sceneType, _string instanceName)
 {
-	return getOrCreateReference(
+	return getOrCreateReference<Ogre::SceneManager>(
 				asRoot(self)->createSceneManager(
-					(SceneTypeMask)sceneType,
+					(Ogre::SceneTypeMask)sceneType,
 					instanceName));
+}
+
+/**
+ * Method: Root::createRenderWindow
+ */
+INV_EXPORT InvHandle
+INV_CALL root_create_render_window_m1(InvHandle self, _string name, _uint width, _uint height, _bool fullscreen)
+{
+	return getOrCreateReference<Ogre::RenderWindow>(
+				asRoot(self)->createRenderWindow(name, width, height, fullscreen));
+}
+
+/**
+ * Method: Root::createRenderWindow
+ */
+INV_EXPORT InvHandle
+INV_CALL root_create_render_window_m2(InvHandle self, _string name, _uint width, _uint height, _bool fullscreen, NameValuePairList list)
+{
+	Ogre::NameValuePairList parameters;
+
+	for (_uint i = 0; i < list.count; i++) {
+		NameValuePair pair = list.pairs[i];
+		Ogre::NameValuePairList::value_type item(pair.name, pair.value);
+
+		parameters.insert(item);
+	}
+
+	return getOrCreateReference<Ogre::RenderWindow>(
+				asRoot(self)->createRenderWindow(name, width, height, fullscreen, &parameters));
+}
+
+/**
+ * Method: Root::loadPlugin
+ */
+INV_EXPORT void
+INV_CALL root_load_plugin(InvHandle self, _string plugin)
+{
+	asRoot(self)->loadPlugin(plugin);
+}
+
+/**
+ * Method: Root::unloadPlugin
+ */
+INV_EXPORT void
+INV_CALL root_unload_plugin(InvHandle self, _string plugin)
+{
+	asRoot(self)->unloadPlugin(plugin);
+}
+
+/**
+ * Method: Root::renderOneFrame
+ */
+INV_EXPORT _bool
+INV_CALL root_render_one_frame(InvHandle self, _bool clearWindowMessages)
+{
+	if (clearWindowMessages == TRUE)
+		Ogre::WindowEventUtilities::messagePump();
+
+	return toBool(asRoot(self)->renderOneFrame());
 }
 
 /**
@@ -230,7 +296,7 @@ INV_CALL root_create_scene_manager_m2(InvHandle self, SCENE_TYPE sceneType, _str
 INV_EXPORT InvHandle
 INV_CALL root_get_singleton()
 {
-	Root* root = Root::getSingletonPtr();
+	Ogre::Root* root = Ogre::Root::getSingletonPtr();
 
-	return getOrCreateReference<Root>(root);
+	return getOrCreateReference<Ogre::Root>(root);
 }

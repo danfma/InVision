@@ -47,13 +47,6 @@ namespace InVision.Framework.Config
 		public IList<Type> ScriptManagers { get; private set; }
 
 		/// <summary>
-		/// Gets or sets the manager factory.
-		/// </summary>
-		/// <value>The manager factory.</value>
-		[XmlIgnore]
-		public ScriptManagerFactory ManagerFactory { get; private set; }
-
-		/// <summary>
 		/// Adds the type of the script manager.
 		/// </summary>
 		/// <param name="type">The type.</param>
@@ -65,16 +58,6 @@ namespace InVision.Framework.Config
 			{
 				ScriptManagers.Add(type);
 			}
-		}
-
-		/// <summary>
-		/// Creates the factory.
-		/// </summary>
-		/// <param name="compilerOutput">The compiler output.</param>
-		/// <param name="executionMode">The execution mode.</param>
-		public void CreateFactory(string compilerOutput = null, ExecutionMode executionMode = ExecutionMode.Interpreted)
-		{
-			ManagerFactory = new ScriptManagerFactory(compilerOutput, executionMode);
 		}
 	}
 }

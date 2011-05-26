@@ -44,11 +44,13 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DefaultTutanoGameFlow.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Tutano.cs" />
+    <Compile Include="TutanoApplication.cs" />
     <Compile Include="TutanoConfigLoader.cs" />
     <Compile Include="TutanoConfiguration.cs" />
+    <Compile Include="TutanoGameFlow.cs" />
     <Compile Include="TutanoLauncher.cs" />
     <Compile Include="Util\ScriptColorRestore.cs" />
   </ItemGroup>
@@ -130,22 +132,34 @@
     <Content Include="Bin\Native\Windows-32bit\RenderSystem_GL_d.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="Config\log4net.config.xml" />
     <Content Include="Config\Tutano.config.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Libraries\Karel.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Config\Tutano.config.boo">
+    <Content Include="Config\SampleByCode.Config.boo">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Bin\Native\Linux-32bit\" />
     <Folder Include="Bin\Native\MacOSX-32bit\" />
-    <Folder Include="Libraries\" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
+    <None Include="Config\Ogre\plugins_d.cfg">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Scripts\States\States.Config.boo">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Scripts\States\World1.GameState.boo">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

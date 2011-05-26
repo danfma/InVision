@@ -148,9 +148,6 @@ namespace ReverseGenerator.Cpp
 			else
 			{
 				functionName = targetType.ToLower().ToPascalCase() + method.Name;
-
-				if (IsOverloaded(method))
-					functionName += GetNumberFromSequence(method);
 			}
 
 			if (IsOverloaded(method))

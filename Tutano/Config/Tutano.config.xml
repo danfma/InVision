@@ -3,15 +3,17 @@
 <configuration>
 	<!--<game-flow-type>FullTypename,Assembly</game-flow-type>-->
 
-	<screen>
+	<!--<screen>
 		<width>800</width>
 		<height>600</height>
 		<background-color value="#ff00ff" />
-	</screen>
+	</screen>-->
 
 	<ogre>
 		<use-ogre-config>true</use-ogre-config>
-		<!--<plugins-directory>Bin/Native/Windows-32bit/</plugins-directory>-->
+		<plugins-directory>Bin/Native/Windows-32bit/</plugins-directory>
+		<plugins-filename>Config/Ogre/plugins_d.cfg</plugins-filename>
+		<ogre-config-filename>Config/Ogre/config.cfg</ogre-config-filename>
 		<plugins>
 			<plugin>RenderSystem_GL_d</plugin>
 			<plugin>Plugin_ParticleFX_d</plugin>
@@ -26,7 +28,12 @@
 	<scripting>
 		<script-managers>
 			<!-- Example of script manager -->
-			<!--<script-manager>InVision.Scripting.Boo.BooScriptManager,InVision.Scripting.Boo</script-manager>-->
+			<script-manager>InVision.Scripting.Boo.BooScriptManager,InVision.Scripting.Boo</script-manager>
 		</script-managers>
 	</scripting>
+
+	<!--<custom-configurations>
+		<custom name="Karel.WorldName" value="World1" />
+	</custom-configurations>-->
+	
 </configuration>

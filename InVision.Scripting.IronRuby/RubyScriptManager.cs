@@ -45,7 +45,7 @@ namespace InVision.Scripting.IronRuby
 		/// <returns></returns>
 		public override IScript LoadScript(string filename)
 		{
-			return new RubyInterpretedScript(this, filename);
+			return new RubyInterpretedScript(this, filename, CompilerOutput);
 		}
 
 		#region Nested type: ForceLibraryDependency

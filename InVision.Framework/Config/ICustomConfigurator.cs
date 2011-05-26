@@ -2,12 +2,12 @@ using System;
 
 namespace InVision.Framework.Config
 {
-	public interface IConfigurator
+	public interface ICustomConfigurator
 	{
 		/// <summary>
 		/// Configures the specified config.
 		/// </summary>
 		/// <param name="config">The config.</param>
-		void Configure(FxConfiguration config);
+		void Configure(Configuration config);
 	}
 }

@@ -254,10 +254,10 @@ namespace InVision.OIS.Native
 		[return: MarshalAs(UnmanagedType.LPStr)]
 		public static extern String GetVersionName(Handle self);
 		
-		[DllImport(Library, EntryPoint = "inputmanager_create_input_system1_m1")]
+		[DllImport(Library, EntryPoint = "inputmanager_create_input_system_m1")]
 		public static extern Handle CreateInputSystem(int winHandle);
 		
-		[DllImport(Library, EntryPoint = "inputmanager_create_input_system2_m2")]
+		[DllImport(Library, EntryPoint = "inputmanager_create_input_system_m2")]
 		public static extern Handle CreateInputSystem(
 			NameValueItem[] parameters, 
 			int parametersCount);
@@ -277,13 +277,13 @@ namespace InVision.OIS.Native
 		[DllImport(Library, EntryPoint = "inputmanager_list_free_devices")]
 		public static extern IntPtr ListFreeDevices(Handle self);
 		
-		[DllImport(Library, EntryPoint = "inputmanager_create_input_object1_m1")]
+		[DllImport(Library, EntryPoint = "inputmanager_create_input_object_m1")]
 		public static extern Handle CreateInputObject(
 			Handle self, 
 			DeviceType iType, 
 			[MarshalAs(UnmanagedType.I1)] bool bufferMode);
 		
-		[DllImport(Library, EntryPoint = "inputmanager_create_input_object2_m2")]
+		[DllImport(Library, EntryPoint = "inputmanager_create_input_object_m2")]
 		public static extern Handle CreateInputObject(
 			Handle self, 
 			DeviceType iType, 

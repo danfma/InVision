@@ -63,9 +63,9 @@ namespace Framework.Tests.Scripting.Boo
 			var script = _scriptManager.LoadScript("Scripting/Boo/Configurer.boo");
 			script.LoadOrExecute();
 
-			var configurator = script.FindServices<IConfigurator>().Single();
+			var configurator = script.FindServices<ICustomConfigurator>().Single();
 
-			var config = FxConfiguration.Create();
+			var config = new Configuration();
 			config.Screen.Width = 1;
 			config.Screen.Height = 1;
 			config.Screen.BackgroundColor = Color.AliceBlue;

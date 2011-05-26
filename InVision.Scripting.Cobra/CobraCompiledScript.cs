@@ -17,8 +17,9 @@ namespace InVision.Scripting.Cobra
 		/// Initializes a new instance of the <see cref="CobraCompiledScript"/> class.
 		/// </summary>
 		/// <param name="filename">The filename.</param>
-		public CobraCompiledScript(string filename)
-			: base(filename)
+		/// <param name="compilerOutput">The compiler output.</param>
+		public CobraCompiledScript(string filename, string compilerOutput)
+			: base(filename, compilerOutput)
 		{
 		}
 

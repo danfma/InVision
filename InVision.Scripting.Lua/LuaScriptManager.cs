@@ -21,7 +21,7 @@ namespace InVision.Scripting.Lua
 		/// <returns></returns>
 		public override IScript LoadScript(string filename)
 		{
-			return new LuaInterpretedScript(filename);
+			return new LuaInterpretedScript(filename, CompilerOutput);
 		}
 	}
 }

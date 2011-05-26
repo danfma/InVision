@@ -89,5 +89,30 @@ namespace InVision.Ogre.Native
 
 		[Method]
 		ISceneManager CreateSceneManager(SceneType sceneType, [MarshalAs(UnmanagedType.LPStr)] string instanceName);
+
+		[Method]
+		IRenderWindow CreateRenderWindow(
+			[MarshalAs(UnmanagedType.LPStr)] string name,
+			uint width, uint height,
+			[MarshalAs(UnmanagedType.I1)] bool fullscreen);
+
+		[Method]
+		IRenderWindow CreateRenderWindow(
+			[MarshalAs(UnmanagedType.LPStr)] string name,
+			uint width, uint height,
+			[MarshalAs(UnmanagedType.I1)] bool fullscreen,
+			NameValuePairList list);
+
+		[Method]
+		void LoadPlugin([MarshalAs(UnmanagedType.LPStr)] string plugin);
+
+		[Method]
+		void UnloadPlugin([MarshalAs(UnmanagedType.LPStr)] string plugin);
+
+		[Method]
+		bool RenderOneFrame([MarshalAs(UnmanagedType.I1)] bool clearWindowMessages);
+
+		[Method]
+		void CheckWindowMessages();
 	}
 }

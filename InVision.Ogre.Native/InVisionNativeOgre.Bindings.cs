@@ -77,6 +77,9 @@ namespace InVision.Ogre.Native
 		}
 		
 		
+		[DllImport(Library, EntryPoint = "root_check_window_messages")]
+		public static extern void CheckWindowMessages(Handle self);
+		
 		[DllImport(Library, EntryPoint = "new_root_m1")]
 		public static extern Handle Construct();
 		
@@ -126,18 +129,18 @@ namespace InVision.Ogre.Native
 		[DllImport(Library, EntryPoint = "root_get_render_system")]
 		public static extern Handle GetRenderSystem(Handle self);
 		
-		[DllImport(Library, EntryPoint = "root_initialize1_m1")]
+		[DllImport(Library, EntryPoint = "root_initialize_m1")]
 		public static extern Handle Initialize(
 			Handle self, 
 			[MarshalAs(UnmanagedType.I1)] bool autoCreateWindow);
 		
-		[DllImport(Library, EntryPoint = "root_initialize2_m2")]
+		[DllImport(Library, EntryPoint = "root_initialize_m2")]
 		public static extern Handle Initialize(
 			Handle self, 
 			[MarshalAs(UnmanagedType.I1)] bool autoCreateWindow, 
 			[MarshalAs(UnmanagedType.LPStr)] String windowTitle);
 		
-		[DllImport(Library, EntryPoint = "root_initialize3_m3")]
+		[DllImport(Library, EntryPoint = "root_initialize_m3")]
 		public static extern Handle Initialize(
 			Handle self, 
 			[MarshalAs(UnmanagedType.I1)] bool autoCreateWindow, 
@@ -170,16 +173,48 @@ namespace InVision.Ogre.Native
 			Handle self, 
 			Handle factory);
 		
-		[DllImport(Library, EntryPoint = "root_create_scene_manager1_m1")]
+		[DllImport(Library, EntryPoint = "root_create_scene_manager_m1")]
 		public static extern Handle CreateSceneManager(
 			Handle self, 
 			SceneType sceneType);
 		
-		[DllImport(Library, EntryPoint = "root_create_scene_manager2_m2")]
+		[DllImport(Library, EntryPoint = "root_create_scene_manager_m2")]
 		public static extern Handle CreateSceneManager(
 			Handle self, 
 			SceneType sceneType, 
 			[MarshalAs(UnmanagedType.LPStr)] String instanceName);
+		
+		[DllImport(Library, EntryPoint = "root_create_render_window_m1")]
+		public static extern Handle CreateRenderWindow(
+			Handle self, 
+			[MarshalAs(UnmanagedType.LPStr)] String name, 
+			uint width, 
+			uint height, 
+			[MarshalAs(UnmanagedType.I1)] bool fullscreen);
+		
+		[DllImport(Library, EntryPoint = "root_create_render_window_m2")]
+		public static extern Handle CreateRenderWindow(
+			Handle self, 
+			[MarshalAs(UnmanagedType.LPStr)] String name, 
+			uint width, 
+			uint height, 
+			[MarshalAs(UnmanagedType.I1)] bool fullscreen, 
+			NameValuePairList list);
+		
+		[DllImport(Library, EntryPoint = "root_load_plugin")]
+		public static extern void LoadPlugin(
+			Handle self, 
+			[MarshalAs(UnmanagedType.LPStr)] String plugin);
+		
+		[DllImport(Library, EntryPoint = "root_unload_plugin")]
+		public static extern void UnloadPlugin(
+			Handle self, 
+			[MarshalAs(UnmanagedType.LPStr)] String plugin);
+		
+		[DllImport(Library, EntryPoint = "root_render_one_frame")]
+		public static extern bool RenderOneFrame(
+			Handle self, 
+			[MarshalAs(UnmanagedType.I1)] bool clearWindowMessages);
 		
 		[DllImport(Library, EntryPoint = "root_get_singleton")]
 		public static extern Handle GetSingleton();
@@ -270,12 +305,12 @@ namespace InVision.Ogre.Native
 		[DllImport(Library, EntryPoint = "logmanager_get_default_log")]
 		public static extern Handle GetDefaultLog(Handle self);
 		
-		[DllImport(Library, EntryPoint = "logmanager_destroy_log1_m1")]
+		[DllImport(Library, EntryPoint = "logmanager_destroy_log_m1")]
 		public static extern void DestroyLog(
 			Handle self, 
 			[MarshalAs(UnmanagedType.LPStr)] String name);
 		
-		[DllImport(Library, EntryPoint = "logmanager_destroy_log2_m2")]
+		[DllImport(Library, EntryPoint = "logmanager_destroy_log_m2")]
 		public static extern void DestroyLog(
 			Handle self, 
 			Handle log);
@@ -299,6 +334,23 @@ namespace InVision.Ogre.Native
 		
 		[DllImport(Library, EntryPoint = "logmanager_get_singleton")]
 		public static extern Handle GetSingleton();
+	}
+	
+	internal sealed class NativeCustomLogListener : InVision.Native.PlatformInvoke
+	{
+		public const string Library = "InVisionNative.dll";
+		
+		static NativeCustomLogListener()
+		{
+			Init();
+		}
+		
+		
+		[DllImport(Library, EntryPoint = "new_customloglistener")]
+		public static extern Handle Construct(LogListenerMessageLoggedHandler messageLoggedHandler);
+		
+		[DllImport(Library, EntryPoint = "delete_customloglistener")]
+		public static extern void Destruct(Handle self);
 	}
 	
 	internal sealed class NativeViewport : InVision.Native.PlatformInvoke
@@ -369,23 +421,10 @@ namespace InVision.Ogre.Native
 			float top, 
 			float width, 
 			float height);
-	}
-	
-	internal sealed class NativeCustomLogListener : InVision.Native.PlatformInvoke
-	{
-		public const string Library = "InVisionNative.dll";
 		
-		static NativeCustomLogListener()
-		{
-			Init();
-		}
-		
-		
-		[DllImport(Library, EntryPoint = "new_customloglistener")]
-		public static extern Handle Construct(LogListenerMessageLoggedHandler messageLoggedHandler);
-		
-		[DllImport(Library, EntryPoint = "delete_customloglistener")]
-		public static extern void Destruct(Handle self);
+		[DllImport(Library, EntryPoint = "renderwindow_is_closed")]
+		[return: MarshalAs(UnmanagedType.I1)]
+		public static extern bool IsClosed(Handle self);
 	}
 	
 }

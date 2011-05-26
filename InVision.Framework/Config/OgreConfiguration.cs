@@ -42,5 +42,13 @@ namespace InVision.Framework.Config
 		/// <value>The ogre config filename.</value>
 		[XmlElement("ogre-config-filename")]
 		public string OgreConfigFilename { get; set; }
+
+		/// <summary>
+		/// Gets or sets the render window parameters.
+		/// </summary>
+		/// <value>The render window parameters.</value>
+		[XmlArray("render-window-parameters")]
+		[XmlArrayItem("parameter")]
+		public NameValue[] RenderWindowParameters { get; set; }
 	}
 }

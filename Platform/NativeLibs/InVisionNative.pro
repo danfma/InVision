@@ -6,7 +6,9 @@
 
 QT       -= core gui
 
-TARGET = InVisionNative
+Debug:TARGET = InVisionNative_d
+Release:TARGET = InVisionNative
+
 TEMPLATE = lib
 
 SOURCES += $$files(sources/common/*.cpp)

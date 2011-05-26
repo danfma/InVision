@@ -232,66 +232,73 @@ namespace InVision.Ogre
 									native => new SceneManager(native));
 		}
 
+		/// <summary>
+		/// Creates the render window.
+		/// </summary>
+		/// <param name="name">The name.</param>
+		/// <param name="width">The width.</param>
+		/// <param name="height">The height.</param>
+		/// <param name="fullscreen">if set to <c>true</c> [fullscreen].</param>
+		/// <param name="parameters">The parameters.</param>
+		/// <returns></returns>
+		public RenderWindow CreateRenderWindow(string name, uint width, uint height, bool fullscreen, RenderWindowParameters parameters)
+		{
+			return GetOrCreateOwner(
+				Native.CreateRenderWindow(name, width, height, fullscreen, parameters.ToNameValuePairList()),
+				native => new RenderWindow(native));
+		}
+
+		/// <summary>
+		/// Creates the render window.
+		/// </summary>
+		/// <param name="name">The name.</param>
+		/// <param name="width">The width.</param>
+		/// <param name="height">The height.</param>
+		/// <param name="fullscreen">if set to <c>true</c> [fullscreen].</param>
+		/// <returns></returns>
+		public RenderWindow CreateRenderWindow(string name, uint width, uint height, bool fullscreen)
+		{
+			return GetOrCreateOwner(
+				Native.CreateRenderWindow(name, width, height, fullscreen),
+				native => new RenderWindow(native));
+		}
+
+		/// <summary>
+		/// Renders the one frame.
+		/// </summary>
+		/// <param name="clearWindowMessages">if set to <c>true</c> [clear window messages].</param>
+		/// <returns></returns>
+		public bool RenderOneFrame(bool clearWindowMessages = true)
+		{
+			return Native.RenderOneFrame(clearWindowMessages);
+		}
+
+		/// <summary>
+		/// Unloads the plugin.
+		/// </summary>
+		/// <param name="plugin">The plugin.</param>
+		public void UnloadPlugin(string plugin)
+		{
+			Native.UnloadPlugin(plugin);
+		}
+
+		/// <summary>
+		/// Loads the plugin.
+		/// </summary>
+		/// <param name="plugin">The plugin.</param>
+		public void LoadPlugin(string plugin)
+		{
+			Native.LoadPlugin(plugin);
+		}
+
+		/// <summary>
+		/// Checks the window messages.
+		/// </summary>
+		public void CheckWindowMessages()
+		{
+			Native.CheckWindowMessages();
+		}
+
 		#endregion
-	}
-
-	public class SceneManager : CppWrapper<ISceneManager>
-	{
-		/// <summary>
-		/// Initializes a new instance of the <see cref="SceneManager"/> class.
-		/// </summary>
-		/// <param name="nativeInstance">The native instance.</param>
-		public SceneManager(ISceneManager nativeInstance)
-			: base(nativeInstance)
-		{
-		}
-	}
-
-	public class SceneManagerFactory : CppWrapper<ISceneManagerFactory>
-	{
-		/// <summary>
-		/// Initializes a new instance of the <see cref="SceneManagerFactory"/> class.
-		/// </summary>
-		/// <param name="nativeInstance">The native instance.</param>
-		public SceneManagerFactory(ISceneManagerFactory nativeInstance)
-			: base(nativeInstance)
-		{
-		}
-	}
-
-	public class RenderSystemCapabilities : CppWrapper<IRenderSystemCapabilities>
-	{
-		/// <summary>
-		/// Initializes a new instance of the <see cref="RenderSystemCapabilities"/> class.
-		/// </summary>
-		/// <param name="nativeInstance">The native instance.</param>
-		public RenderSystemCapabilities(IRenderSystemCapabilities nativeInstance)
-			: base(nativeInstance)
-		{
-		}
-	}
-
-	public class RenderWindow : CppWrapper<IRenderWindow>
-	{
-		/// <summary>
-		/// Initializes a new instance of the <see cref="RenderWindow"/> class.
-		/// </summary>
-		/// <param name="nativeInstance">The native instance.</param>
-		public RenderWindow(IRenderWindow nativeInstance)
-			: base(nativeInstance)
-		{
-		}
-	}
-
-	public class RenderSystem : CppWrapper<IRenderSystem>
-	{
-		/// <summary>
-		/// Initializes a new instance of the <see cref="RenderSystem"/> class.
-		/// </summary>
-		/// <param name="nativeInstance">The native instance.</param>
-		public RenderSystem(IRenderSystem nativeInstance)
-			: base(nativeInstance)
-		{
-		}
 	}
 }

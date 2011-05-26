@@ -19,8 +19,9 @@ namespace InVision.Scripting.Boo
 		/// Initializes a new instance of the <see cref="BooCompiledScript"/> class.
 		/// </summary>
 		/// <param name="filename">The filename.</param>
-		public BooCompiledScript(string filename)
-			: base(filename)
+		/// <param name="compilerOutput">The compiler output.</param>
+		public BooCompiledScript(string filename, string compilerOutput)
+			: base(filename, compilerOutput)
 		{
 		}
 
@@ -63,18 +64,6 @@ namespace InVision.Scripting.Boo
 				compiler.Parameters.AddAssembly(assembly);
 			}
 
-			var booFile = new StringBuilder();
-
-			booFile.Append(File.ReadAllText(Filename));
-
-			string tmp = Path.Combine(Path.GetTempPath(), Path.GetFileName(Filename));
-
-			using (StreamWriter output = File.CreateText(tmp))
-			{
-				output.Write(booFile.ToString());
-				output.Flush();
-			}
-
 			string outputDir = CompilerOutput;
 
 			if (!string.IsNullOrEmpty(outputDir))
@@ -84,7 +73,7 @@ namespace InVision.Scripting.Boo
 
 			string outputAssembly = Path.Combine(
 				outputDir,
-				Path.GetFileNameWithoutExtension(Filename) + ".dll");
+				AssemblyPrefix + Path.GetFileNameWithoutExtension(Filename) + ".dll");
 
 			if (File.Exists(outputAssembly) &&
 				File.GetLastWriteTime(outputAssembly) > File.GetLastWriteTime(Filename))
@@ -93,18 +82,20 @@ namespace InVision.Scripting.Boo
 				return;
 			}
 
-			compiler.Parameters.Input.Add(new FileInput(tmp));
+			compiler.Parameters.Input.Add(new FileInput(Filename));
 			//compiler.Parameters.Pipeline = new CompileToMemory();
 			compiler.Parameters.Pipeline = new CompileToFile();
+#if DEBUG
+			compiler.Parameters.Debug = true;
+#else
 			compiler.Parameters.Debug = false;
+#endif
 			compiler.Parameters.OutputAssembly = outputAssembly;
 			compiler.Parameters.OutputType = CompilerOutputType.Library;
 			compiler.Parameters.Ducky = true;
 
 			_context = compiler.Run();
 			GeneratedAssembly = _context.GeneratedAssembly;
-
-			File.Delete(tmp);
 
 			if (GeneratedAssembly == null)
 				ThrowError(Filename, _context);

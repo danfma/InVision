@@ -21,7 +21,7 @@ namespace InVision.Scripting.Cobra
 		/// <returns></returns>
 		public override IScript LoadScript(string filename)
 		{
-			return new CobraCompiledScript(filename);
+			return new CobraCompiledScript(filename, CompilerOutput);
 		}
 	}
 }

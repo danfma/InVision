@@ -22,9 +22,9 @@ namespace InVision.Scripting.Boo
 		public override IScript LoadScript(string filename)
 		{
 			if (PreferredExecution == ExecutionMode.Interpreted)
-				return new BooInterpretedScript(filename);
+				return new BooInterpretedScript(filename, CompilerOutput);
 
-			return new BooCompiledScript(filename);
+			return new BooCompiledScript(filename, CompilerOutput);
 		}
 	}
 }

@@ -36,9 +36,13 @@ extern "C"
 	 * Prototypes
 	 */
 	
+	struct NameValuePairList;
+	struct NameValuePair;
 	
 	typedef void (INV_CALL *LogListenerMessageLoggedHandler)(_string message, LOG_MESSAGE_LEVEL level, _bool maskDebug, _string name);
 	
+	#include "invisionnative_ogre_name_value_pair_list.h"
+	#include "invisionnative_ogre_name_value_pair.h"
 	
 	
 	/*
@@ -96,6 +100,12 @@ extern "C"
 	/*
 	 * Function group: InVision.Ogre.Native.IRoot
 	 */
+	
+	/**
+	 * Method: Root::checkWindowMessages
+	 */
+	INV_EXPORT void
+	INV_CALL root_check_window_messages(InvHandle self);
 	
 	/**
 	 * Method: Root::Root
@@ -236,6 +246,36 @@ extern "C"
 	INV_CALL root_create_scene_manager_m2(InvHandle self, SCENE_TYPE sceneType, _string instanceName);
 	
 	/**
+	 * Method: Root::createRenderWindow
+	 */
+	INV_EXPORT InvHandle
+	INV_CALL root_create_render_window_m1(InvHandle self, _string name, _uint width, _uint height, _bool fullscreen);
+	
+	/**
+	 * Method: Root::createRenderWindow
+	 */
+	INV_EXPORT InvHandle
+	INV_CALL root_create_render_window_m2(InvHandle self, _string name, _uint width, _uint height, _bool fullscreen, NameValuePairList list);
+	
+	/**
+	 * Method: Root::loadPlugin
+	 */
+	INV_EXPORT void
+	INV_CALL root_load_plugin(InvHandle self, _string plugin);
+	
+	/**
+	 * Method: Root::unloadPlugin
+	 */
+	INV_EXPORT void
+	INV_CALL root_unload_plugin(InvHandle self, _string plugin);
+	
+	/**
+	 * Method: Root::renderOneFrame
+	 */
+	INV_EXPORT _bool
+	INV_CALL root_render_one_frame(InvHandle self, _bool clearWindowMessages);
+	
+	/**
 	 * Method: Root::getSingleton
 	 */
 	INV_EXPORT InvHandle
@@ -353,6 +393,23 @@ extern "C"
 	
 	
 	/*
+	 * Function group: InVision.Ogre.Native.ICustomLogListener
+	 */
+	
+	/**
+	 * Method: CustomLogListener::CustomLogListener
+	 */
+	INV_EXPORT InvHandle
+	INV_CALL new_customloglistener(LogListenerMessageLoggedHandler messageLoggedHandler);
+	
+	/**
+	 * Method: CustomLogListener::~CustomLogListener
+	 */
+	INV_EXPORT void
+	INV_CALL delete_customloglistener(InvHandle self);
+	
+	
+	/*
 	 * Function group: InVision.Ogre.Native.IViewport
 	 */
 	
@@ -408,22 +465,11 @@ extern "C"
 	INV_EXPORT InvHandle
 	INV_CALL renderwindow_add_viewport(InvHandle self, InvHandle camera, _int zOrder, _float left, _float top, _float width, _float height);
 	
-	
-	/*
-	 * Function group: InVision.Ogre.Native.ICustomLogListener
-	 */
-	
 	/**
-	 * Method: CustomLogListener::CustomLogListener
+	 * Method: RenderWindow::isClosed
 	 */
-	INV_EXPORT InvHandle
-	INV_CALL new_customloglistener(LogListenerMessageLoggedHandler messageLoggedHandler);
-	
-	/**
-	 * Method: CustomLogListener::~CustomLogListener
-	 */
-	INV_EXPORT void
-	INV_CALL delete_customloglistener(InvHandle self);
+	INV_EXPORT _bool
+	INV_CALL renderwindow_is_closed(InvHandle self);
 	
 	
 }
@@ -463,6 +509,10 @@ inline Ogre::LogManager* asLogManager(InvHandle self) {
 	return castHandle< Ogre::LogManager >(self);
 }
 
+inline CustomLogListener* asCustomLogListener(InvHandle self) {
+	return castHandle< CustomLogListener >(self);
+}
+
 inline Ogre::Viewport* asViewport(InvHandle self) {
 	return castHandle< Ogre::Viewport >(self);
 }
@@ -473,10 +523,6 @@ inline Ogre::SceneManager* asSceneManager(InvHandle self) {
 
 inline Ogre::RenderWindow* asRenderWindow(InvHandle self) {
 	return castHandle< Ogre::RenderWindow >(self);
-}
-
-inline CustomLogListener* asCustomLogListener(InvHandle self) {
-	return castHandle< CustomLogListener >(self);
 }
 
 #endif // __cplusplus

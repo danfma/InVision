@@ -14,5 +14,9 @@ namespace InVision.Ogre.Native
 		IViewport AddViewport(ICamera camera, int zOrder = 0,
 			float left = 0, float top = 0,
 			float width = 1f, float height = 1f);
+
+		[Method]
+		[return: MarshalAs(UnmanagedType.I1)]
+		bool IsClosed();
 	}
 }

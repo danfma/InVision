@@ -9,29 +9,27 @@ namespace Framework.Tests.Scripting
 	[TestFixture]
 	public class ScriptFactoryTests
 	{
+		private Configuration config;
+
 		#region Setup/Teardown
 
 		[SetUp]
 		public void Setup()
 		{
-			var config = FxConfiguration.Create();
+			config = new Configuration();
 			config.Scripting.ScriptManagers.Add(typeof(BooScriptManager));
+
+			ScriptManagerFactory.Initialize(config);
 		}
 
 		#endregion
-
-		[Test]
-		public void CheckConfiguration()
-		{
-			Assert.That(FxConfiguration.Instance, Is.Not.Null);
-		}
 
 		[Test]
 		public void LoadBooScript()
 		{
 			const string filename = "Scripting/Boo/HelloWorld.boo";
 
-			var scriptFactory = new ScriptManagerFactory();
+			var scriptFactory = ScriptManagerFactory.Instance;
 			var script = scriptFactory.GetScriptManagerFor(filename).LoadScript(filename);
 
 			Assert.That(script, Is.Not.Null);

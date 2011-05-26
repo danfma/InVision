@@ -19,8 +19,9 @@ namespace InVision.Scripting.Boo
 		/// Initializes a new instance of the <see cref="BooInterpretedScript"/> class.
 		/// </summary>
 		/// <param name="filename">The filename.</param>
-		public BooInterpretedScript(string filename)
-			: base(filename)
+		/// <param name="compilerOutput"></param>
+		public BooInterpretedScript(string filename, string compilerOutput)
+			: base(filename, compilerOutput)
 		{
 			_interpreter = new InteractiveInterpreter();
 		}

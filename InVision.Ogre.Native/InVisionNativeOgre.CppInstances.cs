@@ -115,6 +115,13 @@ namespace InVision.Ogre.Native
 			Self = default(Handle);
 		}
 		
+		void IRoot.CheckWindowMessages()
+		{
+			CheckMemberOnlyCall();
+			
+			NativeRoot.CheckWindowMessages(Self);
+		}
+		
 		void IRoot.SaveConfig()
 		{
 			CheckMemberOnlyCall();
@@ -261,6 +268,47 @@ namespace InVision.Ogre.Native
 			var result = NativeRoot.CreateSceneManager(Self, sceneType, instanceName);
 			
 			return HandleConvert.FromHandle<ISceneManager>(result);
+		}
+		
+		IRenderWindow IRoot.CreateRenderWindow(String name, uint width, uint height, bool fullscreen)
+		{
+			CheckMemberOnlyCall();
+			
+			var result = NativeRoot.CreateRenderWindow(Self, name, width, height, fullscreen);
+			
+			return HandleConvert.FromHandle<IRenderWindow>(result);
+		}
+		
+		IRenderWindow IRoot.CreateRenderWindow(String name, uint width, uint height, bool fullscreen, NameValuePairList list)
+		{
+			CheckMemberOnlyCall();
+			
+			var result = NativeRoot.CreateRenderWindow(Self, name, width, height, fullscreen, list);
+			
+			return HandleConvert.FromHandle<IRenderWindow>(result);
+		}
+		
+		void IRoot.LoadPlugin(String plugin)
+		{
+			CheckMemberOnlyCall();
+			
+			NativeRoot.LoadPlugin(Self, plugin);
+		}
+		
+		void IRoot.UnloadPlugin(String plugin)
+		{
+			CheckMemberOnlyCall();
+			
+			NativeRoot.UnloadPlugin(Self, plugin);
+		}
+		
+		bool IRoot.RenderOneFrame(bool clearWindowMessages)
+		{
+			CheckMemberOnlyCall();
+			
+			var result = NativeRoot.RenderOneFrame(Self, clearWindowMessages);
+			
+			return result;
 		}
 		
 		IRoot ISingleton<IRoot>.GetSingleton()
@@ -411,6 +459,24 @@ namespace InVision.Ogre.Native
 		
 	}
 	
+	[CppImplementation(typeof(ICustomLogListener))]
+	internal class CustomLogListenerImpl
+		: CppInstance, ICustomLogListener
+	{
+		ICustomLogListener ICustomLogListener.Construct(LogListenerMessageLoggedHandler messageLoggedHandler)
+		{
+			Self = NativeCustomLogListener.Construct(messageLoggedHandler);
+			return this;
+		}
+		
+		void ICustomLogListener.Destruct()
+		{
+			NativeCustomLogListener.Destruct(Self);
+			Self = default(Handle);
+		}
+		
+	}
+	
 	[CppImplementation(typeof(IViewport))]
 	internal class ViewportImpl
 		: CppInstance, IViewport
@@ -482,22 +548,13 @@ namespace InVision.Ogre.Native
 			return HandleConvert.FromHandle<IViewport>(result);
 		}
 		
-	}
-	
-	[CppImplementation(typeof(ICustomLogListener))]
-	internal class CustomLogListenerImpl
-		: CppInstance, ICustomLogListener
-	{
-		ICustomLogListener ICustomLogListener.Construct(LogListenerMessageLoggedHandler messageLoggedHandler)
+		bool IRenderWindow.IsClosed()
 		{
-			Self = NativeCustomLogListener.Construct(messageLoggedHandler);
-			return this;
-		}
-		
-		void ICustomLogListener.Destruct()
-		{
-			NativeCustomLogListener.Destruct(Self);
-			Self = default(Handle);
+			CheckMemberOnlyCall();
+			
+			var result = NativeRenderWindow.IsClosed(Self);
+			
+			return result;
 		}
 		
 	}

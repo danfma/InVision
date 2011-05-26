@@ -29,8 +29,8 @@ extern "C"
 	// .NET DATA TYPES
 	//
 	typedef int8_t _bool;
-#define TRUE 1
-#define FALSE 0
+#define TRUE (_bool)1
+#define FALSE (_bool)0
 	
 	typedef char _char;
 	typedef unsigned char _uchar;

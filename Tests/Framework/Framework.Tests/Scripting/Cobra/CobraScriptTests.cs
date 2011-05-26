@@ -46,12 +46,12 @@ namespace Framework.Tests.Scripting.Cobra
 		{
 			var script = _scriptManager.LoadScript("Scripting/Cobra/Configurer.cobra");
 			script.AddReference(typeof(Color).Assembly);
-			script.AddReference(typeof(FxConfiguration).Assembly);
+			script.AddReference(typeof(Configuration).Assembly);
 			script.LoadOrExecute();
 
-			var configurator = script.FindServices<IConfigurator>().Single();
+			var configurator = script.FindServices<ICustomConfigurator>().Single();
 
-			FxConfiguration config = FxConfiguration.Create();
+			Configuration config = new Configuration();
 			config.Screen.Width = 1;
 			config.Screen.Height = 1;
 			config.Screen.BackgroundColor = Color.AliceBlue;

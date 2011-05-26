@@ -4,9 +4,8 @@
 	{
 		public static void Run()
 		{
-			using (var tutano = new Tutano())
+			using (var tutano = new TutanoApplication())
 			{
-				tutano.Initialize();
 				tutano.Run();
 			}
 		}

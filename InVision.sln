@@ -34,6 +34,9 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Framework Apps", "Framework Apps", "{29E702E0-9047-4CAB-BAC9-B9BFCD17BC62}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tutano", "Tutano\Tutano.csproj", "{E2696BD7-6F39-482A-98C3-76E4B221DA05}"
+	ProjectSection(ProjectDependencies) = postProject
+		{55599595-6CB4-4983-96AB-B00AFEF7B83F} = {55599595-6CB4-4983-96AB-B00AFEF7B83F}
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InVision.Scripting.IronRuby", "InVision.Scripting.IronRuby\InVision.Scripting.IronRuby.csproj", "{9AC5081A-26D7-4521-A7DA-80F548BD25C8}"
 EndProject
@@ -62,6 +65,10 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InVision.Ogre.Native", "InVision.Ogre.Native\InVision.Ogre.Native.csproj", "{316AE104-9284-4BE8-B3F7-5C5EC74B9C80}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InVision.Native", "InVision.Native\InVision.Native.csproj", "{F84D662E-4316-48BB-ABD0-C37E49601ACC}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tutano Libraries", "Tutano Libraries", "{D9119F23-BF60-434B-B5C1-7E9280EDF739}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Karel", "Karel\Karel.csproj", "{55599595-6CB4-4983-96AB-B00AFEF7B83F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -347,6 +354,18 @@ Global
 		{F84D662E-4316-48BB-ABD0-C37E49601ACC}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{F84D662E-4316-48BB-ABD0-C37E49601ACC}.Release|Win32.ActiveCfg = Release|Any CPU
 		{F84D662E-4316-48BB-ABD0-C37E49601ACC}.Release|x86.ActiveCfg = Release|Any CPU
+		{55599595-6CB4-4983-96AB-B00AFEF7B83F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{55599595-6CB4-4983-96AB-B00AFEF7B83F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{55599595-6CB4-4983-96AB-B00AFEF7B83F}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{55599595-6CB4-4983-96AB-B00AFEF7B83F}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{55599595-6CB4-4983-96AB-B00AFEF7B83F}.Debug|Win32.ActiveCfg = Debug|Any CPU
+		{55599595-6CB4-4983-96AB-B00AFEF7B83F}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{55599595-6CB4-4983-96AB-B00AFEF7B83F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{55599595-6CB4-4983-96AB-B00AFEF7B83F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{55599595-6CB4-4983-96AB-B00AFEF7B83F}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{55599595-6CB4-4983-96AB-B00AFEF7B83F}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{55599595-6CB4-4983-96AB-B00AFEF7B83F}.Release|Win32.ActiveCfg = Release|Any CPU
+		{55599595-6CB4-4983-96AB-B00AFEF7B83F}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -378,6 +397,7 @@ Global
 		{F84D662E-4316-48BB-ABD0-C37E49601ACC} = {CE8D7F5C-FFBD-4B39-8A42-A33157350FBA}
 		{E2696BD7-6F39-482A-98C3-76E4B221DA05} = {29E702E0-9047-4CAB-BAC9-B9BFCD17BC62}
 		{F48E8475-21C6-4124-83B7-3536F2E79EA1} = {3517D935-D619-4821-A127-BF657789BCC1}
+		{55599595-6CB4-4983-96AB-B00AFEF7B83F} = {D9119F23-BF60-434B-B5C1-7E9280EDF739}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		BuildVersion_BuildVersioningStyle = None.None.Increment.YearDayOfYear

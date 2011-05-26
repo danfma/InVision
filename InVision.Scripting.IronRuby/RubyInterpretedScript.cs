@@ -21,8 +21,9 @@ namespace InVision.Scripting.IronRuby
 		/// </summary>
 		/// <param name="manager">The manager.</param>
 		/// <param name="filename">The filename.</param>
-		public RubyInterpretedScript(RubyScriptManager manager, string filename)
-			: base(filename)
+		/// <param name="compilerOutput">The compiler output.</param>
+		public RubyInterpretedScript(RubyScriptManager manager, string filename, string compilerOutput)
+			: base(filename, compilerOutput)
 		{
 			_manager = manager;
 

@@ -44,22 +44,31 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Config\ConfiguratorDispatcher.cs" />
-    <Compile Include="Config\FxConfiguration.cs" />
-    <Compile Include="Config\IConfigurator.cs" />
+    <Compile Include="Config\CustomConfiguratorDispatcher.cs" />
+    <Compile Include="Config\Configuration.cs" />
+    <Compile Include="Config\GameConfiguration.cs" />
+    <Compile Include="Config\ICustomConfigurator.cs" />
+    <Compile Include="Config\NameValue.cs" />
     <Compile Include="Config\OgreConfiguration.cs" />
     <Compile Include="Config\Platform.cs" />
     <Compile Include="Config\PlatformIdentity.cs" />
     <Compile Include="Config\ScreenConfiguration.cs" />
     <Compile Include="Config\ScriptingConfiguration.cs" />
+    <Compile Include="ContentManager.cs" />
     <Compile Include="DefaultGameFlow.cs" />
     <Compile Include="GameApplication.cs" />
+    <Compile Include="GameComponent.cs" />
+    <Compile Include="GameComponentCollection.cs" />
     <Compile Include="GameFlow.cs" />
+    <Compile Include="ElapsedTime.cs" />
+    <Compile Include="IGameComponent.cs" />
+    <Compile Include="IGameLogic.cs" />
     <Compile Include="IGameState.cs" />
-    <Compile Include="GameStateManager.cs" />
+    <Compile Include="GameStateMachine.cs" />
     <Compile Include="IGameFlow.cs" />
     <Compile Include="GameTransition.cs" />
     <Compile Include="GameState.cs" />
+    <Compile Include="Config\ICustomGameStateConfigurator.cs" />
     <Compile Include="IServiceManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Scripting\ExecutionMode.cs" />
@@ -71,8 +80,8 @@
     <Compile Include="Scripting\ScriptManager.cs" />
     <Compile Include="Scripting\ScriptManagerFactory.cs" />
     <Compile Include="Scripting\ScriptNotLoadedException.cs" />
-    <Compile Include="ServiceManager.cs" />
     <Compile Include="ServiceInfo.cs" />
+    <Compile Include="StepAction.cs" />
     <Compile Include="Util\ConsoleColorRestore.cs" />
   </ItemGroup>
   <ItemGroup>
