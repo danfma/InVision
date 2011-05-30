@@ -29,18 +29,116 @@ namespace InVision.OIS.Native
 		public static extern void Destruct(Handle self);
 	}
 	
-	internal sealed unsafe class NativeKeyListener : InVision.Native.PlatformInvoke
+	internal sealed unsafe class NativeInputManager : InVision.Native.PlatformInvoke
 	{
 		public const string Library = "InVisionNative.dll";
 		
-		static NativeKeyListener()
+		static NativeInputManager()
 		{
 			Init();
 		}
 		
 		
-		[DllImport(Library, EntryPoint = "delete_keylistener")]
+		[DllImport(Library, EntryPoint = "inputmanager_get_version_number")]
+		public static extern uint GetVersionNumber();
+		
+		[DllImport(Library, EntryPoint = "inputmanager_get_version_name")]
+		[return: MarshalAs(UnmanagedType.LPStr)]
+		public static extern String GetVersionName(Handle self);
+		
+		[DllImport(Library, EntryPoint = "inputmanager_create_input_system_m1")]
+		public static extern Handle CreateInputSystem(int winHandle);
+		
+		[DllImport(Library, EntryPoint = "inputmanager_create_input_system_m2")]
+		public static extern Handle CreateInputSystem(
+			NameValueItem[] parameters, 
+			int parametersCount);
+		
+		[DllImport(Library, EntryPoint = "inputmanager_destroy_input_system")]
+		public static extern void DestroyInputSystem(Handle manager);
+		
+		[DllImport(Library, EntryPoint = "inputmanager_input_system_name")]
+		[return: MarshalAs(UnmanagedType.LPStr)]
+		public static extern String InputSystemName(Handle self);
+		
+		[DllImport(Library, EntryPoint = "inputmanager_get_number_of_devices")]
+		public static extern int GetNumberOfDevices(
+			Handle self, 
+			DeviceType iType);
+		
+		[DllImport(Library, EntryPoint = "inputmanager_list_free_devices")]
+		public static extern IntPtr ListFreeDevices(Handle self);
+		
+		[DllImport(Library, EntryPoint = "inputmanager_create_input_object_m1")]
+		public static extern Handle CreateInputObject(
+			Handle self, 
+			DeviceType iType, 
+			[MarshalAs(UnmanagedType.I1)] bool bufferMode);
+		
+		[DllImport(Library, EntryPoint = "inputmanager_create_input_object_m2")]
+		public static extern Handle CreateInputObject(
+			Handle self, 
+			DeviceType iType, 
+			[MarshalAs(UnmanagedType.I1)] bool bufferMode, 
+			[MarshalAs(UnmanagedType.LPStr)] String vendor);
+		
+		[DllImport(Library, EntryPoint = "inputmanager_destroy_input_object")]
+		public static extern void DestroyInputObject(
+			Handle self, 
+			Handle obj);
+		
+		[DllImport(Library, EntryPoint = "inputmanager_add_factory_creator")]
+		public static extern void AddFactoryCreator(
+			Handle self, 
+			Handle factory);
+		
+		[DllImport(Library, EntryPoint = "inputmanager_remove_factory_creator")]
+		public static extern void RemoveFactoryCreator(
+			Handle self, 
+			Handle factory);
+		
+		[DllImport(Library, EntryPoint = "inputmanager_enable_add_on_factory")]
+		public static extern void EnableAddOnFactory(
+			Handle self, 
+			AddOnFactory factory);
+	}
+	
+	internal sealed unsafe class NativeEventArg : InVision.Native.PlatformInvoke
+	{
+		public const string Library = "InVisionNative.dll";
+		
+		static NativeEventArg()
+		{
+			Init();
+		}
+		
+		
+		[DllImport(Library, EntryPoint = "new_eventarg")]
+		public static extern Handle Construct(Handle device);
+		
+		[DllImport(Library, EntryPoint = "delete_eventarg")]
 		public static extern void Destruct(Handle self);
+		
+		[DllImport(Library, EntryPoint = "eventarg_get_device")]
+		public static extern Handle GetDevice(Handle self);
+	}
+	
+	internal sealed unsafe class NativeKeyEvent : InVision.Native.PlatformInvoke
+	{
+		public const string Library = "InVisionNative.dll";
+		
+		static NativeKeyEvent()
+		{
+			Init();
+		}
+		
+		
+		[DllImport(Library, EntryPoint = "new_keyevent")]
+		public static extern Handle Construct(
+			ref KeyEventDescriptor descriptor, 
+			Handle device, 
+			KeyCode keyCode, 
+			uint text);
 	}
 	
 	internal sealed unsafe class NativeObject : InVision.Native.PlatformInvoke
@@ -135,6 +233,78 @@ namespace InVision.OIS.Native
 			[MarshalAs(UnmanagedType.LPArray, SizeConst = 256, ArraySubType = UnmanagedType.I1)] bool[] keys);
 	}
 	
+	internal sealed unsafe class NativeInterface : InVision.Native.PlatformInvoke
+	{
+		public const string Library = "InVisionNative.dll";
+		
+		static NativeInterface()
+		{
+			Init();
+		}
+		
+		
+		[DllImport(Library, EntryPoint = "delete_interface")]
+		public static extern void Destruct(Handle self);
+	}
+	
+	internal sealed unsafe class NativeFactoryCreator : InVision.Native.PlatformInvoke
+	{
+		public const string Library = "InVisionNative.dll";
+		
+		static NativeFactoryCreator()
+		{
+			Init();
+		}
+		
+	}
+	
+	internal sealed unsafe class NativeMouseEvent : InVision.Native.PlatformInvoke
+	{
+		public const string Library = "InVisionNative.dll";
+		
+		static NativeMouseEvent()
+		{
+			Init();
+		}
+		
+		
+		[DllImport(Library, EntryPoint = "new_mouseevent")]
+		public static extern Handle Construct(
+			ref MouseEventDescriptor descriptor, 
+			Handle obj, 
+			Handle mouseState);
+	}
+	
+	internal sealed unsafe class NativeKeyListener : InVision.Native.PlatformInvoke
+	{
+		public const string Library = "InVisionNative.dll";
+		
+		static NativeKeyListener()
+		{
+			Init();
+		}
+		
+		
+		[DllImport(Library, EntryPoint = "delete_keylistener")]
+		public static extern void Destruct(Handle self);
+	}
+	
+	internal sealed unsafe class NativeCustomKeyListener : InVision.Native.PlatformInvoke
+	{
+		public const string Library = "InVisionNative.dll";
+		
+		static NativeCustomKeyListener()
+		{
+			Init();
+		}
+		
+		
+		[DllImport(Library, EntryPoint = "new_customkeylistener")]
+		public static extern Handle Construct(
+			KeyEventHandler keyPressed, 
+			KeyEventHandler keyReleased);
+	}
+	
 	internal sealed unsafe class NativeComponent : InVision.Native.PlatformInvoke
 	{
 		public const string Library = "InVisionNative.dll";
@@ -178,38 +348,18 @@ namespace InVision.OIS.Native
 			float z);
 	}
 	
-	internal sealed unsafe class NativeInterface : InVision.Native.PlatformInvoke
+	internal sealed unsafe class NativeAxis : InVision.Native.PlatformInvoke
 	{
 		public const string Library = "InVisionNative.dll";
 		
-		static NativeInterface()
+		static NativeAxis()
 		{
 			Init();
 		}
 		
 		
-		[DllImport(Library, EntryPoint = "delete_interface")]
-		public static extern void Destruct(Handle self);
-	}
-	
-	internal sealed unsafe class NativeEventArg : InVision.Native.PlatformInvoke
-	{
-		public const string Library = "InVisionNative.dll";
-		
-		static NativeEventArg()
-		{
-			Init();
-		}
-		
-		
-		[DllImport(Library, EntryPoint = "new_eventarg")]
-		public static extern Handle Construct(Handle device);
-		
-		[DllImport(Library, EntryPoint = "delete_eventarg")]
-		public static extern void Destruct(Handle self);
-		
-		[DllImport(Library, EntryPoint = "eventarg_get_device")]
-		public static extern Handle GetDevice(Handle self);
+		[DllImport(Library, EntryPoint = "new_axis")]
+		public static extern Handle Construct(ref AxisDescriptor descriptor);
 	}
 	
 	internal sealed unsafe class NativeMouse : InVision.Native.PlatformInvoke
@@ -248,141 +398,6 @@ namespace InVision.OIS.Native
 		public static extern void Destruct(Handle self);
 	}
 	
-	internal sealed unsafe class NativeMouseEvent : InVision.Native.PlatformInvoke
-	{
-		public const string Library = "InVisionNative.dll";
-		
-		static NativeMouseEvent()
-		{
-			Init();
-		}
-		
-		
-		[DllImport(Library, EntryPoint = "new_mouseevent")]
-		public static extern Handle Construct(
-			ref MouseEventDescriptor descriptor, 
-			Handle obj, 
-			Handle mouseState);
-	}
-	
-	internal sealed unsafe class NativeInputManager : InVision.Native.PlatformInvoke
-	{
-		public const string Library = "InVisionNative.dll";
-		
-		static NativeInputManager()
-		{
-			Init();
-		}
-		
-		
-		[DllImport(Library, EntryPoint = "inputmanager_get_version_number")]
-		public static extern uint GetVersionNumber();
-		
-		[DllImport(Library, EntryPoint = "inputmanager_get_version_name")]
-		[return: MarshalAs(UnmanagedType.LPStr)]
-		public static extern String GetVersionName(Handle self);
-		
-		[DllImport(Library, EntryPoint = "inputmanager_create_input_system_m1")]
-		public static extern Handle CreateInputSystem(int winHandle);
-		
-		[DllImport(Library, EntryPoint = "inputmanager_create_input_system_m2")]
-		public static extern Handle CreateInputSystem(
-			NameValueItem[] parameters, 
-			int parametersCount);
-		
-		[DllImport(Library, EntryPoint = "inputmanager_destroy_input_system")]
-		public static extern void DestroyInputSystem(Handle manager);
-		
-		[DllImport(Library, EntryPoint = "inputmanager_input_system_name")]
-		[return: MarshalAs(UnmanagedType.LPStr)]
-		public static extern String InputSystemName(Handle self);
-		
-		[DllImport(Library, EntryPoint = "inputmanager_get_number_of_devices")]
-		public static extern int GetNumberOfDevices(
-			Handle self, 
-			DeviceType iType);
-		
-		[DllImport(Library, EntryPoint = "inputmanager_list_free_devices")]
-		public static extern IntPtr ListFreeDevices(Handle self);
-		
-		[DllImport(Library, EntryPoint = "inputmanager_create_input_object_m1")]
-		public static extern Handle CreateInputObject(
-			Handle self, 
-			DeviceType iType, 
-			[MarshalAs(UnmanagedType.I1)] bool bufferMode);
-		
-		[DllImport(Library, EntryPoint = "inputmanager_create_input_object_m2")]
-		public static extern Handle CreateInputObject(
-			Handle self, 
-			DeviceType iType, 
-			[MarshalAs(UnmanagedType.I1)] bool bufferMode, 
-			[MarshalAs(UnmanagedType.LPStr)] String vendor);
-		
-		[DllImport(Library, EntryPoint = "inputmanager_destroy_input_object")]
-		public static extern void DestroyInputObject(
-			Handle self, 
-			Handle obj);
-		
-		[DllImport(Library, EntryPoint = "inputmanager_add_factory_creator")]
-		public static extern void AddFactoryCreator(
-			Handle self, 
-			Handle factory);
-		
-		[DllImport(Library, EntryPoint = "inputmanager_remove_factory_creator")]
-		public static extern void RemoveFactoryCreator(
-			Handle self, 
-			Handle factory);
-		
-		[DllImport(Library, EntryPoint = "inputmanager_enable_add_on_factory")]
-		public static extern void EnableAddOnFactory(
-			Handle self, 
-			AddOnFactory factory);
-	}
-	
-	internal sealed unsafe class NativeCustomKeyListener : InVision.Native.PlatformInvoke
-	{
-		public const string Library = "InVisionNative.dll";
-		
-		static NativeCustomKeyListener()
-		{
-			Init();
-		}
-		
-		
-		[DllImport(Library, EntryPoint = "new_customkeylistener")]
-		public static extern Handle Construct(
-			KeyEventHandler keyPressed, 
-			KeyEventHandler keyReleased);
-	}
-	
-	internal sealed unsafe class NativeCustomMouseListener : InVision.Native.PlatformInvoke
-	{
-		public const string Library = "InVisionNative.dll";
-		
-		static NativeCustomMouseListener()
-		{
-			Init();
-		}
-		
-		
-		[DllImport(Library, EntryPoint = "new_custommouselistener")]
-		public static extern Handle Construct(
-			MouseMovedHandler mouseMoved, 
-			MouseClickHandler mousePressed, 
-			MouseClickHandler mouseReleased);
-	}
-	
-	internal sealed unsafe class NativeFactoryCreator : InVision.Native.PlatformInvoke
-	{
-		public const string Library = "InVisionNative.dll";
-		
-		static NativeFactoryCreator()
-		{
-			Init();
-		}
-		
-	}
-	
 	internal sealed unsafe class NativeButton : InVision.Native.PlatformInvoke
 	{
 		public const string Library = "InVisionNative.dll";
@@ -402,36 +417,21 @@ namespace InVision.OIS.Native
 			bool pushed);
 	}
 	
-	internal sealed unsafe class NativeAxis : InVision.Native.PlatformInvoke
+	internal sealed unsafe class NativeCustomMouseListener : InVision.Native.PlatformInvoke
 	{
 		public const string Library = "InVisionNative.dll";
 		
-		static NativeAxis()
+		static NativeCustomMouseListener()
 		{
 			Init();
 		}
 		
 		
-		[DllImport(Library, EntryPoint = "new_axis")]
-		public static extern Handle Construct(ref AxisDescriptor descriptor);
-	}
-	
-	internal sealed unsafe class NativeKeyEvent : InVision.Native.PlatformInvoke
-	{
-		public const string Library = "InVisionNative.dll";
-		
-		static NativeKeyEvent()
-		{
-			Init();
-		}
-		
-		
-		[DllImport(Library, EntryPoint = "new_keyevent")]
+		[DllImport(Library, EntryPoint = "new_custommouselistener")]
 		public static extern Handle Construct(
-			ref KeyEventDescriptor descriptor, 
-			Handle device, 
-			KeyCode keyCode, 
-			uint text);
+			MouseMovedHandler mouseMoved, 
+			MouseClickHandler mousePressed, 
+			MouseClickHandler mouseReleased);
 	}
 	
 }

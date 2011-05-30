@@ -30,14 +30,163 @@ namespace InVision.OIS.Native
 		
 	}
 	
-	[CppImplementation(typeof(IKeyListener))]
-	internal unsafe class KeyListenerImpl
-		: CppInstance, IKeyListener
+	[CppImplementation(typeof(IInputManager))]
+	internal unsafe class InputManagerImpl
+		: CppInstance, IInputManager
 	{
-		void IKeyListener.Destruct()
+		uint IInputManager.GetVersionNumber()
 		{
-			NativeKeyListener.Destruct(Self);
+			CheckStaticOnlyCall();
+			
+			var result = NativeInputManager.GetVersionNumber();
+			
+			return result;
+		}
+		
+		String IInputManager.GetVersionName()
+		{
+			CheckMemberOnlyCall();
+			
+			var result = NativeInputManager.GetVersionName(Self);
+			
+			return result;
+		}
+		
+		IInputManager IInputManager.CreateInputSystem(int winHandle)
+		{
+			CheckStaticOnlyCall();
+			
+			var result = NativeInputManager.CreateInputSystem(winHandle);
+			
+			return HandleConvert.FromHandle<IInputManager>(result);
+		}
+		
+		IInputManager IInputManager.CreateInputSystem(NameValueItem[] parameters, int parametersCount)
+		{
+			CheckStaticOnlyCall();
+			
+			var result = NativeInputManager.CreateInputSystem(parameters, parametersCount);
+			
+			return HandleConvert.FromHandle<IInputManager>(result);
+		}
+		
+		void IInputManager.DestroyInputSystem(IInputManager manager)
+		{
+			CheckStaticOnlyCall();
+			
+			NativeInputManager.DestroyInputSystem(HandleConvert.ToHandle(manager));
+		}
+		
+		String IInputManager.InputSystemName()
+		{
+			CheckMemberOnlyCall();
+			
+			var result = NativeInputManager.InputSystemName(Self);
+			
+			return result;
+		}
+		
+		int IInputManager.GetNumberOfDevices(DeviceType iType)
+		{
+			CheckMemberOnlyCall();
+			
+			var result = NativeInputManager.GetNumberOfDevices(Self, iType);
+			
+			return result;
+		}
+		
+		IntPtr IInputManager.ListFreeDevices()
+		{
+			CheckMemberOnlyCall();
+			
+			var result = NativeInputManager.ListFreeDevices(Self);
+			
+			return result;
+		}
+		
+		IObject IInputManager.CreateInputObject(DeviceType iType, bool bufferMode)
+		{
+			CheckMemberOnlyCall();
+			
+			var result = NativeInputManager.CreateInputObject(Self, iType, bufferMode);
+			
+			return HandleConvert.FromHandle<IObject>(result);
+		}
+		
+		IObject IInputManager.CreateInputObject(DeviceType iType, bool bufferMode, String vendor)
+		{
+			CheckMemberOnlyCall();
+			
+			var result = NativeInputManager.CreateInputObject(Self, iType, bufferMode, vendor);
+			
+			return HandleConvert.FromHandle<IObject>(result);
+		}
+		
+		void IInputManager.DestroyInputObject(IObject obj)
+		{
+			CheckMemberOnlyCall();
+			
+			NativeInputManager.DestroyInputObject(Self, HandleConvert.ToHandle(obj));
+		}
+		
+		void IInputManager.AddFactoryCreator(IFactoryCreator factory)
+		{
+			CheckMemberOnlyCall();
+			
+			NativeInputManager.AddFactoryCreator(Self, HandleConvert.ToHandle(factory));
+		}
+		
+		void IInputManager.RemoveFactoryCreator(IFactoryCreator factory)
+		{
+			CheckMemberOnlyCall();
+			
+			NativeInputManager.RemoveFactoryCreator(Self, HandleConvert.ToHandle(factory));
+		}
+		
+		void IInputManager.EnableAddOnFactory(AddOnFactory factory)
+		{
+			CheckMemberOnlyCall();
+			
+			NativeInputManager.EnableAddOnFactory(Self, factory);
+		}
+		
+	}
+	
+	[CppImplementation(typeof(IEventArg))]
+	internal unsafe class EventArgImpl
+		: CppInstance, IEventArg
+	{
+		IEventArg IEventArg.Construct(IObject device)
+		{
+			Self = NativeEventArg.Construct(HandleConvert.ToHandle(device));
+			return this;
+		}
+		
+		void IEventArg.Destruct()
+		{
+			NativeEventArg.Destruct(Self);
 			Self = default(Handle);
+		}
+		
+		IObject IEventArg.GetDevice()
+		{
+			CheckMemberOnlyCall();
+			
+			var result = NativeEventArg.GetDevice(Self);
+			
+			return HandleConvert.FromHandle<IObject>(result);
+		}
+		
+	}
+	
+	[CppImplementation(typeof(IKeyEvent))]
+	internal unsafe class KeyEventImpl
+		: EventArgImpl, IKeyEvent
+	{
+		IKeyEvent IKeyEvent.Construct(ref KeyEventDescriptor descriptor, IObject device, KeyCode keyCode, uint text)
+		{
+			Self = NativeKeyEvent.Construct(ref descriptor, HandleConvert.ToHandle(device), keyCode, text);
+			return this;
 		}
 		
 	}
@@ -194,6 +343,60 @@ namespace InVision.OIS.Native
 		
 	}
 	
+	[CppImplementation(typeof(IInterface))]
+	internal unsafe class InterfaceImpl
+		: CppInstance, IInterface
+	{
+		void IInterface.Destruct()
+		{
+			NativeInterface.Destruct(Self);
+			Self = default(Handle);
+		}
+		
+	}
+	
+	[CppImplementation(typeof(IFactoryCreator))]
+	internal unsafe class FactoryCreatorImpl
+		: CppInstance, IFactoryCreator
+	{
+	}
+	
+	[CppImplementation(typeof(IMouseEvent))]
+	internal unsafe class MouseEventImpl
+		: EventArgImpl, IMouseEvent
+	{
+		IMouseEvent IMouseEvent.Construct(ref MouseEventDescriptor descriptor, IObject obj, IMouseState mouseState)
+		{
+			Self = NativeMouseEvent.Construct(ref descriptor, HandleConvert.ToHandle(obj), HandleConvert.ToHandle(mouseState));
+			return this;
+		}
+		
+	}
+	
+	[CppImplementation(typeof(IKeyListener))]
+	internal unsafe class KeyListenerImpl
+		: CppInstance, IKeyListener
+	{
+		void IKeyListener.Destruct()
+		{
+			NativeKeyListener.Destruct(Self);
+			Self = default(Handle);
+		}
+		
+	}
+	
+	[CppImplementation(typeof(ICustomKeyListener))]
+	internal unsafe class CustomKeyListenerImpl
+		: KeyListenerImpl, ICustomKeyListener
+	{
+		ICustomKeyListener ICustomKeyListener.Construct(KeyEventHandler keyPressed, KeyEventHandler keyReleased)
+		{
+			Self = NativeCustomKeyListener.Construct(keyPressed, keyReleased);
+			return this;
+		}
+		
+	}
+	
 	[CppImplementation(typeof(IComponent))]
 	internal unsafe class ComponentImpl
 		: CppInstance, IComponent
@@ -236,41 +439,14 @@ namespace InVision.OIS.Native
 		
 	}
 	
-	[CppImplementation(typeof(IInterface))]
-	internal unsafe class InterfaceImpl
-		: CppInstance, IInterface
+	[CppImplementation(typeof(IAxis))]
+	internal unsafe class AxisImpl
+		: ComponentImpl, IAxis
 	{
-		void IInterface.Destruct()
+		IAxis IAxis.Construct(ref AxisDescriptor descriptor)
 		{
-			NativeInterface.Destruct(Self);
-			Self = default(Handle);
-		}
-		
-	}
-	
-	[CppImplementation(typeof(IEventArg))]
-	internal unsafe class EventArgImpl
-		: CppInstance, IEventArg
-	{
-		IEventArg IEventArg.Construct(IObject device)
-		{
-			Self = NativeEventArg.Construct(HandleConvert.ToHandle(device));
+			Self = NativeAxis.Construct(ref descriptor);
 			return this;
-		}
-		
-		void IEventArg.Destruct()
-		{
-			NativeEventArg.Destruct(Self);
-			Self = default(Handle);
-		}
-		
-		IObject IEventArg.GetDevice()
-		{
-			CheckMemberOnlyCall();
-			
-			var result = NativeEventArg.GetDevice(Self);
-			
-			return HandleConvert.FromHandle<IObject>(result);
 		}
 		
 	}
@@ -318,170 +494,6 @@ namespace InVision.OIS.Native
 		
 	}
 	
-	[CppImplementation(typeof(IMouseEvent))]
-	internal unsafe class MouseEventImpl
-		: EventArgImpl, IMouseEvent
-	{
-		IMouseEvent IMouseEvent.Construct(ref MouseEventDescriptor descriptor, IObject obj, IMouseState mouseState)
-		{
-			Self = NativeMouseEvent.Construct(ref descriptor, HandleConvert.ToHandle(obj), HandleConvert.ToHandle(mouseState));
-			return this;
-		}
-		
-	}
-	
-	[CppImplementation(typeof(IInputManager))]
-	internal unsafe class InputManagerImpl
-		: CppInstance, IInputManager
-	{
-		uint IInputManager.GetVersionNumber()
-		{
-			CheckStaticOnlyCall();
-			
-			var result = NativeInputManager.GetVersionNumber();
-			
-			return result;
-		}
-		
-		String IInputManager.GetVersionName()
-		{
-			CheckMemberOnlyCall();
-			
-			var result = NativeInputManager.GetVersionName(Self);
-			
-			return result;
-		}
-		
-		IInputManager IInputManager.CreateInputSystem(int winHandle)
-		{
-			CheckStaticOnlyCall();
-			
-			var result = NativeInputManager.CreateInputSystem(winHandle);
-			
-			return HandleConvert.FromHandle<IInputManager>(result);
-		}
-		
-		IInputManager IInputManager.CreateInputSystem(NameValueItem[] parameters, int parametersCount)
-		{
-			CheckStaticOnlyCall();
-			
-			var result = NativeInputManager.CreateInputSystem(parameters, parametersCount);
-			
-			return HandleConvert.FromHandle<IInputManager>(result);
-		}
-		
-		void IInputManager.DestroyInputSystem(IInputManager manager)
-		{
-			CheckStaticOnlyCall();
-			
-			NativeInputManager.DestroyInputSystem(HandleConvert.ToHandle(manager));
-		}
-		
-		String IInputManager.InputSystemName()
-		{
-			CheckMemberOnlyCall();
-			
-			var result = NativeInputManager.InputSystemName(Self);
-			
-			return result;
-		}
-		
-		int IInputManager.GetNumberOfDevices(DeviceType iType)
-		{
-			CheckMemberOnlyCall();
-			
-			var result = NativeInputManager.GetNumberOfDevices(Self, iType);
-			
-			return result;
-		}
-		
-		IntPtr IInputManager.ListFreeDevices()
-		{
-			CheckMemberOnlyCall();
-			
-			var result = NativeInputManager.ListFreeDevices(Self);
-			
-			return result;
-		}
-		
-		IObject IInputManager.CreateInputObject(DeviceType iType, bool bufferMode)
-		{
-			CheckMemberOnlyCall();
-			
-			var result = NativeInputManager.CreateInputObject(Self, iType, bufferMode);
-			
-			return HandleConvert.FromHandle<IObject>(result);
-		}
-		
-		IObject IInputManager.CreateInputObject(DeviceType iType, bool bufferMode, String vendor)
-		{
-			CheckMemberOnlyCall();
-			
-			var result = NativeInputManager.CreateInputObject(Self, iType, bufferMode, vendor);
-			
-			return HandleConvert.FromHandle<IObject>(result);
-		}
-		
-		void IInputManager.DestroyInputObject(IObject obj)
-		{
-			CheckMemberOnlyCall();
-			
-			NativeInputManager.DestroyInputObject(Self, HandleConvert.ToHandle(obj));
-		}
-		
-		void IInputManager.AddFactoryCreator(IFactoryCreator factory)
-		{
-			CheckMemberOnlyCall();
-			
-			NativeInputManager.AddFactoryCreator(Self, HandleConvert.ToHandle(factory));
-		}
-		
-		void IInputManager.RemoveFactoryCreator(IFactoryCreator factory)
-		{
-			CheckMemberOnlyCall();
-			
-			NativeInputManager.RemoveFactoryCreator(Self, HandleConvert.ToHandle(factory));
-		}
-		
-		void IInputManager.EnableAddOnFactory(AddOnFactory factory)
-		{
-			CheckMemberOnlyCall();
-			
-			NativeInputManager.EnableAddOnFactory(Self, factory);
-		}
-		
-	}
-	
-	[CppImplementation(typeof(ICustomKeyListener))]
-	internal unsafe class CustomKeyListenerImpl
-		: KeyListenerImpl, ICustomKeyListener
-	{
-		ICustomKeyListener ICustomKeyListener.Construct(KeyEventHandler keyPressed, KeyEventHandler keyReleased)
-		{
-			Self = NativeCustomKeyListener.Construct(keyPressed, keyReleased);
-			return this;
-		}
-		
-	}
-	
-	[CppImplementation(typeof(ICustomMouseListener))]
-	internal unsafe class CustomMouseListenerImpl
-		: MouseListenerImpl, ICustomMouseListener
-	{
-		ICustomMouseListener ICustomMouseListener.Construct(MouseMovedHandler mouseMoved, MouseClickHandler mousePressed, MouseClickHandler mouseReleased)
-		{
-			Self = NativeCustomMouseListener.Construct(mouseMoved, mousePressed, mouseReleased);
-			return this;
-		}
-		
-	}
-	
-	[CppImplementation(typeof(IFactoryCreator))]
-	internal unsafe class FactoryCreatorImpl
-		: CppInstance, IFactoryCreator
-	{
-	}
-	
 	[CppImplementation(typeof(IButton))]
 	internal unsafe class ButtonImpl
 		: ComponentImpl, IButton
@@ -500,25 +512,13 @@ namespace InVision.OIS.Native
 		
 	}
 	
-	[CppImplementation(typeof(IAxis))]
-	internal unsafe class AxisImpl
-		: ComponentImpl, IAxis
+	[CppImplementation(typeof(ICustomMouseListener))]
+	internal unsafe class CustomMouseListenerImpl
+		: MouseListenerImpl, ICustomMouseListener
 	{
-		IAxis IAxis.Construct(ref AxisDescriptor descriptor)
+		ICustomMouseListener ICustomMouseListener.Construct(MouseMovedHandler mouseMoved, MouseClickHandler mousePressed, MouseClickHandler mouseReleased)
 		{
-			Self = NativeAxis.Construct(ref descriptor);
-			return this;
-		}
-		
-	}
-	
-	[CppImplementation(typeof(IKeyEvent))]
-	internal unsafe class KeyEventImpl
-		: EventArgImpl, IKeyEvent
-	{
-		IKeyEvent IKeyEvent.Construct(ref KeyEventDescriptor descriptor, IObject device, KeyCode keyCode, uint text)
-		{
-			Self = NativeKeyEvent.Construct(ref descriptor, HandleConvert.ToHandle(device), keyCode, text);
+			Self = NativeCustomMouseListener.Construct(mouseMoved, mousePressed, mouseReleased);
 			return this;
 		}
 		

@@ -13,58 +13,10 @@ using InVision.Ogre.Native;
 
 namespace InVision.Ogre.Native
 {
-	[CppImplementation(typeof(IStringInterface))]
-	internal unsafe class StringInterfaceImpl
-		: CppInstance, IStringInterface
+	[CppImplementation(typeof(IRenderSystem))]
+	internal unsafe class RenderSystemImpl
+		: CppInstance, IRenderSystem
 	{
-	}
-	
-	[CppImplementation(typeof(IRenderable))]
-	internal unsafe class RenderableImpl
-		: CppInstance, IRenderable
-	{
-	}
-	
-	[CppImplementation(typeof(IOverlayElement))]
-	internal unsafe class OverlayElementImpl
-		: StringInterfaceImpl, IOverlayElement, IRenderable
-	{
-		String IOverlayElement.GetCaption()
-		{
-			CheckMemberOnlyCall();
-			
-			var result = NativeOverlayElement.GetCaption(Self);
-			
-			return result;
-		}
-		
-		void IOverlayElement.SetCaption(String value)
-		{
-			CheckMemberOnlyCall();
-			
-			NativeOverlayElement.SetCaption(Self, value);
-		}
-		
-		void IOverlayElement.Show()
-		{
-			CheckMemberOnlyCall();
-			
-			NativeOverlayElement.Show(Self);
-		}
-		
-	}
-	
-	[CppImplementation(typeof(IOverlay))]
-	internal unsafe class OverlayImpl
-		: CppInstance, IOverlay
-	{
-		void IOverlay.Show()
-		{
-			CheckMemberOnlyCall();
-			
-			NativeOverlay.Show(Self);
-		}
-		
 	}
 	
 	[CppImplementation(typeof(IAnimableObject))]
@@ -211,49 +163,408 @@ namespace InVision.Ogre.Native
 		
 	}
 	
-	[CppImplementation(typeof(IFrameListener))]
-	internal unsafe class FrameListenerImpl
-		: CppInstance, IFrameListener
+	[CppImplementation(typeof(IRenderable))]
+	internal unsafe class RenderableImpl
+		: CppInstance, IRenderable
 	{
-		void IFrameListener.Destruct()
-		{
-			NativeFrameListener.Destruct(Self);
-			Self = default(Handle);
-		}
-		
-		bool IFrameListener.FrameStarted(FrameEvent frameEvent)
+	}
+	
+	[CppImplementation(typeof(IFrustum))]
+	internal unsafe class FrustumImpl
+		: MovableObjectImpl, IFrustum, IAnimableObject, IShadowCaster, IRenderable
+	{
+	}
+	
+	[CppImplementation(typeof(ICamera))]
+	internal unsafe class CameraImpl
+		: CppInstance, ICamera, IAnimableObject, IShadowCaster, IRenderable
+	{
+		Vector3 ICamera.GetPosition()
 		{
 			CheckMemberOnlyCall();
 			
-			var result = NativeFrameListener.FrameStarted(Self, frameEvent);
+			var result = NativeCamera.GetPosition(Self);
 			
 			return result;
 		}
 		
-		bool IFrameListener.FrameRenderingQueued(FrameEvent frameEvent)
+		void ICamera.SetPosition(Vector3 pos)
 		{
 			CheckMemberOnlyCall();
 			
-			var result = NativeFrameListener.FrameRenderingQueued(Self, frameEvent);
+			NativeCamera.SetPosition(Self, pos);
+		}
+		
+		void ICamera.LookAt(Vector3 direction)
+		{
+			CheckMemberOnlyCall();
+			
+			NativeCamera.LookAt(Self, direction);
+		}
+		
+		float ICamera.GetNearClipDistance()
+		{
+			CheckMemberOnlyCall();
+			
+			var result = NativeCamera.GetNearClipDistance(Self);
 			
 			return result;
 		}
 		
-		bool IFrameListener.FrameEnded(FrameEvent frameEvent)
+		void ICamera.SetNearClipDistance(float distance)
 		{
 			CheckMemberOnlyCall();
 			
-			var result = NativeFrameListener.FrameEnded(Self, frameEvent);
+			NativeCamera.SetNearClipDistance(Self, distance);
+		}
+		
+		float ICamera.GetAspectRatio()
+		{
+			CheckMemberOnlyCall();
+			
+			var result = NativeCamera.GetAspectRatio(Self);
+			
+			return result;
+		}
+		
+		void ICamera.SetAspectRatio(float aspectRatio)
+		{
+			CheckMemberOnlyCall();
+			
+			NativeCamera.SetAspectRatio(Self, aspectRatio);
+		}
+		
+		float ICamera.GetFarClipDistance()
+		{
+			CheckMemberOnlyCall();
+			
+			var result = NativeCamera.GetFarClipDistance(Self);
+			
+			return result;
+		}
+		
+		void ICamera.SetFarClipDistance(float value)
+		{
+			CheckMemberOnlyCall();
+			
+			NativeCamera.SetFarClipDistance(Self, value);
+		}
+		
+		void ICamera.SetAutoAspectRatio(bool value)
+		{
+			CheckMemberOnlyCall();
+			
+			NativeCamera.SetAutoAspectRatio(Self, value);
+		}
+		
+		PolygonMode ICamera.GetPolygonMode()
+		{
+			CheckMemberOnlyCall();
+			
+			var result = NativeCamera.GetPolygonMode(Self);
+			
+			return result;
+		}
+		
+		void ICamera.SetPolygonMode(PolygonMode value)
+		{
+			CheckMemberOnlyCall();
+			
+			NativeCamera.SetPolygonMode(Self, value);
+		}
+		
+		Vector3 ICamera.GetDirection()
+		{
+			CheckMemberOnlyCall();
+			
+			var result = NativeCamera.GetDirection(Self);
+			
+			return result;
+		}
+		
+		Vector3 ICamera.GetRight()
+		{
+			CheckMemberOnlyCall();
+			
+			var result = NativeCamera.GetRight(Self);
+			
+			return result;
+		}
+		
+		Vector3 ICamera.GetUp()
+		{
+			CheckMemberOnlyCall();
+			
+			var result = NativeCamera.GetUp(Self);
+			
+			return result;
+		}
+		
+		void ICamera.Move(Vector3 distance)
+		{
+			CheckMemberOnlyCall();
+			
+			NativeCamera.Move(Self, distance);
+		}
+		
+		void ICamera.Yaw(float valueRadians)
+		{
+			CheckMemberOnlyCall();
+			
+			NativeCamera.Yaw(Self, valueRadians);
+		}
+		
+		void ICamera.Pitch(float valueRadians)
+		{
+			CheckMemberOnlyCall();
+			
+			NativeCamera.Pitch(Self, valueRadians);
+		}
+		
+		bool IShadowCaster.GetCastShadows()
+		{
+			CheckMemberOnlyCall();
+			
+			var result = NativeCamera.GetCastShadows(Self);
+			
+			return result;
+		}
+		
+		IEdgeData IShadowCaster.GetEdgeList()
+		{
+			CheckMemberOnlyCall();
+			
+			var result = NativeCamera.GetEdgeList(Self);
+			
+			return HandleConvert.FromHandle<IEdgeData>(result);
+		}
+		
+		bool IShadowCaster.HasEdgeList()
+		{
+			CheckMemberOnlyCall();
+			
+			var result = NativeCamera.HasEdgeList(Self);
+			
+			return result;
+		}
+		
+		BoundingBox IShadowCaster.GetWorldBoundingBox(bool derive)
+		{
+			CheckMemberOnlyCall();
+			
+			var result = NativeCamera.GetWorldBoundingBox(Self, derive);
+			
+			return result;
+		}
+		
+		BoundingBox IShadowCaster.GetLightCapBounds()
+		{
+			CheckMemberOnlyCall();
+			
+			var result = NativeCamera.GetLightCapBounds(Self);
+			
+			return result;
+		}
+		
+		BoundingBox IShadowCaster.GetDarkCapBounds(ILight light, float dirLightExtrusionDist)
+		{
+			CheckMemberOnlyCall();
+			
+			var result = NativeCamera.GetDarkCapBounds(Self, HandleConvert.ToHandle(light), dirLightExtrusionDist);
+			
+			return result;
+		}
+		
+		float IShadowCaster.GetPointExtrusionDistance(ILight light)
+		{
+			CheckMemberOnlyCall();
+			
+			var result = NativeCamera.GetPointExtrusionDistance(Self, HandleConvert.ToHandle(light));
 			
 			return result;
 		}
 		
 	}
 	
-	[CppImplementation(typeof(IRenderSystemCapabilities))]
-	internal unsafe class RenderSystemCapabilitiesImpl
-		: CppInstance, IRenderSystemCapabilities
+	[CppImplementation(typeof(IScriptLoader))]
+	internal unsafe class ScriptLoaderImpl
+		: CppInstance, IScriptLoader
 	{
+	}
+	
+	[CppImplementation(typeof(IResourceManager))]
+	internal unsafe class ResourceManagerImpl
+		: ScriptLoaderImpl, IResourceManager
+	{
+	}
+	
+	[CppImplementation(typeof(ILogListener))]
+	internal unsafe class LogListenerImpl
+		: CppInstance, ILogListener
+	{
+		void ILogListener.Destruct()
+		{
+			NativeLogListener.Destruct(Self);
+			Self = default(Handle);
+		}
+		
+	}
+	
+	[CppImplementation(typeof(IEntity))]
+	internal unsafe class EntityImpl
+		: MovableObjectImpl, IEntity, IAnimableObject, IShadowCaster
+	{
+	}
+	
+	[CppImplementation(typeof(IOverlay))]
+	internal unsafe class OverlayImpl
+		: CppInstance, IOverlay
+	{
+		void IOverlay.Show()
+		{
+			CheckMemberOnlyCall();
+			
+			NativeOverlay.Show(Self);
+		}
+		
+	}
+	
+	[CppImplementation(typeof(ISceneManager))]
+	internal unsafe class SceneManagerImpl
+		: CppInstance, ISceneManager
+	{
+		void ISceneManager.ClearScene()
+		{
+			CheckMemberOnlyCall();
+			
+			NativeSceneManager.ClearScene(Self);
+		}
+		
+		void ISceneManager.SetAmbientLight(Color color)
+		{
+			CheckMemberOnlyCall();
+			
+			NativeSceneManager.SetAmbientLight(Self, color);
+		}
+		
+		Color ISceneManager.GetAmbientLight()
+		{
+			CheckMemberOnlyCall();
+			
+			var result = NativeSceneManager.GetAmbientLight(Self);
+			
+			return result;
+		}
+		
+		ICamera ISceneManager.CreateCamera(String name)
+		{
+			CheckMemberOnlyCall();
+			
+			var result = NativeSceneManager.CreateCamera(Self, name);
+			
+			return HandleConvert.FromHandle<ICamera>(result);
+		}
+		
+		IEntity ISceneManager.CreateEntity(String meshName)
+		{
+			CheckMemberOnlyCall();
+			
+			var result = NativeSceneManager.CreateEntity(Self, meshName);
+			
+			return HandleConvert.FromHandle<IEntity>(result);
+		}
+		
+		IEntity ISceneManager.CreateEntity(String entityName, String meshName)
+		{
+			CheckMemberOnlyCall();
+			
+			var result = NativeSceneManager.CreateEntity(Self, entityName, meshName);
+			
+			return HandleConvert.FromHandle<IEntity>(result);
+		}
+		
+		ISceneNode ISceneManager.GetRootSceneNode()
+		{
+			CheckMemberOnlyCall();
+			
+			var result = NativeSceneManager.GetRootSceneNode(Self);
+			
+			return HandleConvert.FromHandle<ISceneNode>(result);
+		}
+		
+		ILight ISceneManager.CreateLight()
+		{
+			CheckMemberOnlyCall();
+			
+			var result = NativeSceneManager.CreateLight(Self);
+			
+			return HandleConvert.FromHandle<ILight>(result);
+		}
+		
+		ILight ISceneManager.CreateLight(String name)
+		{
+			CheckMemberOnlyCall();
+			
+			var result = NativeSceneManager.CreateLight(Self, name);
+			
+			return HandleConvert.FromHandle<ILight>(result);
+		}
+		
+	}
+	
+	[CppImplementation(typeof(IRenderTarget))]
+	internal unsafe class RenderTargetImpl
+		: CppInstance, IRenderTarget
+	{
+	}
+	
+	[CppImplementation(typeof(IRenderWindow))]
+	internal unsafe class RenderWindowImpl
+		: RenderTargetImpl, IRenderWindow
+	{
+		void IRenderWindow.GetCustomAttribute(String name, out IntPtr data)
+		{
+			CheckMemberOnlyCall();
+			
+			NativeRenderWindow.GetCustomAttribute(Self, name, out data);
+		}
+		
+		IViewport IRenderWindow.AddViewport(ICamera camera, int zOrder, float left, float top, float width, float height)
+		{
+			CheckMemberOnlyCall();
+			
+			var result = NativeRenderWindow.AddViewport(Self, HandleConvert.ToHandle(camera), zOrder, left, top, width, height);
+			
+			return HandleConvert.FromHandle<IViewport>(result);
+		}
+		
+		bool IRenderWindow.IsClosed()
+		{
+			CheckMemberOnlyCall();
+			
+			var result = NativeRenderWindow.IsClosed(Self);
+			
+			return result;
+		}
+		
+		String IRenderWindow.WriteContentsToTimestampedFile(String filenamePrefix, String filenameSuffix)
+		{
+			CheckMemberOnlyCall();
+			
+			var result = NativeRenderWindow.WriteContentsToTimestampedFile(Self, filenamePrefix, filenameSuffix);
+			
+			return result;
+		}
+		
+		FrameStats IRenderWindow.GetStatistics()
+		{
+			CheckMemberOnlyCall();
+			
+			var result = NativeRenderWindow.GetStatistics(Self);
+			
+			return result;
+		}
+		
 	}
 	
 	[CppImplementation(typeof(ILog))]
@@ -319,59 +630,327 @@ namespace InVision.Ogre.Native
 		
 	}
 	
-	[CppImplementation(typeof(IResourceGroupManager))]
-	internal unsafe class ResourceGroupManagerImpl
-		: CppInstance, IResourceGroupManager, ISingleton<IResourceGroupManager>
+	[CppImplementation(typeof(IAxisAlignedBox))]
+	internal unsafe class AxisAlignedBoxImpl
+		: CppInstance, IAxisAlignedBox
 	{
-		void IResourceGroupManager.AddResourceLocation(String name, String locType)
+	}
+	
+	[CppImplementation(typeof(IFrameListener))]
+	internal unsafe class FrameListenerImpl
+		: CppInstance, IFrameListener
+	{
+		void IFrameListener.Destruct()
+		{
+			NativeFrameListener.Destruct(Self);
+			Self = default(Handle);
+		}
+		
+		bool IFrameListener.FrameStarted(FrameEvent frameEvent)
 		{
 			CheckMemberOnlyCall();
 			
-			NativeResourceGroupManager.AddResourceLocation(Self, name, locType);
+			var result = NativeFrameListener.FrameStarted(Self, frameEvent);
+			
+			return result;
 		}
 		
-		void IResourceGroupManager.AddResourceLocation(String name, String locType, String resGroup)
+		bool IFrameListener.FrameRenderingQueued(FrameEvent frameEvent)
 		{
 			CheckMemberOnlyCall();
 			
-			NativeResourceGroupManager.AddResourceLocation(Self, name, locType, resGroup);
+			var result = NativeFrameListener.FrameRenderingQueued(Self, frameEvent);
+			
+			return result;
 		}
 		
-		void IResourceGroupManager.AddResourceLocation(String name, String locType, String resGroup, bool recursive)
+		bool IFrameListener.FrameEnded(FrameEvent frameEvent)
 		{
 			CheckMemberOnlyCall();
 			
-			NativeResourceGroupManager.AddResourceLocation(Self, name, locType, resGroup, recursive);
+			var result = NativeFrameListener.FrameEnded(Self, frameEvent);
+			
+			return result;
 		}
 		
-		void IResourceGroupManager.InitializeAllResourceGroups()
+	}
+	
+	[CppImplementation(typeof(ICustomFrameListener))]
+	internal unsafe class CustomFrameListenerImpl
+		: FrameListenerImpl, ICustomFrameListener
+	{
+		ICustomFrameListener ICustomFrameListener.Construct(FrameEventHandler frameStarted, FrameEventHandler frameEnded, FrameEventHandler frameRenderingQueued)
+		{
+			Self = NativeCustomFrameListener.Construct(frameStarted, frameEnded, frameRenderingQueued);
+			return this;
+		}
+		
+	}
+	
+	[CppImplementation(typeof(IOverlayManager))]
+	internal unsafe class OverlayManagerImpl
+		: ScriptLoaderImpl, IOverlayManager, ISingleton<IOverlayManager>
+	{
+		IOverlayElement IOverlayManager.GetOverlayElement(String name, bool isTemplate)
 		{
 			CheckMemberOnlyCall();
 			
-			NativeResourceGroupManager.InitializeAllResourceGroups(Self);
+			var result = NativeOverlayManager.GetOverlayElement(Self, name, isTemplate);
+			
+			return HandleConvert.FromHandle<IOverlayElement>(result);
 		}
 		
-		IResourceGroupManager ISingleton<IResourceGroupManager>.GetSingleton()
+		IOverlay IOverlayManager.GetByName(String name)
+		{
+			CheckMemberOnlyCall();
+			
+			var result = NativeOverlayManager.GetByName(Self, name);
+			
+			return HandleConvert.FromHandle<IOverlay>(result);
+		}
+		
+		IOverlayManager ISingleton<IOverlayManager>.GetSingleton()
 		{
 			CheckStaticOnlyCall();
 			
-			var result = NativeResourceGroupManager.GetSingleton();
+			var result = NativeOverlayManager.GetSingleton();
 			
-			return HandleConvert.FromHandle<IResourceGroupManager>(result);
+			return HandleConvert.FromHandle<IOverlayManager>(result);
 		}
 		
 	}
 	
-	[CppImplementation(typeof(IRenderTarget))]
-	internal unsafe class RenderTargetImpl
-		: CppInstance, IRenderTarget
+	[CppImplementation(typeof(IConfigFile))]
+	internal unsafe class ConfigFileImpl
+		: CppInstance, IConfigFile
+	{
+		IConfigFile IConfigFile.Construct()
+		{
+			Self = NativeConfigFile.Construct();
+			return this;
+		}
+		
+		void IConfigFile.Destruct()
+		{
+			NativeConfigFile.Destruct(Self);
+			Self = default(Handle);
+		}
+		
+		void IConfigFile.Load(String filename, String separators, bool trimWhitespace)
+		{
+			CheckMemberOnlyCall();
+			
+			NativeConfigFile.Load(Self, filename, separators, trimWhitespace);
+		}
+		
+		void IConfigFile.GetSections(out SettingsBySection* settingsBySection)
+		{
+			CheckMemberOnlyCall();
+			
+			NativeConfigFile.GetSections(Self, out settingsBySection);
+		}
+		
+		void IConfigFile.DeleteSettingsBySection(SettingsBySection* settingsBySection)
+		{
+			CheckStaticOnlyCall();
+			
+			NativeConfigFile.DeleteSettingsBySection(settingsBySection);
+		}
+		
+	}
+	
+	[CppImplementation(typeof(ISceneManagerFactory))]
+	internal unsafe class SceneManagerFactoryImpl
+		: CppInstance, ISceneManagerFactory
 	{
 	}
 	
-	[CppImplementation(typeof(IFrustum))]
-	internal unsafe class FrustumImpl
-		: MovableObjectImpl, IFrustum, IAnimableObject, IShadowCaster, IRenderable
+	[CppImplementation(typeof(IRenderSystemCapabilities))]
+	internal unsafe class RenderSystemCapabilitiesImpl
+		: CppInstance, IRenderSystemCapabilities
 	{
+	}
+	
+	[CppImplementation(typeof(ITextureManager))]
+	internal unsafe class TextureManagerImpl
+		: CppInstance, ITextureManager, ISingleton<ITextureManager>
+	{
+		void ITextureManager.SetDefaultNumMipmaps(int num)
+		{
+			CheckMemberOnlyCall();
+			
+			NativeTextureManager.SetDefaultNumMipmaps(Self, num);
+		}
+		
+		int ITextureManager.GetDefaultNumMipmaps()
+		{
+			CheckMemberOnlyCall();
+			
+			var result = NativeTextureManager.GetDefaultNumMipmaps(Self);
+			
+			return result;
+		}
+		
+		void ITextureManager.ReloadAll(bool reloadableOnly)
+		{
+			CheckMemberOnlyCall();
+			
+			NativeTextureManager.ReloadAll(Self, reloadableOnly);
+		}
+		
+		ITextureManager ISingleton<ITextureManager>.GetSingleton()
+		{
+			CheckStaticOnlyCall();
+			
+			var result = NativeTextureManager.GetSingleton();
+			
+			return HandleConvert.FromHandle<ITextureManager>(result);
+		}
+		
+	}
+	
+	[CppImplementation(typeof(ILogManager))]
+	internal unsafe class LogManagerImpl
+		: CppInstance, ILogManager, ISingleton<ILogManager>
+	{
+		ILogManager ILogManager.Construct()
+		{
+			Self = NativeLogManager.Construct();
+			return this;
+		}
+		
+		void ILogManager.Destruct()
+		{
+			NativeLogManager.Destruct(Self);
+			Self = default(Handle);
+		}
+		
+		ILog ILogManager.CreateLog(String name, bool defaultLog, bool debuggerOutput, bool suppressFileOutput)
+		{
+			CheckMemberOnlyCall();
+			
+			var result = NativeLogManager.CreateLog(Self, name, defaultLog, debuggerOutput, suppressFileOutput);
+			
+			return HandleConvert.FromHandle<ILog>(result);
+		}
+		
+		ILog ILogManager.GetLog(String name)
+		{
+			CheckMemberOnlyCall();
+			
+			var result = NativeLogManager.GetLog(Self, name);
+			
+			return HandleConvert.FromHandle<ILog>(result);
+		}
+		
+		ILog ILogManager.GetDefaultLog()
+		{
+			CheckMemberOnlyCall();
+			
+			var result = NativeLogManager.GetDefaultLog(Self);
+			
+			return HandleConvert.FromHandle<ILog>(result);
+		}
+		
+		void ILogManager.DestroyLog(String name)
+		{
+			CheckMemberOnlyCall();
+			
+			NativeLogManager.DestroyLog(Self, name);
+		}
+		
+		void ILogManager.DestroyLog(ILog log)
+		{
+			CheckMemberOnlyCall();
+			
+			NativeLogManager.DestroyLog(Self, HandleConvert.ToHandle(log));
+		}
+		
+		ILog ILogManager.SetDefaultLog(ILog log)
+		{
+			CheckMemberOnlyCall();
+			
+			var result = NativeLogManager.SetDefaultLog(Self, HandleConvert.ToHandle(log));
+			
+			return HandleConvert.FromHandle<ILog>(result);
+		}
+		
+		void ILogManager.LogMessage(String message, LogMessageLevel logLevel, bool maskDebug)
+		{
+			CheckMemberOnlyCall();
+			
+			NativeLogManager.LogMessage(Self, message, logLevel, maskDebug);
+		}
+		
+		void ILogManager.SetLogDetail(LoggingLevel level)
+		{
+			CheckMemberOnlyCall();
+			
+			NativeLogManager.SetLogDetail(Self, level);
+		}
+		
+		ILogManager ISingleton<ILogManager>.GetSingleton()
+		{
+			CheckStaticOnlyCall();
+			
+			var result = NativeLogManager.GetSingleton();
+			
+			return HandleConvert.FromHandle<ILogManager>(result);
+		}
+		
+	}
+	
+	[CppImplementation(typeof(IStringInterface))]
+	internal unsafe class StringInterfaceImpl
+		: CppInstance, IStringInterface
+	{
+	}
+	
+	[CppImplementation(typeof(IOverlayElement))]
+	internal unsafe class OverlayElementImpl
+		: StringInterfaceImpl, IOverlayElement, IRenderable
+	{
+		String IOverlayElement.GetCaption()
+		{
+			CheckMemberOnlyCall();
+			
+			var result = NativeOverlayElement.GetCaption(Self);
+			
+			return result;
+		}
+		
+		void IOverlayElement.SetCaption(String value)
+		{
+			CheckMemberOnlyCall();
+			
+			NativeOverlayElement.SetCaption(Self, value);
+		}
+		
+		void IOverlayElement.Show()
+		{
+			CheckMemberOnlyCall();
+			
+			NativeOverlayElement.Show(Self);
+		}
+		
+	}
+	
+	[CppImplementation(typeof(IEdgeData))]
+	internal unsafe class EdgeDataImpl
+		: CppInstance, IEdgeData
+	{
+	}
+	
+	[CppImplementation(typeof(ICustomLogListener))]
+	internal unsafe class CustomLogListenerImpl
+		: LogListenerImpl, ICustomLogListener
+	{
+		ICustomLogListener ICustomLogListener.Construct(LogListenerMessageLoggedHandler messageLoggedHandler)
+		{
+			Self = NativeCustomLogListener.Construct(messageLoggedHandler);
+			return this;
+		}
+		
 	}
 	
 	[CppImplementation(typeof(IRoot))]
@@ -642,360 +1221,6 @@ namespace InVision.Ogre.Native
 	{
 	}
 	
-	[CppImplementation(typeof(ICustomFrameListener))]
-	internal unsafe class CustomFrameListenerImpl
-		: FrameListenerImpl, ICustomFrameListener
-	{
-		ICustomFrameListener ICustomFrameListener.Construct(FrameEventHandler frameStarted, FrameEventHandler frameEnded, FrameEventHandler frameRenderingQueued)
-		{
-			Self = NativeCustomFrameListener.Construct(frameStarted, frameEnded, frameRenderingQueued);
-			return this;
-		}
-		
-	}
-	
-	[CppImplementation(typeof(IAxisAlignedBox))]
-	internal unsafe class AxisAlignedBoxImpl
-		: CppInstance, IAxisAlignedBox
-	{
-	}
-	
-	[CppImplementation(typeof(ICamera))]
-	internal unsafe class CameraImpl
-		: CppInstance, ICamera, IAnimableObject, IShadowCaster, IRenderable
-	{
-		Vector3 ICamera.GetPosition()
-		{
-			CheckMemberOnlyCall();
-			
-			var result = NativeCamera.GetPosition(Self);
-			
-			return result;
-		}
-		
-		void ICamera.SetPosition(Vector3 pos)
-		{
-			CheckMemberOnlyCall();
-			
-			NativeCamera.SetPosition(Self, pos);
-		}
-		
-		void ICamera.LookAt(Vector3 direction)
-		{
-			CheckMemberOnlyCall();
-			
-			NativeCamera.LookAt(Self, direction);
-		}
-		
-		float ICamera.GetNearClipDistance()
-		{
-			CheckMemberOnlyCall();
-			
-			var result = NativeCamera.GetNearClipDistance(Self);
-			
-			return result;
-		}
-		
-		void ICamera.SetNearClipDistance(float distance)
-		{
-			CheckMemberOnlyCall();
-			
-			NativeCamera.SetNearClipDistance(Self, distance);
-		}
-		
-		float ICamera.GetAspectRatio()
-		{
-			CheckMemberOnlyCall();
-			
-			var result = NativeCamera.GetAspectRatio(Self);
-			
-			return result;
-		}
-		
-		void ICamera.SetAspectRatio(float aspectRatio)
-		{
-			CheckMemberOnlyCall();
-			
-			NativeCamera.SetAspectRatio(Self, aspectRatio);
-		}
-		
-		float ICamera.GetFarClipDistance()
-		{
-			CheckMemberOnlyCall();
-			
-			var result = NativeCamera.GetFarClipDistance(Self);
-			
-			return result;
-		}
-		
-		void ICamera.SetFarClipDistance(float value)
-		{
-			CheckMemberOnlyCall();
-			
-			NativeCamera.SetFarClipDistance(Self, value);
-		}
-		
-		void ICamera.SetAutoAspectRatio(bool value)
-		{
-			CheckMemberOnlyCall();
-			
-			NativeCamera.SetAutoAspectRatio(Self, value);
-		}
-		
-		PolygonMode ICamera.GetPolygonMode()
-		{
-			CheckMemberOnlyCall();
-			
-			var result = NativeCamera.GetPolygonMode(Self);
-			
-			return result;
-		}
-		
-		void ICamera.SetPolygonMode(PolygonMode value)
-		{
-			CheckMemberOnlyCall();
-			
-			NativeCamera.SetPolygonMode(Self, value);
-		}
-		
-		Vector3 ICamera.GetDirection()
-		{
-			CheckMemberOnlyCall();
-			
-			var result = NativeCamera.GetDirection(Self);
-			
-			return result;
-		}
-		
-		Vector3 ICamera.GetRight()
-		{
-			CheckMemberOnlyCall();
-			
-			var result = NativeCamera.GetRight(Self);
-			
-			return result;
-		}
-		
-		Vector3 ICamera.GetUp()
-		{
-			CheckMemberOnlyCall();
-			
-			var result = NativeCamera.GetUp(Self);
-			
-			return result;
-		}
-		
-		void ICamera.Move(Vector3 distance)
-		{
-			CheckMemberOnlyCall();
-			
-			NativeCamera.Move(Self, distance);
-		}
-		
-		void ICamera.Yaw(float valueRadians)
-		{
-			CheckMemberOnlyCall();
-			
-			NativeCamera.Yaw(Self, valueRadians);
-		}
-		
-		void ICamera.Pitch(float valueRadians)
-		{
-			CheckMemberOnlyCall();
-			
-			NativeCamera.Pitch(Self, valueRadians);
-		}
-		
-		bool IShadowCaster.GetCastShadows()
-		{
-			CheckMemberOnlyCall();
-			
-			var result = NativeCamera.GetCastShadows(Self);
-			
-			return result;
-		}
-		
-		IEdgeData IShadowCaster.GetEdgeList()
-		{
-			CheckMemberOnlyCall();
-			
-			var result = NativeCamera.GetEdgeList(Self);
-			
-			return HandleConvert.FromHandle<IEdgeData>(result);
-		}
-		
-		bool IShadowCaster.HasEdgeList()
-		{
-			CheckMemberOnlyCall();
-			
-			var result = NativeCamera.HasEdgeList(Self);
-			
-			return result;
-		}
-		
-		BoundingBox IShadowCaster.GetWorldBoundingBox(bool derive)
-		{
-			CheckMemberOnlyCall();
-			
-			var result = NativeCamera.GetWorldBoundingBox(Self, derive);
-			
-			return result;
-		}
-		
-		BoundingBox IShadowCaster.GetLightCapBounds()
-		{
-			CheckMemberOnlyCall();
-			
-			var result = NativeCamera.GetLightCapBounds(Self);
-			
-			return result;
-		}
-		
-		BoundingBox IShadowCaster.GetDarkCapBounds(ILight light, float dirLightExtrusionDist)
-		{
-			CheckMemberOnlyCall();
-			
-			var result = NativeCamera.GetDarkCapBounds(Self, HandleConvert.ToHandle(light), dirLightExtrusionDist);
-			
-			return result;
-		}
-		
-		float IShadowCaster.GetPointExtrusionDistance(ILight light)
-		{
-			CheckMemberOnlyCall();
-			
-			var result = NativeCamera.GetPointExtrusionDistance(Self, HandleConvert.ToHandle(light));
-			
-			return result;
-		}
-		
-	}
-	
-	[CppImplementation(typeof(IScriptLoader))]
-	internal unsafe class ScriptLoaderImpl
-		: CppInstance, IScriptLoader
-	{
-	}
-	
-	[CppImplementation(typeof(IEntity))]
-	internal unsafe class EntityImpl
-		: MovableObjectImpl, IEntity, IAnimableObject, IShadowCaster
-	{
-	}
-	
-	[CppImplementation(typeof(IConfigFile))]
-	internal unsafe class ConfigFileImpl
-		: CppInstance, IConfigFile
-	{
-		IConfigFile IConfigFile.Construct()
-		{
-			Self = NativeConfigFile.Construct();
-			return this;
-		}
-		
-		void IConfigFile.Destruct()
-		{
-			NativeConfigFile.Destruct(Self);
-			Self = default(Handle);
-		}
-		
-		void IConfigFile.Load(String filename, String separators, bool trimWhitespace)
-		{
-			CheckMemberOnlyCall();
-			
-			NativeConfigFile.Load(Self, filename, separators, trimWhitespace);
-		}
-		
-		void IConfigFile.GetSections(out SettingsBySection* settingsBySection)
-		{
-			CheckMemberOnlyCall();
-			
-			NativeConfigFile.GetSections(Self, out settingsBySection);
-		}
-		
-		void IConfigFile.DeleteSettingsBySection(SettingsBySection* settingsBySection)
-		{
-			CheckStaticOnlyCall();
-			
-			NativeConfigFile.DeleteSettingsBySection(settingsBySection);
-		}
-		
-	}
-	
-	[CppImplementation(typeof(IResourceManager))]
-	internal unsafe class ResourceManagerImpl
-		: ScriptLoaderImpl, IResourceManager
-	{
-	}
-	
-	[CppImplementation(typeof(IMaterialManager))]
-	internal unsafe class MaterialManagerImpl
-		: CppInstance, IMaterialManager, ISingleton<IMaterialManager>
-	{
-		void IMaterialManager.SetDefaultTextureFiltering(TextureFilterOption option)
-		{
-			CheckMemberOnlyCall();
-			
-			NativeMaterialManager.SetDefaultTextureFiltering(Self, option);
-		}
-		
-		void IMaterialManager.SetDefaultAnisotropy(uint max)
-		{
-			CheckMemberOnlyCall();
-			
-			NativeMaterialManager.SetDefaultAnisotropy(Self, max);
-		}
-		
-		uint IMaterialManager.GetDefaultAnisotropy()
-		{
-			CheckMemberOnlyCall();
-			
-			var result = NativeMaterialManager.GetDefaultAnisotropy(Self);
-			
-			return result;
-		}
-		
-		IMaterialManager ISingleton<IMaterialManager>.GetSingleton()
-		{
-			CheckStaticOnlyCall();
-			
-			var result = NativeMaterialManager.GetSingleton();
-			
-			return HandleConvert.FromHandle<IMaterialManager>(result);
-		}
-		
-	}
-	
-	[CppImplementation(typeof(ILogListener))]
-	internal unsafe class LogListenerImpl
-		: CppInstance, ILogListener
-	{
-		void ILogListener.Destruct()
-		{
-			NativeLogListener.Destruct(Self);
-			Self = default(Handle);
-		}
-		
-	}
-	
-	[CppImplementation(typeof(IEdgeData))]
-	internal unsafe class EdgeDataImpl
-		: CppInstance, IEdgeData
-	{
-	}
-	
-	[CppImplementation(typeof(ISceneManagerFactory))]
-	internal unsafe class SceneManagerFactoryImpl
-		: CppInstance, ISceneManagerFactory
-	{
-	}
-	
-	[CppImplementation(typeof(IRenderSystem))]
-	internal unsafe class RenderSystemImpl
-		: CppInstance, IRenderSystem
-	{
-	}
-	
 	[CppImplementation(typeof(ISceneNode))]
 	internal unsafe class SceneNodeImpl
 		: NodeImpl, ISceneNode
@@ -1122,167 +1347,83 @@ namespace InVision.Ogre.Native
 		
 	}
 	
-	[CppImplementation(typeof(IOverlayManager))]
-	internal unsafe class OverlayManagerImpl
-		: ScriptLoaderImpl, IOverlayManager, ISingleton<IOverlayManager>
+	[CppImplementation(typeof(IMaterialManager))]
+	internal unsafe class MaterialManagerImpl
+		: CppInstance, IMaterialManager, ISingleton<IMaterialManager>
 	{
-		IOverlayElement IOverlayManager.GetOverlayElement(String name, bool isTemplate)
+		void IMaterialManager.SetDefaultTextureFiltering(TextureFilterOption option)
 		{
 			CheckMemberOnlyCall();
 			
-			var result = NativeOverlayManager.GetOverlayElement(Self, name, isTemplate);
-			
-			return HandleConvert.FromHandle<IOverlayElement>(result);
+			NativeMaterialManager.SetDefaultTextureFiltering(Self, option);
 		}
 		
-		IOverlay IOverlayManager.GetByName(String name)
+		void IMaterialManager.SetDefaultAnisotropy(uint max)
 		{
 			CheckMemberOnlyCall();
 			
-			var result = NativeOverlayManager.GetByName(Self, name);
-			
-			return HandleConvert.FromHandle<IOverlay>(result);
+			NativeMaterialManager.SetDefaultAnisotropy(Self, max);
 		}
 		
-		IOverlayManager ISingleton<IOverlayManager>.GetSingleton()
-		{
-			CheckStaticOnlyCall();
-			
-			var result = NativeOverlayManager.GetSingleton();
-			
-			return HandleConvert.FromHandle<IOverlayManager>(result);
-		}
-		
-	}
-	
-	[CppImplementation(typeof(ILogManager))]
-	internal unsafe class LogManagerImpl
-		: CppInstance, ILogManager, ISingleton<ILogManager>
-	{
-		ILogManager ILogManager.Construct()
-		{
-			Self = NativeLogManager.Construct();
-			return this;
-		}
-		
-		void ILogManager.Destruct()
-		{
-			NativeLogManager.Destruct(Self);
-			Self = default(Handle);
-		}
-		
-		ILog ILogManager.CreateLog(String name, bool defaultLog, bool debuggerOutput, bool suppressFileOutput)
+		uint IMaterialManager.GetDefaultAnisotropy()
 		{
 			CheckMemberOnlyCall();
 			
-			var result = NativeLogManager.CreateLog(Self, name, defaultLog, debuggerOutput, suppressFileOutput);
-			
-			return HandleConvert.FromHandle<ILog>(result);
-		}
-		
-		ILog ILogManager.GetLog(String name)
-		{
-			CheckMemberOnlyCall();
-			
-			var result = NativeLogManager.GetLog(Self, name);
-			
-			return HandleConvert.FromHandle<ILog>(result);
-		}
-		
-		ILog ILogManager.GetDefaultLog()
-		{
-			CheckMemberOnlyCall();
-			
-			var result = NativeLogManager.GetDefaultLog(Self);
-			
-			return HandleConvert.FromHandle<ILog>(result);
-		}
-		
-		void ILogManager.DestroyLog(String name)
-		{
-			CheckMemberOnlyCall();
-			
-			NativeLogManager.DestroyLog(Self, name);
-		}
-		
-		void ILogManager.DestroyLog(ILog log)
-		{
-			CheckMemberOnlyCall();
-			
-			NativeLogManager.DestroyLog(Self, HandleConvert.ToHandle(log));
-		}
-		
-		ILog ILogManager.SetDefaultLog(ILog log)
-		{
-			CheckMemberOnlyCall();
-			
-			var result = NativeLogManager.SetDefaultLog(Self, HandleConvert.ToHandle(log));
-			
-			return HandleConvert.FromHandle<ILog>(result);
-		}
-		
-		void ILogManager.LogMessage(String message, LogMessageLevel logLevel, bool maskDebug)
-		{
-			CheckMemberOnlyCall();
-			
-			NativeLogManager.LogMessage(Self, message, logLevel, maskDebug);
-		}
-		
-		void ILogManager.SetLogDetail(LoggingLevel level)
-		{
-			CheckMemberOnlyCall();
-			
-			NativeLogManager.SetLogDetail(Self, level);
-		}
-		
-		ILogManager ISingleton<ILogManager>.GetSingleton()
-		{
-			CheckStaticOnlyCall();
-			
-			var result = NativeLogManager.GetSingleton();
-			
-			return HandleConvert.FromHandle<ILogManager>(result);
-		}
-		
-	}
-	
-	[CppImplementation(typeof(ILight))]
-	internal unsafe class LightImpl
-		: MovableObjectImpl, ILight, IAnimableObject, IShadowCaster
-	{
-		void ILight.SetPosition(float x, float y, float z)
-		{
-			CheckMemberOnlyCall();
-			
-			NativeLight.SetPosition(Self, x, y, z);
-		}
-		
-		void ILight.SetPosition(Vector3 pos)
-		{
-			CheckMemberOnlyCall();
-			
-			NativeLight.SetPosition(Self, pos);
-		}
-		
-		Vector3 ILight.GetPosition()
-		{
-			CheckMemberOnlyCall();
-			
-			var result = NativeLight.GetPosition(Self);
+			var result = NativeMaterialManager.GetDefaultAnisotropy(Self);
 			
 			return result;
 		}
 		
+		IMaterialManager ISingleton<IMaterialManager>.GetSingleton()
+		{
+			CheckStaticOnlyCall();
+			
+			var result = NativeMaterialManager.GetSingleton();
+			
+			return HandleConvert.FromHandle<IMaterialManager>(result);
+		}
+		
 	}
 	
-	[CppImplementation(typeof(ICustomLogListener))]
-	internal unsafe class CustomLogListenerImpl
-		: LogListenerImpl, ICustomLogListener
+	[CppImplementation(typeof(IResourceGroupManager))]
+	internal unsafe class ResourceGroupManagerImpl
+		: CppInstance, IResourceGroupManager, ISingleton<IResourceGroupManager>
 	{
-		ICustomLogListener ICustomLogListener.Construct(LogListenerMessageLoggedHandler messageLoggedHandler)
+		void IResourceGroupManager.AddResourceLocation(String name, String locType)
 		{
-			Self = NativeCustomLogListener.Construct(messageLoggedHandler);
-			return this;
+			CheckMemberOnlyCall();
+			
+			NativeResourceGroupManager.AddResourceLocation(Self, name, locType);
+		}
+		
+		void IResourceGroupManager.AddResourceLocation(String name, String locType, String resGroup)
+		{
+			CheckMemberOnlyCall();
+			
+			NativeResourceGroupManager.AddResourceLocation(Self, name, locType, resGroup);
+		}
+		
+		void IResourceGroupManager.AddResourceLocation(String name, String locType, String resGroup, bool recursive)
+		{
+			CheckMemberOnlyCall();
+			
+			NativeResourceGroupManager.AddResourceLocation(Self, name, locType, resGroup, recursive);
+		}
+		
+		void IResourceGroupManager.InitializeAllResourceGroups()
+		{
+			CheckMemberOnlyCall();
+			
+			NativeResourceGroupManager.InitializeAllResourceGroups(Self);
+		}
+		
+		IResourceGroupManager ISingleton<IResourceGroupManager>.GetSingleton()
+		{
+			CheckStaticOnlyCall();
+			
+			var result = NativeResourceGroupManager.GetSingleton();
+			
+			return HandleConvert.FromHandle<IResourceGroupManager>(result);
 		}
 		
 	}
@@ -1423,172 +1564,31 @@ namespace InVision.Ogre.Native
 		
 	}
 	
-	[CppImplementation(typeof(ISceneManager))]
-	internal unsafe class SceneManagerImpl
-		: CppInstance, ISceneManager
+	[CppImplementation(typeof(ILight))]
+	internal unsafe class LightImpl
+		: MovableObjectImpl, ILight, IAnimableObject, IShadowCaster
 	{
-		void ISceneManager.ClearScene()
+		void ILight.SetPosition(float x, float y, float z)
 		{
 			CheckMemberOnlyCall();
 			
-			NativeSceneManager.ClearScene(Self);
+			NativeLight.SetPosition(Self, x, y, z);
 		}
 		
-		void ISceneManager.SetAmbientLight(Color color)
+		void ILight.SetPosition(Vector3 pos)
 		{
 			CheckMemberOnlyCall();
 			
-			NativeSceneManager.SetAmbientLight(Self, color);
+			NativeLight.SetPosition(Self, pos);
 		}
 		
-		Color ISceneManager.GetAmbientLight()
+		Vector3 ILight.GetPosition()
 		{
 			CheckMemberOnlyCall();
 			
-			var result = NativeSceneManager.GetAmbientLight(Self);
+			var result = NativeLight.GetPosition(Self);
 			
 			return result;
-		}
-		
-		ICamera ISceneManager.CreateCamera(String name)
-		{
-			CheckMemberOnlyCall();
-			
-			var result = NativeSceneManager.CreateCamera(Self, name);
-			
-			return HandleConvert.FromHandle<ICamera>(result);
-		}
-		
-		IEntity ISceneManager.CreateEntity(String meshName)
-		{
-			CheckMemberOnlyCall();
-			
-			var result = NativeSceneManager.CreateEntity(Self, meshName);
-			
-			return HandleConvert.FromHandle<IEntity>(result);
-		}
-		
-		IEntity ISceneManager.CreateEntity(String entityName, String meshName)
-		{
-			CheckMemberOnlyCall();
-			
-			var result = NativeSceneManager.CreateEntity(Self, entityName, meshName);
-			
-			return HandleConvert.FromHandle<IEntity>(result);
-		}
-		
-		ISceneNode ISceneManager.GetRootSceneNode()
-		{
-			CheckMemberOnlyCall();
-			
-			var result = NativeSceneManager.GetRootSceneNode(Self);
-			
-			return HandleConvert.FromHandle<ISceneNode>(result);
-		}
-		
-		ILight ISceneManager.CreateLight()
-		{
-			CheckMemberOnlyCall();
-			
-			var result = NativeSceneManager.CreateLight(Self);
-			
-			return HandleConvert.FromHandle<ILight>(result);
-		}
-		
-		ILight ISceneManager.CreateLight(String name)
-		{
-			CheckMemberOnlyCall();
-			
-			var result = NativeSceneManager.CreateLight(Self, name);
-			
-			return HandleConvert.FromHandle<ILight>(result);
-		}
-		
-	}
-	
-	[CppImplementation(typeof(IRenderWindow))]
-	internal unsafe class RenderWindowImpl
-		: RenderTargetImpl, IRenderWindow
-	{
-		void IRenderWindow.GetCustomAttribute(String name, out IntPtr data)
-		{
-			CheckMemberOnlyCall();
-			
-			NativeRenderWindow.GetCustomAttribute(Self, name, out data);
-		}
-		
-		IViewport IRenderWindow.AddViewport(ICamera camera, int zOrder, float left, float top, float width, float height)
-		{
-			CheckMemberOnlyCall();
-			
-			var result = NativeRenderWindow.AddViewport(Self, HandleConvert.ToHandle(camera), zOrder, left, top, width, height);
-			
-			return HandleConvert.FromHandle<IViewport>(result);
-		}
-		
-		bool IRenderWindow.IsClosed()
-		{
-			CheckMemberOnlyCall();
-			
-			var result = NativeRenderWindow.IsClosed(Self);
-			
-			return result;
-		}
-		
-		String IRenderWindow.WriteContentsToTimestampedFile(String filenamePrefix, String filenameSuffix)
-		{
-			CheckMemberOnlyCall();
-			
-			var result = NativeRenderWindow.WriteContentsToTimestampedFile(Self, filenamePrefix, filenameSuffix);
-			
-			return result;
-		}
-		
-		FrameStats IRenderWindow.GetStatistics()
-		{
-			CheckMemberOnlyCall();
-			
-			var result = NativeRenderWindow.GetStatistics(Self);
-			
-			return result;
-		}
-		
-	}
-	
-	[CppImplementation(typeof(ITextureManager))]
-	internal unsafe class TextureManagerImpl
-		: CppInstance, ITextureManager, ISingleton<ITextureManager>
-	{
-		void ITextureManager.SetDefaultNumMipmaps(int num)
-		{
-			CheckMemberOnlyCall();
-			
-			NativeTextureManager.SetDefaultNumMipmaps(Self, num);
-		}
-		
-		int ITextureManager.GetDefaultNumMipmaps()
-		{
-			CheckMemberOnlyCall();
-			
-			var result = NativeTextureManager.GetDefaultNumMipmaps(Self);
-			
-			return result;
-		}
-		
-		void ITextureManager.ReloadAll(bool reloadableOnly)
-		{
-			CheckMemberOnlyCall();
-			
-			NativeTextureManager.ReloadAll(Self, reloadableOnly);
-		}
-		
-		ITextureManager ISingleton<ITextureManager>.GetSingleton()
-		{
-			CheckStaticOnlyCall();
-			
-			var result = NativeTextureManager.GetSingleton();
-			
-			return HandleConvert.FromHandle<ITextureManager>(result);
 		}
 		
 	}
