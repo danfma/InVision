@@ -7,11 +7,11 @@ namespace InVision.Ogre.Native
 	public interface IOverlayElement : IStringInterface, IRenderable
 	{
 		[Method(Implemented = true)]
-		[return: MarshalAs(UnmanagedType.LPWStr)]
+		[return: MarshalAs(UnmanagedType.LPStr)]
 		string GetCaption();
 
 		[Method(Implemented = true)]
-		void SetCaption([MarshalAs(UnmanagedType.LPWStr)] string value);
+		void SetCaption([MarshalAs(UnmanagedType.LPStr)] string value);
 
 		[Method(Implemented = true)]
 		void Show();
