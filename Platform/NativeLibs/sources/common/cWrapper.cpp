@@ -15,9 +15,9 @@ INV_EXPORT void INV_CALL util_string_delete(const _string data)
 /*
  * Exception handler
  */
-ExceptionHandler exceptionHandler = NULL;
+InvExceptionHandler exceptionHandler = NULL;
 
-INV_EXPORT void INV_CALL register_exception_handler(ExceptionHandler handler)
+INV_EXPORT void INV_CALL register_exception_handler(InvExceptionHandler handler)
 {
 	exceptionHandler = handler;
 }

@@ -32,14 +32,14 @@ Debug:RCC_DIR = Bin/Debug/.rcc
 Debug:UI_DIR = Bin/Debug/.ui
 Debug:DEFINES += DEBUG
 
-INCLUDEPATH += sources/common $$(BOOST_SDK)
+INCLUDEPATH += sources/common
 INCLUDEPATH += sources/cois
 INCLUDEPATH += sources/cogre3d
 
 DEFINES += InvNativeProject
 
 win32 {
-	DEFINES += WIN32 DEBUG
+	DEFINES += WIN32
 
 	INCLUDEPATH += $$(BOOST_SDK)
 	INCLUDEPATH += $$(OGRE_SDK)include\OGRE
@@ -51,5 +51,15 @@ win32 {
 }
 
 macx {
-	DEFINES += MACOSX DEBUG
+	CONFIG += x86
+
+	DEFINES += MACOSX
+
+	INCLUDEPATH += /opt/local/include/
+	INCLUDEPATH += /Library/Frameworks/OIS.framework/Headers/
+	INCLUDEPATH += /Library/Frameworks/Ogre.framework/Headers/
+
+	LIBS += -framework OIS
+	LIBS += -framework Ogre
+	LIBS += -framework Carbon -framework IOKit
 }

@@ -173,10 +173,10 @@ extern "C"
 #define NOT_SINGLETON_ERROR		5
 
 
-	typedef void (INV_CALL *ExceptionHandler)(const _string message, _int errorType);
+	typedef void (INV_CALL *InvExceptionHandler)(const _string message, _int errorType);
 
 	INV_EXPORT void
-	INV_CALL register_exception_handler(ExceptionHandler handler);
+	INV_CALL register_exception_handler(InvExceptionHandler handler);
 
 #ifdef __cplusplus
 
