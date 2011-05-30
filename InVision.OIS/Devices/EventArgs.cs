@@ -10,7 +10,7 @@ namespace InVision.OIS.Devices
 		/// Initializes a new instance of the <see cref="EventArgs"/> class.
 		/// </summary>
 		/// <param name="nativeInstance">The native instance.</param>
-		protected EventArgs(ICppInterface nativeInstance)
+		protected EventArgs(ICppInstance nativeInstance)
 			: base(nativeInstance)
 		{
 		}

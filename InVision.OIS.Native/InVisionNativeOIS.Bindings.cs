@@ -12,7 +12,7 @@ using InVision.OIS.Native;
 
 namespace InVision.OIS.Native
 {
-	internal sealed class NativeMouseState : InVision.Native.PlatformInvoke
+	internal sealed unsafe class NativeMouseState : InVision.Native.PlatformInvoke
 	{
 		public const string Library = "InVisionNative.dll";
 		
@@ -29,7 +29,21 @@ namespace InVision.OIS.Native
 		public static extern void Destruct(Handle self);
 	}
 	
-	internal sealed class NativeObject : InVision.Native.PlatformInvoke
+	internal sealed unsafe class NativeKeyListener : InVision.Native.PlatformInvoke
+	{
+		public const string Library = "InVisionNative.dll";
+		
+		static NativeKeyListener()
+		{
+			Init();
+		}
+		
+		
+		[DllImport(Library, EntryPoint = "delete_keylistener")]
+		public static extern void Destruct(Handle self);
+	}
+	
+	internal sealed unsafe class NativeObject : InVision.Native.PlatformInvoke
 	{
 		public const string Library = "InVisionNative.dll";
 		
@@ -73,7 +87,7 @@ namespace InVision.OIS.Native
 			InterfaceType interfaceType);
 	}
 	
-	internal sealed class NativeKeyboard : InVision.Native.PlatformInvoke
+	internal sealed unsafe class NativeKeyboard : InVision.Native.PlatformInvoke
 	{
 		public const string Library = "InVisionNative.dll";
 		
@@ -121,7 +135,7 @@ namespace InVision.OIS.Native
 			[MarshalAs(UnmanagedType.LPArray, SizeConst = 256, ArraySubType = UnmanagedType.I1)] bool[] keys);
 	}
 	
-	internal sealed class NativeComponent : InVision.Native.PlatformInvoke
+	internal sealed unsafe class NativeComponent : InVision.Native.PlatformInvoke
 	{
 		public const string Library = "InVisionNative.dll";
 		
@@ -143,7 +157,7 @@ namespace InVision.OIS.Native
 		public static extern void Destruct(Handle self);
 	}
 	
-	internal sealed class NativeVector3 : InVision.Native.PlatformInvoke
+	internal sealed unsafe class NativeVector3 : InVision.Native.PlatformInvoke
 	{
 		public const string Library = "InVisionNative.dll";
 		
@@ -164,7 +178,7 @@ namespace InVision.OIS.Native
 			float z);
 	}
 	
-	internal sealed class NativeInterface : InVision.Native.PlatformInvoke
+	internal sealed unsafe class NativeInterface : InVision.Native.PlatformInvoke
 	{
 		public const string Library = "InVisionNative.dll";
 		
@@ -178,7 +192,7 @@ namespace InVision.OIS.Native
 		public static extern void Destruct(Handle self);
 	}
 	
-	internal sealed class NativeEventArg : InVision.Native.PlatformInvoke
+	internal sealed unsafe class NativeEventArg : InVision.Native.PlatformInvoke
 	{
 		public const string Library = "InVisionNative.dll";
 		
@@ -198,7 +212,7 @@ namespace InVision.OIS.Native
 		public static extern Handle GetDevice(Handle self);
 	}
 	
-	internal sealed class NativeMouse : InVision.Native.PlatformInvoke
+	internal sealed unsafe class NativeMouse : InVision.Native.PlatformInvoke
 	{
 		public const string Library = "InVisionNative.dll";
 		
@@ -220,7 +234,21 @@ namespace InVision.OIS.Native
 		public static extern Handle GetMouseState(Handle self);
 	}
 	
-	internal sealed class NativeMouseEvent : InVision.Native.PlatformInvoke
+	internal sealed unsafe class NativeMouseListener : InVision.Native.PlatformInvoke
+	{
+		public const string Library = "InVisionNative.dll";
+		
+		static NativeMouseListener()
+		{
+			Init();
+		}
+		
+		
+		[DllImport(Library, EntryPoint = "delete_mouselistener")]
+		public static extern void Destruct(Handle self);
+	}
+	
+	internal sealed unsafe class NativeMouseEvent : InVision.Native.PlatformInvoke
 	{
 		public const string Library = "InVisionNative.dll";
 		
@@ -237,7 +265,7 @@ namespace InVision.OIS.Native
 			Handle mouseState);
 	}
 	
-	internal sealed class NativeInputManager : InVision.Native.PlatformInvoke
+	internal sealed unsafe class NativeInputManager : InVision.Native.PlatformInvoke
 	{
 		public const string Library = "InVisionNative.dll";
 		
@@ -311,18 +339,7 @@ namespace InVision.OIS.Native
 			AddOnFactory factory);
 	}
 	
-	internal sealed class NativeFactoryCreator : InVision.Native.PlatformInvoke
-	{
-		public const string Library = "InVisionNative.dll";
-		
-		static NativeFactoryCreator()
-		{
-			Init();
-		}
-		
-	}
-	
-	internal sealed class NativeCustomKeyListener : InVision.Native.PlatformInvoke
+	internal sealed unsafe class NativeCustomKeyListener : InVision.Native.PlatformInvoke
 	{
 		public const string Library = "InVisionNative.dll";
 		
@@ -336,12 +353,9 @@ namespace InVision.OIS.Native
 		public static extern Handle Construct(
 			KeyEventHandler keyPressed, 
 			KeyEventHandler keyReleased);
-		
-		[DllImport(Library, EntryPoint = "delete_customkeylistener")]
-		public static extern void Destruct(Handle self);
 	}
 	
-	internal sealed class NativeCustomMouseListener : InVision.Native.PlatformInvoke
+	internal sealed unsafe class NativeCustomMouseListener : InVision.Native.PlatformInvoke
 	{
 		public const string Library = "InVisionNative.dll";
 		
@@ -356,12 +370,20 @@ namespace InVision.OIS.Native
 			MouseMovedHandler mouseMoved, 
 			MouseClickHandler mousePressed, 
 			MouseClickHandler mouseReleased);
-		
-		[DllImport(Library, EntryPoint = "delete_custommouselistener")]
-		public static extern void Destruct(Handle self);
 	}
 	
-	internal sealed class NativeButton : InVision.Native.PlatformInvoke
+	internal sealed unsafe class NativeFactoryCreator : InVision.Native.PlatformInvoke
+	{
+		public const string Library = "InVisionNative.dll";
+		
+		static NativeFactoryCreator()
+		{
+			Init();
+		}
+		
+	}
+	
+	internal sealed unsafe class NativeButton : InVision.Native.PlatformInvoke
 	{
 		public const string Library = "InVisionNative.dll";
 		
@@ -380,7 +402,7 @@ namespace InVision.OIS.Native
 			bool pushed);
 	}
 	
-	internal sealed class NativeAxis : InVision.Native.PlatformInvoke
+	internal sealed unsafe class NativeAxis : InVision.Native.PlatformInvoke
 	{
 		public const string Library = "InVisionNative.dll";
 		
@@ -394,7 +416,7 @@ namespace InVision.OIS.Native
 		public static extern Handle Construct(ref AxisDescriptor descriptor);
 	}
 	
-	internal sealed class NativeKeyEvent : InVision.Native.PlatformInvoke
+	internal sealed unsafe class NativeKeyEvent : InVision.Native.PlatformInvoke
 	{
 		public const string Library = "InVisionNative.dll";
 		

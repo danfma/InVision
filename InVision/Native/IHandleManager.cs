@@ -2,10 +2,10 @@
 
 namespace InVision.Native
 {
-	[CppInterface("HandleManager")]
+	[CppClass("HandleManager")]
 	public interface IHandleManager
 	{
-		[Method(Static = true)]
+		[Method(Static = true, Implemented = true)]
 		void RegisterHandleDestroyed(HandleListenerHandleDestroyedHandler handleDestroyed);
 	}
 }

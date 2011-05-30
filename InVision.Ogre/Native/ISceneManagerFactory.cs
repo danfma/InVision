@@ -2,8 +2,8 @@
 
 namespace InVision.Ogre.Native
 {
-	[OgreInterface("SceneManagerFactory")]
-	public interface ISceneManagerFactory : ICppInterface
+	[OgreClass("SceneManagerFactory")]
+	public interface ISceneManagerFactory : ICppInstance
 	{
 	}
 }

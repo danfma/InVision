@@ -11,21 +11,63 @@ namespace invision
 	class CustomFrameListener : public Ogre::FrameListener
 	{
 	private:
-		FrameEvent event;
-		FrameEventHandler frameStartedHandler;
-		FrameEventHandler frameEndedHandler;
+		FrameEvent _event;
+		FrameEventHandler _frameStarted;
+		FrameEventHandler _frameEnded;
+		FrameEventHandler _frameRenderingQueued;
 
-		void copyEventData(const Ogre::FrameEvent &evt);
+		inline void copyEventData(const Ogre::FrameEvent &evt)
+		{
+			_event.timeSinceLastEvent = evt.timeSinceLastEvent;
+			_event.timeSinceLastFrame = evt.timeSinceLastFrame;
+		}
 
 	public:
 		CustomFrameListener(
-				FrameEventHandler frameStartedHandler,
-				FrameEventHandler frameEndedHandler);
+			FrameEventHandler frameStartedHandler,
+			FrameEventHandler frameEndedHandler,
+			FrameEventHandler frameRenderingQueuedHandler)
+			: _frameStarted(frameStartedHandler),
+			  _frameEnded(frameEndedHandler),
+			  _frameRenderingQueued(frameRenderingQueuedHandler)
+		{
+		}
 
-		~CustomFrameListener();
+		bool frameStarted(const Ogre::FrameEvent &evt)
+		{
+			copyEventData(evt);
 
-		bool frameStarted(const Ogre::FrameEvent &evt);
-		bool frameEnded(const Ogre::FrameEvent &evt);
+			bool result = true;
+
+			if (_frameStarted)
+				result = fromBool(_frameStarted(_event));
+
+			return result;
+		}
+
+		bool frameEnded(const Ogre::FrameEvent &evt)
+		{
+			copyEventData(evt);
+
+			bool result = true;
+
+			if (_frameEnded)
+				result = fromBool(_frameEnded(_event));
+
+			return result;
+		}
+
+		bool frameRenderingQueued(const Ogre::FrameEvent &evt)
+		{
+			copyEventData(evt);
+
+			bool result = true;
+
+			if (_frameRenderingQueued)
+				result = fromBool(_frameRenderingQueued(_event));
+
+			return result;
+		}
 	};
 }
 

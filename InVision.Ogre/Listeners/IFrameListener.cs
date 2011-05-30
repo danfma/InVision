@@ -10,6 +10,13 @@ namespace InVision.Ogre.Listeners
 		bool OnFrameStarted(FrameEvent e);
 
 		/// <summary>
+		/// Called when [frame rendering queued].
+		/// </summary>
+		/// <param name="e">The e.</param>
+		/// <returns></returns>
+		bool OnFrameRenderingQueued(FrameEvent e);
+
+		/// <summary>
 		/// Called when [frame ended].
 		/// </summary>
 		/// <param name="e">The e.</param>

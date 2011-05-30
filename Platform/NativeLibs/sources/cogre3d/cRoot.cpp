@@ -127,7 +127,9 @@ INV_CALL root_get_render_system(InvHandle self)
 INV_EXPORT InvHandle
 INV_CALL root_initialize_m1(InvHandle self, _bool autoCreateWindow)
 {
-	return getOrCreateReference<Ogre::RenderWindow>(asRoot(self)->initialise(toBool(autoCreateWindow)));
+	return getOrCreateReference<Ogre::RenderWindow>(
+				asRoot(self)->initialise(
+					fromBool(autoCreateWindow)));
 }
 
 /**
@@ -137,8 +139,9 @@ INV_EXPORT InvHandle
 INV_CALL root_initialize_m2(InvHandle self, _bool autoCreateWindow, _string windowTitle)
 {
 	return getOrCreateReference<Ogre::RenderWindow>(
-				asRoot(self)->initialise(toBool(autoCreateWindow),
-										 windowTitle));
+				asRoot(self)->initialise(
+					fromBool(autoCreateWindow),
+					windowTitle));
 }
 
 /**
@@ -148,9 +151,10 @@ INV_EXPORT InvHandle
 INV_CALL root_initialize_m3(InvHandle self, _bool autoCreateWindow, _string windowTitle, _string customCapabilities)
 {
 	return getOrCreateReference<Ogre::RenderWindow>(
-				asRoot(self)->initialise(toBool(autoCreateWindow),
-										 windowTitle,
-										 customCapabilities));
+				asRoot(self)->initialise(
+					fromBool(autoCreateWindow),
+					windowTitle,
+					customCapabilities));
 }
 
 /**
@@ -238,7 +242,7 @@ INV_EXPORT InvHandle
 INV_CALL root_create_render_window_m1(InvHandle self, _string name, _uint width, _uint height, _bool fullscreen)
 {
 	return getOrCreateReference<Ogre::RenderWindow>(
-				asRoot(self)->createRenderWindow(name, width, height, fullscreen));
+				asRoot(self)->createRenderWindow(name, width, height, fromBool(fullscreen)));
 }
 
 /**
@@ -257,7 +261,7 @@ INV_CALL root_create_render_window_m2(InvHandle self, _string name, _uint width,
 	}
 
 	return getOrCreateReference<Ogre::RenderWindow>(
-				asRoot(self)->createRenderWindow(name, width, height, fullscreen, &parameters));
+				asRoot(self)->createRenderWindow(name, width, height, fromBool(fullscreen), &parameters));
 }
 
 /**
@@ -290,6 +294,18 @@ INV_CALL root_render_one_frame(InvHandle self, _bool clearWindowMessages)
 	return toBool(asRoot(self)->renderOneFrame());
 }
 
+INV_EXPORT void
+INV_CALL root_add_frame_listener(InvHandle self, InvHandle listener)
+{
+	asRoot(self)->addFrameListener(asFrameListener(listener));
+}
+
+INV_EXPORT void
+INV_CALL root_remove_frame_listener(InvHandle self, InvHandle listener)
+{
+	asRoot(self)->removeFrameListener(asFrameListener(listener));
+}
+
 /**
  * Method: Root::getSingleton
  */
@@ -299,4 +315,10 @@ INV_CALL root_get_singleton()
 	Ogre::Root* root = Ogre::Root::getSingletonPtr();
 
 	return getOrCreateReference<Ogre::Root>(root);
+}
+
+INV_EXPORT void
+INV_CALL root_start_rendering(InvHandle self)
+{
+	asRoot(self)->startRendering();
 }

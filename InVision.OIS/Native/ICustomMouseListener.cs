@@ -1,19 +1,15 @@
 ﻿using System;
 using InVision.Native;
-using InVision.OIS.Attributes;
 
 namespace InVision.OIS.Native
 {
-    [OISInterface("MouseListener")]
-    public interface ICustomMouseListener : ICppInterface
-    {
-        [Constructor]
-        ICustomMouseListener Construct(
-            MouseMovedHandler mouseMoved, 
-            MouseClickHandler mousePressed,
-            MouseClickHandler mouseReleased);
-
-        [Destructor]
-        void Destruct();
-    }
+	[CppClass("CustomMouseListener", DefinitionFile = "cCustomMouseListener.h", LocalDefinition = true)]
+	public interface ICustomMouseListener : IMouseListener
+	{
+		[Constructor(Implemented = true)]
+		ICustomMouseListener Construct(
+			MouseMovedHandler mouseMoved,
+			MouseClickHandler mousePressed,
+			MouseClickHandler mouseReleased);
+	}
 }

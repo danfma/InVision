@@ -3,13 +3,13 @@ using InVision.OIS.Attributes;
 
 namespace InVision.OIS.Native
 {
-    [OISInterface("MouseState")]
-    public interface IMouseState : ICppInterface
+    [OISClass("MouseState")]
+    public interface IMouseState : ICppInstance
     {
-        [Constructor]
+		[Constructor(Implemented = true)]
         IMouseState Construct(ref MouseStateDescriptor descriptor);
 
-        [Destructor]
+		[Destructor(Implemented = true)]
         void Destruct();
     }
 }

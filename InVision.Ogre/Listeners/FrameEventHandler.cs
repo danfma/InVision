@@ -1,7 +1,9 @@
-﻿namespace InVision.Ogre.Listeners
+﻿using System.Runtime.InteropServices;
+using InVision.Native;
+
+namespace InVision.Ogre.Listeners
 {
-	/// <summary>
-	/// 
-	/// </summary>
+	[CppFunction]
+	[return: MarshalAs(UnmanagedType.I1)]
 	public delegate bool FrameEventHandler(FrameEvent e);
 }

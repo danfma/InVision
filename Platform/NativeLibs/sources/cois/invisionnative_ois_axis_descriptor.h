@@ -16,7 +16,6 @@ extern "C"
 		_int* abs;
 		_int* rel;
 		_bool* absOnly;
-		_byte* padding;
 	};
 	
 	AxisDescriptor descriptor_of_axis(InvHandle handle);

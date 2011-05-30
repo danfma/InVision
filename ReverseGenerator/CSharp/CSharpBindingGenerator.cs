@@ -27,7 +27,7 @@ namespace ReverseGenerator.CSharp
 		/// <param name="types">The types.</param>
 		protected override void GenerateContent(IEnumerable<Type> types)
 		{
-			IEnumerable<Type> wrapperTypes = types.Where(t => t.HasAttribute<CppInterfaceAttribute>(true) && !t.IsGenericTypeDefinition);
+			IEnumerable<Type> wrapperTypes = types.Where(t => t.HasAttribute<CppClassAttribute>(true) && !t.IsGenericTypeDefinition);
 
 			var defaultNamespaces = new[] {
                 typeof (DllImportAttribute).Namespace,
@@ -38,8 +38,7 @@ namespace ReverseGenerator.CSharp
 			namespacesUsed = namespacesUsed.Union(defaultNamespaces);
 			namespacesUsed = namespacesUsed.OrderBy(ns => ns, new NamespaceComparer());
 
-			foreach (string namespaceUsed in namespacesUsed)
-			{
+			foreach (string namespaceUsed in namespacesUsed) {
 				Writer.WriteLine("using {0};", namespaceUsed);
 			}
 
@@ -47,13 +46,11 @@ namespace ReverseGenerator.CSharp
 
 			IEnumerable<IGrouping<string, Type>> groupedTypes = wrapperTypes.GroupBy(t => t.Namespace);
 
-			foreach (var typeGroup in groupedTypes)
-			{
+			foreach (var typeGroup in groupedTypes) {
 				Writer.WriteLine("namespace {0}", typeGroup.Key);
 				Writer.OpenBlock();
 				{
-					foreach (Type wrapperType in typeGroup)
-					{
+					foreach (Type wrapperType in typeGroup) {
 						WriteWrapperType(wrapperType);
 						Writer.WriteLine();
 					}
@@ -68,12 +65,13 @@ namespace ReverseGenerator.CSharp
 		/// <param name="wrapperType">Type of the wrapper.</param>
 		private void WriteWrapperType(Type wrapperType)
 		{
-			Writer.WriteLine("internal sealed class Native{0} : {1}",
+			Writer.WriteLine("internal sealed unsafe class Native{0} : {1}",
 				wrapperType.Name.Substring(1),
 				typeof(PlatformInvoke).FullName);
+
 			Writer.OpenBlock();
 			{
-				Writer.WriteLine("public const string Library = \"{0}.dll\";", ConfigOptions.LibraryName);
+				Writer.WriteLine("public const string Library = \"{0}.dll\";", Options.LibraryName);
 				Writer.WriteLine();
 				Writer.WriteLine("static Native{0}()", wrapperType.Name.Substring(1));
 				Writer.OpenBlock();
@@ -83,8 +81,18 @@ namespace ReverseGenerator.CSharp
 				Writer.CloseBlock();
 				Writer.WriteLine();
 
-				foreach (MethodInfo method in ReflectionUtility.GetMethods(wrapperType))
-				{
+				var constructors = Options.GetConstructors(wrapperType);
+				var destructor = Options.GetDestructor(wrapperType);
+				var methods = Options.GetMethods(wrapperType);
+
+				IEnumerable<MethodInfo> allMethods = constructors;
+
+				if (destructor != null)
+					allMethods = allMethods.Union(new[] { destructor });
+
+				allMethods = allMethods.Union(methods);
+
+				foreach (MethodInfo method in allMethods) {
 					Writer.WriteLine();
 					WriteMethod(wrapperType, method);
 				}
@@ -169,29 +177,24 @@ namespace ReverseGenerator.CSharp
 			bool isDestructor = method.HasAttribute<DestructorAttribute>();
 			bool longParameters = (parameters.Length + (isNonStaticMethod ? 1 : 0)) > 1;
 
-			if (longParameters)
-			{
+			if (longParameters) {
 				Writer.Write(Writer.NewLine);
 				Writer.Indent();
 				Writer.BeginLine();
 			}
 
-			if (isNonStaticMethod || isDestructor)
-			{
+			if (isNonStaticMethod || isDestructor) {
 				firstParam = false;
 				Writer.Write("Handle self");
 			}
 
-			foreach (ParameterInfo parameter in parameters)
-			{
+			foreach (ParameterInfo parameter in parameters) {
 				if (firstParam)
 					firstParam = false;
-				else
-				{
+				else {
 					Writer.Write(", ");
 
-					if (longParameters)
-					{
+					if (longParameters) {
 						Writer.Write(Writer.NewLine);
 						Writer.BeginLine();
 					}
@@ -199,8 +202,7 @@ namespace ReverseGenerator.CSharp
 
 				var marshalAsAttribute = parameter.GetAttribute<MarshalAsAttribute>(true);
 
-				if (marshalAsAttribute != null)
-				{
+				if (marshalAsAttribute != null) {
 					Writer.Write(BuildMarshalAsAttribute(marshalAsAttribute, false));
 					Writer.Write(" ");
 				}

@@ -3,16 +3,16 @@ using InVision.OIS.Attributes;
 
 namespace InVision.OIS.Native
 {
-    [OISInterface("Mouse", BaseType = typeof(IObject))]
+    [OISClass("Mouse", BaseType = typeof(IObject))]
     public interface IMouse : IObject
     {
-        [Method]
+		[Method(Implemented = true)]
         void SetEventCallback(ICustomMouseListener mouseListener);
 
-        [Method]
+		[Method(Implemented = true)]
         ICustomMouseListener GetEventCallback();
 
-        [Method]
+		[Method(Implemented = true)]
         IMouseState GetMouseState();
     }
 }

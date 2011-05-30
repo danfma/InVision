@@ -2,16 +2,16 @@
 
 MouseStateDescriptor descriptor_of_mousestate(InvHandle self)
 {
-	MouseState* obj = castHandle<MouseState>(self);
+	OIS::MouseState* obj = castHandle<OIS::MouseState>(self);
 
 	MouseStateDescriptor descriptor;
 	descriptor.self = self;
 	descriptor.buttons = &obj->buttons;
 	descriptor.width = &obj->width;
 	descriptor.height = &obj->height;
-	descriptor.x = descriptor_of_axis(createReference<Axis>(&obj->X));
-	descriptor.y = descriptor_of_axis(createReference<Axis>(&obj->Y));
-	descriptor.z = descriptor_of_axis(createReference<Axis>(&obj->Z));
+	descriptor.x = descriptor_of_axis(createReference<OIS::Axis>(&obj->X));
+	descriptor.y = descriptor_of_axis(createReference<OIS::Axis>(&obj->Y));
+	descriptor.z = descriptor_of_axis(createReference<OIS::Axis>(&obj->Z));
 
 	return descriptor;
 }
@@ -22,9 +22,9 @@ MouseStateDescriptor descriptor_of_mousestate(InvHandle self)
 INV_EXPORT InvHandle
 INV_CALL new_mousestate(MouseStateDescriptor* descriptor)
 {
-	MouseState* obj = new MouseState();
+	OIS::MouseState* obj = new OIS::MouseState();
 
-	InvHandle handle = createHandle<MouseState>(obj);
+	InvHandle handle = createHandle<OIS::MouseState>(obj);
 	*descriptor = descriptor_of_mousestate(handle);
 
 	return handle;

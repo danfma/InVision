@@ -6,62 +6,56 @@ using InVision.OIS.Devices;
 
 namespace InVision.OIS.Native
 {
-	[OISInterface("InputManager")]
-	public interface IInputManager : ICppInterface
+	[OISClass("InputManager")]
+	public interface IInputManager : ICppInstance
 	{
-		[Method(Static = true)]
+		[Method(Static = true, Implemented = true)]
 		uint GetVersionNumber();
 
-		[Method]
+		[Method(Implemented = true)]
 		[return: MarshalAs(UnmanagedType.LPStr)]
 		string GetVersionName();
 
-		[Method(Static = true)]
+		[Method(Static = true, Implemented = true)]
 		IInputManager CreateInputSystem(int winHandle);
 
-		[Method(Static = true)]
+		[Method(Static = true, Implemented = true)]
 		IInputManager CreateInputSystem(NameValueItem[] parameters, int parametersCount);
 
-		[Method(Static = true)]
+		[Method(Static = true, Implemented = true)]
 		void DestroyInputSystem(IInputManager manager);
 
-		[Method]
+		[Method(Implemented = true)]
 		[return: MarshalAs(UnmanagedType.LPStr)]
 		string InputSystemName();
 
-		[Method]
+		[Method(Implemented = true)]
 		int GetNumberOfDevices(DeviceType iType);
 
 		/// <summary>
 		/// TODO CHECAR
 		/// </summary>
 		/// <returns></returns>
-		[Method]
+		[Method(Implemented = true)]
 		IntPtr ListFreeDevices();
 
-		[Method]
+		[Method(Implemented = true)]
 		IObject CreateInputObject(DeviceType iType, [MarshalAs(UnmanagedType.I1)] bool bufferMode);
 
-		[Method]
+		[Method(Implemented = true)]
 		IObject CreateInputObject(DeviceType iType, [MarshalAs(UnmanagedType.I1)] bool bufferMode,
 								 [MarshalAs(UnmanagedType.LPStr)] string vendor);
 
-		[Method]
+		[Method(Implemented = true)]
 		void DestroyInputObject(IObject obj);
 
-		[Method]
+		[Method(Implemented = true)]
 		void AddFactoryCreator(IFactoryCreator factory);
 
-		[Method]
+		[Method(Implemented = true)]
 		void RemoveFactoryCreator(IFactoryCreator factory);
 
-		[Method]
+		[Method(Implemented = true)]
 		void EnableAddOnFactory(AddOnFactory factory);
-	}
-
-	[OISInterface("FactoryCreator")]
-	public interface IFactoryCreator : ICppInterface
-	{
-
 	}
 }

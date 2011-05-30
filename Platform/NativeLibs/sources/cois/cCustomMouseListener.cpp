@@ -13,10 +13,10 @@ INV_CALL new_custommouselistener(MouseMovedHandler mouseMoved, MouseClickHandler
 }
 
 /**
- * Method: MouseListener::~CustomMouseListener
+ * Method: MouseListener::~MouseListener (OK)
  */
 INV_EXPORT void
-INV_CALL delete_custommouselistener(InvHandle self)
+INV_CALL delete_mouselistener(InvHandle self)
 {
 	destroyHandle(self);
 }

@@ -2,13 +2,10 @@
 
 namespace InVision.Ogre.Native
 {
-	[CppInterface("CustomLogListener", DefinitionFile = "cCustomLogListener.h", LocalDefinition = true)]
-	public interface ICustomLogListener : ICppInterface
+	[CppClass("CustomLogListener", DefinitionFile = "cCustomLogListener.h", LocalDefinition = true)]
+	public interface ICustomLogListener : ILogListener
 	{
-		[Constructor]
+		[Constructor(Implemented = true)]
 		ICustomLogListener Construct(LogListenerMessageLoggedHandler messageLoggedHandler);
-
-		[Destructor]
-		void Destruct();
 	}
 }

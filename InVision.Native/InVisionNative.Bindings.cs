@@ -5,6 +5,7 @@
 
 using System;
 using System.Runtime.InteropServices;
+using InVision.GameMath;
 using InVision.Native;
 
 namespace InVision.Native

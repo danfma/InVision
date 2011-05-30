@@ -54,11 +54,11 @@ namespace ReverseGenerator.Cpp
         private void WriteBaseDescriptorField(SourceWriter writer)
         {
             IEnumerable<Type> parentInterfaces =
-                Type.GetInterfaces().Where(i => i.HasAttribute<CppInterfaceAttribute>(true));
+                Type.GetInterfaces().Where(i => i.HasAttribute<CppClassAttribute>(true));
             var baseInterface =
                 (from i in parentInterfaces
-                 let attr = i.GetAttribute<CppInterfaceAttribute>(true)
-                 where attr.CppInterfaceType == CppInterfaceType.Type
+                 let attr = i.GetAttribute<CppClassAttribute>(true)
+                 where attr.Type == ClassType.Concrete
                  select new { Interface = i, Attribute = attr }).SingleOrDefault();
 
             if (baseInterface != null)

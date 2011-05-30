@@ -1,10 +1,11 @@
 ﻿using InVision.Native;
 using InVision.Ogre.Native;
+using InVision.Extensions;
 
 namespace InVision.Ogre
 {
 	public abstract class Singleton<TWrapper, TNative> : CppWrapper, ICppWrapper<TNative>
-		where TNative : ISingleton<TNative>, ICppInterface
+		where TNative : ISingleton<TNative>, ICppInstance
 	{
 		protected static readonly TNative Static = CreateCppInstance<TNative>();
 
@@ -12,7 +13,7 @@ namespace InVision.Ogre
 		/// Initializes a new instance of the <see cref="Singleton&lt;T&gt;"/> class.
 		/// </summary>
 		/// <param name="nativeInstance">The native instance.</param>
-		protected Singleton(ICppInterface nativeInstance)
+		protected Singleton(ICppInstance nativeInstance)
 			: base(nativeInstance)
 		{
 		}
@@ -27,7 +28,9 @@ namespace InVision.Ogre
 			{
 				TNative result = Static.GetSingleton();
 
-				return GetOwner<TWrapper>(result);
+				return GetOrCreateOwner(
+					result, 
+					native => typeof(TWrapper).CreateInstance<TWrapper>(native));
 			}
 		}
 

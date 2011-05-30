@@ -21,6 +21,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -47,17 +48,20 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AngleUnit.cs" />
+    <Compile Include="Camera.cs" />
+    <Compile Include="ConfigFile.cs" />
     <Compile Include="Config\PluginConfig.cs" />
     <Compile Include="Config\PluginsConfig.cs" />
     <Compile Include="Degree.cs" />
+    <Compile Include="EdgeData.cs" />
+    <Compile Include="Entity.cs" />
     <Compile Include="FrameStats.cs" />
+    <Compile Include="Frustum.cs" />
     <Compile Include="IAnimableObject.cs" />
-    <Compile Include="IMovableObject.cs" />
     <Compile Include="IShadowCaster.cs" />
-    <Compile Include="ITextureManager.cs" />
+    <Compile Include="Light.cs" />
     <Compile Include="Listeners\FrameEvent.cs" />
     <Compile Include="Listeners\FrameEventDispatcher.cs" />
-    <Compile Include="Listeners\FrameEventDispatcherHandler.cs" />
     <Compile Include="Listeners\FrameEventHandler.cs" />
     <Compile Include="Listeners\IEventDispatcher.cs" />
     <Compile Include="Listeners\IFrameListener.cs" />
@@ -66,16 +70,54 @@
     <Compile Include="Logging\Log.cs" />
     <Compile Include="Logging\LogListenerDispatcher.cs" />
     <Compile Include="Logging\LogManager.cs" />
+    <Compile Include="MaterialManager.cs" />
+    <Compile Include="MovableObject.cs" />
+    <Compile Include="Native\IAnimableObject.cs" />
+    <Compile Include="Native\IAxisAlignedBox.cs" />
+    <Compile Include="Native\IConfigFile.cs" />
+    <Compile Include="Native\ICustomFrameListener.cs" />
     <Compile Include="Native\ICustomLogListener.cs" />
+    <Compile Include="Native\IEdgeData.cs" />
+    <Compile Include="Native\IEntity.cs" />
+    <Compile Include="Native\IFrameListener.cs" />
+    <Compile Include="Native\IFrustum.cs" />
+    <Compile Include="Native\ILight.cs" />
+    <Compile Include="Native\ILogListener.cs" />
+    <Compile Include="Native\IMaterialManager.cs" />
+    <Compile Include="Native\IMovableObject.cs" />
+    <Compile Include="Native\INode.cs" />
+    <Compile Include="Native\IOverlay.cs" />
+    <Compile Include="Native\IOverlayElement.cs" />
+    <Compile Include="Native\IOverlayManager.cs" />
+    <Compile Include="Native\IRenderable.cs" />
+    <Compile Include="Native\IRenderTarget.cs" />
+    <Compile Include="Native\IResourceGroupManager.cs" />
+    <Compile Include="Native\IResourceManager.cs" />
+    <Compile Include="Native\ISceneNode.cs" />
+    <Compile Include="Native\IScriptLoader.cs" />
+    <Compile Include="Native\IShadowCaster.cs" />
+    <Compile Include="Native\IStringInterface.cs" />
+    <Compile Include="Native\ITextureManager.cs" />
     <Compile Include="Native\LogListenerMessageLoggedHandler.cs" />
     <Compile Include="Native\NameValuePair.cs" />
     <Compile Include="Native\NameValuePairList.cs" />
+    <Compile Include="Native\Setting.cs" />
+    <Compile Include="Native\SettingsBySection.cs" />
+    <Compile Include="Node.cs" />
+    <Compile Include="Overlay.cs" />
+    <Compile Include="OverlayElement.cs" />
+    <Compile Include="OverlayManager.cs" />
     <Compile Include="RenderSystem.cs" />
     <Compile Include="RenderSystemCapabilities.cs" />
+    <Compile Include="RenderTarget.cs" />
     <Compile Include="RenderWindow.cs" />
     <Compile Include="RenderWindowParameters.cs" />
+    <Compile Include="ResourceGroupManager.cs" />
+    <Compile Include="ResourceManager.cs" />
     <Compile Include="SceneManager.cs" />
     <Compile Include="SceneManagerFactory.cs" />
+    <Compile Include="SceneNode.cs" />
+    <Compile Include="ScriptLoader.cs" />
     <Compile Include="Singleton.cs" />
     <Compile Include="LogMessageLevel.cs" />
     <Compile Include="Native\ICamera.cs" />
@@ -90,7 +132,7 @@
     <Compile Include="Native\ISingleton.cs" />
     <Compile Include="Native\IViewport.cs" />
     <Compile Include="Native\OgreEnumerationAttribute.cs" />
-    <Compile Include="Native\OgreInterfaceAttribute.cs" />
+    <Compile Include="Native\OgreClassAttribute.cs" />
     <Compile Include="Native\OgreValueObjectAttribute.cs" />
     <Compile Include="Native\StringArray.cs" />
     <Compile Include="ParameterType.cs" />
@@ -99,7 +141,9 @@
     <Compile Include="Radian.cs" />
     <Compile Include="Root.cs" />
     <Compile Include="SceneType.cs" />
+    <Compile Include="StringInterface.cs" />
     <Compile Include="TextureFilterOption.cs" />
+    <Compile Include="TextureManager.cs" />
     <Compile Include="TransformSpace.cs" />
     <Compile Include="Util\MathUtility.cs" />
     <Compile Include="Viewport.cs" />
@@ -117,7 +161,7 @@
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>"$(SolutionDir)ReverseGenerator\bin\$(Configuration)\ReverseGenerator.exe" -a:"$(TargetPath)"  -cpp:"$(SolutionDir)Platform\NativeLibs\sources\cogre3d" -p:"InVisionNative_Ogre" -cs:"$(SolutionDir)InVision.Ogre.Native" -l:"InVisionNative"</PostBuildEvent>
+    <PostBuildEvent>"$(SolutionDir)ReverseGenerator\bin\$(Configuration)\ReverseGenerator.exe" -a:"$(TargetPath)"  -cpp:"$(SolutionDir)Platform\NativeLibs\sources\cogre3d" -p:"InVisionNative_Ogre" -cs:"$(SolutionDir)InVision.Ogre.Native" -l:"InVisionNative" -r:"InVisionNative"</PostBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

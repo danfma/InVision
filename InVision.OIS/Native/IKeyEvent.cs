@@ -4,10 +4,10 @@ using InVision.OIS.Devices;
 
 namespace InVision.OIS.Native
 {
-    [OISInterface("KeyEvent", BaseType = typeof(IEventArg))]
+    [OISClass("KeyEvent", BaseType = typeof(IEventArg))]
     public interface IKeyEvent : IEventArg
     {
-        [Constructor]
+		[Constructor(Implemented = true)]
         IKeyEvent Construct(ref KeyEventDescriptor descriptor, IObject device, KeyCode keyCode, uint text);
     }
 }

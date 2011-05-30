@@ -115,7 +115,7 @@ namespace InVision.Extensions
 
         public static bool HasICppInterface(this Type type)
         {
-            return typeof (ICppInterface).IsAssignableFrom(type);
+            return typeof (ICppInstance).IsAssignableFrom(type);
         }
     }
 }

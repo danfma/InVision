@@ -2,10 +2,10 @@
 
 namespace InVision.OIS.Native
 {
-    [CppInterface("Axis", Namespace = "OIS", DefinitionFile = "OIS.h", BaseType = typeof(IComponent))]
-    public unsafe interface IAxis : IComponent
-    {
-        [Constructor]
-        IAxis Construct(ref AxisDescriptor descriptor);
-    }
+	[CppClass("Axis", Namespace = "OIS", DefinitionFile = "OIS.h", BaseType = typeof(IComponent))]
+	public interface IAxis : IComponent
+	{
+		[Constructor(Implemented = true)]
+		IAxis Construct(ref AxisDescriptor descriptor);
+	}
 }

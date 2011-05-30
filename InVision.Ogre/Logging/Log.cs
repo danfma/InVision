@@ -15,7 +15,7 @@ namespace InVision.Ogre.Logging
 		/// Initializes a new instance of the <see cref="Log"/> class.
 		/// </summary>
 		/// <param name="nativeInstance">The native instance.</param>
-		public Log(ICppInterface nativeInstance)
+		public Log(ICppInstance nativeInstance)
 			: base(nativeInstance)
 		{
 		}

@@ -113,6 +113,24 @@ extern "C"
 
 #endif
 
+	typedef Vector4 Quaternion;
+
+
+#ifdef __cplusplus
+
+	inline Quaternion create_quaternion(float x = 0, float y = 0, float z = 0, float w = 0)
+	{
+		Quaternion v;
+		v.x = x;
+		v.y = y;
+		v.z = z;
+		v.w = w;
+
+		return v;
+	}
+
+#endif
+
 	struct Color
 	{
 		float r;
@@ -246,6 +264,19 @@ extern "C"
 		_char* data = new _char[length + 1];
 
 		memcpy(data, str.c_str(), length);
+		data[length] = '\0';
+
+		return data;
+	}
+
+	inline _wstring copyString(const std::wstring& str)
+	{
+		_int length = str.size();
+		_wstring data = new _wchar[length + 1];
+
+		for (int i = 0; i < length; i++)
+			data[i] = str.at(i);
+
 		data[length] = '\0';
 
 		return data;

@@ -160,6 +160,7 @@
     <Compile Include="GameMath\Quaternion.cs" />
     <Compile Include="GameMath\Ray.cs" />
     <Compile Include="GameMath\Rectangle.cs" />
+    <Compile Include="GameMath\Sphere.cs" />
     <Compile Include="GameMath\Vector2.cs" />
     <Compile Include="GameMath\Vector3.cs" />
     <Compile Include="GameMath\Vector3.Extension.cs" />
@@ -170,7 +171,6 @@
     <Compile Include="Native\Collections\INativeCollectionSynchronizer.cs" />
     <Compile Include="Native\Collections\List.cs" />
     <Compile Include="Native\Collections\MultiDictionary.cs" />
-    <Compile Include="Native\Enumerator.cs" />
     <Compile Include="Native\ExceptionRaiser.cs" />
     <Compile Include="Native\ConstructorAttribute.cs" />
     <Compile Include="Native\CppDescriptorAttribute.cs" />
@@ -178,7 +178,7 @@
     <Compile Include="Native\CppFunctionAttribute.cs" />
     <Compile Include="Native\CppImplementationAttribute.cs" />
     <Compile Include="Native\CppInstance.cs" />
-    <Compile Include="Native\CppInterfaceAttribute.cs" />
+    <Compile Include="Native\CppClassAttribute.cs" />
     <Compile Include="Native\CppWrapper.cs" />
     <Compile Include="Native\DestructorAttribute.cs" />
     <Compile Include="DisposableObject.cs" />
@@ -190,20 +190,16 @@
     <Compile Include="Native\CppTypeAttribute.cs" />
     <Compile Include="Native\HandleListenerDispatcher.cs" />
     <Compile Include="Native\HandleListenerHandleDestroyedHandler.cs" />
-    <Compile Include="Native\ICppInterface.cs" />
-    <Compile Include="Native\CppInterfaceType.cs" />
+    <Compile Include="Native\ICppInstance.cs" />
+    <Compile Include="Native\ClassType.cs" />
     <Compile Include="Native\ICppWrapper.cs" />
     <Compile Include="Native\IHandleManager.cs" />
     <Compile Include="Native\MethodAttribute.cs" />
     <Compile Include="Native\NativeFactory.cs" />
     <Compile Include="Native\CppValueObjectAttribute.cs" />
-    <Compile Include="Native\SafeHandle.cs" />
     <Compile Include="Native\InVisionNativeException.cs" />
-    <Compile Include="Native\MarshallExtensions.cs" />
-    <Compile Include="Native\NativeEnumerator.cs" />
     <Compile Include="Native\PlatformInvoke.cs" />
     <Compile Include="Native\RaiseExceptionHandler.cs" />
-    <Compile Include="Native\ReferenceSafeHandle.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="VersionInfo.cs" />
   </ItemGroup>

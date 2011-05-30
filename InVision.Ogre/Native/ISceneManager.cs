@@ -4,19 +4,34 @@ using InVision.Native;
 
 namespace InVision.Ogre.Native
 {
-	[OgreInterface("SceneManager")]
-	public interface ISceneManager : ICppInterface
+	[OgreClass("SceneManager")]
+	public interface ISceneManager : ICppInstance
 	{
-		[Method]
+		[Method(Implemented = true)]
 		void ClearScene();
 
-		[Method]
+		[Method(Implemented = true)]
 		void SetAmbientLight(Color color);
 
-		[Method]
+		[Method(Implemented = true)]
 		Color GetAmbientLight();
 
-		[Method]
+		[Method(Implemented = true)]
 		ICamera CreateCamera([MarshalAs(UnmanagedType.LPStr)] string name);
+
+		[Method(Implemented = true)]
+		IEntity CreateEntity([MarshalAs(UnmanagedType.LPStr)] string meshName);
+
+		[Method(Implemented = true)]
+		IEntity CreateEntity([MarshalAs(UnmanagedType.LPStr)] string entityName, [MarshalAs(UnmanagedType.LPStr)] string meshName);
+
+		[Method(Implemented = true)]
+		ISceneNode GetRootSceneNode();
+
+		[Method(Implemented = true)]
+		ILight CreateLight();
+
+		[Method(Implemented = true)]
+		ILight CreateLight([MarshalAs(UnmanagedType.LPStr)] string name);
 	}
 }

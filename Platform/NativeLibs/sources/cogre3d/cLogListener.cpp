@@ -14,10 +14,10 @@ INV_CALL new_customloglistener(LogListenerMessageLoggedHandler messageLoggedHand
 
 
 /**
- * Method: CustomLogListener::~CustomLogListener
+ * Method: LogListener::~LogListener (OK)
  */
 INV_EXPORT void
-INV_CALL delete_customloglistener(InvHandle self)
+INV_CALL delete_loglistener(InvHandle self)
 {
 	destroyHandle(self);
 }

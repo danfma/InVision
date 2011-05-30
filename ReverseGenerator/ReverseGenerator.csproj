@@ -46,6 +46,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Cpp\CppImplGenerator.cs" />
     <Compile Include="Cpp\CppValueObjectGenerator.cs" />
     <Compile Include="Cpp\CppValueObjectGeneratorBase.cs" />
     <Compile Include="Cpp\CppWraperDescriptorGenerator.cs" />
@@ -60,7 +61,7 @@
     <Compile Include="Cpp\CppHeaderGenerator.cs" />
     <Compile Include="ReflectionUtility.cs" />
     <Compile Include="SourceWriter.cs" />
-    <Compile Include="CSharp\CSharpCppInstanceGenerator.cs" />
+    <Compile Include="CSharp\CSharpCppClassImplGenerator.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\InVision\InVision.csproj">
@@ -68,6 +69,7 @@
       <Name>InVision</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

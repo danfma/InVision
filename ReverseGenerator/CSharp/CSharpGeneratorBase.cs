@@ -6,25 +6,25 @@ namespace ReverseGenerator.CSharp
 {
     public abstract class CSharpGeneratorBase
     {
-        private readonly ConfigOptions _configOptions;
+        private readonly ConfigOptions _options;
         private SourceWriter _writer;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="CSharpGeneratorBase"/> class.
         /// </summary>
-        /// <param name="configOptions">The config options.</param>
-        protected CSharpGeneratorBase(ConfigOptions configOptions)
+        /// <param name="options">The config options.</param>
+        protected CSharpGeneratorBase(ConfigOptions options)
         {
-            _configOptions = configOptions;
+            _options = options;
         }
 
         /// <summary>
         /// Gets the config options.
         /// </summary>
         /// <value>The config options.</value>
-        public ConfigOptions ConfigOptions
+        public ConfigOptions Options
         {
-            get { return _configOptions; }
+            get { return _options; }
         }
 
         /// <summary>
@@ -43,9 +43,9 @@ namespace ReverseGenerator.CSharp
         /// <param name="suffix">The suffix.</param>
         public void Generate(IEnumerable<Type> types, string suffix)
         {
-            var outputFile = _configOptions.ProjectName + suffix + ".cs";
+            var outputFile = _options.ProjectName + suffix + ".cs";
             outputFile = outputFile.Replace("_", "");
-            outputFile = Path.Combine(_configOptions.CsOutputDir, outputFile);
+            outputFile = Path.Combine(_options.CsOutputDir, outputFile);
 
             using (_writer = new SourceWriter(outputFile))
             {

@@ -6,35 +6,29 @@
 extern "C"
 {
 	typedef _uint InvHandle;
-	typedef _ushort TypeID;
-
-	INV_EXPORT TypeID
-	INV_CALL get_registered_typeid_by_name(const char* type);
-
-	INV_EXPORT TypeID
-	INV_CALL register_type_by_name(const char* type);
 }
 
 #ifdef __cplusplus
 #include <typeinfo>
 #include <boost/unordered_map.hpp>
-
-INV_EXPORT TypeID
-INV_CALL get_registered_typeid(const std::type_info& type);
-
-INV_EXPORT TypeID
-INV_CALL register_typeid(const std::type_info& type);
+#include "ConverterRegistry.h"
 
 namespace invision
 {
 	const InvHandle INVALID_HANDLE = 0;
-	
+
 	class IHandleData
 	{
 	public:
-		virtual TypeID getTypeId() = 0;
 		virtual bool contains(void* data) = 0;
 		virtual void deleteData() = 0;
+		virtual void* convertedData(const std::type_info& expectedType) = 0;
+
+		template<typename TOut>
+		TOut* convertedData()
+		{
+			return static_cast<TOut*>(convertedData(typeid(TOut*)));
+		}
 	};
 
 	typedef boost::unordered_map<InvHandle, IHandleData*> HandleRegistry;
@@ -45,17 +39,12 @@ namespace invision
 	{
 	public:
 		HandleReference(T* data)
-			: _data(data)
+			: _data(data), _dataType(typeid(T*))
 		{ }
 
 		inline T* data()
 		{
 			return _data;
-		}
-
-		virtual TypeID getTypeId()
-		{
-			return (TypeID)get_registered_typeid(typeid(T));
 		}
 
 		virtual bool contains(void* data)
@@ -69,8 +58,16 @@ namespace invision
 				_data = NULL;
 		}
 
+		virtual void* convertedData(const std::type_info& expectedType)
+		{
+			IConverter* converter = converter_of(expectedType, _dataType);
+
+			return converter->convert(_data);
+		}
+
 	protected:
 		T* _data;
+		const std::type_info& _dataType;
 	};
 
 
@@ -127,14 +124,14 @@ namespace invision
 		HandleDestroyedHandler _handleDestroyed;
 
 
-		InvHandle nextHandle(const std::type_info& type)
+		InvHandle nextHandle()
 		{
-			return _generator->next() << 16 | get_registered_typeid(type);
+			return _generator->next();
 		}
 
-		InvHandle registerHandle(IHandleData* hdata, const std::type_info& type)
+		InvHandle registerHandle(IHandleData* hdata)
 		{
-			HandleRegistry::value_type entry(nextHandle(type), hdata);
+			HandleRegistry::value_type entry(nextHandle(), hdata);
 			_registry.insert(entry);
 
 			return entry.first;
@@ -184,7 +181,7 @@ namespace invision
 
 			IHandleData* hdata = (*it).second;
 
-			_registry.erase_return_void(it);
+			_registry.erase(handle);
 			hdata->deleteData();
 			delete hdata;
 
@@ -200,7 +197,7 @@ namespace invision
 		{
 			IHandleData* hdata = new HandleData<T>(data);
 
-			return registerHandle(hdata, typeid(T));
+			return registerHandle(hdata);
 		}
 
 		/**
@@ -211,7 +208,7 @@ namespace invision
 		{
 			IHandleData* hdata = new HandleReference<T>(data);
 
-			return registerHandle(hdata, typeid(T));
+			return registerHandle(hdata);
 		}
 
 		/**
@@ -227,12 +224,7 @@ namespace invision
 				if (hdata == NULL)
 					throws_key_not_found("" + handle);
 
-				HandleReference<T>* converted = dynamic_cast<HandleReference<T>* >(hdata);
-
-				if (converted == NULL)
-					throws_invalid_cast(hdata->getTypeId(), get_registered_typeid(typeid(T)));
-
-				return converted->data();
+				return hdata->convertedData<T>();
 			}
 			catch (std::bad_cast& e)
 			{

@@ -26,7 +26,7 @@ INV_CALL mouse_get_event_callback(InvHandle self)
 INV_EXPORT InvHandle
 INV_CALL mouse_get_mouse_state(InvHandle self)
 {
-	MouseState& mouseState = const_cast<OIS::MouseState&>(asMouse(self)->getMouseState());
+	OIS::MouseState& mouseState = const_cast<OIS::MouseState&>(asMouse(self)->getMouseState());
 
 	return createReference<OIS::MouseState>(&mouseState);
 }

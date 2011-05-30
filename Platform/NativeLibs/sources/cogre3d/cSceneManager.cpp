@@ -40,3 +40,50 @@ INV_CALL scenemanager_create_camera(InvHandle self, _string name)
 	return createReference<Camera>(
 				asSceneManager(self)->createCamera(name));
 }
+
+/**
+ * Method: SceneManager::createEntity
+ */
+INV_EXPORT InvHandle
+INV_CALL scenemanager_create_entity_m1(InvHandle self, _string meshName)
+{
+	return createReference<Entity>(
+				asSceneManager(self)->createEntity(meshName));
+}
+
+INV_EXPORT InvHandle
+INV_CALL scenemanager_create_entity_m2(InvHandle self, _string entityName, _string meshName)
+{
+	return createReference<Entity>(
+				asSceneManager(self)->createEntity(entityName, meshName));
+}
+
+/**
+ * Method: SceneManager::getRootSceneNode
+ */
+INV_EXPORT InvHandle
+INV_CALL scenemanager_get_root_scene_node(InvHandle self)
+{
+	return createReference<SceneNode>(
+				asSceneManager(self)->getRootSceneNode());
+}
+
+/**
+ * Method: SceneManager::createLight
+ */
+INV_EXPORT InvHandle
+INV_CALL scenemanager_create_light_m1(InvHandle self)
+{
+	return createReference<Ogre::Light>(
+				asSceneManager(self)->createLight());
+}
+
+/**
+ * Method: SceneManager::createLight
+ */
+INV_EXPORT InvHandle
+INV_CALL scenemanager_create_light_m2(InvHandle self, _string name)
+{
+	return createReference<Ogre::Light>(
+				asSceneManager(self)->createLight(name));
+}

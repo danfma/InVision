@@ -10,9 +10,11 @@ extern "C"
 	 * Prototypes
 	 */
 	
+	struct BoundingBox;
 	
 	typedef void (INV_CALL *HandleListenerHandleDestroyedHandler)(InvHandle handle);
 	
+	#include "invisionnative_bounding_box.h"
 	
 	
 	/*
@@ -20,7 +22,7 @@ extern "C"
 	 */
 	
 	/**
-	 * Method: HandleManager::registerHandleDestroyed
+	 * Method: HandleManager::registerHandleDestroyed (OK)
 	 */
 	INV_EXPORT void
 	INV_CALL handlemanager_register_handle_destroyed(HandleListenerHandleDestroyedHandler handleDestroyed);
@@ -36,6 +38,18 @@ using namespace invision;
 inline HandleManager* asHandleManager(InvHandle self) {
 	return castHandle< HandleManager >(self);
 }
+
+/*
+ * Initializer
+ */
+struct InVisionNative
+{
+	InVisionNative()
+	{
+	}
+};
+
+static InVisionNative __initInVisionNative;
 
 #endif // __cplusplus
 #endif // __INVISIONNATIVE_H__

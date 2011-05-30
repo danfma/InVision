@@ -116,5 +116,5 @@ INV_CALL logmanager_set_log_detail(InvHandle self, LOGGING_LEVEL level)
 INV_EXPORT InvHandle
 INV_CALL logmanager_get_singleton()
 {
-	return createReference<LogManager>(LogManager::getSingletonPtr());
+	return getOrCreateReference<LogManager>(LogManager::getSingletonPtr());
 }

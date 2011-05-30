@@ -70,6 +70,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tutano Libraries", "Tutano 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Karel", "Karel\Karel.csproj", "{55599595-6CB4-4983-96AB-B00AFEF7B83F}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TutorialFx.Tutorial1", "Tests\Framework\Tutoriais\TutorialFx.Tutorial1\TutorialFx.Tutorial1.csproj", "{E349F068-EAC7-476C-8D96-9D374B3301DC}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -366,6 +368,18 @@ Global
 		{55599595-6CB4-4983-96AB-B00AFEF7B83F}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{55599595-6CB4-4983-96AB-B00AFEF7B83F}.Release|Win32.ActiveCfg = Release|Any CPU
 		{55599595-6CB4-4983-96AB-B00AFEF7B83F}.Release|x86.ActiveCfg = Release|Any CPU
+		{E349F068-EAC7-476C-8D96-9D374B3301DC}.Debug|Any CPU.ActiveCfg = Debug|x86
+		{E349F068-EAC7-476C-8D96-9D374B3301DC}.Debug|Mixed Platforms.ActiveCfg = Debug|x86
+		{E349F068-EAC7-476C-8D96-9D374B3301DC}.Debug|Mixed Platforms.Build.0 = Debug|x86
+		{E349F068-EAC7-476C-8D96-9D374B3301DC}.Debug|Win32.ActiveCfg = Debug|x86
+		{E349F068-EAC7-476C-8D96-9D374B3301DC}.Debug|x86.ActiveCfg = Debug|x86
+		{E349F068-EAC7-476C-8D96-9D374B3301DC}.Debug|x86.Build.0 = Debug|x86
+		{E349F068-EAC7-476C-8D96-9D374B3301DC}.Release|Any CPU.ActiveCfg = Release|x86
+		{E349F068-EAC7-476C-8D96-9D374B3301DC}.Release|Mixed Platforms.ActiveCfg = Release|x86
+		{E349F068-EAC7-476C-8D96-9D374B3301DC}.Release|Mixed Platforms.Build.0 = Release|x86
+		{E349F068-EAC7-476C-8D96-9D374B3301DC}.Release|Win32.ActiveCfg = Release|x86
+		{E349F068-EAC7-476C-8D96-9D374B3301DC}.Release|x86.ActiveCfg = Release|x86
+		{E349F068-EAC7-476C-8D96-9D374B3301DC}.Release|x86.Build.0 = Release|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -397,11 +411,12 @@ Global
 		{F84D662E-4316-48BB-ABD0-C37E49601ACC} = {CE8D7F5C-FFBD-4B39-8A42-A33157350FBA}
 		{E2696BD7-6F39-482A-98C3-76E4B221DA05} = {29E702E0-9047-4CAB-BAC9-B9BFCD17BC62}
 		{F48E8475-21C6-4124-83B7-3536F2E79EA1} = {3517D935-D619-4821-A127-BF657789BCC1}
+		{E349F068-EAC7-476C-8D96-9D374B3301DC} = {3517D935-D619-4821-A127-BF657789BCC1}
 		{55599595-6CB4-4983-96AB-B00AFEF7B83F} = {D9119F23-BF60-434B-B5C1-7E9280EDF739}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		BuildVersion_BuildVersioningStyle = None.None.Increment.YearDayOfYear
 		BuildVersion_StartDate = 2011/2/18
+		BuildVersion_BuildVersioningStyle = None.None.Increment.YearDayOfYear
 	EndGlobalSection
 	GlobalSection(MonoDevelopProperties) = preSolution
 		StartupItem = Tests\InVision.Rendering.Launcher\InVision.Rendering.Launcher.csproj

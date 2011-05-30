@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using InVision.Native;
 using InVision.OIS.Native;
 
 namespace InVision.OIS.Devices
@@ -13,7 +12,7 @@ namespace InVision.OIS.Devices
 		/// Initializes a new instance of the <see cref="Keyboard"/> class.
 		/// </summary>
 		/// <param name="nativeInstance">The native instance.</param>
-		protected Keyboard(ICppInterface nativeInstance)
+		public Keyboard(IKeyboard nativeInstance)
 			: base(nativeInstance)
 		{
 			_dispatcher = new KeyListenerDispatcher();

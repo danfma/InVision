@@ -1,7 +1,9 @@
 ﻿using System.Runtime.InteropServices;
+using InVision.Ogre.Native;
 
 namespace InVision.Ogre
 {
+	[OgreValueObject("FrameStats")]
 	[StructLayout(LayoutKind.Sequential)]
 	public struct FrameStats
 	{

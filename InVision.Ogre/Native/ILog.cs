@@ -3,32 +3,32 @@ using InVision.Native;
 
 namespace InVision.Ogre.Native
 {
-	[OgreInterface("Log")]
-	public interface ILog : ICppInterface
+	[OgreClass("Log")]
+	public interface ILog : ICppInstance
 	{
-		[Method]
+		[Method(Implemented = true)]
 		void AddListener(ICustomLogListener listener);
 
-		[Method]
+		[Method(Implemented = true)]
 		void RemoveListener(ICustomLogListener listener);
 
-		[Method]
+		[Method(Implemented = true)]
 		[return: MarshalAs(UnmanagedType.LPStr)]
 		string GetName();
 
-		[Method]
+		[Method(Implemented = true)]
 		[return: MarshalAs(UnmanagedType.I1)]
 		bool IsDebugOutputEnabled();
 
-		[Method]
+		[Method(Implemented = true)]
 		[return: MarshalAs(UnmanagedType.I1)]
 		bool IsFileOutputSuppressed();
 
-		[Method]
+		[Method(Implemented = true)]
 		[return: MarshalAs(UnmanagedType.I1)]
 		bool IsTimeStampEnabled();
 
-		[Method]
+		[Method(Implemented = true)]
 		void LogMessage(
 			[MarshalAs(UnmanagedType.LPStr)] string message,
 			LogMessageLevel level = LogMessageLevel.Normal,

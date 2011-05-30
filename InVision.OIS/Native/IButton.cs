@@ -3,13 +3,13 @@ using InVision.OIS.Attributes;
 
 namespace InVision.OIS.Native
 {
-	[OISInterface("Button", BaseType = typeof (IComponent))]
+	[OISClass("Button", BaseType = typeof(IComponent))]
 	public interface IButton : IComponent
 	{
-		[Constructor]
+		[Constructor(Implemented = true)]
 		IButton Construct(ref ButtonDescriptor descriptor);
 
-		[Constructor]
+		[Constructor(Implemented = true)]
 		IButton Construct(ref ButtonDescriptor descriptor, bool pushed);
 	}
 }

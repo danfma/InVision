@@ -113,10 +113,12 @@
     <Compile Include="AddOnFactory.cs" />
     <Compile Include="Attributes\OISDescriptorAttribute.cs" />
     <Compile Include="Attributes\OISEnumerationAttribute.cs" />
-    <Compile Include="Attributes\OISInterfaceAttribute.cs" />
+    <Compile Include="Attributes\OISClassAttribute.cs" />
     <Compile Include="Devices\Axis.cs" />
     <Compile Include="Devices\Button.cs" />
     <Compile Include="Devices\ComponentType.cs" />
+    <Compile Include="Devices\ITypeConstructor.cs" />
+    <Compile Include="Devices\TypeConstructor.cs" />
     <Compile Include="Native\DeviceList.cs" />
     <Compile Include="ErrorType.cs" />
     <Compile Include="Devices\EventArgs.cs" />
@@ -149,13 +151,16 @@
     <Compile Include="Native\ICustomKeyListener.cs" />
     <Compile Include="Native\IDeviceList.cs" />
     <Compile Include="Native\IEventArg.cs" />
+    <Compile Include="Native\IFactoryCreator.cs" />
     <Compile Include="Native\IInputManager.cs" />
     <Compile Include="Native\IInterface.cs" />
     <Compile Include="Native\IKeyboard.cs" />
     <Compile Include="Native\ICustomMouseListener.cs" />
     <Compile Include="Native\IKeyEvent.cs" />
+    <Compile Include="Native\IKeyListener.cs" />
     <Compile Include="Native\IMouse.cs" />
     <Compile Include="Native\IMouseEvent.cs" />
+    <Compile Include="Native\IMouseListener.cs" />
     <Compile Include="Native\IMouseState.cs" />
     <Compile Include="Native\IObject.cs" />
     <Compile Include="Native\IVector3.cs" />
@@ -196,7 +201,7 @@
   </ItemGroup>
   <ItemGroup />
   <PropertyGroup>
-    <PostBuildEvent>"$(SolutionDir)ReverseGenerator\bin\$(Configuration)\ReverseGenerator.exe" -a:"$(TargetPath)"  -cpp:"../../../Platform/NativeLibs/sources/cois/" -p:"InVisionNative_OIS" -cs:"$(ProjectDir)..\$(ProjectName).Native" -l:"InVisionNative"</PostBuildEvent>
+    <PostBuildEvent>"$(SolutionDir)ReverseGenerator\bin\$(Configuration)\ReverseGenerator.exe" -a:"$(TargetPath)"  -cpp:"../../../Platform/NativeLibs/sources/cois/" -p:"InVisionNative_OIS" -cs:"$(ProjectDir)..\$(ProjectName).Native" -l:"InVisionNative" -r:InVisionNative</PostBuildEvent>
   </PropertyGroup>
   <Target Name="AfterBuild">
     <!--<Exec Command="&quot;$(SolutionDir)ReverseGenerator\\bin\\$(Configuration)\\ReverseGenerator.exe&quot; -a:&quot;$(TargetPath)&quot; -p:InVisionNative_OIS -cpp:&quot;$(SolutionDir)Platform\\NativeLibs\\sources\\cois&quot; -cs:&quot;$(TargetDir)&quot;" />-->

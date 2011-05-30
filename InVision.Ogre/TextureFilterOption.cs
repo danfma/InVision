@@ -1,5 +1,8 @@
-﻿namespace InVision.Ogre
+﻿using InVision.Ogre.Native;
+
+namespace InVision.Ogre
 {
+	[OgreEnumeration("TextureFilterOptions")]
 	public enum TextureFilterOption : uint
 	{
 		None,

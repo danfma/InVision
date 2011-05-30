@@ -8,6 +8,9 @@ using InVision.Native;
 
 namespace ReverseGenerator.Cpp
 {
+	/// <summary>
+	/// 
+	/// </summary>
 	public class CppHeaderGenerator : IGenerator
 	{
 		internal const BindingFlags MethodFlags =
@@ -18,19 +21,47 @@ namespace ReverseGenerator.Cpp
 		private SourceWriter _writer;
 
 		/// <summary>
+		/// Gets the define filename.
+		/// </summary>
+		/// <value>The define filename.</value>
+		protected string DefineFilename
+		{
+			get { return _defineFilename; }
+		}
+
+		/// <summary>
+		/// Gets the filename.
+		/// </summary>
+		/// <value>The filename.</value>
+		protected string Filename
+		{
+			get { return _filename; }
+		}
+
+		/// <summary>
 		/// Gets the name of the project.
 		/// </summary>
 		/// <value>The name of the project.</value>
 		protected string ProjectName
 		{
-			get { return ConfigOptions.ProjectName; }
+			get { return Options.ProjectName; }
+		}
+
+		/// <summary>
+		/// Gets or sets the writer.
+		/// </summary>
+		/// <value>The writer.</value>
+		protected SourceWriter Writer
+		{
+			get { return _writer; }
+			set { _writer = value; }
 		}
 
 		/// <summary>
 		/// Gets or sets the options.
 		/// </summary>
 		/// <value>The options.</value>
-		protected ConfigOptions ConfigOptions { get; set; }
+		protected ConfigOptions Options { get; set; }
 
 		#region IGenerator Members
 
@@ -39,18 +70,17 @@ namespace ReverseGenerator.Cpp
 		/// </summary>
 		/// <param name="configOptions">The options.</param>
 		/// <param name="types">The types.</param>
-		public void Generate(ConfigOptions configOptions, IEnumerable<Type> types)
+		public virtual void Generate(ConfigOptions configOptions, IEnumerable<Type> types)
 		{
-			ConfigOptions = configOptions;
+			Options = configOptions;
 
 			_filename = (ProjectName + ".h").ToLower();
 			_defineFilename = _filename.Replace('.', '_').ToUpper();
 
-			using (_writer = new SourceWriter(Path.Combine(Path.GetFullPath(ConfigOptions.CppOutputDir), _filename)))
-			{
+			using (_writer = new SourceWriter(Path.Combine(Path.GetFullPath(Options.CppOutputDir), _filename))) {
 				IEnumerable<Type> functionTypes = types.Where(t => t.HasAttribute<CppFunctionAttribute>());
 
-				IEnumerable<Type> wrapperTypes = types.Where(t => t.HasAttribute<CppInterfaceAttribute>(true));
+				IEnumerable<Type> wrapperTypes = types.Where(t => t.HasAttribute<CppClassAttribute>(true));
 
 				IEnumerable<Type> enumerations = types.Where(t => t.IsEnum);
 
@@ -60,7 +90,7 @@ namespace ReverseGenerator.Cpp
 				IEnumerable<Type> functionProviders =
 					types.Where(
 						t =>
-						t.HasAttribute<CppTypeAttribute>() && !t.HasAttribute<CppInterfaceAttribute>(true) &&
+						t.HasAttribute<CppTypeAttribute>() && !t.HasAttribute<CppClassAttribute>(true) &&
 						t.IsInterface);
 
 				IEnumerable<Type> converters = types.Where(t => t.HasAttribute<HandleConverterAttribute>());
@@ -89,10 +119,102 @@ namespace ReverseGenerator.Cpp
 				_writer.WriteLine("}");
 				_writer.WriteLine();
 
-				WriteInlineConverters(converters.Union(wrapperTypes).Distinct());
+				WriteInlineConvertersAndConverters(converters.Union(wrapperTypes).Distinct(), wrapperTypes);
 				WriteFooter();
 
 				_writer.Close();
+			}
+		}
+
+		/// <summary>
+		/// Writes the converter registries.
+		/// </summary>
+		/// <param name="wrapperTypes">The wrapper types.</param>
+		private void WriteConverterRegistries(IEnumerable<Type> wrapperTypes)
+		{
+			_writer.WriteLine("/*");
+			_writer.WriteLine(" * Initializer");
+			_writer.WriteLine(" */");
+
+			_writer.WriteLine("struct {0}", Options.ProjectName);
+			_writer.OpenBlock();
+			{
+				_writer.WriteLine("{0}()", Options.ProjectName);
+				_writer.OpenBlock();
+
+				foreach (var wrapperType in wrapperTypes) {
+					WriteConverterRegistry(wrapperType);
+				}
+
+				_writer.CloseBlock();
+			}
+			_writer.CloseBlock(";");
+			_writer.WriteLine();
+			_writer.WriteLine("static {0} __init{0};", Options.ProjectName);
+			_writer.WriteLine();
+		}
+
+		/// <summary>
+		/// Writes the converter registry.
+		/// </summary>
+		/// <param name="sourceType">Type of the wrapper.</param>
+		private void WriteConverterRegistry(Type sourceType)
+		{
+			var attrType = sourceType.GetAttribute<CppTypeAttribute>(true);
+
+			var baseTypes = GetBaseTypes(sourceType);
+			var interfaces = sourceType.GetInterfaces().Where(x => x.QueryAttribute<CppClassAttribute>(y => y.Type == ClassType.Interface));
+			var targetTypes = baseTypes.Union(interfaces).Distinct();
+
+			foreach (var targetType in targetTypes) {
+				var attrBaseType = targetType.GetAttribute<CppTypeAttribute>(true);
+				var typeFrom = ConfigOptions.GetCppTypename(sourceType);
+				var typeTo = ConfigOptions.GetCppTypename(targetType);
+
+				_writer.WriteLine("register_converter< {0}, {1} >();",
+								  attrType.GetCppFullName(typeFrom, GetGenericTypes(sourceType).ToArray()),
+								  attrBaseType.GetCppFullName(typeTo, GetGenericTypes(targetType).ToArray()));
+			}
+		}
+
+		/// <summary>
+		/// Gets the generic types.
+		/// </summary>
+		/// <param name="genericType">Type of the generic.</param>
+		/// <returns></returns>
+		private IEnumerable<string> GetGenericTypes(Type genericType)
+		{
+			if (!genericType.IsGenericType)
+				yield break;
+
+			foreach (var genericArgument in genericType.GetGenericArguments()) {
+				var attr = genericArgument.GetAttribute<CppTypeAttribute>(true);
+
+				if (attr == null)
+					continue;
+
+				yield return attr.GetCppFullName(
+					ConfigOptions.GetCppTypename(genericArgument),
+					GetGenericTypes(genericArgument).ToArray());
+			}
+		}
+
+		/// <summary>
+		/// Gets the base types.
+		/// </summary>
+		/// <param name="wrapperType">Type of the wrapper.</param>
+		/// <returns></returns>
+		private IEnumerable<Type> GetBaseTypes(Type wrapperType)
+		{
+			var baseType = Options.GetBaseType(wrapperType);
+
+			if (baseType == null)
+				yield break;
+
+			yield return baseType;
+
+			foreach (var baseBaseType in GetBaseTypes(baseType)) {
+				yield return baseBaseType;
 			}
 		}
 
@@ -106,8 +228,7 @@ namespace ReverseGenerator.Cpp
 		{
 			functionTypes = functionTypes.Where(t => !t.IsGenericType);
 
-			foreach (Type functionType in functionTypes)
-			{
+			foreach (Type functionType in functionTypes) {
 				MethodInfo invoke = functionType.GetMethod("Invoke");
 
 				string returnTypename = ConfigOptions.ToCppTypename(functionType, invoke.ReturnType);
@@ -134,19 +255,14 @@ namespace ReverseGenerator.Cpp
 			string functionName;
 			string targetType = ConfigOptions.GetCppTypename(type);
 
-			if (method.HasAttribute<ConstructorAttribute>())
-			{
+			if (method.HasAttribute<ConstructorAttribute>()) {
 				functionName = "new" + targetType.ToLower().ToPascalCase();
 
 				//ParameterInfo[] ctrParameters = method.GetParameters();
 				//functionName = AddBySuffix(ctrParameters, functionName);
-			}
-			else if (method.HasAttribute<DestructorAttribute>())
-			{
+			} else if (method.HasAttribute<DestructorAttribute>()) {
 				functionName = "delete" + targetType.ToLower().ToPascalCase();
-			}
-			else
-			{
+			} else {
 				functionName = targetType.ToLower().ToPascalCase() + method.Name;
 			}
 
@@ -162,7 +278,8 @@ namespace ReverseGenerator.Cpp
 		/// Writes the inline converters.
 		/// </summary>
 		/// <param name="converters">The converters.</param>
-		private void WriteInlineConverters(IEnumerable<Type> converters)
+		/// <param name="wrapperTypes"></param>
+		private void WriteInlineConvertersAndConverters(IEnumerable<Type> converters, IEnumerable<Type> wrapperTypes)
 		{
 			_writer.WriteLine();
 			_writer.WriteLine("#ifdef __cplusplus");
@@ -177,8 +294,7 @@ namespace ReverseGenerator.Cpp
 					 attribute.LocalDefinition
 				 }).Distinct();
 
-			foreach (var definition in definitions)
-			{
+			foreach (var definition in definitions) {
 				if (string.IsNullOrEmpty(definition.DefinitionFile))
 					continue;
 
@@ -192,10 +308,11 @@ namespace ReverseGenerator.Cpp
 			_writer.WriteLine("using namespace invision;");
 			_writer.WriteLine();
 
-			foreach (Type converter in converters)
-			{
+			foreach (Type converter in converters) {
 				WriteInlineConverter(converter);
 			}
+
+			WriteConverterRegistries(wrapperTypes);
 
 			_writer.WriteLine("#endif // __cplusplus");
 		}
@@ -229,8 +346,7 @@ namespace ReverseGenerator.Cpp
 		/// <param name="enumerations">The enumerations.</param>
 		private void WriteEnumerations(IEnumerable<Type> enumerations)
 		{
-			foreach (Type enumeration in enumerations)
-			{
+			foreach (Type enumeration in enumerations) {
 				WriteEnumeration(enumeration);
 			}
 
@@ -254,8 +370,7 @@ namespace ReverseGenerator.Cpp
 				from enumName in Enum.GetNames(enumeration)
 				select new { Name = enumName, Value = Convert.ToInt32(Enum.Parse(enumeration, enumName)) };
 
-			foreach (var entry in enumEntries)
-			{
+			foreach (var entry in enumEntries) {
 				_writer.WriteLine(
 					"#define {0} 0x{1}",
 					(enumTypeName + "_" + entry.Name).ToCStyle().ToUpper(),
@@ -278,6 +393,11 @@ namespace ReverseGenerator.Cpp
 			_writer.WriteLine("#define __{0}__", _defineFilename);
 			_writer.WriteLine();
 			_writer.WriteLine("#include <InvisionHandle.h>");
+
+			foreach (var projectReference in Options.ProjectReferences) {
+				_writer.WriteLine("#include \"{0}\"", projectReference.ToLower() + ".h");
+			}
+
 			_writer.WriteLine();
 		}
 
@@ -304,8 +424,7 @@ namespace ReverseGenerator.Cpp
 			_writer.WriteLine(" */");
 			_writer.WriteLine();
 
-			foreach (Type type in types)
-			{
+			foreach (Type type in types) {
 				WritePrototype(type);
 			}
 
@@ -334,8 +453,7 @@ namespace ReverseGenerator.Cpp
 			_writer.WriteLine(" */");
 			_writer.WriteLine();
 
-			foreach (Type type in wrapperTypes)
-			{
+			foreach (Type type in wrapperTypes) {
 				WriteWrapperDescriptorPrototype(type);
 			}
 
@@ -363,9 +481,8 @@ namespace ReverseGenerator.Cpp
 		/// <param name="types">The types.</param>
 		private void WriteTypeDefinitions(IEnumerable<Type> types)
 		{
-			foreach (Type type in types)
-			{
-				var generator = new CppValueObjectGenerator(ConfigOptions, type);
+			foreach (Type type in types) {
+				var generator = new CppValueObjectGenerator(Options, type);
 				string filename = generator.Generate();
 
 				_writer.WriteLine("#include \"{0}\"", filename);
@@ -380,9 +497,8 @@ namespace ReverseGenerator.Cpp
 		/// <param name="types">The types.</param>
 		private void WriteWrapperDescriptorDefinitions(IEnumerable<Type> types)
 		{
-			foreach (Type type in types)
-			{
-				var generator = new CppWraperDescriptorGenerator(ConfigOptions, type);
+			foreach (Type type in types) {
+				var generator = new CppWraperDescriptorGenerator(Options, type);
 				string fileGenerated = generator.Generate();
 
 				_writer.WriteLine("#include \"{0}\"", fileGenerated);
@@ -399,8 +515,7 @@ namespace ReverseGenerator.Cpp
 		/// <param name="functionProviders">The function providers.</param>
 		private void WriteFunctionProviders(IEnumerable<Type> functionProviders)
 		{
-			foreach (Type functionProvider in functionProviders)
-			{
+			foreach (Type functionProvider in functionProviders) {
 				WriteFunctionProvider(functionProvider);
 			}
 		}
@@ -433,8 +548,7 @@ namespace ReverseGenerator.Cpp
 			_writer.WriteLine(" */");
 			_writer.WriteLine();
 
-			foreach (MethodInfo methodInfo in methods)
-			{
+			foreach (MethodInfo methodInfo in methods) {
 				if (methodInfo.IsPropertyMember())
 					continue;
 
@@ -454,21 +568,16 @@ namespace ReverseGenerator.Cpp
 			string functionName;
 			string targetMethod;
 
-			if (methodInfo.HasAttribute<ConstructorAttribute>())
-			{
+			if (methodInfo.HasAttribute<ConstructorAttribute>()) {
 				functionName = "new" + targetType.ToLower().ToPascalCase();
 				targetMethod = targetType;
 
 				ParameterInfo[] ctrParameters = methodInfo.GetParameters();
 				functionName = AddBySuffix(ctrParameters, functionName);
-			}
-			else if (methodInfo.HasAttribute<DestructorAttribute>())
-			{
+			} else if (methodInfo.HasAttribute<DestructorAttribute>()) {
 				functionName = "delete" + targetType.ToLower().ToPascalCase();
 				targetMethod = "~" + targetType;
-			}
-			else
-			{
+			} else {
 				functionName = targetType.ToLower().ToPascalCase() + methodInfo.Name;
 				targetMethod = methodInfo.Name.ToCamelCase();
 
@@ -478,12 +587,9 @@ namespace ReverseGenerator.Cpp
 
 			string parameters;
 
-			if (methodInfo.HasAttribute<DestructorAttribute>())
-			{
+			if (methodInfo.HasAttribute<DestructorAttribute>()) {
 				parameters = "InvHandle self";
-			}
-			else if (methodInfo.HasAttribute<MethodAttribute>())
-			{
+			} else if (methodInfo.HasAttribute<MethodAttribute>()) {
 				var attr = methodInfo.GetAttribute<MethodAttribute>(true);
 
 				parameters = GetParametersString(methodInfo);
@@ -491,9 +597,7 @@ namespace ReverseGenerator.Cpp
 				if (!attr.Static)
 					parameters = "InvHandle self" +
 								 (!string.IsNullOrEmpty(parameters) ? (", " + parameters) : parameters);
-			}
-			else
-			{
+			} else {
 				parameters = GetParametersString(methodInfo);
 			}
 
@@ -520,8 +624,7 @@ namespace ReverseGenerator.Cpp
 
 			int i = 0;
 
-			foreach (MethodInfo method in methods)
-			{
+			foreach (MethodInfo method in methods) {
 				i++;
 
 				if (ReferenceEquals(method, methodInfo))
@@ -560,8 +663,7 @@ namespace ReverseGenerator.Cpp
 			if (parameters.Count() > 0 && parameters.First().Name == "self")
 				paramStart = 1;
 
-			for (int paramIndex = paramStart; paramIndex < parameters.Length; paramIndex++)
-			{
+			for (int paramIndex = paramStart; paramIndex < parameters.Length; paramIndex++) {
 				ParameterInfo parameterInfo = parameters[paramIndex];
 
 				if (paramIndex == paramStart)
@@ -584,8 +686,7 @@ namespace ReverseGenerator.Cpp
 		{
 			string parameters = string.Empty;
 
-			for (int paramIndex = 0; paramIndex < methodInfo.GetParameters().Length; paramIndex++)
-			{
+			for (int paramIndex = 0; paramIndex < methodInfo.GetParameters().Length; paramIndex++) {
 				ParameterInfo parameterInfo = methodInfo.GetParameters()[paramIndex];
 
 				if (paramIndex > 0)
@@ -604,12 +705,11 @@ namespace ReverseGenerator.Cpp
 		/// Writes the wrapper methods.
 		/// </summary>
 		/// <param name="wrapperTypes">The wrapper types.</param>
-		private void WriteWrappersMethods(IEnumerable<Type> wrapperTypes)
+		protected void WriteWrappersMethods(IEnumerable<Type> wrapperTypes)
 		{
 			wrapperTypes = wrapperTypes.Where(t => !t.IsGenericTypeDefinition);
 
-			foreach (Type wrapperType in wrapperTypes)
-			{
+			foreach (Type wrapperType in wrapperTypes) {
 				WriteWrapperMethods(wrapperType);
 			}
 		}
@@ -628,25 +728,25 @@ namespace ReverseGenerator.Cpp
 		/// Writes the wrapper methods.
 		/// </summary>
 		/// <param name="wrapperType">Type of the wrapper.</param>
-		private void WriteWrapperMethods(Type wrapperType)
+		/// <param name="writeContent">if set to <c>true</c> [write content].</param>
+		protected void WriteWrapperMethods(Type wrapperType, bool writeContent = false)
 		{
 			if (!wrapperType.HasAttribute<CppTypeAttribute>())
 				throw new NotSupportedException();
 
 			var attribute = wrapperType.GetAttribute<CppTypeAttribute>(false);
-			IEnumerable<MethodInfo> methods = ReflectionUtility.GetMethods(wrapperType);
+			IEnumerable<MethodInfo> methods = Options.GetAllMethods(wrapperType);
 
 			_writer.WriteLine("/*");
 			_writer.WriteLine(" * Function group: {0}", wrapperType);
 			_writer.WriteLine(" */");
 			_writer.WriteLine();
 
-			foreach (MethodInfo methodInfo in methods)
-			{
+			foreach (MethodInfo methodInfo in methods) {
 				if (methodInfo.IsPropertyMember())
 					continue;
 
-				WriteMethod(wrapperType, methodInfo);
+				WriteMethod(wrapperType, methodInfo, writeContent);
 			}
 
 			_writer.WriteLine();
@@ -657,17 +757,18 @@ namespace ReverseGenerator.Cpp
 		/// </summary>
 		/// <param name="type">The type.</param>
 		/// <param name="methodInfo">The method info.</param>
-		private void WriteMethod(Type type, MethodInfo methodInfo)
+		/// <param name="writeContent">if set to <c>true</c> [write content].</param>
+		protected virtual void WriteMethod(Type type, MethodInfo methodInfo, bool writeContent = false)
 		{
 			string functionName;
 			string targetMethod;
 
 			var targetType = ConfigOptions.GetCppTypename(type);
 			bool isConstructor = false;
+			bool implemented = false;
 			string cppTargetType = targetType;
 
-			if (methodInfo.HasAttribute<ConstructorAttribute>())
-			{
+			if (methodInfo.HasAttribute<ConstructorAttribute>()) {
 				functionName = "new" + targetType.ToLower().ToPascalCase();
 				targetMethod = targetType;
 
@@ -678,14 +779,14 @@ namespace ReverseGenerator.Cpp
 					functionName += "_m" + GetNumberFromSequence(methodInfo);
 
 				isConstructor = true;
-			}
-			else if (methodInfo.HasAttribute<DestructorAttribute>())
-			{
+				implemented = methodInfo.QueryAttribute<ConstructorAttribute>(x => x.Implemented);
+
+			} else if (methodInfo.HasAttribute<DestructorAttribute>()) {
 				functionName = "delete" + targetType.ToLower().ToPascalCase();
 				targetMethod = "~" + targetType;
-			}
-			else
-			{
+				implemented = methodInfo.QueryAttribute<DestructorAttribute>(x => x.Implemented);
+
+			} else {
 				var methodName = methodInfo.Name;
 
 				functionName = targetType.ToLower().ToPascalCase() + methodName;
@@ -693,16 +794,16 @@ namespace ReverseGenerator.Cpp
 
 				if (IsOverloaded(methodInfo))
 					functionName += "_m" + GetNumberFromSequence(methodInfo);
+
+				implemented = methodInfo.QueryAttribute<MethodAttribute>(x => x.Implemented);
 			}
 
 			string parameters;
 
-			if (methodInfo.HasAttribute<DestructorAttribute>())
-			{
+			if (methodInfo.HasAttribute<DestructorAttribute>()) {
 				parameters = "InvHandle self";
-			}
-			else if (methodInfo.HasAttribute<MethodAttribute>())
-			{
+
+			} else if (methodInfo.HasAttribute<MethodAttribute>()) {
 				var attr = methodInfo.GetAttribute<MethodAttribute>(true);
 
 				parameters = GetParametersString(methodInfo);
@@ -710,9 +811,8 @@ namespace ReverseGenerator.Cpp
 				if (!attr.Static)
 					parameters = "InvHandle self" +
 								 (!string.IsNullOrEmpty(parameters) ? (", " + parameters) : parameters);
-			}
-			else
-			{
+
+			} else {
 				parameters = GetParametersString(methodInfo);
 			}
 
@@ -722,11 +822,28 @@ namespace ReverseGenerator.Cpp
 				returnedType = "InvHandle";
 
 			_writer.WriteLine("/**");
-			_writer.WriteLine(" * Method: {0}::{1}", cppTargetType, targetMethod);
+			_writer.WriteLine(" * Method: {0}::{1} {2}", cppTargetType, targetMethod, implemented ? "(OK)" : "(NOT IMPLEMENTED)");
 			_writer.WriteLine(" */");
 			_writer.WriteLine("INV_EXPORT {0}", returnedType);
-			_writer.WriteLine("INV_CALL {0}({1});", functionName.ToCStyle(), parameters);
+			_writer.WriteLine("INV_CALL {0}({1}){2}", functionName.ToCStyle(), parameters, writeContent ? string.Empty : ";");
+
+			if (writeContent) {
+				_writer.OpenBlock();
+				WriteMethodContent(type, methodInfo);
+				_writer.CloseBlock();
+			}
+
 			_writer.WriteLine();
+		}
+
+		/// <summary>
+		/// Writes the content of the method.
+		/// </summary>
+		/// <param name="type">The type.</param>
+		/// <param name="methodInfo">The method info.</param>
+		protected virtual void WriteMethodContent(Type type, MethodInfo methodInfo)
+		{
+
 		}
 
 		#endregion

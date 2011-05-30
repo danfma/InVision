@@ -4,16 +4,16 @@ using InVision.OIS.Devices;
 
 namespace InVision.OIS.Native
 {
-    [OISInterface("Component")]
-    public interface IComponent : ICppInterface
+    [OISClass("Component")]
+    public interface IComponent : ICppInstance
     {
-        [Constructor]
+        [Constructor(Implemented = true)]
         IComponent Construct(ref ComponentDescriptor descriptor);
 
-        [Constructor]
+		[Constructor(Implemented = true)]
         IComponent Construct(ref ComponentDescriptor descriptor, ComponentType ctype);
 
-        [Destructor]
+		[Destructor(Implemented = true)]
         void Destruct();
     }
 }

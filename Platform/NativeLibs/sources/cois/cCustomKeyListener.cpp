@@ -1,5 +1,14 @@
 #include "cOIS.h"
-#include "cCustomKeyEventListener.h"
+#include "cCustomKeyListener.h"
+
+/**
+ * Method: KeyListener::~KeyListener (OK)
+ */
+INV_EXPORT void
+INV_CALL delete_keylistener(InvHandle self)
+{
+	destroyHandle(self);
+}
 
 /**
  * Method: KeyListener::CustomKeyListener
@@ -10,13 +19,4 @@ INV_CALL new_customkeylistener(KeyEventHandler keyPressed, KeyEventHandler keyRe
 	CustomKeyListener* keyListener = new CustomKeyListener(keyPressed, keyReleased);
 
 	return createHandle<CustomKeyListener>(keyListener);
-}
-
-/**
- * Method: KeyListener::~CustomKeyListener
- */
-INV_EXPORT void
-INV_CALL delete_customkeylistener(InvHandle self)
-{
-	destroyHandle(self);
 }

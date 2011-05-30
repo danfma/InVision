@@ -1,5 +1,6 @@
 ﻿using System;
 using InVision.Native;
+using InVision.Ogre.Listeners;
 using InVision.Ogre.Native;
 
 namespace InVision.Ogre
@@ -12,9 +13,10 @@ namespace InVision.Ogre
 		/// Initializes a new instance of the <see cref="Root"/> class.
 		/// </summary>
 		/// <param name="native">The native.</param>
-		protected Root(IRoot native)
+		public Root(IRoot native)
 			: base(native)
 		{
+			FrameEvent = new FrameEventDispatcher();
 		}
 
 		/// <summary>
@@ -27,6 +29,7 @@ namespace InVision.Ogre
 			: this(CreateCppInstance<IRoot>())
 		{
 			Native.Construct(pluginFilename, configFilename, logFilename).SetOwner(this);
+			Native.AddFrameListener(FrameEvent.Native);
 		}
 
 		/// <summary>
@@ -35,11 +38,27 @@ namespace InVision.Ogre
 		/// <param name="disposing"><c>true</c> to release both managed and unmanaged resources; <c>false</c> to release only unmanaged resources.</param>
 		protected override void Dispose(bool disposing)
 		{
-			if (Native != null)
+			if (Native != null) {
+				if (FrameEvent != null)
+					Native.RemoveFrameListener(FrameEvent.Native);
+
 				Native.Destruct();
+			}
+
+			if (FrameEvent != null)
+				FrameEvent.Dispose();
+
+			if (disposing)
+				FrameEvent = null;
 
 			base.Dispose(disposing);
 		}
+
+		/// <summary>
+		/// Gets or sets the frame event.
+		/// </summary>
+		/// <value>The frame event.</value>
+		public FrameEventDispatcher FrameEvent { get; private set; }
 
 		#region IRoot
 
@@ -241,7 +260,8 @@ namespace InVision.Ogre
 		/// <param name="fullscreen">if set to <c>true</c> [fullscreen].</param>
 		/// <param name="parameters">The parameters.</param>
 		/// <returns></returns>
-		public RenderWindow CreateRenderWindow(string name, uint width, uint height, bool fullscreen, RenderWindowParameters parameters)
+		public RenderWindow CreateRenderWindow(string name, uint width, uint height, bool fullscreen,
+											   RenderWindowParameters parameters)
 		{
 			return GetOrCreateOwner(
 				Native.CreateRenderWindow(name, width, height, fullscreen, parameters.ToNameValuePairList()),
@@ -297,6 +317,14 @@ namespace InVision.Ogre
 		public void CheckWindowMessages()
 		{
 			Native.CheckWindowMessages();
+		}
+
+		/// <summary>
+		/// Starts the rendering.
+		/// </summary>
+		public void StartRendering()
+		{
+			Native.StartRendering();
 		}
 
 		#endregion

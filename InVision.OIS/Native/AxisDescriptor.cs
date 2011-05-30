@@ -11,9 +11,7 @@ namespace InVision.OIS.Native
         public ComponentDescriptor Base;
         public int* Abs;
         public int* Rel;
-
-        [MarshalAs(UnmanagedType.I1)] public bool* AbsOnly;
-
-        [MarshalAs(UnmanagedType.ByValArray, SizeConst = 3)] private readonly byte[] _padding;
+        //[MarshalAs(UnmanagedType.I1)] 
+		public bool* AbsOnly;
     }
 }

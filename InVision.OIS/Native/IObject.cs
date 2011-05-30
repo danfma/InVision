@@ -7,36 +7,36 @@ using InterfaceType = InVision.OIS.Devices.InterfaceType;
 
 namespace InVision.OIS.Native
 {
-	[OISInterface("Object")]
-	public interface IObject : ICppInterface
+	[OISClass("Object")]
+	public interface IObject : ICppInstance
 	{
-		[Destructor]
+		[Destructor(Implemented = true)]
 		void Destruct();
 
-		[Method]
+		[Method(Implemented = true)]
 		DeviceType Type();
 
-		[Method]
+		[Method(Implemented = true)]
 		[return: MarshalAs(UnmanagedType.LPStr)]
 		string Vendor();
 
-		[Method]
+		[Method(Implemented = true)]
 		[return: MarshalAs(UnmanagedType.I1)]
 		bool Buffered();
 
-		[Method]
+		[Method(Implemented = true)]
 		void SetBuffered([MarshalAs(UnmanagedType.I1)] bool value);
 
-		[Method]
+		[Method(Implemented = true)]
 		Handle GetCreator();
 
-		[Method]
+		[Method(Implemented = true)]
 		void Capture();
 
-		[Method]
+		[Method(Implemented = true)]
 		int GetID();
 
-		[Method]
+		[Method(Implemented = true)]
 		Handle QueryInterface(InterfaceType interfaceType);
 	}
 }

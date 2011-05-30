@@ -16,7 +16,7 @@ INV_CALL new_eventarg(InvHandle device)
 {
 	OIS::Object* obj = castHandle<OIS::Object>(device);
 
-	OIS::EventArg* eventArg = new EventArg(obj);
+	OIS::EventArg* eventArg = new OIS::EventArg(obj);
 
 	return createHandle<OIS::EventArg>(eventArg);
 }

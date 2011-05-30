@@ -2,10 +2,10 @@
 
 namespace InVision.Ogre.Native
 {
-	[CppInterface("Singleton", CppInterfaceType = CppInterfaceType.Interface)]
-	public interface ISingleton<out T> where T : ICppInterface
+	[OgreClass("Singleton", Type = ClassType.Interface)]
+	public interface ISingleton<out T> where T : ICppInstance
 	{
-		[Method(Static = true)]
+		[Method(Static = true, Implemented = true)]
 		T GetSingleton();
 	}
 }

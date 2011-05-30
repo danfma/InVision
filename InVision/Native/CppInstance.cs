@@ -3,7 +3,7 @@ using System.Diagnostics;
 
 namespace InVision.Native
 {
-	public abstract class CppInstance : IEquatable<CppInstance>, ICppInterface
+	public abstract class CppInstance : IEquatable<CppInstance>, ICppInstance
 	{
 		/// <summary>
 		/// Gets or sets the self.

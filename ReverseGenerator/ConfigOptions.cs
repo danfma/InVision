@@ -67,6 +67,7 @@ namespace ReverseGenerator
 		/// </summary>
 		public ConfigOptions()
 		{
+			ProjectReferences = new List<string>();
 			AssembliesToScan = new List<Assembly>();
 			CsOutputDir = CppOutputDir = Environment.CurrentDirectory;
 		}
@@ -76,6 +77,12 @@ namespace ReverseGenerator
 		/// </summary>
 		/// <value>The name of the project.</value>
 		public string ProjectName { get; set; }
+
+		/// <summary>
+		/// Gets or sets the project references.
+		/// </summary>
+		/// <value>The project references.</value>
+		public List<string> ProjectReferences { get; set; }
 
 		/// <summary>
 		/// Gets or sets the name of the library.
@@ -132,8 +139,7 @@ namespace ReverseGenerator
 		{
 			string translatedType;
 
-			if (fieldType == typeof(string))
-			{
+			if (fieldType == typeof(string)) {
 				return fieldInfo.HasAttribute<MarshalAsAttribute>() &&
 					   fieldInfo.GetAttribute<MarshalAsAttribute>(false).Value == UnmanagedType.LPStr
 						? "_string"
@@ -143,21 +149,18 @@ namespace ReverseGenerator
 			if (TranslatedTypes.TryGetValue(fieldType, out translatedType))
 				return translatedType;
 
-			if (fieldType.IsByRef)
-			{
+			if (fieldType.IsByRef) {
 				string pointedTypename = fieldType.FullName.Substring(0, fieldType.FullName.Length - 1);
 				Type pointedType = fieldType.Assembly.GetType(pointedTypename);
 
 				return ToCppTypename(fieldInfo, pointedType) + "*";
 			}
 
-			if (fieldType.IsArray)
-			{
+			if (fieldType.IsArray) {
 				return ToCppTypename(fieldInfo, fieldType.GetElementType()) + "*";
 			}
 
-			if (fieldType.IsPointer)
-			{
+			if (fieldType.IsPointer) {
 				string pointedTypename = fieldType.FullName.Substring(0, fieldType.FullName.Length - 1);
 				Type pointedType = fieldType.Assembly.GetType(pointedTypename);
 
@@ -180,7 +183,7 @@ namespace ReverseGenerator
 		/// <returns></returns>
 		public static string GetCppTypename(Type type)
 		{
-			if (type.HasAttribute<CppInterfaceAttribute>())
+			if (type.HasAttribute<CppClassAttribute>())
 				return type.Name.Substring(1).ToPascalCase();
 
 			return type.Name;
@@ -258,21 +261,18 @@ namespace ReverseGenerator
 			if (CSharpTypes.TryGetValue(type, out csharpType))
 				return csharpType;
 
-			if (type.IsByRef)
-			{
+			if (type.IsByRef) {
 				string pointedTypename = type.FullName.Substring(0, type.FullName.Length - 1);
 				Type pointedType = type.Assembly.GetType(pointedTypename);
 
 				return GetCSharpTypeString(pointedType);
 			}
 
-			if (type.IsArray)
-			{
+			if (type.IsArray) {
 				return GetCSharpTypeString(type.GetElementType()) + "[]";
 			}
 
-			if (type.IsPointer)
-			{
+			if (type.IsPointer) {
 				string pointedTypename = type.FullName.Substring(0, type.FullName.Length - 1);
 				Type pointedType = type.Assembly.GetType(pointedTypename);
 
@@ -308,7 +308,7 @@ namespace ReverseGenerator
 
 		public static Type GetCppInstanceBaseType(Type wrapperType)
 		{
-			return wrapperType.GetAttribute<CppInterfaceAttribute>(false).BaseType;
+			return wrapperType.GetAttribute<CppClassAttribute>(false).BaseType;
 		}
 
 		public static string GetCSharpNativeTypename(Type wrapperType)
@@ -347,6 +347,138 @@ namespace ReverseGenerator
 		public void AddAssembly(string assemblyFile)
 		{
 			AssembliesToScan.Add(Assembly.LoadFrom(assemblyFile));
+		}
+
+		/// <summary>
+		/// Gets the methods.
+		/// </summary>
+		/// <param name="wrapperType">Type of the wrapper.</param>
+		/// <returns></returns>
+		public IEnumerable<MethodInfo> GetMethods(Type wrapperType)
+		{
+			IEnumerable<MethodInfo> methods =
+				from method in wrapperType.GetMethods()
+				where method.QueryAttribute<MethodAttribute>(attr => string.IsNullOrEmpty(attr.Property))
+				select method;
+
+			var baseType = GetBaseType(wrapperType);
+			var @interfaces =
+				from t in wrapperType.GetInterfaces()
+				where
+					t.QueryAttribute<CppClassAttribute>(x => x.Type == ClassType.Interface) &&
+					((baseType != null && !baseType.HasInterface(t)) || baseType == null)
+				select t;
+
+			methods = methods.Union(
+				from @interface in @interfaces
+				from method in @interface.GetMethods()
+				where method.HasAttribute<MethodAttribute>(true)
+				select method);
+
+			return methods;
+		}
+
+		/// <summary>
+		/// Gets the type of the base.
+		/// </summary>
+		/// <param name="wrapperType">Type of the wrapper.</param>
+		/// <returns></returns>
+		public Type GetBaseType(Type wrapperType)
+		{
+			return CppClassAttribute.GetBaseType(wrapperType);
+		}
+
+		/// <summary>
+		/// Determines whether [has base type] [the specified wrapper type].
+		/// </summary>
+		/// <param name="wrapperType">Type of the wrapper.</param>
+		/// <returns>
+		/// 	<c>true</c> if [has base type] [the specified wrapper type]; otherwise, <c>false</c>.
+		/// </returns>
+		public bool HasBaseType(Type wrapperType)
+		{
+			return GetBaseType(wrapperType) != null;
+		}
+
+		/// <summary>
+		/// Gets the wrapper types.
+		/// </summary>
+		/// <param name="types">The types.</param>
+		/// <returns></returns>
+		public IEnumerable<Type> GetWrapperTypes(IEnumerable<Type> types)
+		{
+			return types.Where(t => t.HasAttribute<CppClassAttribute>(true) && !t.IsGenericTypeDefinition);
+		}
+
+		/// <summary>
+		/// Gets the constructors.
+		/// </summary>
+		/// <param name="wrapperType">Type of the wrapper.</param>
+		/// <returns></returns>
+		public IEnumerable<MethodInfo> GetConstructors(Type wrapperType)
+		{
+			//ReflectionUtility.GetMethods(wrapperType).
+			// Where(m => m.HasAttribute<ConstructorAttribute>());
+			return wrapperType.GetMethods().Where(m => m.HasAttribute<ConstructorAttribute>());
+		}
+
+		/// <summary>
+		/// Determines whether the specified wrapper type has destructor.
+		/// </summary>
+		/// <param name="wrapperType">Type of the wrapper.</param>
+		/// <returns>
+		/// 	<c>true</c> if the specified wrapper type has destructor; otherwise, <c>false</c>.
+		/// </returns>
+		public bool HasDestructor(Type wrapperType)
+		{
+			return FindDestructor(wrapperType).Any();
+		}
+
+		/// <summary>
+		/// Gets the destructor.
+		/// </summary>
+		/// <param name="wrapperType">Type of the wrapper.</param>
+		/// <returns></returns>
+		public MethodInfo GetDestructor(Type wrapperType)
+		{
+			return FindDestructor(wrapperType).SingleOrDefault();
+		}
+
+		/// <summary>
+		/// Finds the destructor.
+		/// </summary>
+		/// <param name="wrapperType">Type of the wrapper.</param>
+		/// <returns></returns>
+		private IEnumerable<MethodInfo> FindDestructor(Type wrapperType)
+		{
+			return ReflectionUtility.GetMethods(wrapperType).Where(m => m.HasAttribute<DestructorAttribute>(false));
+		}
+
+		/// <summary>
+		/// Gets all methods.
+		/// </summary>
+		/// <param name="wrapperType">Type of the wrapper.</param>
+		/// <returns></returns>
+		public IEnumerable<MethodInfo> GetAllMethods(Type wrapperType)
+		{
+			var methods = GetConstructors(wrapperType);
+			methods = methods.Union(GetDestructors(wrapperType));
+			methods = methods.Union(GetMethods(wrapperType));
+
+			return methods;
+		}
+
+		/// <summary>
+		/// Gets the destructors.
+		/// </summary>
+		/// <param name="wrapperType">Type of the wrapper.</param>
+		/// <returns></returns>
+		public IEnumerable<MethodInfo> GetDestructors(Type wrapperType)
+		{
+			var destructor = GetDestructor(wrapperType);
+
+			if (destructor != null)
+				yield return destructor;
 		}
 	}
 }

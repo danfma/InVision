@@ -16,3 +16,6 @@ TEMPLATE = app
 SOURCES += main.cpp
 
 INCLUDEPATH += $(BOOST_SDK)
+
+HEADERS += \
+    alignof.h

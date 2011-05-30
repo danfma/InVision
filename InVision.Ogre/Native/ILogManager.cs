@@ -3,45 +3,45 @@ using InVision.Native;
 
 namespace InVision.Ogre.Native
 {
-	[OgreInterface("LogManager")]
-	public interface ILogManager : ICppInterface, ISingleton<ILogManager>
+	[OgreClass("LogManager")]
+	public interface ILogManager : ICppInstance, ISingleton<ILogManager>
 	{
-		[Constructor]
+		[Constructor(Implemented = true)]
 		ILogManager Construct();
 
-		[Destructor]
+		[Destructor(Implemented = true)]
 		void Destruct();
 
-		[Method]
+		[Method(Implemented = true)]
 		ILog CreateLog(
 			[MarshalAs(UnmanagedType.LPStr)] string name,
 			[MarshalAs(UnmanagedType.I1)] bool defaultLog = false,
 			[MarshalAs(UnmanagedType.I1)] bool debuggerOutput = true,
 			[MarshalAs(UnmanagedType.I1)] bool suppressFileOutput = false);
 
-		[Method]
+		[Method(Implemented = true)]
 		ILog GetLog([MarshalAs(UnmanagedType.LPStr)] string name);
 
-		[Method]
+		[Method(Implemented = true)]
 		ILog GetDefaultLog();
 
-		[Method]
+		[Method(Implemented = true)]
 		void DestroyLog([MarshalAs(UnmanagedType.LPStr)] string name);
 
-		[Method]
+		[Method(Implemented = true)]
 		void DestroyLog(ILog log);
 
-		[Method]
+		[Method(Implemented = true)]
 		ILog SetDefaultLog(ILog log);
 
-		[Method]
+		[Method(Implemented = true)]
 		void LogMessage(
 			[MarshalAs(UnmanagedType.LPStr)] string message,
 			LogMessageLevel logLevel,
 			[MarshalAs(UnmanagedType.I1)]
 				bool maskDebug = false);
 
-		[Method]
+		[Method(Implemented = true)]
 		void SetLogDetail(LoggingLevel level);
 	}
 }

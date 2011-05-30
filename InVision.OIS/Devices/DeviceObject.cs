@@ -2,31 +2,17 @@
 using System.Globalization;
 using System.Reflection;
 using InVision.Native;
-using InVision.Native.Collections;
 using InVision.OIS.Native;
 
 namespace InVision.OIS.Devices
 {
 	public class DeviceObject : CppWrapper
 	{
-		private static readonly Dictionary<DeviceType, Type> DeviceTypes;
-
-		/// <summary>
-		/// Initializes the <see cref="DeviceObject"/> class.
-		/// </summary>
-		static DeviceObject()
-		{
-			DeviceTypes = new Dictionary<DeviceType, Type> {
-				{ DeviceType.Mouse, typeof (Mouse) },
-				{ DeviceType.Keyboard, typeof (Keyboard) }
-			};
-		}
-
 		/// <summary>
 		/// Initializes a new instance of the <see cref="DeviceObject"/> class.
 		/// </summary>
 		/// <param name="nativeInstance">The native instance.</param>
-		protected DeviceObject(ICppInterface nativeInstance)
+		protected DeviceObject(ICppInstance nativeInstance)
 			: base(nativeInstance)
 		{
 		}
@@ -136,15 +122,8 @@ namespace InVision.OIS.Devices
 		{
 			var owner = (DeviceObject)GetOwner<IObject>(nativeObject);
 
-			if (owner == null)
-			{
-				owner = (DeviceObject)Activator.CreateInstance(
-					DeviceTypes[type],
-					BindingFlags.Public | BindingFlags.NonPublic,
-					null,
-					new[] { nativeObject },
-					CultureInfo.CurrentCulture);
-
+			if (owner == null) {
+				owner = (DeviceObject)TypeConstructor.GetConstructor(type).CreateInstance(nativeObject);
 				owner.InputManager = inputManager;
 				owner.Initialize();
 

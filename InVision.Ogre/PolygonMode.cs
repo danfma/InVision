@@ -1,5 +1,8 @@
-﻿namespace InVision.Ogre
+﻿using InVision.Ogre.Native;
+
+namespace InVision.Ogre
 {
+	[OgreEnumeration("PolygonMode")]
 	public enum PolygonMode : uint
 	{
 		Points = 1,

@@ -1,0 +1,100 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{E349F068-EAC7-476C-8D96-9D374B3301DC}</ProjectGuid>
+    <OutputType>Exe</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>TutorialFx.Tutorial1</RootNamespace>
+    <AssemblyName>TutorialFx.Tutorial1</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <TargetFrameworkProfile>Client</TargetFrameworkProfile>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
+    <PlatformTarget>x86</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
+    <PlatformTarget>x86</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Program.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\..\InVision.Native\InVision.Native.csproj">
+      <Project>{F84D662E-4316-48BB-ABD0-C37E49601ACC}</Project>
+      <Name>InVision.Native</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\InVision.Ogre.Native\InVision.Ogre.Native.csproj">
+      <Project>{316AE104-9284-4BE8-B3F7-5C5EC74B9C80}</Project>
+      <Name>InVision.Ogre.Native</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\InVision.Ogre\InVision.Ogre.csproj">
+      <Project>{5D60C1BB-506C-4A0A-8561-C1669FAFBC5B}</Project>
+      <Name>InVision.Ogre</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\InVision.OIS.Native\InVision.OIS.Native.csproj">
+      <Project>{CF8FC602-FD36-41DF-8FC6-08E9BB5593DC}</Project>
+      <Name>InVision.OIS.Native</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\InVision.OIS\InVision.OIS.csproj">
+      <Project>{059527B2-32AF-4983-A27F-12407C88BE0B}</Project>
+      <Name>InVision.OIS</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\InVision.TutorialFx\InVision.TutorialFx.csproj">
+      <Project>{0EE75EE2-B71D-4C7F-BB2C-A7C05E7DFEAD}</Project>
+      <Name>InVision.TutorialFx</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\InVision\InVision.csproj">
+      <Project>{4A69EB8E-6E49-415C-ACB4-9CB904EA54DB}</Project>
+      <Name>InVision</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="plugins.cfg">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources.cfg">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PostBuildEvent>copy "$(SolutionDir)Build\Bin\Debug_x86\Platform\*.dll" $(TargetDir)
+copy "$(SolutionDir)Build\Bin\Debug_x86\Platform\*.pdb" $(TargetDir)
+copy "C:\OgreSDK_vc10_v1-7-2\bin\debug\*" "$(TargetDir)"</PostBuildEvent>
+  </PropertyGroup>
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

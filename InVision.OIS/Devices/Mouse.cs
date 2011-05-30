@@ -13,7 +13,7 @@ namespace InVision.OIS.Devices
 		/// Initializes a new instance of the <see cref="Mouse"/> class.
 		/// </summary>
 		/// <param name="nativeInstance">The native instance.</param>
-		protected Mouse(ICppInterface nativeInstance)
+		public Mouse(IMouse nativeInstance)
 			: base(nativeInstance)
 		{
 			_dispatcher = new MouseListenerDispatcher();

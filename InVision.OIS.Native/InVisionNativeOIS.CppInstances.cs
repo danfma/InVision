@@ -13,7 +13,7 @@ using InVision.OIS.Native;
 namespace InVision.OIS.Native
 {
 	[CppImplementation(typeof(IMouseState))]
-	internal class MouseStateImpl
+	internal unsafe class MouseStateImpl
 		: CppInstance, IMouseState
 	{
 		IMouseState IMouseState.Construct(ref MouseStateDescriptor descriptor)
@@ -30,8 +30,20 @@ namespace InVision.OIS.Native
 		
 	}
 	
+	[CppImplementation(typeof(IKeyListener))]
+	internal unsafe class KeyListenerImpl
+		: CppInstance, IKeyListener
+	{
+		void IKeyListener.Destruct()
+		{
+			NativeKeyListener.Destruct(Self);
+			Self = default(Handle);
+		}
+		
+	}
+	
 	[CppImplementation(typeof(IObject))]
-	internal class ObjectImpl
+	internal unsafe class ObjectImpl
 		: CppInstance, IObject
 	{
 		void IObject.Destruct()
@@ -111,7 +123,7 @@ namespace InVision.OIS.Native
 	}
 	
 	[CppImplementation(typeof(IKeyboard))]
-	internal class KeyboardImpl
+	internal unsafe class KeyboardImpl
 		: ObjectImpl, IKeyboard
 	{
 		bool IKeyboard.IsKeyDown(KeyCode keyCode)
@@ -183,7 +195,7 @@ namespace InVision.OIS.Native
 	}
 	
 	[CppImplementation(typeof(IComponent))]
-	internal class ComponentImpl
+	internal unsafe class ComponentImpl
 		: CppInstance, IComponent
 	{
 		IComponent IComponent.Construct(ref ComponentDescriptor descriptor)
@@ -207,7 +219,7 @@ namespace InVision.OIS.Native
 	}
 	
 	[CppImplementation(typeof(IVector3))]
-	internal class Vector3Impl
+	internal unsafe class Vector3Impl
 		: ComponentImpl, IVector3
 	{
 		IVector3 IVector3.Construct(ref Vector3Descriptor descriptor)
@@ -225,7 +237,7 @@ namespace InVision.OIS.Native
 	}
 	
 	[CppImplementation(typeof(IInterface))]
-	internal class InterfaceImpl
+	internal unsafe class InterfaceImpl
 		: CppInstance, IInterface
 	{
 		void IInterface.Destruct()
@@ -237,7 +249,7 @@ namespace InVision.OIS.Native
 	}
 	
 	[CppImplementation(typeof(IEventArg))]
-	internal class EventArgImpl
+	internal unsafe class EventArgImpl
 		: CppInstance, IEventArg
 	{
 		IEventArg IEventArg.Construct(IObject device)
@@ -264,7 +276,7 @@ namespace InVision.OIS.Native
 	}
 	
 	[CppImplementation(typeof(IMouse))]
-	internal class MouseImpl
+	internal unsafe class MouseImpl
 		: ObjectImpl, IMouse
 	{
 		void IMouse.SetEventCallback(ICustomMouseListener mouseListener)
@@ -294,8 +306,20 @@ namespace InVision.OIS.Native
 		
 	}
 	
+	[CppImplementation(typeof(IMouseListener))]
+	internal unsafe class MouseListenerImpl
+		: CppInstance, IMouseListener
+	{
+		void IMouseListener.Destruct()
+		{
+			NativeMouseListener.Destruct(Self);
+			Self = default(Handle);
+		}
+		
+	}
+	
 	[CppImplementation(typeof(IMouseEvent))]
-	internal class MouseEventImpl
+	internal unsafe class MouseEventImpl
 		: EventArgImpl, IMouseEvent
 	{
 		IMouseEvent IMouseEvent.Construct(ref MouseEventDescriptor descriptor, IObject obj, IMouseState mouseState)
@@ -307,7 +331,7 @@ namespace InVision.OIS.Native
 	}
 	
 	[CppImplementation(typeof(IInputManager))]
-	internal class InputManagerImpl
+	internal unsafe class InputManagerImpl
 		: CppInstance, IInputManager
 	{
 		uint IInputManager.GetVersionNumber()
@@ -428,15 +452,9 @@ namespace InVision.OIS.Native
 		
 	}
 	
-	[CppImplementation(typeof(IFactoryCreator))]
-	internal class FactoryCreatorImpl
-		: CppInstance, IFactoryCreator
-	{
-	}
-	
 	[CppImplementation(typeof(ICustomKeyListener))]
-	internal class CustomKeyListenerImpl
-		: CppInstance, ICustomKeyListener
+	internal unsafe class CustomKeyListenerImpl
+		: KeyListenerImpl, ICustomKeyListener
 	{
 		ICustomKeyListener ICustomKeyListener.Construct(KeyEventHandler keyPressed, KeyEventHandler keyReleased)
 		{
@@ -444,17 +462,11 @@ namespace InVision.OIS.Native
 			return this;
 		}
 		
-		void ICustomKeyListener.Destruct()
-		{
-			NativeCustomKeyListener.Destruct(Self);
-			Self = default(Handle);
-		}
-		
 	}
 	
 	[CppImplementation(typeof(ICustomMouseListener))]
-	internal class CustomMouseListenerImpl
-		: CppInstance, ICustomMouseListener
+	internal unsafe class CustomMouseListenerImpl
+		: MouseListenerImpl, ICustomMouseListener
 	{
 		ICustomMouseListener ICustomMouseListener.Construct(MouseMovedHandler mouseMoved, MouseClickHandler mousePressed, MouseClickHandler mouseReleased)
 		{
@@ -462,16 +474,16 @@ namespace InVision.OIS.Native
 			return this;
 		}
 		
-		void ICustomMouseListener.Destruct()
-		{
-			NativeCustomMouseListener.Destruct(Self);
-			Self = default(Handle);
-		}
-		
+	}
+	
+	[CppImplementation(typeof(IFactoryCreator))]
+	internal unsafe class FactoryCreatorImpl
+		: CppInstance, IFactoryCreator
+	{
 	}
 	
 	[CppImplementation(typeof(IButton))]
-	internal class ButtonImpl
+	internal unsafe class ButtonImpl
 		: ComponentImpl, IButton
 	{
 		IButton IButton.Construct(ref ButtonDescriptor descriptor)
@@ -489,7 +501,7 @@ namespace InVision.OIS.Native
 	}
 	
 	[CppImplementation(typeof(IAxis))]
-	internal class AxisImpl
+	internal unsafe class AxisImpl
 		: ComponentImpl, IAxis
 	{
 		IAxis IAxis.Construct(ref AxisDescriptor descriptor)
@@ -501,7 +513,7 @@ namespace InVision.OIS.Native
 	}
 	
 	[CppImplementation(typeof(IKeyEvent))]
-	internal class KeyEventImpl
+	internal unsafe class KeyEventImpl
 		: EventArgImpl, IKeyEvent
 	{
 		IKeyEvent IKeyEvent.Construct(ref KeyEventDescriptor descriptor, IObject device, KeyCode keyCode, uint text)

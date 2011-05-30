@@ -1,6 +1,7 @@
-namespace InVision.Ogre
+﻿namespace InVision.Ogre
 {
 	public interface IAnimableObject
 	{
+
 	}
 }

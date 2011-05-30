@@ -8,7 +8,7 @@
 		/// <typeparam name="T"></typeparam>
 		/// <param name="data">The data.</param>
 		/// <returns></returns>
-		public static Handle ToHandle<T>(T data) where T : ICppInterface
+		public static Handle ToHandle<T>(T data) where T : ICppInstance
 		{
 			if (Equals(data, default(T)))
 				return Handle.Invalid;
@@ -22,7 +22,7 @@
 		/// <typeparam name="T"></typeparam>
 		/// <param name="handle">The handle.</param>
 		/// <returns></returns>
-		public static T FromHandle<T>(Handle handle) where T : ICppInterface
+		public static T FromHandle<T>(Handle handle) where T : ICppInstance
 		{
 			if (!handle.IsValid)
 				return default(T);

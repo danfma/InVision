@@ -15,8 +15,7 @@ namespace ReverseGenerator
 	{
 		private static void Main(string[] args)
 		{
-			if (args.Count() < 3)
-			{
+			if (args.Count() < 3) {
 				ShowUsage();
 				return;
 			}
@@ -24,6 +23,7 @@ namespace ReverseGenerator
 			var options = new ConfigOptions();
 			var optionSet = new OptionSet {
 				{ "p|project=",		v => options.ProjectName = v },
+				{ "r|reference=",	v => options.ProjectReferences.Add(v) },
 				{ "a|assembly=",	v => options.AddAssembly(v) },
 				{ "cs|csout=",		v => options.CsOutputDir = v },
 				{ "cpp|cppout=",	v => options.CppOutputDir = v },
@@ -34,8 +34,7 @@ namespace ReverseGenerator
 
 			bool generateNeeded = false;
 
-			foreach (var assembly in options.AssembliesToScan)
-			{
+			foreach (var assembly in options.AssembliesToScan) {
 				var assemblyTime = File.GetLastWriteTime(assembly.Location);
 				var generatedFileTime = File.GetLastWriteTime(Path.Combine(options.CppOutputDir, options.ProjectName.ToLower() + ".h"));
 
@@ -43,8 +42,8 @@ namespace ReverseGenerator
 					generateNeeded = true;
 			}
 
-			if (generateNeeded)
-				GenerateFiles(options);
+			//if (generateNeeded)
+			GenerateFiles(options);
 		}
 
 		/// <summary>
@@ -63,8 +62,7 @@ namespace ReverseGenerator
 		{
 			IEnumerable<IGenerator> generators = GetGenerators();
 
-			foreach (IGenerator generator in generators)
-			{
+			foreach (IGenerator generator in generators) {
 				generator.Generate(configOptions, GetCppTypes(configOptions.AssembliesToScan));
 			}
 		}
@@ -75,7 +73,10 @@ namespace ReverseGenerator
 		/// <returns></returns>
 		private static IEnumerable<IGenerator> GetGenerators()
 		{
-			return new IGenerator[] { new CppHeaderGenerator(), new CSharpGenerator() };
+			return new IGenerator[] {
+				new CppHeaderGenerator(), 
+				new CSharpGenerator()
+			};
 		}
 
 		/// <summary>

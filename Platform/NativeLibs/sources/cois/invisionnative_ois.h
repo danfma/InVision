@@ -2,6 +2,7 @@
 #define __INVISIONNATIVE_OIS_H__
 
 #include <InvisionHandle.h>
+#include "invisionnative.h"
 
 extern "C"
 {
@@ -291,16 +292,27 @@ extern "C"
 	 */
 	
 	/**
-	 * Method: MouseState::MouseState
+	 * Method: MouseState::MouseState (OK)
 	 */
 	INV_EXPORT InvHandle
 	INV_CALL new_mousestate(MouseStateDescriptor* descriptor);
 	
 	/**
-	 * Method: MouseState::~MouseState
+	 * Method: MouseState::~MouseState (OK)
 	 */
 	INV_EXPORT void
 	INV_CALL delete_mousestate(InvHandle self);
+	
+	
+	/*
+	 * Function group: InVision.OIS.Native.IKeyListener
+	 */
+	
+	/**
+	 * Method: KeyListener::~KeyListener (OK)
+	 */
+	INV_EXPORT void
+	INV_CALL delete_keylistener(InvHandle self);
 	
 	
 	/*
@@ -308,55 +320,55 @@ extern "C"
 	 */
 	
 	/**
-	 * Method: Object::~Object
+	 * Method: Object::~Object (OK)
 	 */
 	INV_EXPORT void
 	INV_CALL delete_object(InvHandle self);
 	
 	/**
-	 * Method: Object::type
+	 * Method: Object::type (OK)
 	 */
 	INV_EXPORT DEVICE_TYPE
 	INV_CALL object_type(InvHandle self);
 	
 	/**
-	 * Method: Object::vendor
+	 * Method: Object::vendor (OK)
 	 */
 	INV_EXPORT _string
 	INV_CALL object_vendor(InvHandle self);
 	
 	/**
-	 * Method: Object::buffered
+	 * Method: Object::buffered (OK)
 	 */
 	INV_EXPORT _bool
 	INV_CALL object_buffered(InvHandle self);
 	
 	/**
-	 * Method: Object::setBuffered
+	 * Method: Object::setBuffered (OK)
 	 */
 	INV_EXPORT void
 	INV_CALL object_set_buffered(InvHandle self, _bool value);
 	
 	/**
-	 * Method: Object::getCreator
+	 * Method: Object::getCreator (OK)
 	 */
 	INV_EXPORT InvHandle
 	INV_CALL object_get_creator(InvHandle self);
 	
 	/**
-	 * Method: Object::capture
+	 * Method: Object::capture (OK)
 	 */
 	INV_EXPORT void
 	INV_CALL object_capture(InvHandle self);
 	
 	/**
-	 * Method: Object::getID
+	 * Method: Object::getID (OK)
 	 */
 	INV_EXPORT _int
 	INV_CALL object_get_id(InvHandle self);
 	
 	/**
-	 * Method: Object::queryInterface
+	 * Method: Object::queryInterface (OK)
 	 */
 	INV_EXPORT InvHandle
 	INV_CALL object_query_interface(InvHandle self, INTERFACE_TYPE interfaceType);
@@ -367,49 +379,49 @@ extern "C"
 	 */
 	
 	/**
-	 * Method: Keyboard::isKeyDown
+	 * Method: Keyboard::isKeyDown (OK)
 	 */
 	INV_EXPORT _bool
 	INV_CALL keyboard_is_key_down(InvHandle self, KEY_CODE keyCode);
 	
 	/**
-	 * Method: Keyboard::setEventCallback
+	 * Method: Keyboard::setEventCallback (OK)
 	 */
 	INV_EXPORT void
 	INV_CALL keyboard_set_event_callback(InvHandle self, InvHandle keyListener);
 	
 	/**
-	 * Method: Keyboard::getEventCallback
+	 * Method: Keyboard::getEventCallback (OK)
 	 */
 	INV_EXPORT InvHandle
 	INV_CALL keyboard_get_event_callback(InvHandle self);
 	
 	/**
-	 * Method: Keyboard::setTextTranslation
+	 * Method: Keyboard::setTextTranslation (OK)
 	 */
 	INV_EXPORT void
 	INV_CALL keyboard_set_text_translation(InvHandle self, TEXT_TRANSLATION_MODE translationMode);
 	
 	/**
-	 * Method: Keyboard::getTextTranslation
+	 * Method: Keyboard::getTextTranslation (OK)
 	 */
 	INV_EXPORT TEXT_TRANSLATION_MODE
 	INV_CALL keyboard_get_text_translation(InvHandle self);
 	
 	/**
-	 * Method: Keyboard::getAsString
+	 * Method: Keyboard::getAsString (OK)
 	 */
 	INV_EXPORT _string
 	INV_CALL keyboard_get_as_string(InvHandle self, KEY_CODE keyCode);
 	
 	/**
-	 * Method: Keyboard::isModifierDown
+	 * Method: Keyboard::isModifierDown (OK)
 	 */
 	INV_EXPORT _bool
 	INV_CALL keyboard_is_modifier_down(InvHandle self, MODIFIER modifier);
 	
 	/**
-	 * Method: Keyboard::copyKeyStates
+	 * Method: Keyboard::copyKeyStates (OK)
 	 */
 	INV_EXPORT void
 	INV_CALL keyboard_copy_key_states(InvHandle self, _bool* keys);
@@ -420,19 +432,19 @@ extern "C"
 	 */
 	
 	/**
-	 * Method: Component::Component
+	 * Method: Component::Component (OK)
 	 */
 	INV_EXPORT InvHandle
 	INV_CALL new_component_m1(ComponentDescriptor* descriptor);
 	
 	/**
-	 * Method: Component::Component
+	 * Method: Component::Component (OK)
 	 */
 	INV_EXPORT InvHandle
 	INV_CALL new_component_m2(ComponentDescriptor* descriptor, COMPONENT_TYPE ctype);
 	
 	/**
-	 * Method: Component::~Component
+	 * Method: Component::~Component (OK)
 	 */
 	INV_EXPORT void
 	INV_CALL delete_component(InvHandle self);
@@ -443,13 +455,13 @@ extern "C"
 	 */
 	
 	/**
-	 * Method: Vector3::Vector3
+	 * Method: Vector3::Vector3 (OK)
 	 */
 	INV_EXPORT InvHandle
 	INV_CALL new_vector3_m1(Vector3Descriptor* descriptor);
 	
 	/**
-	 * Method: Vector3::Vector3
+	 * Method: Vector3::Vector3 (OK)
 	 */
 	INV_EXPORT InvHandle
 	INV_CALL new_vector3_m2(Vector3Descriptor* descriptor, _float x, _float y, _float z);
@@ -460,7 +472,7 @@ extern "C"
 	 */
 	
 	/**
-	 * Method: Interface::~Interface
+	 * Method: Interface::~Interface (OK)
 	 */
 	INV_EXPORT void
 	INV_CALL delete_interface(InvHandle self);
@@ -471,19 +483,19 @@ extern "C"
 	 */
 	
 	/**
-	 * Method: EventArg::EventArg
+	 * Method: EventArg::EventArg (OK)
 	 */
 	INV_EXPORT InvHandle
 	INV_CALL new_eventarg(InvHandle device);
 	
 	/**
-	 * Method: EventArg::~EventArg
+	 * Method: EventArg::~EventArg (OK)
 	 */
 	INV_EXPORT void
 	INV_CALL delete_eventarg(InvHandle self);
 	
 	/**
-	 * Method: EventArg::getDevice
+	 * Method: EventArg::getDevice (OK)
 	 */
 	INV_EXPORT InvHandle
 	INV_CALL eventarg_get_device(InvHandle self);
@@ -494,22 +506,33 @@ extern "C"
 	 */
 	
 	/**
-	 * Method: Mouse::setEventCallback
+	 * Method: Mouse::setEventCallback (OK)
 	 */
 	INV_EXPORT void
 	INV_CALL mouse_set_event_callback(InvHandle self, InvHandle mouseListener);
 	
 	/**
-	 * Method: Mouse::getEventCallback
+	 * Method: Mouse::getEventCallback (OK)
 	 */
 	INV_EXPORT InvHandle
 	INV_CALL mouse_get_event_callback(InvHandle self);
 	
 	/**
-	 * Method: Mouse::getMouseState
+	 * Method: Mouse::getMouseState (OK)
 	 */
 	INV_EXPORT InvHandle
 	INV_CALL mouse_get_mouse_state(InvHandle self);
+	
+	
+	/*
+	 * Function group: InVision.OIS.Native.IMouseListener
+	 */
+	
+	/**
+	 * Method: MouseListener::~MouseListener (OK)
+	 */
+	INV_EXPORT void
+	INV_CALL delete_mouselistener(InvHandle self);
 	
 	
 	/*
@@ -517,7 +540,7 @@ extern "C"
 	 */
 	
 	/**
-	 * Method: MouseEvent::MouseEvent
+	 * Method: MouseEvent::MouseEvent (OK)
 	 */
 	INV_EXPORT InvHandle
 	INV_CALL new_mouseevent(MouseEventDescriptor* descriptor, InvHandle obj, InvHandle mouseState);
@@ -528,88 +551,110 @@ extern "C"
 	 */
 	
 	/**
-	 * Method: InputManager::getVersionNumber
+	 * Method: InputManager::getVersionNumber (OK)
 	 */
 	INV_EXPORT _uint
 	INV_CALL inputmanager_get_version_number();
 	
 	/**
-	 * Method: InputManager::getVersionName
+	 * Method: InputManager::getVersionName (OK)
 	 */
 	INV_EXPORT _string
 	INV_CALL inputmanager_get_version_name(InvHandle self);
 	
 	/**
-	 * Method: InputManager::createInputSystem
+	 * Method: InputManager::createInputSystem (OK)
 	 */
 	INV_EXPORT InvHandle
 	INV_CALL inputmanager_create_input_system_m1(_int winHandle);
 	
 	/**
-	 * Method: InputManager::createInputSystem
+	 * Method: InputManager::createInputSystem (OK)
 	 */
 	INV_EXPORT InvHandle
 	INV_CALL inputmanager_create_input_system_m2(NameValueItem* parameters, _int parametersCount);
 	
 	/**
-	 * Method: InputManager::destroyInputSystem
+	 * Method: InputManager::destroyInputSystem (OK)
 	 */
 	INV_EXPORT void
 	INV_CALL inputmanager_destroy_input_system(InvHandle manager);
 	
 	/**
-	 * Method: InputManager::inputSystemName
+	 * Method: InputManager::inputSystemName (OK)
 	 */
 	INV_EXPORT _string
 	INV_CALL inputmanager_input_system_name(InvHandle self);
 	
 	/**
-	 * Method: InputManager::getNumberOfDevices
+	 * Method: InputManager::getNumberOfDevices (OK)
 	 */
 	INV_EXPORT _int
 	INV_CALL inputmanager_get_number_of_devices(InvHandle self, DEVICE_TYPE iType);
 	
 	/**
-	 * Method: InputManager::listFreeDevices
+	 * Method: InputManager::listFreeDevices (OK)
 	 */
 	INV_EXPORT _any
 	INV_CALL inputmanager_list_free_devices(InvHandle self);
 	
 	/**
-	 * Method: InputManager::createInputObject
+	 * Method: InputManager::createInputObject (OK)
 	 */
 	INV_EXPORT InvHandle
 	INV_CALL inputmanager_create_input_object_m1(InvHandle self, DEVICE_TYPE iType, _bool bufferMode);
 	
 	/**
-	 * Method: InputManager::createInputObject
+	 * Method: InputManager::createInputObject (OK)
 	 */
 	INV_EXPORT InvHandle
 	INV_CALL inputmanager_create_input_object_m2(InvHandle self, DEVICE_TYPE iType, _bool bufferMode, _string vendor);
 	
 	/**
-	 * Method: InputManager::destroyInputObject
+	 * Method: InputManager::destroyInputObject (OK)
 	 */
 	INV_EXPORT void
 	INV_CALL inputmanager_destroy_input_object(InvHandle self, InvHandle obj);
 	
 	/**
-	 * Method: InputManager::addFactoryCreator
+	 * Method: InputManager::addFactoryCreator (OK)
 	 */
 	INV_EXPORT void
 	INV_CALL inputmanager_add_factory_creator(InvHandle self, InvHandle factory);
 	
 	/**
-	 * Method: InputManager::removeFactoryCreator
+	 * Method: InputManager::removeFactoryCreator (OK)
 	 */
 	INV_EXPORT void
 	INV_CALL inputmanager_remove_factory_creator(InvHandle self, InvHandle factory);
 	
 	/**
-	 * Method: InputManager::enableAddOnFactory
+	 * Method: InputManager::enableAddOnFactory (OK)
 	 */
 	INV_EXPORT void
 	INV_CALL inputmanager_enable_add_on_factory(InvHandle self, ADD_ON_FACTORY factory);
+	
+	
+	/*
+	 * Function group: InVision.OIS.Native.ICustomKeyListener
+	 */
+	
+	/**
+	 * Method: CustomKeyListener::CustomKeyListener (OK)
+	 */
+	INV_EXPORT InvHandle
+	INV_CALL new_customkeylistener(KeyEventHandler keyPressed, KeyEventHandler keyReleased);
+	
+	
+	/*
+	 * Function group: InVision.OIS.Native.ICustomMouseListener
+	 */
+	
+	/**
+	 * Method: CustomMouseListener::CustomMouseListener (OK)
+	 */
+	INV_EXPORT InvHandle
+	INV_CALL new_custommouselistener(MouseMovedHandler mouseMoved, MouseClickHandler mousePressed, MouseClickHandler mouseReleased);
 	
 	
 	/*
@@ -618,51 +663,17 @@ extern "C"
 	
 	
 	/*
-	 * Function group: InVision.OIS.Native.ICustomKeyListener
-	 */
-	
-	/**
-	 * Method: CustomKeyListener::CustomKeyListener
-	 */
-	INV_EXPORT InvHandle
-	INV_CALL new_customkeylistener(KeyEventHandler keyPressed, KeyEventHandler keyReleased);
-	
-	/**
-	 * Method: CustomKeyListener::~CustomKeyListener
-	 */
-	INV_EXPORT void
-	INV_CALL delete_customkeylistener(InvHandle self);
-	
-	
-	/*
-	 * Function group: InVision.OIS.Native.ICustomMouseListener
-	 */
-	
-	/**
-	 * Method: CustomMouseListener::CustomMouseListener
-	 */
-	INV_EXPORT InvHandle
-	INV_CALL new_custommouselistener(MouseMovedHandler mouseMoved, MouseClickHandler mousePressed, MouseClickHandler mouseReleased);
-	
-	/**
-	 * Method: CustomMouseListener::~CustomMouseListener
-	 */
-	INV_EXPORT void
-	INV_CALL delete_custommouselistener(InvHandle self);
-	
-	
-	/*
 	 * Function group: InVision.OIS.Native.IButton
 	 */
 	
 	/**
-	 * Method: Button::Button
+	 * Method: Button::Button (OK)
 	 */
 	INV_EXPORT InvHandle
 	INV_CALL new_button_m1(ButtonDescriptor* descriptor);
 	
 	/**
-	 * Method: Button::Button
+	 * Method: Button::Button (OK)
 	 */
 	INV_EXPORT InvHandle
 	INV_CALL new_button_m2(ButtonDescriptor* descriptor, _bool pushed);
@@ -673,7 +684,7 @@ extern "C"
 	 */
 	
 	/**
-	 * Method: Axis::Axis
+	 * Method: Axis::Axis (OK)
 	 */
 	INV_EXPORT InvHandle
 	INV_CALL new_axis(AxisDescriptor* descriptor);
@@ -684,7 +695,7 @@ extern "C"
 	 */
 	
 	/**
-	 * Method: KeyEvent::KeyEvent
+	 * Method: KeyEvent::KeyEvent (OK)
 	 */
 	INV_EXPORT InvHandle
 	INV_CALL new_keyevent(KeyEventDescriptor* descriptor, InvHandle device, KEY_CODE keyCode, _uint text);
@@ -695,11 +706,17 @@ extern "C"
 
 #ifdef __cplusplus
 #include <OIS.h>
+#include "cCustomKeyListener.h"
+#include "cCustomMouseListener.h"
 
 using namespace invision;
 
 inline OIS::MouseState* asMouseState(InvHandle self) {
 	return castHandle< OIS::MouseState >(self);
+}
+
+inline OIS::KeyListener* asKeyListener(InvHandle self) {
+	return castHandle< OIS::KeyListener >(self);
 }
 
 inline OIS::Object* asObject(InvHandle self) {
@@ -730,6 +747,10 @@ inline OIS::Mouse* asMouse(InvHandle self) {
 	return castHandle< OIS::Mouse >(self);
 }
 
+inline OIS::MouseListener* asMouseListener(InvHandle self) {
+	return castHandle< OIS::MouseListener >(self);
+}
+
 inline OIS::MouseEvent* asMouseEvent(InvHandle self) {
 	return castHandle< OIS::MouseEvent >(self);
 }
@@ -738,16 +759,16 @@ inline OIS::InputManager* asInputManager(InvHandle self) {
 	return castHandle< OIS::InputManager >(self);
 }
 
+inline CustomKeyListener* asCustomKeyListener(InvHandle self) {
+	return castHandle< CustomKeyListener >(self);
+}
+
+inline CustomMouseListener* asCustomMouseListener(InvHandle self) {
+	return castHandle< CustomMouseListener >(self);
+}
+
 inline OIS::FactoryCreator* asFactoryCreator(InvHandle self) {
 	return castHandle< OIS::FactoryCreator >(self);
-}
-
-inline OIS::KeyListener* asKeyListener(InvHandle self) {
-	return castHandle< OIS::KeyListener >(self);
-}
-
-inline OIS::MouseListener* asMouseListener(InvHandle self) {
-	return castHandle< OIS::MouseListener >(self);
 }
 
 inline OIS::Button* asButton(InvHandle self) {
@@ -761,6 +782,27 @@ inline OIS::Axis* asAxis(InvHandle self) {
 inline OIS::KeyEvent* asKeyEvent(InvHandle self) {
 	return castHandle< OIS::KeyEvent >(self);
 }
+
+/*
+ * Initializer
+ */
+struct InVisionNative_OIS
+{
+	InVisionNative_OIS()
+	{
+		register_converter< OIS::Keyboard, OIS::Object >();
+		register_converter< OIS::Vector3, OIS::Component >();
+		register_converter< OIS::Mouse, OIS::Object >();
+		register_converter< OIS::MouseEvent, OIS::EventArg >();
+		register_converter< CustomKeyListener, OIS::KeyListener >();
+		register_converter< CustomMouseListener, OIS::MouseListener >();
+		register_converter< OIS::Button, OIS::Component >();
+		register_converter< OIS::Axis, OIS::Component >();
+		register_converter< OIS::KeyEvent, OIS::EventArg >();
+	}
+};
+
+static InVisionNative_OIS __initInVisionNative_OIS;
 
 #endif // __cplusplus
 #endif // __INVISIONNATIVE_OIS_H__

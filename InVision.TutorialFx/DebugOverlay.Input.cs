@@ -18,7 +18,7 @@ namespace InVision.TutorialFx
 		{
 			Window = window;
 
-			var debugOverlay = OverlayManager.Instance.GetByName("Core/DebugOverlay");
+			Overlay debugOverlay = OverlayManager.Instance.GetByName("Core/DebugOverlay");
 			debugOverlay.Show();
 
 			GuiAvg = OverlayManager.Instance.GetOverlayElement("Core/AverageFps");
@@ -37,8 +37,7 @@ namespace InVision.TutorialFx
 
 		public void Update(float timeFragment)
 		{
-			if (TimeSinceLastDebugUpdate > 0.5f)
-			{
+			if (TimeSinceLastDebugUpdate > 0.5f) {
 				var stats = Window.GetStatistics();
 
 				GuiAvg.Caption = "Average FPS: " + stats.AvgFPS;
@@ -49,9 +48,7 @@ namespace InVision.TutorialFx
 				ModesText.Caption = additionalInfo;
 
 				TimeSinceLastDebugUpdate = 0;
-			}
-			else
-			{
+			} else {
 				TimeSinceLastDebugUpdate += timeFragment;
 			}
 		}

@@ -6,32 +6,32 @@ using InVision.OIS.Devices;
 
 namespace InVision.OIS.Native
 {
-	[OISInterface("Keyboard", BaseType = typeof(IObject))]
+	[OISClass("Keyboard", BaseType = typeof(IObject))]
 	public interface IKeyboard : IObject
 	{
-		[Method]
+		[Method(Implemented = true)]
 		bool IsKeyDown(KeyCode keyCode);
 
-		[Method]
+		[Method(Implemented = true)]
 		void SetEventCallback(ICustomKeyListener keyListener);
 
-		[Method]
+		[Method(Implemented = true)]
 		ICustomKeyListener GetEventCallback();
 
-		[Method]
+		[Method(Implemented = true)]
 		void SetTextTranslation(TextTranslationMode translationMode);
 
-		[Method]
+		[Method(Implemented = true)]
 		TextTranslationMode GetTextTranslation();
 
-		[Method]
+		[Method(Implemented = true)]
 		[return: MarshalAs(UnmanagedType.LPStr)]
 		string GetAsString(KeyCode keyCode);
 
-		[Method]
+		[Method(Implemented = true)]
 		bool IsModifierDown(Modifier modifier);
 
-		[Method]
+		[Method(Implemented = true)]
 		void CopyKeyStates(
 			[MarshalAs(UnmanagedType.LPArray, SizeConst = 256, ArraySubType = UnmanagedType.I1)] bool[] keys);
 	}

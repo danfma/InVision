@@ -1,4 +1,7 @@
-﻿namespace InVision.Native
+﻿using System;
+using InVision.Extensions;
+
+namespace InVision.Native
 {
 	public class CppTypeAttribute : GeneratorModelAttribute
 	{
@@ -7,7 +10,7 @@
 		/// </summary>
 		public CppTypeAttribute()
 		{
-
+			
 		}
 
 		/// <summary>
@@ -15,6 +18,7 @@
 		/// </summary>
 		/// <param name="typename">The typename.</param>
 		public CppTypeAttribute(string typename)
+			: this()
 		{
 			Typename = typename;
 		}
@@ -46,14 +50,25 @@
 		/// <summary>
 		/// Gets the full name of the CPP.
 		/// </summary>
-		/// <param name="memberName">Name of the member.</param>
+		/// <param name="typename">The typename.</param>
+		/// <param name="generics">The generics.</param>
 		/// <returns></returns>
-		public string GetCppFullName(string memberName = "")
+		public string GetCppFullName(string typename = "", string[] generics = null)
 		{
-			if (string.IsNullOrEmpty(Namespace))
-				return Typename;
+			string fullname;
 
-			return Namespace + "::" + (Typename ?? memberName);
+			if (string.IsNullOrEmpty(Namespace))
+				fullname = Typename ?? typename;
+			else
+				fullname = Namespace + "::" + (Typename ?? typename);
+
+			if (generics != null && generics.Length > 0) {
+				fullname += "< ";
+				fullname += generics.Join(", ");
+				fullname += " >";
+			}
+
+			return fullname;
 		}
 	}
 }

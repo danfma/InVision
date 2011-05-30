@@ -34,26 +34,22 @@ namespace InVision.TutorialFx
 		/// </summary>
 		public void Go()
 		{
-			try
-			{
+			try {
 				if (!Setup())
 					return;
 
 				Root.StartRendering();
 
 				DestroyScene();
-			}
-			catch (SEHException e)
-			{
+
+			} catch (SEHException e) {
 				Console.WriteLine(e);
 
 				MessageBox.Show(
 					"An Ogre error has occurred. Check the Ogre.log file for details", "Exception",
 					MessageBoxButtons.OK,
 					MessageBoxIcon.Error);
-			}
-			catch (Exception e)
-			{
+			} catch (Exception e) {
 				Console.WriteLine(e);
 
 				MessageBox.Show(
@@ -99,9 +95,8 @@ namespace InVision.TutorialFx
 
 		protected virtual bool Configure()
 		{
-			if (Root.ShowConfigDialog())
-			{
-				Window = Root.Initialise(true, "TutorialApplication Render Window");
+			if (Root.ShowConfigDialog()) {
+				Window = Root.Initialize(true, "TutorialApplication Render Window");
 				return true;
 			}
 
@@ -129,7 +124,7 @@ namespace InVision.TutorialFx
 		{
 			// Create one viewport, entire window
 			Viewport vp = Window.AddViewport(Camera);
-			vp.BackgroundColour = ColourValues.Black;
+			vp.BackgroundColor = Color.Black;
 
 			// Alter the camera aspect ratio to match the viewport
 			float aspectRatio = vp.ActualWidth / (float)vp.ActualHeight;
@@ -151,21 +146,24 @@ namespace InVision.TutorialFx
 
 			// Load resource paths from config file
 			var cf = new ConfigFile();
-			cf.Load(ResourcesCfg, "\t:=", true);
+			cf.Load(ResourcesCfg);
 
 			// Go through all sections & settings in the file
 			var settings =
 				from section in cf.GetSections()
 				from setting in section.Value
-				select new { Section = section.Key, Setting = setting.Key, setting.Value };
+				select new {
+					Section = section.Key,
+					Setting = setting.Key,
+					setting.Value
+				};
 
-			foreach (var setting in settings)
-			{
+			foreach (var setting in settings) {
 				ResourceGroupManager.Instance.AddResourceLocation(
 					setting.Value, setting.Setting, setting.Section);
 			}
 
-			ResourceGroupManager.Instance.InitialiseAllResourceGroups();
+			ResourceGroupManager.Instance.InitializeAllResourceGroups();
 		}
 
 		protected void ReloadAllTextures()
@@ -176,8 +174,7 @@ namespace InVision.TutorialFx
 		protected void CycleTextureFilteringMode()
 		{
 			TextureMode = (TextureMode + 1) % 4;
-			switch (TextureMode)
-			{
+			switch (TextureMode) {
 				case 0:
 					MaterialManager.Instance.SetDefaultTextureFiltering(TextureFilterOption.Bilinear);
 					DebugOverlay.AdditionalInfo = "BiLinear";
@@ -206,8 +203,7 @@ namespace InVision.TutorialFx
 		{
 			RenderMode = (RenderMode + 1) % 3;
 
-			switch (RenderMode)
-			{
+			switch (RenderMode) {
 				case 0:
 					Camera.PolygonMode = PolygonMode.Solid;
 					break;
@@ -240,8 +236,7 @@ namespace InVision.TutorialFx
 			if (ShutDown)
 				return false;
 
-			try
-			{
+			try {
 				ProcessInput();
 
 				UpdateScene(evt);
@@ -250,9 +245,8 @@ namespace InVision.TutorialFx
 				DebugOverlay.Update(evt.TimeSinceLastFrame);
 
 				return true;
-			}
-			catch (ShutdownException)
-			{
+
+			} catch (ShutdownException) {
 				ShutDown = true;
 				return false;
 			}
@@ -273,6 +267,7 @@ namespace InVision.TutorialFx
 
 		protected virtual void DestroyScene()
 		{
+			Root.Dispose();
 		}
 	}
 }

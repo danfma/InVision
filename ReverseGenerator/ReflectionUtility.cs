@@ -111,7 +111,7 @@ namespace ReverseGenerator
 
 			var interfaces =
 				from @interface in type.GetInterfaces()
-				where @interface.QueryAttribute<CppInterfaceAttribute>(t => t.CppInterfaceType == CppInterfaceType.Interface)
+				where @interface.QueryAttribute<CppClassAttribute>(t => t.Type == ClassType.Interface)
 				select @interface;
 
 			foreach (var @interface in interfaces)

@@ -1,37 +1,60 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using InVision.Native;
+using InVision.Ogre.Native;
 
 namespace InVision.Ogre.Listeners
 {
-	public sealed class FrameEventDispatcher : IFrameListener, IEventDispatcher
+	public sealed class FrameEventDispatcher : CppWrapper<ICustomFrameListener>, IFrameListener, IEventDispatcher
 	{
-		private readonly FrameEventDispatcherHandler _frameEndedHandler;
-		private readonly FrameEventDispatcherHandler _frameStartedHandler;
+		private readonly FrameEventHandler _frameEndedHandler;
+		private readonly FrameEventHandler _frameRenderingQueued;
+		private readonly FrameEventHandler _frameStartedHandler;
 		private readonly List<IFrameListener> _listeners;
+
+		/// <summary>
+		/// Initializes a new instance of the <see cref="FrameEventDispatcher"/> class.
+		/// </summary>
+		/// <param name="nativeInstance">The native instance.</param>
+		public FrameEventDispatcher(ICustomFrameListener nativeInstance)
+			: base(nativeInstance)
+		{
+		}
 
 		/// <summary>
 		/// 	Initializes a new instance of the <see cref = "FrameEventDispatcher" /> class.
 		/// </summary>
 		public FrameEventDispatcher()
+			: this(CreateCppInstance<ICustomFrameListener>())
 		{
-			_frameStartedHandler = new FrameEventDispatcherHandler(OnFrameStarted);
-			_frameEndedHandler = new FrameEventDispatcherHandler(OnFrameEnded);
-
-			//SetHandle(NativeOgreFrameListener.New(frameStartedHandler, frameEndedHandler));
-
+			_frameStartedHandler = new FrameEventHandler(OnFrameStarted);
+			_frameEndedHandler = new FrameEventHandler(OnFrameEnded);
+			_frameRenderingQueued = new FrameEventHandler(OnFrameRenderingQueued);
 			_listeners = new List<IFrameListener>();
+
+			Native.Construct(
+				_frameStartedHandler,
+				_frameEndedHandler,
+				_frameRenderingQueued);
 		}
 
-		/// <summary>
-		/// Gets or sets a value indicating whether this instance is listeners enabled.
-		/// </summary>
-		/// <value>
-		/// 	<c>true</c> if this instance is listeners enabled; otherwise, <c>false</c>.
-		/// </value>
-		public bool IsListenersEnabled { get; private set; }
-
 		#region IFrameListener Members
+
+		/// <summary>
+		/// Called when [frame rendering queued].
+		/// </summary>
+		/// <param name="e">The e.</param>
+		/// <returns></returns>
+		public bool OnFrameRenderingQueued(FrameEvent e)
+		{
+			bool result = true;
+
+			if (FrameRenderingQueued != null)
+				result = FrameRenderingQueued(e);
+
+			return _listeners.Aggregate(result, (current, frameListener) => current && frameListener.OnFrameRenderingQueued(e));
+		}
 
 		/// <summary>
 		/// 	Called when [frame started].
@@ -66,27 +89,15 @@ namespace InVision.Ogre.Listeners
 		#endregion
 
 		/// <summary>
-		/// 	Called when [frame started].
+		/// Releases unmanaged and - optionally - managed resources
 		/// </summary>
-		/// <param name = "pEvent">The p event.</param>
-		/// <returns></returns>
-		private bool OnFrameStarted(IntPtr pEvent)
+		/// <param name="disposing"><c>true</c> to release both managed and unmanaged resources; <c>false</c> to release only unmanaged resources.</param>
+		protected override void Dispose(bool disposing)
 		{
-			var e = new FrameEvent();
+			if (Native != null)
+				Native.Destruct();
 
-			return OnFrameStarted(e);
-		}
-
-		/// <summary>
-		/// 	Called when [frame ended].
-		/// </summary>
-		/// <param name = "pEvent">The p event.</param>
-		/// <returns></returns>
-		private bool OnFrameEnded(IntPtr pEvent)
-		{
-			var e = new FrameEvent();
-
-			return OnFrameEnded(e);
+			base.Dispose(disposing);
 		}
 
 		/// <summary>
@@ -98,6 +109,11 @@ namespace InVision.Ogre.Listeners
 		/// 	Occurs when [frame ended].
 		/// </summary>
 		public event FrameEventHandler FrameEnded;
+
+		/// <summary>
+		/// Occurs when [frame rendering queued].
+		/// </summary>
+		public event FrameEventHandler FrameRenderingQueued;
 
 		/// <summary>
 		/// 	Adds an object to the end of the <see cref = "T:System.Collections.Generic.List`1" />.
@@ -130,30 +146,6 @@ namespace InVision.Ogre.Listeners
 		public bool Remove(IFrameListener item)
 		{
 			return _listeners.Remove(item);
-		}
-
-		/// <summary>
-		/// Enables the listeners.
-		/// </summary>
-		public void EnableListeners()
-		{
-			if (IsListenersEnabled)
-				return;
-
-			//Root.Instance.EnableFrameDispatcher(this);
-			IsListenersEnabled = true;
-		}
-
-		/// <summary>
-		/// Disables the listeners.
-		/// </summary>
-		public void DisableListeners()
-		{
-			if (!IsListenersEnabled)
-				return;
-
-			//Root.Instance.DisableFrameDispatcher(this);
-			IsListenersEnabled = false;
 		}
 	}
 }

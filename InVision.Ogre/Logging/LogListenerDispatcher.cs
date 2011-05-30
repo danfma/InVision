@@ -26,7 +26,7 @@ namespace InVision.Ogre.Logging
 		/// Initializes a new instance of the <see cref="LogListenerDispatcher"/> class.
 		/// </summary>
 		/// <param name="nativeInstance">The native instance.</param>
-		public LogListenerDispatcher(ICppInterface nativeInstance)
+		public LogListenerDispatcher(ICppInstance nativeInstance)
 			: base(nativeInstance)
 		{
 			_listeners = new List<ILogListener>();

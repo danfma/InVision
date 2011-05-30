@@ -46,11 +46,31 @@ namespace InVision.Ogre
 		/// <param name="width">The width.</param>
 		/// <param name="height">The height.</param>
 		/// <returns></returns>
-		public Viewport AddViewport(ICamera camera, int zOrder, float left, float top, float width, float height)
+		public Viewport AddViewport(Camera camera, int zOrder = 0, float left = 0f, float top = 0f, float width = 1f, float height = 1f)
 		{
 			return GetOrCreateOwner(
-				Native.AddViewport(camera, zOrder, left, top, width, height),
+				Native.AddViewport(camera.Native, zOrder, left, top, width, height),
 				native => new Viewport(native));
+		}
+
+		/// <summary>
+		/// Writes the contents to timestamped file.
+		/// </summary>
+		/// <param name="filenamePrefix">The filename prefix.</param>
+		/// <param name="filenameSuffix">The filename suffix.</param>
+		/// <returns></returns>
+		public string WriteContentsToTimestampedFile(string filenamePrefix, string filenameSuffix)
+		{
+			return Native.WriteContentsToTimestampedFile(filenamePrefix, filenameSuffix);
+		}
+
+		/// <summary>
+		/// Gets the statistics.
+		/// </summary>
+		/// <returns></returns>
+		public FrameStats GetStatistics()
+		{
+			return Native.GetStatistics();
 		}
 	}
 }

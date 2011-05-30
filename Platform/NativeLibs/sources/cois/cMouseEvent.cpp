@@ -29,12 +29,3 @@ INV_CALL new_mouseevent(MouseEventDescriptor* descriptor, InvHandle obj, InvHand
 
 	return handle;
 }
-
-/**
- * Method: MouseEvent::~MouseEvent
- */
-INV_EXPORT void
-INV_CALL delete_mouseevent(InvHandle self)
-{
-	destroyHandle(self);
-}

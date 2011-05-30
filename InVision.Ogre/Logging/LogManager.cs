@@ -11,7 +11,7 @@ namespace InVision.Ogre.Logging
 		/// Initializes a new instance of the <see cref="LogManager"/> class.
 		/// </summary>
 		/// <param name="nativeInstance">The native instance.</param>
-		public LogManager(ICppInterface nativeInstance)
+		public LogManager(ICppInstance nativeInstance)
 			: base(nativeInstance)
 		{
 		}
@@ -109,7 +109,7 @@ namespace InVision.Ogre.Logging
 		/// <param name="message">The message.</param>
 		/// <param name="logLevel">The log level.</param>
 		/// <param name="maskDebug">if set to <c>true</c> [mask debug].</param>
-		public void LogMessage(string message, LogMessageLevel logLevel, bool maskDebug)
+		public void LogMessage(string message, LogMessageLevel logLevel = LogMessageLevel.Normal, bool maskDebug = false)
 		{
 			Native.LogMessage(message, logLevel, maskDebug);
 		}

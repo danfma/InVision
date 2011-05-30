@@ -3,16 +3,16 @@ using InVision.OIS.Attributes;
 
 namespace InVision.OIS.Native
 {
-	[OISInterface("EventArg")]
-	public interface IEventArg : ICppInterface
+	[OISClass("EventArg")]
+	public interface IEventArg : ICppInstance
 	{
-		[Constructor]
+		[Constructor(Implemented = true)]
 		IEventArg Construct(IObject device);
 
-		[Destructor]
+		[Destructor(Implemented = true)]
 		void Destruct();
 
-		[Method]
+		[Method(Implemented = true)]
 		IObject GetDevice();
 	}
 }

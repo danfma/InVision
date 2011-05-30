@@ -4,38 +4,38 @@ using InVision.Native;
 
 namespace InVision.Ogre.Native
 {
-	[OgreInterface("Root")]
-	public interface IRoot : ICppInterface, ISingleton<IRoot>
+	[OgreClass("Root")]
+	public interface IRoot : ICppInstance, ISingleton<IRoot>
 	{
-		[Constructor]
+		[Constructor(Implemented = true)]
 		IRoot Construct();
 
-		[Constructor]
+		[Constructor(Implemented = true)]
 		IRoot Construct(
 			[MarshalAs(UnmanagedType.LPStr)] string pluginFilename);
 
-		[Constructor]
+		[Constructor(Implemented = true)]
 		IRoot Construct(
 			[MarshalAs(UnmanagedType.LPStr)] string pluginFilename,
 			[MarshalAs(UnmanagedType.LPStr)] string configFilename);
 
-		[Constructor]
+		[Constructor(Implemented = true)]
 		IRoot Construct(
 			[MarshalAs(UnmanagedType.LPStr)] string pluginFilename,
 			[MarshalAs(UnmanagedType.LPStr)] string configFilename,
 			[MarshalAs(UnmanagedType.LPStr)] string logFilename);
 
-		[Destructor]
+		[Destructor(Implemented = true)]
 		void Destruct();
 
-		[Method]
+		[Method(Implemented = true)]
 		void SaveConfig();
 
-		[Method]
+		[Method(Implemented = true)]
 		[return: MarshalAs(UnmanagedType.I1)]
 		bool RestoreConfig();
 
-		[Method]
+		[Method(Implemented = true)]
 		[return: MarshalAs(UnmanagedType.I1)]
 		bool ShowConfigDialog();
 
@@ -51,22 +51,22 @@ namespace InVision.Ogre.Native
 		[Method]
 		IRenderSystem GetRenderSystem();
 
-		[Method]
+		[Method(Implemented = true)]
 		IRenderWindow Initialize(
 			[MarshalAs(UnmanagedType.I1)] bool autoCreateWindow);
 
-		[Method]
+		[Method(Implemented = true)]
 		IRenderWindow Initialize(
 			[MarshalAs(UnmanagedType.I1)] bool autoCreateWindow,
 			[MarshalAs(UnmanagedType.LPStr)] string windowTitle);
 
-		[Method]
+		[Method(Implemented = true)]
 		IRenderWindow Initialize(
 			[MarshalAs(UnmanagedType.I1)] bool autoCreateWindow,
 			[MarshalAs(UnmanagedType.LPStr)] string windowTitle,
 			[MarshalAs(UnmanagedType.LPStr)] string customCapabilities);
 
-		[Method]
+		[Method(Implemented = true)]
 		bool IsInitialized();
 
 		[Method]
@@ -84,35 +84,44 @@ namespace InVision.Ogre.Native
 		[Method]
 		void RemoveSceneManagerFactory(ISceneManagerFactory factory);
 
-		[Method]
+		[Method(Implemented = true)]
 		ISceneManager CreateSceneManager(SceneType sceneType);
 
-		[Method]
+		[Method(Implemented = true)]
 		ISceneManager CreateSceneManager(SceneType sceneType, [MarshalAs(UnmanagedType.LPStr)] string instanceName);
 
-		[Method]
+		[Method(Implemented = true)]
 		IRenderWindow CreateRenderWindow(
 			[MarshalAs(UnmanagedType.LPStr)] string name,
 			uint width, uint height,
 			[MarshalAs(UnmanagedType.I1)] bool fullscreen);
 
-		[Method]
+		[Method(Implemented = true)]
 		IRenderWindow CreateRenderWindow(
 			[MarshalAs(UnmanagedType.LPStr)] string name,
 			uint width, uint height,
 			[MarshalAs(UnmanagedType.I1)] bool fullscreen,
 			NameValuePairList list);
 
-		[Method]
+		[Method(Implemented = true)]
 		void LoadPlugin([MarshalAs(UnmanagedType.LPStr)] string plugin);
 
-		[Method]
+		[Method(Implemented = true)]
 		void UnloadPlugin([MarshalAs(UnmanagedType.LPStr)] string plugin);
 
-		[Method]
+		[Method(Implemented = true)]
 		bool RenderOneFrame([MarshalAs(UnmanagedType.I1)] bool clearWindowMessages);
 
-		[Method]
+		[Method(Implemented = true)]
 		void CheckWindowMessages();
+
+		[Method(Implemented = true)]
+		void StartRendering();
+
+		[Method(Implemented = true)]
+		void AddFrameListener(IFrameListener listener);
+
+		[Method(Implemented = true)]
+		void RemoveFrameListener(IFrameListener listener);
 	}
 }

@@ -28,14 +28,6 @@ namespace InVision.Native
 		}
 
 		/// <summary>
-		/// The type's id of this handle on the native side.
-		/// </summary>
-		public ushort TypeCode
-		{
-			get { return (ushort)_value; }
-		}
-
-		/// <summary>
 		/// Gets a value indicating whether this instance is valid.
 		/// </summary>
 		/// <value><c>true</c> if this instance is valid; otherwise, <c>false</c>.</value>

@@ -1,7 +1,9 @@
 ﻿using System.Runtime.InteropServices;
+using InVision.Ogre.Native;
 
 namespace InVision.Ogre.Listeners
 {
+	[OgreValueObject("FrameEvent")]
 	[StructLayout(LayoutKind.Sequential)]
 	public struct FrameEvent
 	{

@@ -3,10 +3,10 @@ using InVision.OIS.Attributes;
 
 namespace InVision.OIS.Native
 {
-    [OISInterface("Interface")]
+    [OISClass("Interface")]
     public interface IInterface
     {
-        [Destructor]
+		[Destructor(Implemented = true)]
         void Destruct();
     }
 }

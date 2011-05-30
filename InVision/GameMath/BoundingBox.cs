@@ -26,10 +26,14 @@
 
 using System;
 using System.Collections.Generic;
+using System.Runtime.InteropServices;
+using InVision.Native;
 
 namespace InVision.GameMath
 {
 	[Serializable]
+	[StructLayout(LayoutKind.Sequential)]
+	[CppValueObject(DefinitionFile = "invisionnative.h")]
 	public struct BoundingBox : IEquatable<BoundingBox>
 	{
 		public const int CornerCount = 8;
@@ -55,16 +59,14 @@ namespace InVision.GameMath
 		{
 			if ((Max.X < box.Min.X || Min.X > box.Max.X) ||
 				(Max.Y < box.Min.Y || Min.Y > box.Max.Y) ||
-				(Max.Z < box.Min.Z || Min.Z > box.Max.Z))
-			{
+				(Max.Z < box.Min.Z || Min.Z > box.Max.Z)) {
 				result = ContainmentType.Disjoint;
 				return;
 			}
 
 			if ((Min.X <= box.Min.X && Max.X >= box.Max.X) &&
 				(Min.Y <= box.Min.Y && Max.Y >= box.Max.Y) &&
-				(Min.Z <= box.Min.Z && Max.Z >= box.Max.Z))
-			{
+				(Min.Z <= box.Min.Z && Max.Z >= box.Max.Z)) {
 				result = ContainmentType.Contains;
 				return;
 			}
@@ -77,19 +79,16 @@ namespace InVision.GameMath
 			if (frustum == null)
 				throw new ArgumentNullException("frustum");
 
-			if (!frustum.Intersects(this))
-			{
+			if (!frustum.Intersects(this)) {
 				return ContainmentType.Disjoint;
 			}
 
 			Vector3[] cornerArray = frustum.cornerArray;
 
-			for (int i = 0; i < cornerArray.Length; i++)
-			{
+			for (int i = 0; i < cornerArray.Length; i++) {
 				Vector3 point = cornerArray[i];
 
-				if (Contains(point) == ContainmentType.Disjoint)
-				{
+				if (Contains(point) == ContainmentType.Disjoint) {
 					return ContainmentType.Intersects;
 				}
 			}
@@ -116,16 +115,14 @@ namespace InVision.GameMath
 
 			float radius = sphere.Radius;
 
-			if (dist > radius)
-			{
+			if (dist > radius) {
 				result = ContainmentType.Disjoint;
 				return;
 			}
 
 			if (Min.X + radius <= center.X && Max.X - radius >= center.X && Max.X - Min.X > radius &&
 				Min.Y + radius <= center.Y && Max.Y - radius >= center.Y && Max.Y - Min.Y > radius &&
-				Min.Z + radius <= center.Z && Max.Z - radius >= center.Z && Max.X - Min.X > radius)
-			{
+				Min.Z + radius <= center.Z && Max.Z - radius >= center.Z && Max.X - Min.X > radius) {
 				result = ContainmentType.Contains;
 				return;
 			}
@@ -144,8 +141,7 @@ namespace InVision.GameMath
 		{
 			if ((Min.X <= point.X && Max.X >= point.X) &&
 				(Min.Y <= point.Y && Max.Y >= point.Y) &&
-				(Min.Z <= point.Z && Max.Z >= point.Z))
-			{
+				(Min.Z <= point.Z && Max.Z >= point.Z)) {
 				result = ContainmentType.Contains;
 				return;
 			}
@@ -166,8 +162,7 @@ namespace InVision.GameMath
 			var min = new Vector3(float.MaxValue);
 			var max = new Vector3(float.MinValue);
 
-			foreach (Vector3 point in points)
-			{
+			foreach (Vector3 point in points) {
 				Vector3 pt = point;
 
 				Vector3.Min(ref min, ref pt, out min);
@@ -341,16 +336,14 @@ namespace InVision.GameMath
 
 			float num = plane.Normal.X * vector.X + plane.Normal.Y * vector.Y + plane.Normal.Z * vector.Z;
 
-			if (num + plane.D > 0f)
-			{
+			if (num + plane.D > 0f) {
 				result = PlaneIntersectionType.Front;
 				return;
 			}
 
 			num = plane.Normal.X * vector2.X + plane.Normal.Y * vector2.Y + plane.Normal.Z * vector2.Z;
 
-			if (num + plane.D < 0f)
-			{
+			if (num + plane.D < 0f) {
 				result = PlaneIntersectionType.Back;
 				return;
 			}
@@ -371,78 +364,60 @@ namespace InVision.GameMath
 			float num = 0f;
 			float num2 = 3.40282347E+38f;
 
-			if (Math.Abs(ray.Direction.X) < 1E-06f)
-			{
-				if (ray.Position.X < Min.X || ray.Position.X > Max.X)
-				{
+			if (Math.Abs(ray.Direction.X) < 1E-06f) {
+				if (ray.Position.X < Min.X || ray.Position.X > Max.X) {
 					return;
 				}
-			}
-			else
-			{
+			} else {
 				float num3 = 1f / ray.Direction.X;
 				float num4 = (Min.X - ray.Position.X) * num3;
 				float num5 = (Max.X - ray.Position.X) * num3;
-				if (num4 > num5)
-				{
+				if (num4 > num5) {
 					float num6 = num4;
 					num4 = num5;
 					num5 = num6;
 				}
 				num = MathHelper.Max(num4, num);
 				num2 = MathHelper.Min(num5, num2);
-				if (num > num2)
-				{
+				if (num > num2) {
 					return;
 				}
 			}
-			if (Math.Abs(ray.Direction.Y) < 1E-06f)
-			{
-				if (ray.Position.Y < Min.Y || ray.Position.Y > Max.Y)
-				{
+			if (Math.Abs(ray.Direction.Y) < 1E-06f) {
+				if (ray.Position.Y < Min.Y || ray.Position.Y > Max.Y) {
 					return;
 				}
-			}
-			else
-			{
+			} else {
 				float num7 = 1f / ray.Direction.Y;
 				float num8 = (Min.Y - ray.Position.Y) * num7;
 				float num9 = (Max.Y - ray.Position.Y) * num7;
-				if (num8 > num9)
-				{
+				if (num8 > num9) {
 					float num10 = num8;
 					num8 = num9;
 					num9 = num10;
 				}
 				num = MathHelper.Max(num8, num);
 				num2 = MathHelper.Min(num9, num2);
-				if (num > num2)
-				{
+				if (num > num2) {
 					return;
 				}
 			}
-			if (Math.Abs(ray.Direction.Z) < 1E-06f)
-			{
-				if (ray.Position.Z < Min.Z || ray.Position.Z > Max.Z)
-				{
+			if (Math.Abs(ray.Direction.Z) < 1E-06f) {
+				if (ray.Position.Z < Min.Z || ray.Position.Z > Max.Z) {
 					return;
 				}
-			}
-			else
-			{
+			} else {
 				float num11 = 1f / ray.Direction.Z;
 				float num12 = (Min.Z - ray.Position.Z) * num11;
 				float num13 = (Max.Z - ray.Position.Z) * num11;
-				if (num12 > num13)
-				{
+				if (num12 > num13) {
 					float num14 = num12;
 					num12 = num13;
 					num13 = num14;
 				}
 				num = MathHelper.Max(num12, num);
 				num2 = MathHelper.Min(num13, num2);
-				if (num > num2)
-				{
+				if (num > num2) {
 					return;
 				}
 			}

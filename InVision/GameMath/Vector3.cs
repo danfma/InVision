@@ -121,6 +121,21 @@ namespace InVision.GameMath
 			get { return new Vector3(0f, 0f, 1f); }
 		}
 
+		public static Vector3 NegativeUnitX
+		{
+			get { return new Vector3(-1f, 0f, 0f); }
+		}
+
+		public static Vector3 NegativeUnitY
+		{
+			get { return new Vector3(0f, -1f, 0f); }
+		}
+
+		public static Vector3 NegativeUnitZ
+		{
+			get { return new Vector3(0f, 0f, -1f); }
+		}
+
 		public static Vector3 One
 		{
 			get { return new Vector3(1f); }
@@ -520,9 +535,9 @@ namespace InVision.GameMath
 
 		public static void Distance(ref Vector3 value1, ref Vector3 value2, out float result)
 		{
-			DistanceSquared (ref value1, ref value2, out result);
-			
-			result = (float) System.Math.Sqrt (result);
+			DistanceSquared(ref value1, ref value2, out result);
+
+			result = (float)System.Math.Sqrt(result);
 		}
 
 		public static float DistanceSquared(Vector3 value1, Vector3 value2)
@@ -534,8 +549,8 @@ namespace InVision.GameMath
 
 		public static void DistanceSquared(ref Vector3 value1, ref Vector3 value2, out float result)
 		{
-			Subtract (ref value1, ref value2, out value1);
-			result = value1.LengthSquared ();
+			Subtract(ref value1, ref value2, out value1);
+			result = value1.LengthSquared();
 		}
 
 		public static float Dot(Vector3 vector1, Vector3 vector2)
@@ -769,8 +784,7 @@ namespace InVision.GameMath
 
 		public static void TransformNormalInverse(ref Vector3 normal, ref Matrix inverse, out Vector3 result)
 		{
-			result = new Vector3
-			{
+			result = new Vector3 {
 				X = normal.X * inverse.Row0.X +
 					normal.Y * inverse.Row0.Y +
 					normal.Z * inverse.Row0.Z,
@@ -831,6 +845,38 @@ namespace InVision.GameMath
 		public override string ToString()
 		{
 			return string.Format("{{X:{0} Y:{1} Z:{2}}}", X, Y, Z);
+		}
+
+		/// <summary>
+		/// Sets this vector's components to the maximum of its own and the ones of the passed in vector.
+		/// </summary>
+		/// <remarks>
+		/// 'Maximum' in this case means the combination of the highest
+		/// value of x, y and z from both vectors. Highest is taken just
+		/// numerically, not magnitude, so 1 > -3.
+		/// </remarks>
+		/// <param name="cmp">The CMP.</param>
+		public void MakeCeil(Vector3 cmp)
+		{
+			if (cmp.X > X) X = cmp.X;
+			if (cmp.Y > Y) Y = cmp.Y;
+			if (cmp.Z > Z) Z = cmp.Z;
+		}
+
+		/// <summary>
+		/// Sets this vector's components to the minimum of its own and the ones of the passed in vector.
+		/// </summary>
+		/// <remarks>
+		/// 'Minimum' in this case means the combination of the lowest
+		/// value of x, y and z from both vectors. Lowest is taken just
+		/// numerically, not magnitude, so -1 < 0.
+		/// </remarks>
+		/// <param name="cmp">The CMP.</param>
+		public void MakeFloor(Vector3 cmp)
+		{
+			if (cmp.X < X) X = cmp.X;
+			if (cmp.Y < Y) Y = cmp.Y;
+			if (cmp.Z < Z) Z = cmp.Z;
 		}
 	}
 }

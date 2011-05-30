@@ -2,8 +2,8 @@
 
 namespace InVision.Ogre.Native
 {
-	[OgreInterface("RenderSystem")]
-	public interface IRenderSystem : ICppInterface
+	[OgreClass("RenderSystem")]
+	public interface IRenderSystem : ICppInstance
 	{
 	}
 }

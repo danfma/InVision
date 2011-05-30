@@ -6,7 +6,7 @@ namespace InVision.Native
 	/// <summary>
 	/// 
 	/// </summary>
-	public abstract class CppWrapper : DisposableObject, ICppWrapper<ICppInterface>
+	public abstract class CppWrapper : DisposableObject, ICppWrapper<ICppInstance>
 	{
 		private static readonly HandleListenerDispatcher HandleListener = new HandleListenerDispatcher();
 
@@ -25,7 +25,7 @@ namespace InVision.Native
 		/// Initializes a new instance of the <see cref="CppWrapper"/> class.
 		/// </summary>
 		/// <param name="nativeInstance">The native instance.</param>
-		protected CppWrapper(ICppInterface nativeInstance)
+		protected CppWrapper(ICppInstance nativeInstance)
 		{
 			Native = nativeInstance;
 		}
@@ -73,7 +73,7 @@ namespace InVision.Native
 		/// Gets or sets the native instance.
 		/// </summary>
 		/// <value>The native instance.</value>
-		public ICppInterface Native { get; private set; }
+		public ICppInstance Native { get; private set; }
 
 		#endregion
 
@@ -113,18 +113,18 @@ namespace InVision.Native
 		/// <summary>
 		/// Registers the ownership.
 		/// </summary>
-		/// <param name="interface">The @interface.</param>
+		/// <param name="instance">The @interface.</param>
 		/// <param name="owner">The owner.</param>
-		protected internal static void RegisterOwnership(ICppInterface @interface, object owner)
+		protected internal static void RegisterOwnership(ICppInstance instance, object owner)
 		{
-			References.TryAdd(@interface.Self, new WeakReference(owner));
+			References.TryAdd(instance.Self, new WeakReference(owner));
 		}
 
 		/// <summary>
 		/// Removes the ownership.
 		/// </summary>
 		/// <param name="nativeInstance">The native instance.</param>
-		protected internal static void RemoveOwnership(ICppInterface nativeInstance)
+		protected internal static void RemoveOwnership(ICppInstance nativeInstance)
 		{
 			WeakReference reference;
 
@@ -140,7 +140,7 @@ namespace InVision.Native
 		/// <param name="creator">The creator.</param>
 		/// <returns></returns>
 		protected static TOwner GetOrCreateOwner<TOwner, TNative>(TNative @native, Func<TNative, TOwner> creator)
-			where TNative : ICppInterface
+			where TNative : ICppInstance
 		{
 			if (Equals(@native, null) || !@native.Self.IsValid)
 				return default(TOwner);
@@ -160,21 +160,21 @@ namespace InVision.Native
 		/// Gets the owner.
 		/// </summary>
 		/// <typeparam name="T"></typeparam>
-		/// <param name="interface">The @interface.</param>
+		/// <param name="instance">The @interface.</param>
 		/// <returns></returns>
-		protected static T GetOwner<T>(ICppInterface @interface)
+		protected static T GetOwner<T>(ICppInstance instance)
 		{
-			if (@interface == null)
+			if (instance == null)
 				return default(T);
 
 			WeakReference reference;
 
-			if (References.TryGetValue(@interface.Self, out reference))
+			if (References.TryGetValue(instance.Self, out reference))
 			{
 				if (reference.IsAlive)
 					return (T)reference.Target;
 
-				References.TryRemove(@interface.Self, out reference);
+				References.TryRemove(instance.Self, out reference);
 			}
 
 			return default(T);
@@ -182,7 +182,7 @@ namespace InVision.Native
 	}
 
 	public abstract class CppWrapper<T> : CppWrapper, ICppWrapper<T>
-		where T : ICppInterface
+		where T : ICppInstance
 	{
 		/// <summary>
 		/// Initializes a new instance of the <see cref="CppWrapper&lt;T&gt;"/> class.
