@@ -19,7 +19,7 @@ namespace InVision.Scripting.Boo
 		/// </summary>
 		/// <param name="filename">The filename.</param>
 		/// <returns></returns>
-		public override IScript LoadScript(string filename)
+		public override IScript CreateScriptFrom(string filename)
 		{
 			if (PreferredExecution == ExecutionMode.Interpreted)
 				return new BooInterpretedScript(filename, CompilerOutput);

@@ -1,11 +1,13 @@
 ﻿namespace Tutano
 {
-	public static class TutanoLauncher
+	public class TutanoLauncher
 	{
-		public static void Run()
+		/// <summary>
+		/// Runs this instance.
+		/// </summary>
+		public void Run()
 		{
-			using (var tutano = new TutanoApplication())
-			{
+			using (var tutano = new Core.Tutano()) {
 				tutano.Run();
 			}
 		}

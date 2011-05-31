@@ -1127,6 +1127,54 @@ namespace InVision.Ogre.Native
 			return HandleConvert.FromHandle<ISceneNode>(result);
 		}
 		
+		void ISceneNode.SetPosition(Vector3 value)
+		{
+			CheckMemberOnlyCall();
+			
+			NativeSceneNode.SetPosition(Self, value);
+		}
+		
+		Vector3 ISceneNode.GetPosition()
+		{
+			CheckMemberOnlyCall();
+			
+			var result = NativeSceneNode.GetPosition(Self);
+			
+			return result;
+		}
+		
+		void ISceneNode.SetScale(Vector3 scale)
+		{
+			CheckMemberOnlyCall();
+			
+			NativeSceneNode.SetScale(Self, scale);
+		}
+		
+		Vector3 ISceneNode.GetScale()
+		{
+			CheckMemberOnlyCall();
+			
+			var result = NativeSceneNode.GetScale(Self);
+			
+			return result;
+		}
+		
+		Quaternion ISceneNode.GetOrientation()
+		{
+			CheckMemberOnlyCall();
+			
+			var result = NativeSceneNode.GetOrientation(Self);
+			
+			return result;
+		}
+		
+		void ISceneNode.SetOrientation(Quaternion orientation)
+		{
+			CheckMemberOnlyCall();
+			
+			NativeSceneNode.SetOrientation(Self, orientation);
+		}
+		
 	}
 	
 	[CppImplementation(typeof(IOverlayManager))]

@@ -1,16 +1,19 @@
 ﻿using System;
-using InVision.Extensions;
+using System.Linq;
+using InVision.FMod;
+using InVision.FMod.Native;
 using InVision.Framework;
 using InVision.Framework.Components;
 using InVision.GameMath;
-using System.Linq;
+using InVision.Ogre;
+using Karel.Flow;
 
 namespace Karel
 {
 	public class KarelWorld : GameComponent
 	{
-		private Type _karelModelType;
 		private WorldSpace[,] _spaces;
+		private SceneNode _sceneNode;
 
 		#region Construction and Destruction
 
@@ -21,21 +24,19 @@ namespace Karel
 		/// <param name="columns">The columns.</param>
 		public KarelWorld(int rows, int columns)
 		{
-			_karelModelType = typeof(KarelRobot);
+			Rows = rows;
+			Columns = columns;
 			_spaces = new WorldSpace[rows, columns];
 
-			for (int i = 0; i < rows; i++)
-			{
-				for (int j = 0; j < columns; j++)
-				{
+			for (int i = 0; i < rows; i++) {
+				for (int j = 0; j < columns; j++) {
 					string spaceName = string.Format("KarelWorldSpace_{0}x{1}", i, j);
 
-					_spaces[i, j] = new WorldSpace();
+					var space = _spaces[i, j] = new WorldSpace();
+					space.WorldPosition = new Point(i, j);
 					Children.Add(spaceName, _spaces[i, j]);
 				}
 			}
-
-			Instance = this;
 		}
 
 		/// <summary>
@@ -44,17 +45,26 @@ namespace Karel
 		/// <param name="disposing"><c>true</c> to release both managed and unmanaged resources; <c>false</c> to release only unmanaged resources.</param>
 		protected override void Dispose(bool disposing)
 		{
-			if (disposing)
-			{
-				Instance = null;
+			if (disposing) {
 				_spaces = null;
-				_karelModelType = null;
 			}
 
 			base.Dispose(disposing);
 		}
 
 		#endregion
+
+		/// <summary>
+		/// Gets or sets the rows.
+		/// </summary>
+		/// <value>The rows.</value>
+		public int Rows { get; private set; }
+
+		/// <summary>
+		/// Gets or sets the columns.
+		/// </summary>
+		/// <value>The columns.</value>
+		public int Columns { get; private set; }
 
 		/// <summary>
 		/// Gets or sets the <see cref="WorldSpace"/> with the specified x.
@@ -71,12 +81,6 @@ namespace Karel
 		/// </summary>
 		/// <value>The karel.</value>
 		public KarelRobot Karel { get; private set; }
-
-		/// <summary>
-		/// Gets or sets the instance.
-		/// </summary>
-		/// <value>The instance.</value>
-		public static KarelWorld Instance { get; private set; }
 
 		/// <summary>
 		/// Adds the child at space.
@@ -161,21 +165,9 @@ namespace Karel
 		{
 			const string karelChildName = "KarelRobot";
 
-			var karel = (KarelRobot)Children.GetOrAdd(karelChildName, key => _karelModelType.CreateInstance<KarelRobot>());
+			var karel = (KarelRobot)Children.GetOrAdd(karelChildName, key => new KarelRobot());
 			karel.WorldPosition = new Point(x, y);
 			Karel = karel;
-		}
-
-		/// <summary>
-		/// Sets the karel model.
-		/// </summary>
-		/// <param name="karelType">Type of the karel.</param>
-		public void SetKarelModel(Type karelType)
-		{
-			if (!typeof(KarelRobot).IsAssignableFrom(karelType))
-				throw new InvalidOperationException("You must extends the KarelRobot Type to set the Karel Model");
-
-			_karelModelType = karelType;
 		}
 
 		/// <summary>
@@ -184,7 +176,7 @@ namespace Karel
 		/// <param name="elapsedTime">The elapsed time.</param>
 		protected override void UpdateSelf(ElapsedTime elapsedTime)
 		{
-			var remainingBeepers =
+			int remainingBeepers =
 				(from child in Children.AsParallel()
 				 from beeper in child.Children
 				 where beeper is KarelBeeper
@@ -192,11 +184,47 @@ namespace Karel
 
 			bool karelIsOnCheckpoint = this[Karel.WorldPosition.X, Karel.WorldPosition.Y].Checkpoint;
 
-			if (remainingBeepers == 0 && Karel.IsOff && karelIsOnCheckpoint)
-			{
+			if (remainingBeepers == 0 && Karel.IsOff && karelIsOnCheckpoint) {
 				Console.WriteLine("CONGRATULATIONS!! You have won!!");
 				GameApplication.Exit();
 			}
+		}
+
+		/// <summary>
+		/// Saves this instance.
+		/// </summary>
+		public void Save()
+		{
+			KarelGameFlow.Register(this);
+		}
+
+		/// <summary>
+		/// Initializes the self.
+		/// </summary>
+		/// <param name="app">The app.</param>
+		protected override void InitializeSelf(GameApplication app)
+		{
+			dynamic ogre = GameApplication.GlobalVariables.Ogre;
+
+			var sceneManager = (SceneManager)ogre.SceneManager;
+			_sceneNode = sceneManager.RootSceneNode.CreateChildSceneNode("KarelWorld");
+			StateVariables.WorldSceneNode = _sceneNode;
+
+			InitializeSound();
+		}
+
+		/// <summary>
+		/// Initializes the sound.
+		/// </summary>
+		private void InitializeSound()
+		{
+			var audioSystem = (AudioSystem)GameApplication.GlobalVariables.AudioSystem;
+			var sound = audioSystem.CreateSound("Content/Sounds/BgSound.mp3",
+			                                    MODE.HARDWARE | MODE._2D | MODE.CREATESTREAM | MODE.OPENONLY);
+			var channel = sound.PlaySound(CHANNELINDEX.FREE, false);
+
+			GameApplication.GlobalVariables.BgSound = sound;
+			GameApplication.GlobalVariables.Channel = channel;
 		}
 	}
 }

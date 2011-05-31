@@ -1,8 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 
 <configuration>
-	<!--<game-flow-type>FullTypename,Assembly</game-flow-type>-->
-
 	<!--<screen>
 		<width>800</width>
 		<height>600</height>
@@ -32,8 +30,13 @@
 		</script-managers>
 	</scripting>
 
-	<!--<custom-configurations>
-		<custom name="Karel.WorldName" value="World1" />
-	</custom-configurations>-->
+	
+	<!-- KAREL -->
+	<game-flow-type>Karel.Flow.KarelGameFlow, Karel</game-flow-type>
+
+	<custom-configuration>
+		<config name="Karel.Problem" value="Scripts/Worlds/World1" />
+		<config name="Karel.Resolution" value="Scripts/Resolved/World1" />
+	</custom-configuration>
 	
 </configuration>

@@ -1,26 +1,19 @@
 ﻿using System;
+using System.Threading;
 using InVision.GameMath;
+using Karel.Flow;
 
 namespace Karel.Controller
 {
 	public class Karel
 	{
 		/// <summary>
-		/// Gets the karel instance.
+		/// Gets the karel robot.
 		/// </summary>
-		/// <value>The karel instance.</value>
-		private static KarelRobot KarelInstance
+		/// <value>The karel robot.</value>
+		private static KarelRobot KarelRobot
 		{
-			get { return World != null ? World.Karel : null; }
-		}
-
-		/// <summary>
-		/// Gets the world.
-		/// </summary>
-		/// <value>The world.</value>
-		private static KarelWorld World
-		{
-			get { return KarelWorld.Instance; }
+			get { return KarelGameFlow.World.Karel; }
 		}
 
 		/// <summary>
@@ -29,7 +22,7 @@ namespace Karel.Controller
 		/// <value>The direction.</value>
 		public KarelDirection Direction
 		{
-			get { return KarelInstance.Direction; }
+			get { return KarelRobot.Direction; }
 		}
 
 		/// <summary>
@@ -38,7 +31,7 @@ namespace Karel.Controller
 		/// <value><c>true</c> if [looking to north]; otherwise, <c>false</c>.</value>
 		public bool LookingToNorth
 		{
-			get { return KarelInstance.LookingToNorth; }
+			get { return KarelRobot.LookingToNorth; }
 		}
 
 		/// <summary>
@@ -47,8 +40,8 @@ namespace Karel.Controller
 		/// <value>The world position.</value>
 		public Point WorldPosition
 		{
-			get { return KarelInstance.WorldPosition; }
-			set { KarelInstance.WorldPosition = value; }
+			get { return KarelRobot.WorldPosition; }
+			set { KarelRobot.WorldPosition = value; }
 		}
 
 		/// <summary>
@@ -57,7 +50,7 @@ namespace Karel.Controller
 		/// <value><c>true</c> if [looking to west]; otherwise, <c>false</c>.</value>
 		public bool LookingToWest
 		{
-			get { return KarelInstance.LookingToWest; }
+			get { return KarelRobot.LookingToWest; }
 		}
 
 		/// <summary>
@@ -66,7 +59,7 @@ namespace Karel.Controller
 		/// <value><c>true</c> if [looking to east]; otherwise, <c>false</c>.</value>
 		public bool LookingToEast
 		{
-			get { return KarelInstance.LookingToEast; }
+			get { return KarelRobot.LookingToEast; }
 		}
 
 		/// <summary>
@@ -75,7 +68,7 @@ namespace Karel.Controller
 		/// <value><c>true</c> if [looking to south]; otherwise, <c>false</c>.</value>
 		public bool LookingToSouth
 		{
-			get { return KarelInstance.LookingToSouth; }
+			get { return KarelRobot.LookingToSouth; }
 		}
 
 		/// <summary>
@@ -86,7 +79,7 @@ namespace Karel.Controller
 		/// </value>
 		public bool HasBeeper
 		{
-			get { return KarelInstance.HasBeeper; }
+			get { return KarelRobot.HasBeeper; }
 		}
 
 		/// <summary>
@@ -96,7 +89,7 @@ namespace Karel.Controller
 		/// <returns></returns>
 		public bool LookingTo(KarelDirection direction)
 		{
-			return KarelInstance.LookingTo(direction);
+			return KarelRobot.LookingTo(direction);
 		}
 
 		/// <summary>
@@ -107,7 +100,7 @@ namespace Karel.Controller
 		/// </returns>
 		public bool HasFoundBeeper()
 		{
-			return KarelInstance.HasFoundBeeper();
+			return KarelRobot.HasFoundBeeper();
 		}
 
 		/// <summary>
@@ -118,7 +111,7 @@ namespace Karel.Controller
 		/// </returns>
 		public bool CanMove()
 		{
-			return KarelInstance.CanMove();
+			return KarelRobot.CanMove();
 		}
 
 		/// <summary>
@@ -126,7 +119,8 @@ namespace Karel.Controller
 		/// </summary>
 		public void TurnOn()
 		{
-			KarelInstance.TurnOn();
+			KarelRobot.TurnOn();
+			WaitPendingActions();
 		}
 
 		/// <summary>
@@ -134,7 +128,8 @@ namespace Karel.Controller
 		/// </summary>
 		public void TurnOff()
 		{
-			KarelInstance.TurnOff();
+			KarelRobot.TurnOff();
+			WaitPendingActions();
 		}
 
 		/// <summary>
@@ -142,7 +137,8 @@ namespace Karel.Controller
 		/// </summary>
 		public void Move()
 		{
-			KarelInstance.Move();
+			KarelRobot.Move();
+			WaitPendingActions();
 		}
 
 		/// <summary>
@@ -150,15 +146,17 @@ namespace Karel.Controller
 		/// </summary>
 		public void TurnLeft()
 		{
-			KarelInstance.TurnLeft();
+			KarelRobot.TurnLeft();
+			WaitPendingActions();
 		}
 
 		/// <summary>
 		/// Picks the beeper.
 		/// </summary>
-		public static void PickBeeper()
+		public void PickBeeper()
 		{
-			KarelInstance.PickBeeper();
+			KarelRobot.PickBeeper();
+			WaitPendingActions();
 		}
 
 		/// <summary>
@@ -166,7 +164,18 @@ namespace Karel.Controller
 		/// </summary>
 		public void PutBeeper()
 		{
-			KarelInstance.PutBeeper();
+			KarelRobot.PutBeeper();
+			WaitPendingActions();
+		}
+
+		/// <summary>
+		/// Waits the pending actions.
+		/// </summary>
+		private void WaitPendingActions()
+		{
+			while (KarelRobot.HasPendingActions) {
+				Thread.Sleep(100);
+			}
 		}
 	}
 }

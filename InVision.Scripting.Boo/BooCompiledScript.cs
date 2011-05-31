@@ -59,26 +59,25 @@ namespace InVision.Scripting.Boo
 		{
 			var compiler = new BooCompiler();
 
-			foreach (Assembly assembly in References)
-			{
+			foreach (Assembly assembly in References) {
 				compiler.Parameters.AddAssembly(assembly);
 			}
 
 			string outputDir = CompilerOutput;
 
 			if (!string.IsNullOrEmpty(outputDir))
-				outputDir = Path.GetFullPath(outputDir);
+				outputDir = System.IO.Path.GetFullPath(outputDir);
 			else
-				outputDir = Path.GetDirectoryName(Filename);
+				outputDir = System.IO.Path.GetDirectoryName(Filename);
 
-			string outputAssembly = Path.Combine(
+			string outputAssembly = System.IO.Path.Combine(
 				outputDir,
-				AssemblyPrefix + Path.GetFileNameWithoutExtension(Filename) + ".dll");
+				AssemblyPrefix + System.IO.Path.GetFileNameWithoutExtension(Filename) + ".dll");
 
 			if (File.Exists(outputAssembly) &&
-				File.GetLastWriteTime(outputAssembly) > File.GetLastWriteTime(Filename))
-			{
+				File.GetLastWriteTime(outputAssembly) > File.GetLastWriteTime(Filename)) {
 				GeneratedAssembly = Assembly.LoadFrom(outputAssembly);
+				InvokeEntryPoint();
 				return;
 			}
 
@@ -91,7 +90,7 @@ namespace InVision.Scripting.Boo
 			compiler.Parameters.Debug = false;
 #endif
 			compiler.Parameters.OutputAssembly = outputAssembly;
-			compiler.Parameters.OutputType = CompilerOutputType.Library;
+			compiler.Parameters.OutputType = CompilerOutputType.ConsoleApplication;
 			compiler.Parameters.Ducky = true;
 
 			_context = compiler.Run();
@@ -99,6 +98,19 @@ namespace InVision.Scripting.Boo
 
 			if (GeneratedAssembly == null)
 				ThrowError(Filename, _context);
+
+			InvokeEntryPoint();
+		}
+
+		/// <summary>
+		/// Invokes the entry point.
+		/// </summary>
+		private void InvokeEntryPoint()
+		{
+			if (GeneratedAssembly.EntryPoint != null) {
+				dynamic invoker = Delegate.CreateDelegate(typeof(Action<string[]>), GeneratedAssembly.EntryPoint);
+				invoker(new string[0]);
+			}
 		}
 
 		/// <summary>
@@ -110,10 +122,8 @@ namespace InVision.Scripting.Boo
 		{
 			var errors = new List<string>();
 
-			using (StreamWriter errorFile = File.CreateText(filename + ".errors"))
-			{
-				foreach (CompilerError error in context.Errors)
-				{
+			using (StreamWriter errorFile = File.CreateText(filename + ".errors")) {
+				foreach (CompilerError error in context.Errors) {
 					errorFile.WriteLine("= ERROR ========================================================================");
 					errorFile.WriteLine(error);
 					errorFile.WriteLine("================================================================================");
@@ -135,6 +145,9 @@ namespace InVision.Scripting.Boo
 		/// <returns></returns>
 		public override IEnumerable<T> FindServices<T>()
 		{
+			if (GeneratedAssembly == null)
+				return Enumerable.Empty<T>();
+
 			return
 				from t in GeneratedAssembly.GetTypes()
 				where typeof(T).IsAssignableFrom(t) && !(t.IsAbstract || t.IsInterface)

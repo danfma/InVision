@@ -16,7 +16,6 @@ namespace InVision.Framework.Components
 		protected GameComponent()
 		{
 			Children = new GameComponentCollection();
-			ActionProcessor = new ActionProcessor(UpdateBySteps());
 		}
 
 		/// <summary>
@@ -31,18 +30,15 @@ namespace InVision.Framework.Components
 		/// <param name="disposing"><c>true</c> to release both managed and unmanaged resources; <c>false</c> to release only unmanaged resources.</param>
 		protected override void Dispose(bool disposing)
 		{
-			if (Children != null)
-			{
-				foreach (IGameComponent child in Children)
-				{
+			if (Children != null) {
+				foreach (IGameComponent child in Children) {
 					child.Dispose();
 				}
 
 				Children.Clear();
 			}
 
-			if (disposing)
-			{
+			if (disposing) {
 				Children = null;
 				ActionProcessor = null;
 			}
@@ -94,7 +90,10 @@ namespace InVision.Framework.Components
 		/// <value><c>true</c> if this instance is dead; otherwise, <c>false</c>.</value>
 		public bool IsDead
 		{
-			get { return !ActionProcessor.IsProcessing && !RepeatUpdateSteps; }
+			get
+			{
+				return ActionProcessor != null && !ActionProcessor.IsProcessing && !RepeatUpdateSteps;
+			}
 		}
 
 		/// <summary>
@@ -182,8 +181,10 @@ namespace InVision.Framework.Components
 		/// <param name="app">The app.</param>
 		protected virtual void InitializeChildren(GameApplication app)
 		{
-			foreach (IGameComponent child in Children)
-			{
+			foreach (IGameComponent child in Children) {
+				child.GameApplication = GameApplication;
+				child.GameVariables = GameVariables;
+				child.StateVariables = StateVariables;
 				child.Initialize(app);
 			}
 		}
@@ -200,6 +201,9 @@ namespace InVision.Framework.Components
 		/// <param name="elapsedTime">The elapsed time.</param>
 		protected virtual void UpdateSelf(ElapsedTime elapsedTime)
 		{
+			if (ActionProcessor == null)
+				ActionProcessor = new ActionProcessor(UpdateBySteps());
+
 			ElapsedTime = elapsedTime;
 			ActionProcessor.Step(elapsedTime);
 
@@ -216,8 +220,7 @@ namespace InVision.Framework.Components
 		/// <param name="elapsedTime">The elapsed time.</param>
 		protected virtual void UpdateChildren(ElapsedTime elapsedTime)
 		{
-			foreach (IGameComponent child in Children)
-			{
+			foreach (IGameComponent child in Children) {
 				child.Update(elapsedTime);
 			}
 		}

@@ -49,6 +49,7 @@
     <Compile Include="Components\Actions\WaitTimeUpdateAction.cs" />
     <Compile Include="Config\CustomConfiguratorDispatcher.cs" />
     <Compile Include="Config\Configuration.cs" />
+    <Compile Include="Config\CustomItem.cs" />
     <Compile Include="Config\GameConfiguration.cs" />
     <Compile Include="Config\ICustomConfigurator.cs" />
     <Compile Include="Config\NameValue.cs" />
@@ -91,6 +92,10 @@
     <ProjectReference Include="..\InVision.Bullet\InVision.Bullet.csproj">
       <Project>{DF5FAE84-D72B-44DF-B646-EA3FBE436732}</Project>
       <Name>InVision.Bullet</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\InVision.FMod\InVision.FMod.csproj">
+      <Project>{C035CF88-28BA-4A23-8CBC-271A8B2AFC8B}</Project>
+      <Name>InVision.FMod</Name>
     </ProjectReference>
     <ProjectReference Include="..\InVision.Ogre\InVision.Ogre.csproj">
       <Project>{5D60C1BB-506C-4A0A-8561-C1669FAFBC5B}</Project>

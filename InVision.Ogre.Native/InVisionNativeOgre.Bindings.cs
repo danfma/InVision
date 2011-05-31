@@ -841,6 +841,30 @@ namespace InVision.Ogre.Native
 			[MarshalAs(UnmanagedType.LPStr)] String name, 
 			Vector3 translate, 
 			Quaternion rotate);
+		
+		[DllImport(Library, EntryPoint = "scenenode_set_position")]
+		public static extern void SetPosition(
+			Handle self, 
+			Vector3 value);
+		
+		[DllImport(Library, EntryPoint = "scenenode_get_position")]
+		public static extern Vector3 GetPosition(Handle self);
+		
+		[DllImport(Library, EntryPoint = "scenenode_set_scale")]
+		public static extern void SetScale(
+			Handle self, 
+			Vector3 scale);
+		
+		[DllImport(Library, EntryPoint = "scenenode_get_scale")]
+		public static extern Vector3 GetScale(Handle self);
+		
+		[DllImport(Library, EntryPoint = "scenenode_get_orientation")]
+		public static extern Quaternion GetOrientation(Handle self);
+		
+		[DllImport(Library, EntryPoint = "scenenode_set_orientation")]
+		public static extern void SetOrientation(
+			Handle self, 
+			Quaternion orientation);
 	}
 	
 	internal sealed unsafe class NativeOverlayManager : InVision.Native.PlatformInvoke

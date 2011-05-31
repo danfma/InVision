@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace InVision.Extensions
 {
@@ -15,6 +16,16 @@ namespace InVision.Extensions
 			for (int i = start; i < end; i++) {
 				yield return i;
 			}
+		}
+
+		/// <summary>
+		/// Secondses the specified value.
+		/// </summary>
+		/// <param name="value">The value.</param>
+		/// <returns></returns>
+		public static TimeSpan Seconds(this int value)
+		{
+			return new TimeSpan(0, 0, value);
 		}
 	}
 }

@@ -19,15 +19,15 @@ namespace TutorialFx.Tutorial1
 		/// </summary>
 		protected override void CreateScene()
 		{
-			var ogreHead = SceneMgr.CreateEntity("Head", "ogrehead.mesh");
+			//var ogreHead = SceneMgr.CreateEntity("Head", "ogrehead.mesh");
 
-			var headNode = SceneMgr.RootSceneNode.CreateChildSceneNode();
-			headNode.AttachObject(ogreHead);
+			//var headNode = SceneMgr.RootSceneNode.CreateChildSceneNode();
+			//headNode.AttachObject(ogreHead);
 
-			SceneMgr.AmbientLight = new Color(0.5f, 0.5f, 0.5f);
+			//SceneMgr.AmbientLight = new Color(0.5f, 0.5f, 0.5f);
 
-			var light = SceneMgr.CreateLight("MainLight");
-			light.Position = new Vector3(20, 80, 50);
+			//var light = SceneMgr.CreateLight("MainLight");
+			//light.Position = new Vector3(20, 80, 50);
 		}
 
 		/// <summary>

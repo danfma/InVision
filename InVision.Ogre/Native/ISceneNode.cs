@@ -49,6 +49,22 @@ namespace InVision.Ogre.Native
 		[Method(Implemented = true)]
 		ISceneNode CreateChildSceneNode([MarshalAs(UnmanagedType.LPStr)] string name, Vector3 translate, Quaternion rotate);
 
-		
+		[Method(Implemented = true)]
+		void SetPosition(Vector3 value);
+
+		[Method(Implemented = true)]
+		Vector3 GetPosition();
+
+		[Method(Implemented = true)]
+		void SetScale(Vector3 scale);
+
+		[Method(Implemented = true)]
+		Vector3 GetScale();
+
+		[Method(Implemented = true)]
+		Quaternion GetOrientation();
+
+		[Method(Implemented = true)]
+		void SetOrientation(Quaternion orientation);
 	}
 }

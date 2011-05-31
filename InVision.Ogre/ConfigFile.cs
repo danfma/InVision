@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using InVision.Native;
 using InVision.Native.Collections;
 using InVision.Ogre.Native;
@@ -103,5 +104,34 @@ namespace InVision.Ogre
 		}
 
 		#endregion
+
+		/// <summary>
+		/// Loads the resources.
+		/// </summary>
+		/// <param name="resourceFile">The resource file.</param>
+		public static void LoadResources(string resourceFile = "resources.cfg")
+		{
+			// Load resource paths from config file
+			using (var cf = new ConfigFile()) {
+				cf.Load(resourceFile);
+
+				// Go through all sections & settings in the file
+				var settings =
+					from section in cf.GetSections()
+					from setting in section.Value
+					select new {
+						Section = section.Key,
+						Setting = setting.Key,
+						setting.Value
+					};
+
+				foreach (var setting in settings) {
+					ResourceGroupManager.Instance.AddResourceLocation(
+						setting.Value, setting.Setting, setting.Section);
+				}
+
+				ResourceGroupManager.Instance.InitializeAllResourceGroups();
+			}
+		}
 	}
 }

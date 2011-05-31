@@ -133,6 +133,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Extensions\ConcurrentQueueExtensions.cs" />
     <Compile Include="Extensions\CustomAttributeProviderExtensions.cs" />
     <Compile Include="Extensions\ExpressionExtensions.cs" />
     <Compile Include="Extensions\MethodInfoExtension.cs" />

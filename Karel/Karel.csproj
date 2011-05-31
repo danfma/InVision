@@ -40,13 +40,16 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Flow\KarelGameState.cs" />
     <Compile Include="IKarelWorldCreator.cs" />
     <Compile Include="KarelBeeper.cs" />
     <Compile Include="KarelBlock.cs" />
     <Compile Include="KarelCheckPoint.cs" />
     <Compile Include="KarelDeposit.cs" />
     <Compile Include="KarelDirection.cs" />
+    <Compile Include="Flow\KarelGameFlow.cs" />
     <Compile Include="KarelRobot.cs" />
+    <Compile Include="Flow\KarelStateConfigurator.cs" />
     <Compile Include="KarelWorld.cs" />
     <Compile Include="KarelWorldComponent.cs" />
     <Compile Include="Controller\Karel.cs" />
@@ -54,9 +57,9 @@
     <Compile Include="WorldSpace.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\InVision.Bullet\InVision.Bullet.csproj">
-      <Project>{DF5FAE84-D72B-44DF-B646-EA3FBE436732}</Project>
-      <Name>InVision.Bullet</Name>
+    <ProjectReference Include="..\InVision.FMod\InVision.FMod.csproj">
+      <Project>{C035CF88-28BA-4A23-8CBC-271A8B2AFC8B}</Project>
+      <Name>InVision.FMod</Name>
     </ProjectReference>
     <ProjectReference Include="..\InVision.Framework\InVision.Framework.csproj">
       <Project>{2104F696-0FF2-4634-89D1-56613AEB7E7C}</Project>
@@ -74,6 +77,10 @@
       <Project>{4A69EB8E-6E49-415C-ACB4-9CB904EA54DB}</Project>
       <Name>InVision</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Tutano.Core\Tutano.Core.csproj">
+      <Project>{07176BD3-4E90-427A-B5D1-696DDFC69BE4}</Project>
+      <Name>Tutano.Core</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
@@ -86,7 +93,7 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>copy "$(TargetPath)" "$(SolutionDir)Tutano\Libraries\"</PostBuildEvent>
+    <PostBuildEvent>copy "$(TargetPath)" "$(SolutionDir)Tutano\build\$(Configuration)\Libraries\"</PostBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

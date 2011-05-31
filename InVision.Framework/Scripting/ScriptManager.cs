@@ -1,4 +1,7 @@
-﻿namespace InVision.Framework.Scripting
+﻿using System;
+using System.IO;
+
+namespace InVision.Framework.Scripting
 {
 	public abstract class ScriptManager : IScriptManager
 	{
@@ -28,6 +31,34 @@
 		/// </summary>
 		/// <param name="filename">The filename.</param>
 		/// <returns></returns>
-		public abstract IScript LoadScript(string filename);
+		public IScript LoadScript(string filename)
+		{
+			var currentPath = Environment.CurrentDirectory;
+			var scriptPath = Path.GetFullPath(filename);
+
+			scriptPath = Path.Combine(
+				Path.GetDirectoryName(scriptPath),
+				Path.GetFileNameWithoutExtension(scriptPath));
+
+			var diff = scriptPath.Substring(currentPath.Length);
+
+			if (diff.StartsWith(Path.DirectorySeparatorChar + ""))
+				diff = diff.Substring(1);
+
+			var path = diff.Replace(Path.DirectorySeparatorChar, '/');
+			var script = CreateScriptFrom(filename);
+
+			if (script != null)
+				script.Path = path;
+
+			return script;
+		}
+
+		/// <summary>
+		/// Creates the script from.
+		/// </summary>
+		/// <param name="filename">The filename.</param>
+		/// <returns></returns>
+		public abstract IScript CreateScriptFrom(string filename);
 	}
 }

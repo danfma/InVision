@@ -31,6 +31,12 @@ namespace InVision.Framework.Scripting
 		string AssemblyPrefix { get; set; }
 
 		/// <summary>
+		/// Gets or sets the name of the path.
+		/// </summary>
+		/// <value>The name of the path.</value>
+		string Path { get; set; }
+
+		/// <summary>
 		/// Adds the reference.
 		/// </summary>
 		/// <param name="assembly">The assembly.</param>

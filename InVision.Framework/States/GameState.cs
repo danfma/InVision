@@ -81,6 +81,7 @@ namespace InVision.Framework.States
 				component.GameApplication = GameApplication;
 				component.GameVariables = GameApplication.GlobalVariables;
 				component.StateVariables = StateVariables;
+				component.Initialize(GameApplication);
 			}
 		}
 

@@ -34,12 +34,13 @@ namespace Tutano
 		/// <param name="unhandledExceptionEventArgs">The <see cref="System.UnhandledExceptionEventArgs"/> instance containing the event data.</param>
 		private static void OnUnhandledException(object sender, UnhandledExceptionEventArgs unhandledExceptionEventArgs)
 		{
-			using (var errorFile = new StreamWriter("Tutano.error.log"))
-			{
+			using (var errorFile = new StreamWriter("Tutano.error.log")) {
 				errorFile.WriteLine("Error: {0}", unhandledExceptionEventArgs.ExceptionObject);
 				errorFile.Flush();
 				errorFile.Close();
 			}
+
+			Environment.Exit(0);
 		}
 
 		/// <summary>
@@ -66,7 +67,7 @@ namespace Tutano
 		/// <param name="args">The args.</param>
 		public static void Main(string[] args)
 		{
-			TutanoLauncher.Run();
+			new TutanoLauncher().Run();
 		}
 	}
 }

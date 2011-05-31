@@ -43,7 +43,7 @@ namespace InVision.Scripting.IronRuby
 		/// </summary>
 		/// <param name="filename">The filename.</param>
 		/// <returns></returns>
-		public override IScript LoadScript(string filename)
+		public override IScript CreateScriptFrom(string filename)
 		{
 			return new RubyInterpretedScript(this, filename, CompilerOutput);
 		}

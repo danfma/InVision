@@ -1,11 +1,22 @@
 ﻿using System;
 using System.Collections.Generic;
 using InVision.GameMath;
+using InVision.Ogre;
 
 namespace Karel
 {
 	public class WorldSpace : KarelWorldComponent
 	{
+		private SceneNode _sceneNode;
+
+		/// <summary>
+		/// Initializes a new instance of the <see cref="WorldSpace"/> class.
+		/// </summary>
+		public WorldSpace()
+		{
+			AllowedBeeperColors = new List<Color>();
+		}
+
 		/// <summary>
 		/// Gets or sets a value indicating whether this <see cref="WorldSpace"/> is checkpoint.
 		/// </summary>
@@ -52,8 +63,7 @@ namespace Karel
 		/// <returns></returns>
 		public bool TryAdd(string childName, KarelWorldComponent child)
 		{
-			if (child is KarelBeeper)
-			{
+			if (child is KarelBeeper) {
 				if (HasBeeper)
 					return false;
 
@@ -62,8 +72,7 @@ namespace Karel
 				return true;
 			}
 
-			if (child is KarelBlock)
-			{
+			if (child is KarelBlock) {
 				if (HasBlock)
 					return false;
 
@@ -72,8 +81,7 @@ namespace Karel
 				return true;
 			}
 
-			if (child is KarelRobot)
-			{
+			if (child is KarelRobot) {
 				if (HasKarel)
 					return false;
 
@@ -84,6 +92,24 @@ namespace Karel
 
 			Children.Add(childName, child);
 			return true;
+		}
+
+		/// <summary>
+		/// Initializes the self.
+		/// </summary>
+		/// <param name="app">The app.</param>
+		protected override void InitializeSelf(InVision.Framework.GameApplication app)
+		{
+			dynamic ogre = GameApplication.GlobalVariables.Ogre;
+
+			var sceneManager = (SceneManager)ogre.SceneManager;
+			var worldSceneNode = (SceneNode)StateVariables.WorldSceneNode;
+
+			var plane = sceneManager.CreateEntity("Plane.mesh");
+			_sceneNode = worldSceneNode.CreateChildSceneNode();
+			_sceneNode.AttachObject(plane);
+			_sceneNode.Position = new Vector3(WorldPosition.X, 0, WorldPosition.Y);
+			_sceneNode.Scale = new Vector3(.7f, .7f, .7f);
 		}
 	}
 }

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Runtime.CompilerServices;
 using System.Xml.Serialization;
@@ -17,6 +18,7 @@ namespace InVision.Framework.Config
 			Game = new GameConfiguration();
 			Screen = new ScreenConfiguration();
 			Scripting = new ScriptingConfiguration();
+			CustomItems = new List<CustomItem>();
 		}
 
 		[XmlElement("game")]
@@ -44,6 +46,14 @@ namespace InVision.Framework.Config
 		public OgreConfiguration Ogre { get; set; }
 
 		/// <summary>
+		/// Gets or sets the custom items.
+		/// </summary>
+		/// <value>The custom items.</value>
+		[XmlArray("custom-configuration")]
+		[XmlArrayItem("config")]
+		public List<CustomItem> CustomItems { get; set; }
+
+		/// <summary>
 		/// Loads the specified filename.
 		/// </summary>
 		/// <param name="filename">The filename.</param>
@@ -52,8 +62,7 @@ namespace InVision.Framework.Config
 		{
 			var serializer = new XmlSerializer(typeof(Configuration));
 
-			using (var file = new FileStream(filename, FileMode.Open))
-			{
+			using (var file = new FileStream(filename, FileMode.Open)) {
 				return (Configuration)serializer.Deserialize(file);
 			}
 		}
@@ -67,8 +76,7 @@ namespace InVision.Framework.Config
 		{
 			var serializer = new XmlSerializer(typeof(T));
 
-			using (var file = new FileStream(filename, FileMode.Open))
-			{
+			using (var file = new FileStream(filename, FileMode.Open)) {
 				return (T)serializer.Deserialize(file);
 			}
 		}

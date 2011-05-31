@@ -58,13 +58,13 @@ namespace InVision.Scripting.Cobra
 			string outputDir = CompilerOutput;
 
 			if (string.IsNullOrEmpty(outputDir))
-				outputDir = Path.GetDirectoryName(Filename);
+				outputDir = System.IO.Path.GetDirectoryName(Filename);
 			else
-				outputDir = Path.GetFullPath(outputDir);
+				outputDir = System.IO.Path.GetFullPath(outputDir);
 
-			string outputFilename = Path.Combine(
+			string outputFilename = System.IO.Path.Combine(
 				outputDir ?? Environment.CurrentDirectory,
-				Path.GetFileNameWithoutExtension(Filename) + ".dll");
+				System.IO.Path.GetFileNameWithoutExtension(Filename) + ".dll");
 
 			var compilerParameters = new List<string>();
 			compilerParameters.Add("-cin");

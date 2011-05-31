@@ -919,6 +919,42 @@ extern "C"
 	INV_EXPORT InvHandle
 	INV_CALL scenenode_create_child_scene_node_m6(InvHandle self, _string name, Vector3 translate, Quaternion rotate);
 	
+	/**
+	 * Method: SceneNode::setPosition (OK)
+	 */
+	INV_EXPORT void
+	INV_CALL scenenode_set_position(InvHandle self, Vector3 value);
+	
+	/**
+	 * Method: SceneNode::getPosition (OK)
+	 */
+	INV_EXPORT Vector3
+	INV_CALL scenenode_get_position(InvHandle self);
+	
+	/**
+	 * Method: SceneNode::setScale (OK)
+	 */
+	INV_EXPORT void
+	INV_CALL scenenode_set_scale(InvHandle self, Vector3 scale);
+	
+	/**
+	 * Method: SceneNode::getScale (OK)
+	 */
+	INV_EXPORT Vector3
+	INV_CALL scenenode_get_scale(InvHandle self);
+	
+	/**
+	 * Method: SceneNode::getOrientation (OK)
+	 */
+	INV_EXPORT Quaternion
+	INV_CALL scenenode_get_orientation(InvHandle self);
+	
+	/**
+	 * Method: SceneNode::setOrientation (OK)
+	 */
+	INV_EXPORT void
+	INV_CALL scenenode_set_orientation(InvHandle self, Quaternion orientation);
+	
 	
 	/*
 	 * Function group: InVision.Ogre.Native.IOverlayManager

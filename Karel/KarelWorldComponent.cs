@@ -11,14 +11,5 @@ namespace Karel
 		/// </summary>
 		/// <value>The world position.</value>
 		public Point WorldPosition { get; set; }
-
-		/// <summary>
-		/// Updates the self.
-		/// </summary>
-		/// <param name="elapsedTime">The elapsed time.</param>
-		protected override void UpdateSelf(ElapsedTime elapsedTime)
-		{
-
-		}
 	}
 }

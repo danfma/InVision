@@ -1,15 +1,37 @@
 ﻿using System;
+using System.Collections.Concurrent;
+using System.Collections.Generic;
+using InVision.Extensions;
+using InVision.Framework.Components.Actions;
+using InVision.GameMath;
+using InVision.Ogre;
 
 namespace Karel
 {
 	public class KarelRobot : KarelWorldComponent
 	{
+		private readonly ConcurrentQueue<UpdateAction> _pendingActions;
+		private SceneNode _sceneNode;
+
 		/// <summary>
 		/// Initializes a new instance of the <see cref="KarelRobot"/> class.
 		/// </summary>
 		public KarelRobot()
 		{
+			_pendingActions = new ConcurrentQueue<UpdateAction>();
+			RepeatUpdateSteps = true;
 			IsOff = true;
+		}
+
+		/// <summary>
+		/// Gets a value indicating whether this instance has pending actions.
+		/// </summary>
+		/// <value>
+		/// 	<c>true</c> if this instance has pending actions; otherwise, <c>false</c>.
+		/// </value>
+		public bool HasPendingActions
+		{
+			get { return _pendingActions.Count > 0; }
 		}
 
 		/// <summary>
@@ -105,6 +127,18 @@ namespace Karel
 		/// </summary>
 		public void TurnOn()
 		{
+			_pendingActions.EnqueueAll(GetTurnOnActions());
+		}
+
+		/// <summary>
+		/// Gets the turn on actions.
+		/// </summary>
+		/// <returns></returns>
+		private IEnumerable<UpdateAction> GetTurnOnActions()
+		{
+			yield return WaitBy(1.Seconds());
+
+			Console.WriteLine("Karel turned off");
 		}
 
 		/// <summary>
@@ -112,6 +146,18 @@ namespace Karel
 		/// </summary>
 		public void TurnOff()
 		{
+			_pendingActions.EnqueueAll(GetTurnOffActions());
+		}
+
+		/// <summary>
+		/// Gets the turn off actions.
+		/// </summary>
+		/// <returns></returns>
+		private IEnumerable<UpdateAction> GetTurnOffActions()
+		{
+			yield return WaitBy(1.Seconds());
+
+			Console.WriteLine("Karel turned off");
 		}
 
 		/// <summary>
@@ -119,6 +165,21 @@ namespace Karel
 		/// </summary>
 		public void Move()
 		{
+			_pendingActions.EnqueueAll(GetMoveActions());
+		}
+
+		/// <summary>
+		/// Gets the move actions.
+		/// </summary>
+		/// <returns></returns>
+		private IEnumerable<UpdateAction> GetMoveActions()
+		{
+			yield return WaitBy(1.Seconds());
+
+			var matrix = Matrix.CreateFromQuaternion(_sceneNode.Orientation);
+			_sceneNode.Position += matrix.Forward;
+
+			Console.WriteLine("Karel moved");
 		}
 
 		/// <summary>
@@ -126,6 +187,28 @@ namespace Karel
 		/// </summary>
 		public void TurnLeft()
 		{
+			_pendingActions.EnqueueAll(GetTurnLeftActions());
+		}
+
+		/// <summary>
+		/// Gets the turn left actions.
+		/// </summary>
+		/// <returns></returns>
+		private IEnumerable<UpdateAction> GetTurnLeftActions()
+		{
+			yield return WaitBy(1.Seconds());
+
+			var matrix = Matrix.CreateFromQuaternion(_sceneNode.Orientation);
+			matrix *= Matrix.CreateRotationY((float) (Math.PI / 2f));
+			//_sceneNode.Position += matrix.Forward;
+			Vector3 scale;
+			Quaternion rotation;
+			Vector3 translation;
+			
+			matrix.Decompose(out scale, out rotation, out translation);
+			_sceneNode.Orientation = rotation;
+
+			Console.WriteLine("Karel Turned left");
 		}
 
 		/// <summary>
@@ -133,6 +216,18 @@ namespace Karel
 		/// </summary>
 		public void PickBeeper()
 		{
+			_pendingActions.EnqueueAll(GetPickBeeperActions());
+		}
+
+		/// <summary>
+		/// Gets the pick beeper actions.
+		/// </summary>
+		/// <returns></returns>
+		private IEnumerable<UpdateAction> GetPickBeeperActions()
+		{
+			yield return WaitBy(1.Seconds());
+
+			Console.WriteLine("Karel picked beeper");
 		}
 
 		/// <summary>
@@ -140,6 +235,50 @@ namespace Karel
 		/// </summary>
 		public void PutBeeper()
 		{
+			_pendingActions.EnqueueAll(GetPutBeeperActions());
+		}
+
+		/// <summary>
+		/// Gets the put beeper actions.
+		/// </summary>
+		/// <returns></returns>
+		private IEnumerable<UpdateAction> GetPutBeeperActions()
+		{
+			yield return WaitBy(1.Seconds());
+
+			Console.WriteLine("Karel put beeper");
+		}
+
+		/// <summary>
+		/// Updates the by steps.
+		/// </summary>
+		/// <returns></returns>
+		public override IEnumerable<UpdateAction> UpdateBySteps()
+		{
+			while (!_pendingActions.IsEmpty) {
+				UpdateAction action;
+				_pendingActions.TryDequeue(out action);
+				yield return action;
+			}
+		}
+
+		/// <summary>
+		/// Initializes the self.
+		/// </summary>
+		/// <param name="app">The app.</param>
+		protected override void InitializeSelf(InVision.Framework.GameApplication app)
+		{
+			dynamic ogre = GameApplication.GlobalVariables.Ogre;
+
+			var sceneManager = (SceneManager)ogre.SceneManager;
+			var worldSceneNode = (SceneNode)StateVariables.WorldSceneNode;
+
+			var robot = sceneManager.CreateEntity("robot.mesh");
+			_sceneNode = worldSceneNode.CreateChildSceneNode();
+			_sceneNode.AttachObject(robot);
+			_sceneNode.Position = new Vector3(WorldPosition.X, 0, WorldPosition.Y);
+			_sceneNode.Scale = new Vector3(0.02f, 0.02f, 0.02f);
+
 		}
 	}
 }

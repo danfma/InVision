@@ -25,6 +25,45 @@ namespace InVision.Ogre
 		}
 
 		/// <summary>
+		/// Nums the attached objects.
+		/// </summary>
+		/// <value></value>
+		public ushort NumAttachedObjects
+		{
+			get { return Native.NumAttachedObjects(); }
+		}
+
+		/// <summary>
+		/// Gets or sets the position.
+		/// </summary>
+		/// <value>The position.</value>
+		public Vector3 Position
+		{
+			get { return Native.GetPosition(); }
+			set { Native.SetPosition(value); }
+		}
+
+		/// <summary>
+		/// Gets or sets the scale.
+		/// </summary>
+		/// <value>The scale.</value>
+		public Vector3 Scale
+		{
+			get { return Native.GetScale(); }
+			set { Native.SetScale(value); }
+		}
+
+		/// <summary>
+		/// Gets or sets the orientation.
+		/// </summary>
+		/// <value>The orientation.</value>
+		public Quaternion Orientation
+		{
+			get { return Native.GetOrientation(); }
+			set { Native.SetOrientation(value); }
+		}
+
+		/// <summary>
 		/// Creates the child scene node.
 		/// </summary>
 		/// <param name="name">The name.</param>
@@ -154,15 +193,6 @@ namespace InVision.Ogre
 		public MovableObject GetAttachedObject(ushort index)
 		{
 			throw new NotImplementedException();
-		}
-
-		/// <summary>
-		/// Nums the attached objects.
-		/// </summary>
-		/// <value></value>
-		public ushort NumAttachedObjects
-		{
-			get { return Native.NumAttachedObjects(); }
 		}
 
 		/// <summary>

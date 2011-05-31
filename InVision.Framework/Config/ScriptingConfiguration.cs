@@ -18,6 +18,13 @@ namespace InVision.Framework.Config
 		}
 
 		/// <summary>
+		/// Gets or sets the execution mode.
+		/// </summary>
+		/// <value>The execution mode.</value>
+		[XmlAttribute("mode")]
+		public ExecutionMode ExecutionMode { get; set; }
+
+		/// <summary>
 		/// Gets or sets the script managers.
 		/// </summary>
 		/// <value>The script managers.</value>
@@ -30,8 +37,7 @@ namespace InVision.Framework.Config
 			{
 				ScriptManagers.Clear();
 
-				foreach (string typename in value)
-				{
+				foreach (string typename in value) {
 					Type type = Type.GetType(typename, true);
 
 					AddScriptManagerType(type);
@@ -54,8 +60,7 @@ namespace InVision.Framework.Config
 		{
 			if (!type.IsAbstract && !type.IsInterface &&
 				typeof(IScriptManager).IsAssignableFrom(type) &&
-				!ScriptManagers.Contains(type))
-			{
+				!ScriptManagers.Contains(type)) {
 				ScriptManagers.Add(type);
 			}
 		}
