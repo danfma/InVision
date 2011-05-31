@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using InVision.Native;
 
 namespace InVision.FMod.Attributes
@@ -11,7 +8,6 @@ namespace InVision.FMod.Attributes
 		public FModEnumerationAttribute(string name)
 			: base(name)
 		{
-			
 		}
 	}
 }

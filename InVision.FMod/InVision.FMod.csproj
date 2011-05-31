@@ -90,8 +90,10 @@
       <Name>InVision</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PostBuildEvent>"$(SolutionDir)ReverseGenerator\bin\$(Configuration)\ReverseGenerator.exe" -a:"$(TargetPath)"  -cpp:"$(SolutionDir)Platform\NativeLibs\sources\fmod" -p:"InVisionNative_FMod" -cs:"$(SolutionDir)InVision.FMod.Native" -l:"InVisionNative" -r:"InVisionNative"</PostBuildEvent>
+  </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">
