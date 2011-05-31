@@ -1,24 +1,18 @@
 #include "cOgre.h"
 
-INV_EXPORT _string
+INV_EXPORT _wstring
 INV_CALL overlayelement_get_caption(InvHandle self)
 {
-	_string text = const_cast<_string>(asOverlayElement(self)->getCaption().asUTF8_c_str());
+	std::wstring text = asOverlayElement(self)->getCaption().asWStr();
 
-	int length = strlen(text);
-	_string textCopy = new _char[length];
-
-	for (int i = 0; i < length; i++) {
-		textCopy[i] = text[i];
-	}
-
-	return textCopy;
+	return copyString(text);
 }
 
 INV_EXPORT void
-INV_CALL overlayelement_set_caption(InvHandle self, _string value)
+INV_CALL overlayelement_set_caption(InvHandle self, _wstring value)
 {
-	Ogre::DisplayString text = value;
+	const std::wstring wtext = (wchar_t*)value;
+	Ogre::DisplayString text = wtext;
 
 	asOverlayElement(self)->setCaption(text);
 }
@@ -27,4 +21,11 @@ INV_EXPORT void
 INV_CALL overlayelement_show(InvHandle self)
 {
 	asOverlayElement(self)->show();
+}
+
+INV_EXPORT void
+INV_CALL overlayelement_delete_wide_string(_wchar* pdata)
+{
+	if (pdata != NULL)
+		delete[] pdata;
 }

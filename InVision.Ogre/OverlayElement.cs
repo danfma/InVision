@@ -1,9 +1,12 @@
-﻿using InVision.Ogre.Native;
+﻿using System.Runtime.InteropServices;
+using InVision.Ogre.Native;
 
 namespace InVision.Ogre
 {
 	public class OverlayElement : StringInterface
 	{
+		public static readonly IOverlayElement NativeStatic = CreateCppInstance<IOverlayElement>();
+
 		/// <summary>
 		/// Initializes a new instance of the <see cref="OverlayElement"/> class.
 		/// </summary>
@@ -28,8 +31,23 @@ namespace InVision.Ogre
 		/// <value>The caption.</value>
 		public string Caption
 		{
-			get { return Native.GetCaption(); }
-			set { Native.SetCaption(value); }
+			get
+			{
+				unsafe {
+					char* pdata = Native.GetCaption();
+
+					try {
+						return new string(pdata);
+
+					} finally {
+						NativeStatic.DeleteWideString(pdata);
+					}
+				}
+			}
+			set
+			{
+				Native.SetCaption(value);
+			}
 		}
 
 		/// <summary>

@@ -7,8 +7,8 @@ config = {
 }
 
 if os.is("windows") then
-	local ogredir = "C:\\OgreSDK\\OgreSDK_vc10_v1-7-2\\"
-	local boostdir = "C:\\boost_1_46_1\\boost_1_46_1\\"
+	local ogredir = "C:\\OgreSDK_vc10_v1-7-2\\"
+	local boostdir = "C:\\boost_1_46_1\\"
 	local qtsdk = "C:\\Qt\\2010.05\\qt\\include\\"
 	
 	config.defines = { "WIN32", "USE_SIMD" }

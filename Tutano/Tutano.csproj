@@ -91,13 +91,9 @@
     <Content Include="Bin\Native\Windows-32bit\InVisionNative.pdb">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Bin\Native\Windows-32bit\NoDelete.txt">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
     <Content Include="Bin\Native\Windows-32bit\OgreMain_d.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Bin\Native\Windows-32bit\OgreMeshUpgrader_d.exe" />
     <Content Include="Bin\Native\Windows-32bit\OgrePaging_d.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
@@ -110,7 +106,6 @@
     <Content Include="Bin\Native\Windows-32bit\OgreTerrain_d.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Bin\Native\Windows-32bit\OgreXMLConverter_d.exe" />
     <Content Include="Bin\Native\Windows-32bit\OIS_d.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
@@ -157,10 +152,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
-    <None Include="Bin\Native\Windows-32bit\plugins_d.cfg" />
-    <None Include="Bin\Native\Windows-32bit\quakemap_d.cfg" />
-    <None Include="Bin\Native\Windows-32bit\resources_d.cfg" />
-    <None Include="Bin\Native\Windows-32bit\samples_d.cfg" />
     <None Include="Config\Ogre\plugins_d.cfg">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>

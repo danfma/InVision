@@ -274,10 +274,8 @@ extern "C"
 		_int length = str.size();
 		_wstring data = new _wchar[length + 1];
 
-		for (int i = 0; i < length; i++)
-			data[i] = str.at(i);
-
-		data[length] = '\0';
+		str.copy((wchar_t*)data, length);
+		data[length] = NULL;
 
 		return data;
 	}

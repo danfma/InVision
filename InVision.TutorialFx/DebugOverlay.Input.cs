@@ -1,4 +1,5 @@
-﻿using InVision.Ogre;
+﻿using System;
+using InVision.Ogre;
 
 namespace InVision.TutorialFx
 {
@@ -41,6 +42,9 @@ namespace InVision.TutorialFx
 				var stats = Window.GetStatistics();
 
 				GuiAvg.Caption = "Average FPS: " + stats.AvgFPS;
+
+				Console.WriteLine(GuiAvg.Caption);
+
 				GuiCurr.Caption = "Current FPS: " + stats.LastFPS;
 				GuiBest.Caption = "Best FPS: " + stats.BestFPS + " " + stats.BestFrameTime + " ms";
 				GuiWorst.Caption = "Worst FPS: " + stats.WorstFPS + " " + stats.WorstFrameTime + " ms";
