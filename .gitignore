@@ -4,8 +4,12 @@
 /Build/Build
 /Build/Bin
 
-*/bin
-*/obj
+InVision*/bin
+InVision*/obj
+
+ReverseGenerator/bin
+ReverseGenerator/obj
+
 *.user
 *.*~
 
@@ -19,6 +23,16 @@
 /Tests/*/obj
 /Tests/*/*/bin
 /Tests/*/*/obj
+/Tests/Framework/Tutoriais/*/bin
+/Tests/Framework/Tutoriais/*/obj
+
+/Tutano/build
+/Tutano/obj
+/Tutano.Core/bin
+/Tutano.Core/obj
+
+/Karel/bin
+/Karel/obj
 
 .DS_Store
 InVision.suo

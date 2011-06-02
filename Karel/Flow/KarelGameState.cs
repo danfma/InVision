@@ -1,4 +1,5 @@
 ﻿using System;
+using InVision.Extensions;
 using InVision.FMod;
 using InVision.FMod.Native;
 using InVision.Framework.States;
@@ -23,8 +24,10 @@ namespace Karel.Flow
 		/// </summary>
 		public override void Initialize()
 		{
+			ConfigFile.LoadResources("Config/Ogre/resources.cfg");
 			ConfigureScene();
 			ConfigureAudio();
+
 			base.Initialize();
 		}
 
@@ -38,17 +41,20 @@ namespace Karel.Flow
 			if (world == null)
 				return;
 
-			dynamic ogre = GameApplication.GlobalVariables.Ogre;
+			dynamic ogre = GameApplication.Variables.Ogre;
 			var root = (Root)ogre.Root;
 
 			var sceneManager = root.CreateSceneManager(SceneType.Generic);
-			sceneManager.AmbientLight = new Color(0.7f, 0.3f, 0.2f);
+			sceneManager.AmbientLight = new Color(0.5f, 0.5f, 0.5f);
 			ogre.SceneManager = sceneManager;
 
+			Degree fieldOfView = 60f.Degree();
+
 			var camera = sceneManager.CreateCamera("MainCamera");
-			camera.Position = new Vector3(0, world.Rows + world.Columns, -(world.Rows + world.Columns));
-			camera.LookAt(new Vector3());
+			camera.Position = new Vector3(world.Rows / 2f, 2f * world.Columns, 0);
+			camera.LookAt(new Vector3(world.Rows / 2f, 0, world.Columns / 2f));
 			camera.NearClipDistance = 0.5f;
+			camera.FieldOfView = fieldOfView;
 			ogre.MainCamera = camera;
 
 			var renderWindow = (RenderWindow)ogre.RenderWindow;
@@ -60,9 +66,10 @@ namespace Karel.Flow
 			camera.AspectRatio = aspect;
 
 			TextureManager.Instance.DefaultNumMipmaps = 5;
+			TextureManager.Instance.ReloadAll();
 
 			var light = sceneManager.CreateLight("MainLight");
-			var lightPos = camera.Position + new Vector3(0, 10, 0);
+			var lightPos = camera.Position + new Vector3(0, 15, 0);
 			light.SetPosition(lightPos.X, lightPos.Y, lightPos.Z);
 		}
 
@@ -71,7 +78,7 @@ namespace Karel.Flow
 		/// </summary>
 		private void ConfigureAudio()
 		{
-			var audioSystem = (AudioSystem)GameApplication.GlobalVariables.AudioSystem;
+			var audioSystem = (AudioSystem)GameApplication.Variables.AudioSystem;
 			audioSystem.Init(32, INITFLAGS.NORMAL);
 			audioSystem.SetStreamBufferSize(64 * 1024, TIMEUNIT.RAWBYTES);
 		}

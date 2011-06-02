@@ -813,6 +813,22 @@ namespace InVision.Ogre.Native
 			NativeCamera.Pitch(Self, valueRadians);
 		}
 		
+		float ICamera.GetFovY()
+		{
+			CheckMemberOnlyCall();
+			
+			var result = NativeCamera.GetFovY(Self);
+			
+			return result;
+		}
+		
+		void ICamera.SetFovY(float value)
+		{
+			CheckMemberOnlyCall();
+			
+			NativeCamera.SetFovY(Self, value);
+		}
+		
 		bool IShadowCaster.GetCastShadows()
 		{
 			CheckMemberOnlyCall();

@@ -54,6 +54,21 @@ namespace InVision.Framework.Scripting
 		void LoadOrExecute();
 
 		/// <summary>
+		/// Gets the method or function.
+		/// </summary>
+		/// <typeparam name="TDelegate">The type of the delegate.</typeparam>
+		/// <param name="name">The name.</param>
+		/// <returns></returns>
+		TDelegate GetMethodOrFunction<TDelegate>(string name);
+
+		/// <summary>
+		/// Gets the method or function.
+		/// </summary>
+		/// <param name="name">The name.</param>
+		/// <returns></returns>
+		object GetMethodOrFunction(string name);
+
+		/// <summary>
 		/// Finds the services.
 		/// </summary>
 		/// <typeparam name="T"></typeparam>

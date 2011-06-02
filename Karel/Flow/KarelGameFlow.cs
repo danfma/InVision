@@ -3,8 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using InVision.Extensions;
 using InVision.Framework;
+using InVision.Framework.Components;
 using InVision.Framework.Scripting;
+using InVision.Framework.States;
+using InVision.Ogre;
+using InVision.Ogre.Listeners;
 using Tutano.Core;
 
 namespace Karel.Flow
@@ -17,10 +22,31 @@ namespace Karel.Flow
 		private IScript _resolutionScript;
 
 		/// <summary>
+		/// Initializes a new instance of the <see cref="KarelGameFlow"/> class.
+		/// </summary>
+		public KarelGameFlow()
+		{
+			GameLogics = new Dictionary<IScript, IGameLogic[]>();
+			ModifiedScripts = new List<IScript>();
+		}
+
+		/// <summary>
 		/// Gets the world.
 		/// </summary>
 		/// <value>The world.</value>
-		public static KarelWorld World { get; private set; }
+		public static World World { get; private set; }
+
+		/// <summary>
+		/// Gets or sets the game logics.
+		/// </summary>
+		/// <value>The game logics.</value>
+		private Dictionary<IScript, IGameLogic[]> GameLogics { get; set; }
+
+		/// <summary>
+		/// Gets or sets the modified scripts.
+		/// </summary>
+		/// <value>The modified scripts.</value>
+		private List<IScript> ModifiedScripts { get; set; }
 
 		/// <summary>
 		/// Initializes the specified app.
@@ -72,8 +98,81 @@ namespace Karel.Flow
 				return;
 
 			CreateGameState(app);
+			LoadScripts();
 			BeginKarelTask();
-			base.GameLoop(app);
+
+			Root.Instance.FrameEvent.FrameRenderingQueued += OnFrameRenderingQueued;
+			Root.Instance.StartRendering();
+		}
+
+		/// <summary>
+		/// Loads the scripts.
+		/// </summary>
+		private void LoadScripts()
+		{
+			foreach (IScript logicScript in Tutano.GameLogicScripts) {
+				logicScript.LoadOrExecute();
+				ReloadGameLogics(logicScript);
+			}
+		}
+
+		/// <summary>
+		/// Reloads the game logics.
+		/// </summary>
+		/// <param name="logicScript">The logic script.</param>
+		private void ReloadGameLogics(IScript logicScript)
+		{
+			GameLogics[logicScript] = logicScript.FindServices<IGameLogic>().ForEach(x => x.Game = Game).ToArray();
+		}
+
+		/// <summary>
+		/// Called when [frame rendering queued].
+		/// </summary>
+		/// <param name="e">The e.</param>
+		/// <returns></returns>
+		private bool OnFrameRenderingQueued(FrameEvent e)
+		{
+			Game.Timer.UpdateByEvent(e);
+
+			ApplyCustomLogic();
+
+			IGameState currentState = Game.StateMachine.Current;
+
+			if (currentState == null)
+				return false;
+
+			currentState.Update(Game.Timer);
+
+			return Game.IsRunning && !Game.Variables.Ogre.RenderWindow.IsClosed;
+		}
+
+		private void ApplyCustomLogic()
+		{
+			foreach (var pair in GameLogics) {
+				if (pair.Key.SourceChanged) {
+					ModifiedScripts.Add(pair.Key);
+					continue;
+				}
+
+				foreach (IGameLogic gameLogic in pair.Value) {
+					gameLogic.Update(Game.Timer);
+				}
+			}
+
+			if (ModifiedScripts.Count > 0) {
+				foreach (var script in ModifiedScripts) {
+					try {
+						script.LoadOrExecute();
+						ReloadGameLogics(script);
+
+					} catch {
+						Console.WriteLine("Failed to load script: {0}", script.Path);
+						GameLogics[script] = new IGameLogic[0];
+					}
+				}
+
+				ModifiedScripts.Clear();
+			}
 		}
 
 		/// <summary>
@@ -84,8 +183,10 @@ namespace Karel.Flow
 		{
 			var state = new KarelGameState("MainState");
 			app.StateMachine.Add("MainState", state);
+
 			app.StateMachine.CurrentStateName = "MainState";
 			state.Components.Add("KarelWorld", World);
+
 			state.Initialize();
 		}
 
@@ -94,7 +195,7 @@ namespace Karel.Flow
 		/// </summary>
 		private void BeginKarelTask()
 		{
-			var karelTask = new Task(ExecuteUserScript, TaskCreationOptions.AttachedToParent);
+			var karelTask = new Task(ExecuteUserScript, TaskCreationOptions.PreferFairness);
 			karelTask.Start();
 		}
 
@@ -104,19 +205,19 @@ namespace Karel.Flow
 		private void ExecuteUserScript()
 		{
 			Thread.Sleep(1000);
-			Console.WriteLine("Starting execution");
+			Console.WriteLine("Starting user execution");
 
 			_resolutionScript.LoadOrExecute();
-			Tutano.App.Exit();
+			//Game.Exit();
 		}
 
 		/// <summary>
 		/// Registers the specified world name.
 		/// </summary>
-		/// <param name="karelWorld">The karel world.</param>
-		public static void Register(KarelWorld karelWorld)
+		/// <param name="world">The karel world.</param>
+		public static void Register(World world)
 		{
-			World = karelWorld;
+			World = world;
 		}
 	}
 }

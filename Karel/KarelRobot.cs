@@ -2,16 +2,16 @@
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using InVision.Extensions;
+using InVision.Framework;
 using InVision.Framework.Components.Actions;
 using InVision.GameMath;
 using InVision.Ogre;
 
 namespace Karel
 {
-	public class KarelRobot : KarelWorldComponent
+	public class KarelRobot : KarelComponent
 	{
 		private readonly ConcurrentQueue<UpdateAction> _pendingActions;
-		private SceneNode _sceneNode;
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="KarelRobot"/> class.
@@ -38,7 +38,7 @@ namespace Karel
 		/// Gets or sets the direction.
 		/// </summary>
 		/// <value>The direction.</value>
-		public KarelDirection Direction { get; private set; }
+		public KarelDirection Direction { get; internal set; }
 
 		/// <summary>
 		/// Gets a value indicating whether [looking to north].
@@ -136,7 +136,7 @@ namespace Karel
 		/// <returns></returns>
 		private IEnumerable<UpdateAction> GetTurnOnActions()
 		{
-			yield return WaitBy(1.Seconds());
+			yield return WaitBy(1.Second());
 
 			Console.WriteLine("Karel turned off");
 		}
@@ -155,7 +155,7 @@ namespace Karel
 		/// <returns></returns>
 		private IEnumerable<UpdateAction> GetTurnOffActions()
 		{
-			yield return WaitBy(1.Seconds());
+			yield return WaitBy(1.Second());
 
 			Console.WriteLine("Karel turned off");
 		}
@@ -174,12 +174,15 @@ namespace Karel
 		/// <returns></returns>
 		private IEnumerable<UpdateAction> GetMoveActions()
 		{
-			yield return WaitBy(1.Seconds());
+			const int steps = 60;
+			Matrix matrix = Matrix.CreateFromQuaternion(SceneNode.Orientation);
+			Vector3 forward = matrix.Forward / steps;
 
-			var matrix = Matrix.CreateFromQuaternion(_sceneNode.Orientation);
-			_sceneNode.Position += matrix.Forward;
+			for (int i = 0; i < steps; i++) {
+				yield return DelayedWork(delegate { SceneNode.Position += forward; });
 
-			Console.WriteLine("Karel moved");
+				yield return WaitBy(30);
+			}
 		}
 
 		/// <summary>
@@ -196,19 +199,18 @@ namespace Karel
 		/// <returns></returns>
 		private IEnumerable<UpdateAction> GetTurnLeftActions()
 		{
-			yield return WaitBy(1.Seconds());
+			const int turnSteps = 30;
+			const float angle = MathHelper.PiOver2 / turnSteps;
 
-			var matrix = Matrix.CreateFromQuaternion(_sceneNode.Orientation);
-			matrix *= Matrix.CreateRotationY((float) (Math.PI / 2f));
-			//_sceneNode.Position += matrix.Forward;
-			Vector3 scale;
-			Quaternion rotation;
-			Vector3 translation;
-			
-			matrix.Decompose(out scale, out rotation, out translation);
-			_sceneNode.Orientation = rotation;
+			for (int i = 0; i < turnSteps; i++) {
+				yield return DelayedWork(delegate {
+					Matrix matrix = Matrix.CreateFromQuaternion(SceneNode.Orientation);
+					matrix *= Matrix.CreateRotationY(angle);
+					SceneNode.Orientation = Quaternion.CreateFromRotationMatrix(matrix);
+				});
 
-			Console.WriteLine("Karel Turned left");
+				yield return WaitBy(30);
+			}
 		}
 
 		/// <summary>
@@ -225,7 +227,7 @@ namespace Karel
 		/// <returns></returns>
 		private IEnumerable<UpdateAction> GetPickBeeperActions()
 		{
-			yield return WaitBy(1.Seconds());
+			yield return WaitBy(1.Second());
 
 			Console.WriteLine("Karel picked beeper");
 		}
@@ -244,7 +246,7 @@ namespace Karel
 		/// <returns></returns>
 		private IEnumerable<UpdateAction> GetPutBeeperActions()
 		{
-			yield return WaitBy(1.Seconds());
+			yield return WaitBy(1.Second());
 
 			Console.WriteLine("Karel put beeper");
 		}
@@ -266,19 +268,38 @@ namespace Karel
 		/// Initializes the self.
 		/// </summary>
 		/// <param name="app">The app.</param>
-		protected override void InitializeSelf(InVision.Framework.GameApplication app)
+		protected override void InitializeSelf(GameApplication app)
 		{
-			dynamic ogre = GameApplication.GlobalVariables.Ogre;
+			SceneNode worldSceneNode = Parent.SceneNode;
 
-			var sceneManager = (SceneManager)ogre.SceneManager;
-			var worldSceneNode = (SceneNode)StateVariables.WorldSceneNode;
+			SceneNode = worldSceneNode.CreateChildSceneNode();
+			SceneNode.Position = new Vector3(WorldPosition.X, 0, WorldPosition.Y);
 
-			var robot = sceneManager.CreateEntity("robot.mesh");
-			_sceneNode = worldSceneNode.CreateChildSceneNode();
-			_sceneNode.AttachObject(robot);
-			_sceneNode.Position = new Vector3(WorldPosition.X, 0, WorldPosition.Y);
-			_sceneNode.Scale = new Vector3(0.02f, 0.02f, 0.02f);
+			Entity robot = SceneManager.CreateEntity("robot.mesh");
+			SceneNode robotNode = SceneNode.CreateChildSceneNode();
+			robotNode.AttachObject(robot);
+			robotNode.Scale = new Vector3(0.02f, 0.02f, 0.02f);
+			robotNode.Orientation = Quaternion.CreateFromAxisAngle(Vector3.Up, (float)(Math.PI / 2f));
 
+			switch (Direction) {
+				case KarelDirection.West:
+					TurnLeft();
+					TurnLeft();
+					TurnLeft();
+					break;
+
+				case KarelDirection.North:
+					TurnLeft();
+					TurnLeft();
+					break;
+
+				case KarelDirection.East:
+					TurnLeft();
+					break;
+
+				case KarelDirection.South:
+					break;
+			}
 		}
 	}
 }

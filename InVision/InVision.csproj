@@ -133,7 +133,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Extensions\ConcurrentQueueExtensions.cs" />
+    <Compile Include="Extensions\QueueExtensions.cs" />
     <Compile Include="Extensions\CustomAttributeProviderExtensions.cs" />
     <Compile Include="Extensions\ExpressionExtensions.cs" />
     <Compile Include="Extensions\MethodInfoExtension.cs" />
@@ -148,6 +148,7 @@
     <Compile Include="GameMath\BoundingFrustum.cs" />
     <Compile Include="GameMath\BoundingSphere.cs" />
     <Compile Include="GameMath\Color.cs" />
+    <Compile Include="GameMath\Degree.cs" />
     <Compile Include="GameMath\Endianess\BigEndianColourRepresentation.cs" />
     <Compile Include="GameMath\Endianess\ColourRepresentation.cs" />
     <Compile Include="GameMath\Endianess\LittleEndianColourRepresentation.cs" />
@@ -159,6 +160,7 @@
     <Compile Include="GameMath\Plane.cs" />
     <Compile Include="GameMath\Point.cs" />
     <Compile Include="GameMath\Quaternion.cs" />
+    <Compile Include="GameMath\Radian.cs" />
     <Compile Include="GameMath\Ray.cs" />
     <Compile Include="GameMath\Rectangle.cs" />
     <Compile Include="GameMath\Sphere.cs" />

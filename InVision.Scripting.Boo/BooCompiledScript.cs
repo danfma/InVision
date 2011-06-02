@@ -1,9 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Reflection;
-using System.Text;
 using Boo.Lang.Compiler;
 using Boo.Lang.Compiler.IO;
 using Boo.Lang.Compiler.Pipelines;
@@ -11,7 +8,7 @@ using InVision.Framework.Scripting;
 
 namespace InVision.Scripting.Boo
 {
-	public class BooCompiledScript : Script, IBooScript
+	public class BooCompiledScript : BooScript
 	{
 		private CompilerContext _context;
 
@@ -24,24 +21,6 @@ namespace InVision.Scripting.Boo
 			: base(filename, compilerOutput)
 		{
 		}
-
-		/// <summary>
-		/// Gets the extension.
-		/// </summary>
-		/// <value>The extension.</value>
-		protected override string Extension
-		{
-			get { return ".boo"; }
-		}
-
-
-		/// <summary>
-		/// Gets the generated assembly.
-		/// </summary>
-		/// <value>The generated assembly.</value>
-		public Assembly GeneratedAssembly { get; private set; }
-
-		#region IBooScript Members
 
 		/// <summary>
 		/// Gets the execution mode.
@@ -75,7 +54,7 @@ namespace InVision.Scripting.Boo
 				AssemblyPrefix + System.IO.Path.GetFileNameWithoutExtension(Filename) + ".dll");
 
 			if (File.Exists(outputAssembly) &&
-				File.GetLastWriteTime(outputAssembly) > File.GetLastWriteTime(Filename)) {
+			    File.GetLastWriteTime(outputAssembly) > File.GetLastWriteTime(Filename)) {
 				GeneratedAssembly = Assembly.LoadFrom(outputAssembly);
 				InvokeEntryPoint();
 				return;
@@ -91,7 +70,7 @@ namespace InVision.Scripting.Boo
 #endif
 			compiler.Parameters.OutputAssembly = outputAssembly;
 			compiler.Parameters.OutputType = CompilerOutputType.ConsoleApplication;
-			compiler.Parameters.Ducky = true;
+			compiler.Parameters.Ducky = false;
 
 			_context = compiler.Run();
 			GeneratedAssembly = _context.GeneratedAssembly;
@@ -108,52 +87,9 @@ namespace InVision.Scripting.Boo
 		private void InvokeEntryPoint()
 		{
 			if (GeneratedAssembly.EntryPoint != null) {
-				dynamic invoker = Delegate.CreateDelegate(typeof(Action<string[]>), GeneratedAssembly.EntryPoint);
+				dynamic invoker = Delegate.CreateDelegate(typeof (Action<string[]>), GeneratedAssembly.EntryPoint);
 				invoker(new string[0]);
 			}
 		}
-
-		/// <summary>
-		/// Throws the error.
-		/// </summary>
-		/// <param name="filename">The filename.</param>
-		/// <param name="context">The context.</param>
-		internal static void ThrowError(string filename, CompilerContext context)
-		{
-			var errors = new List<string>();
-
-			using (StreamWriter errorFile = File.CreateText(filename + ".errors")) {
-				foreach (CompilerError error in context.Errors) {
-					errorFile.WriteLine("= ERROR ========================================================================");
-					errorFile.WriteLine(error);
-					errorFile.WriteLine("================================================================================");
-					errorFile.WriteLine();
-
-					errors.Add(error.ToString());
-				}
-
-				errorFile.Flush();
-			}
-
-			throw new ScriptErrorException(filename, errors.ToArray());
-		}
-
-		/// <summary>
-		/// Finds the services.
-		/// </summary>
-		/// <typeparam name="T"></typeparam>
-		/// <returns></returns>
-		public override IEnumerable<T> FindServices<T>()
-		{
-			if (GeneratedAssembly == null)
-				return Enumerable.Empty<T>();
-
-			return
-				from t in GeneratedAssembly.GetTypes()
-				where typeof(T).IsAssignableFrom(t) && !(t.IsAbstract || t.IsInterface)
-				select (T)Activator.CreateInstance(t);
-		}
-
-		#endregion
 	}
 }

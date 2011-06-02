@@ -76,6 +76,33 @@ namespace Tutano.Core
 		public List<IScript> Scripts { get; protected set; }
 
 		/// <summary>
+		/// Gets the game logic scripts.
+		/// </summary>
+		/// <value>The game logic scripts.</value>
+		public IEnumerable<IScript> GameLogicScripts
+		{
+			get { return Scripts.Where(x => x.Path.EndsWith(".Logic")); }
+		}
+
+		/// <summary>
+		/// Gets the game state scripts.
+		/// </summary>
+		/// <value>The game state scripts.</value>
+		public IEnumerable<IScript> GameStateScripts
+		{
+			get { return Scripts.Where(x => x.Path.EndsWith(".State")); }
+		}
+
+		/// <summary>
+		/// Gets the game object scripts.
+		/// </summary>
+		/// <value>The game object scripts.</value>
+		public IEnumerable<IScript> GameObjectScripts
+		{
+			get { return Scripts.Where(x => x.Path.EndsWith(".Object")); }
+		}
+
+		/// <summary>
 		/// Runs this instance.
 		/// </summary>
 		public void Run()
@@ -259,28 +286,6 @@ namespace Tutano.Core
 						configurator.Configure(Configuration);
 					}
 				}
-			}
-		}
-
-		/// <summary>
-		/// Loads the game states.
-		/// </summary>
-		public void LoadGameStates()
-		{
-			Console.WriteLine("Searching for GameStates...");
-
-			foreach (IScript script in Scripts.Where(s => s.Path.EndsWith(".GameState"))) {
-				foreach (IGameState gameState in script.FindServices<IGameState>()) {
-					_app.StateMachine.Add(gameState.Name, gameState);
-					Console.WriteLine("=> Game State found: {0}", gameState.Name);
-				}
-			}
-
-			ICustomGameStateConfigurator stateManagerConfigurator =
-				Scripts.SelectMany(s => s.FindServices<ICustomGameStateConfigurator>()).SingleOrDefault();
-
-			if (stateManagerConfigurator != null) {
-				stateManagerConfigurator.Configure(App, _app.StateMachine);
 			}
 		}
 

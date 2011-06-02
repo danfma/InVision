@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Dynamic;
 using System.Linq;
@@ -21,8 +22,7 @@ namespace InVision.Framework
 		public GameApplication()
 		{
 			StateMachine = new GameStateMachine(this);
-			Components = new GameComponentCollection();
-			GlobalVariables = new ExpandoObject();
+			Variables = new ExpandoObject();
 			Configurators = new List<ICustomConfigurator>();
 			Timer = new ElapsedTime();
 		}
@@ -39,19 +39,16 @@ namespace InVision.Framework
 			if (Configurators != null)
 				Configurators.Clear();
 
-			if (Components != null)
-				Components.Clear();
-
 			if (StateMachine != null)
 				StateMachine.Dispose();
 
-			if (GlobalVariables != null)
+			if (Variables != null)
 				DisposeOgre();
 
 			if (disposing) {
 				Configurators = null;
 				StateMachine = null;
-				GlobalVariables = null;
+				Variables = null;
 				Configuration = null;
 				Timer = default(ElapsedTime);
 			}
@@ -66,12 +63,6 @@ namespace InVision.Framework
 		public IList<ICustomConfigurator> Configurators { get; private set; }
 
 		/// <summary>
-		/// Gets or sets the component manager.
-		/// </summary>
-		/// <value>The component manager.</value>
-		public GameComponentCollection Components { get; private set; }
-
-		/// <summary>
 		/// Gets the state manager.
 		/// </summary>
 		/// <value>The state manager.</value>
@@ -81,7 +72,7 @@ namespace InVision.Framework
 		/// Gets the global vars.
 		/// </summary>
 		/// <value>The global vars.</value>
-		public dynamic GlobalVariables { get; private set; }
+		public dynamic Variables { get; private set; }
 
 		/// <summary>
 		/// Gets or sets the configuration.
@@ -115,12 +106,11 @@ namespace InVision.Framework
 		/// <param name="config">The config.</param>
 		public void Configure(Configuration config)
 		{
-			GlobalVariables.Game = this;
-			GlobalVariables.Config = config;
-			GlobalVariables.StateManager = StateMachine;
-			GlobalVariables.Ogre = new ExpandoObject();
-			GlobalVariables.Components = Components;
-			GlobalVariables.AudioSystem = new AudioSystem();
+			Variables.Game = this;
+			Variables.Config = config;
+			Variables.StateManager = StateMachine;
+			Variables.Ogre = new ExpandoObject();
+			Variables.AudioSystem = new AudioSystem();
 
 			foreach (ICustomConfigurator configurator in Configurators) {
 				configurator.Configure(config);
@@ -141,13 +131,13 @@ namespace InVision.Framework
 			Configuration config = Configuration;
 
 			var logManager = new LogManager();
-			GlobalVariables.Ogre.LogManager = logManager;
+			Variables.Ogre.LogManager = logManager;
 
 			Log logger = logManager.CreateLog("OGRE.log", true, false, false);
-			GlobalVariables.Ogre.Logger = logger;
+			Variables.Ogre.Logger = logger;
 
 			var root = new Root(config.Ogre.PluginsFilename, config.Ogre.OgreConfigFilename);
-			GlobalVariables.Ogre.Root = root;
+			Variables.Ogre.Root = root;
 
 			CreateWindow(root);
 		}
@@ -157,7 +147,7 @@ namespace InVision.Framework
 		/// </summary>
 		protected virtual void DisposeOgre()
 		{
-			dynamic ogre = GlobalVariables.Ogre;
+			dynamic ogre = Variables.Ogre;
 
 			if (ogre.RenderWindow != null)
 				ogre.RenderWindow.Dispose();
@@ -215,7 +205,7 @@ namespace InVision.Framework
 				}
 			}
 
-			GlobalVariables.Ogre.RenderWindow = window;
+			Variables.Ogre.RenderWindow = window;
 		}
 
 		/// <summary>
@@ -240,12 +230,15 @@ namespace InVision.Framework
 		/// <summary>
 		/// Ends the scene.
 		/// </summary>
-		public void EndScene()
+		/// <param name="renderFrame">if set to <c>true</c> [render frame].</param>
+		public void EndScene(bool renderFrame = true)
 		{
-			var root = (Root)GlobalVariables.Ogre.Root;
-			var window = (RenderWindow)GlobalVariables.Ogre.RenderWindow;
+			var root = (Root)Variables.Ogre.Root;
+			var window = (RenderWindow)Variables.Ogre.RenderWindow;
 
-			IsRunning = IsRunning && root.RenderOneFrame() && !window.IsClosed;
+			if (renderFrame)
+				IsRunning = IsRunning && root.RenderOneFrame() && !window.IsClosed;
+
 			Timer.EndFrame();
 		}
 
@@ -258,6 +251,27 @@ namespace InVision.Framework
 				GameFlow = new DefaultGameFlow();
 
 			GameFlow.Run(this);
+		}
+
+		/// <summary>
+		/// Gets the variable.
+		/// </summary>
+		/// <param name="name">The name.</param>
+		/// <returns></returns>
+		public object GetVariable(string name)
+		{
+			if (!name.Contains("."))
+				return Variables[name];
+
+			string[] names = name.Split('.');
+			dynamic variables = Variables;
+
+			foreach (var varname in names) {
+				var data = (IDictionary<string, object>)variables;
+				variables = data[varname];
+			}
+
+			return variables;
 		}
 	}
 }

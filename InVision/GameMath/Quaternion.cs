@@ -85,35 +85,28 @@ namespace InVision.GameMath
 			float t = 1f + rotation.A1 + rotation.B2 + rotation.C3;
 			const float tax = 0.25f;
 
-			if (t > 0.001f)
-			{
+			if (t > 0.001f) {
 				float s = (float)(Math.Sqrt(t) * 2f);
 
 				X = (rotation.C2 - rotation.B3) / s;
 				Y = (rotation.A3 - rotation.C1) / s;
 				Z = (rotation.B1 - rotation.A2) / s;
 				W = tax * s;
-			}
-			else if (rotation.A1 > rotation.B2 && rotation.A1 > rotation.C3)
-			{
+			} else if (rotation.A1 > rotation.B2 && rotation.A1 > rotation.C3) {
 				float s = (float)Math.Sqrt(1f + rotation.A1 - rotation.B2 - rotation.C3) * 2f;
 
 				X = tax * s;
 				Y = (rotation.B1 + rotation.A2) / s;
 				Z = (rotation.A3 + rotation.C1) / s;
 				W = (rotation.C2 - rotation.B3) / s;
-			}
-			else if (rotation.B2 > rotation.C3)
-			{
+			} else if (rotation.B2 > rotation.C3) {
 				float s = (float)Math.Sqrt(1f + rotation.B2 - rotation.A1 - rotation.C3) * 2f;
 
 				X = (rotation.B1 + rotation.A2) / s;
 				Y = tax * s;
 				Z = (rotation.C2 + rotation.B3) / s;
 				W = (rotation.A3 - rotation.C1) / s;
-			}
-			else
-			{
+			} else {
 				float s = (float)Math.Sqrt(1f + rotation.C3 - rotation.A1 - rotation.B2) * 2f;
 
 				X = (rotation.A3 + rotation.C1) / s;
@@ -159,41 +152,45 @@ namespace InVision.GameMath
 
 		public static void CreateFromRotationMatrix(ref Matrix matrix, out Quaternion result)
 		{
-			result = default(Quaternion);
+			Matrix rotation = Matrix.Transpose(matrix);
+			float t = 1 + rotation.M11 + rotation.M22 + rotation.M33;
 
-			if ((matrix.M11 + matrix.M22 + matrix.M33) > 0.0F)
-			{
-				float M1 = (float)System.Math.Sqrt((double)(matrix.M11 + matrix.M22 + matrix.M33 + 1.0F));
-				result.W = M1 * 0.5F;
-				M1 = 0.5F / M1;
-				result.X = (matrix.M23 - matrix.M32) * M1;
-				result.Y = (matrix.M31 - matrix.M13) * M1;
-				result.Z = (matrix.M12 - matrix.M21) * M1;
+			if (t > 0.001f) {
+				float s = (float)(Math.Sqrt(t) * 2f);
+
+				result = new Quaternion(
+					(rotation.M32 - rotation.M23) / s,
+					(rotation.M13 - rotation.M31) / s,
+					(rotation.M21 - rotation.M12) / s,
+					0.25f * s);
+
+			} else if (rotation.M11 > rotation.M22 && rotation.M11 > rotation.M33) {
+				float s = (float)(Math.Sqrt(1f + rotation.M11 - rotation.M22 - rotation.M33) * 2f);
+
+				result = new Quaternion(
+					0.25f * s,
+					(rotation.M21 + rotation.M12) / s,
+					(rotation.M13 + rotation.M31) / s,
+					(rotation.M32 - rotation.M23) / s);
+
+			} else if (rotation.M22 > rotation.M33) {
+				float s = (float)(Math.Sqrt(1.0f + rotation.M22 - rotation.M11 - rotation.M33) * 2.0f);
+
+				result = new Quaternion(
+					(rotation.M21 + rotation.M12) / s,
+					0.25f * s,
+					(rotation.M32 + rotation.M23) / s,
+					(rotation.M13 - rotation.M31) / s);
+
+			} else {
+				float s = (float)(Math.Sqrt(1.0f + rotation.M33 - rotation.M11 - rotation.M22) * 2.0f);
+
+				result = new Quaternion(
+					(rotation.M13 + rotation.M31) / s,
+					(rotation.M32 + rotation.M23) / s,
+					0.25f * s,
+					(rotation.M21 - rotation.M12) / s);
 			}
-			if ((matrix.M11 >= matrix.M22) && (matrix.M11 >= matrix.M33))
-			{
-				float M2 = (float)System.Math.Sqrt((double)(1.0F + matrix.M11 - matrix.M22 - matrix.M33));
-				float M3 = 0.5F / M2;
-				result.X = 0.5F * M2;
-				result.Y = (matrix.M12 + matrix.M21) * M3;
-				result.Z = (matrix.M13 + matrix.M31) * M3;
-				result.W = (matrix.M23 - matrix.M32) * M3;
-			}
-			if (matrix.M22 > matrix.M33)
-			{
-				float M4 = (float)System.Math.Sqrt((double)(1.0F + matrix.M22 - matrix.M11 - matrix.M33));
-				float M5 = 0.5F / M4;
-				result.X = (matrix.M21 + matrix.M12) * M5;
-				result.Y = 0.5F * M4;
-				result.Z = (matrix.M32 + matrix.M23) * M5;
-				result.W = (matrix.M31 - matrix.M13) * M5;
-			}
-			float M6 = (float)System.Math.Sqrt((double)(1.0F + matrix.M33 - matrix.M11 - matrix.M22));
-			float M7 = 0.5F / M6;
-			result.X = (matrix.M31 + matrix.M13) * M7;
-			result.Y = (matrix.M32 + matrix.M23) * M7;
-			result.Z = 0.5F * M6;
-			result.W = (matrix.M12 - matrix.M21) * M7;
 		}
 
 		public static Quaternion CreateFromYawPitchRoll(float yaw, float pitch, float roll)
@@ -570,18 +567,14 @@ namespace InVision.GameMath
 
 			Quaternion q3;
 
-			if (dot < 0.0f)
-			{
+			if (dot < 0.0f) {
 				dot = -dot;
 				Negate(ref quaternion2, out q3);
-			}
-			else
-			{
+			} else {
 				q3 = quaternion2;
 			}
 
-			if (dot < 0.999999f)
-			{
+			if (dot < 0.999999f) {
 				float angle = (float)System.Math.Acos(dot);
 				float sin1 = (float)System.Math.Sin(angle * (1.0f - amount));
 				float sin2 = (float)System.Math.Sin(angle * amount);
@@ -597,9 +590,7 @@ namespace InVision.GameMath
 				Add(ref q1, ref q2, out q4);
 
 				Divide(ref q4, sin3, out result);
-			}
-			else
-			{
+			} else {
 				Lerp(ref quaternion1, ref q3, amount, out result);
 			}
 		}

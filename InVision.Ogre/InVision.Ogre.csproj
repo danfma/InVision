@@ -52,7 +52,6 @@
     <Compile Include="ConfigFile.cs" />
     <Compile Include="Config\PluginConfig.cs" />
     <Compile Include="Config\PluginsConfig.cs" />
-    <Compile Include="Degree.cs" />
     <Compile Include="EdgeData.cs" />
     <Compile Include="Entity.cs" />
     <Compile Include="FrameStats.cs" />
@@ -138,7 +137,6 @@
     <Compile Include="ParameterType.cs" />
     <Compile Include="PolygonMode.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Radian.cs" />
     <Compile Include="Root.cs" />
     <Compile Include="SceneType.cs" />
     <Compile Include="StringInterface.cs" />

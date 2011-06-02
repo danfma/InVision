@@ -7,7 +7,7 @@ namespace InVision.Framework.Scripting
 {
 	public abstract class Script : IScript
 	{
-		private readonly DateTime _fileLastChange;
+		private DateTime _fileLastChange;
 		private readonly List<Assembly> _references;
 
 		/// <summary>
@@ -20,10 +20,18 @@ namespace InVision.Framework.Scripting
 			CheckFilename(filename);
 
 			Filename = filename;
+			CompilerOutput = compilerOutput;
 
 			_references = new List<Assembly>();
-			_fileLastChange = File.GetLastWriteTime(filename);
-			CompilerOutput = compilerOutput;
+			GetFileLastChange();
+		}
+
+		/// <summary>
+		/// Gets the file last change.
+		/// </summary>
+		protected void GetFileLastChange()
+		{
+			_fileLastChange = File.GetLastWriteTime(Filename);
 		}
 
 		/// <summary>
@@ -98,8 +106,7 @@ namespace InVision.Framework.Scripting
 		/// <param name="assemblies">The assemblies.</param>
 		public virtual void AddReferences(IEnumerable<Assembly> assemblies)
 		{
-			foreach (var assembly in assemblies)
-			{
+			foreach (Assembly assembly in assemblies) {
 				AddReference(assembly);
 			}
 		}
@@ -108,6 +115,24 @@ namespace InVision.Framework.Scripting
 		/// Loads this instance.
 		/// </summary>
 		public abstract void LoadOrExecute();
+
+		/// <summary>
+		/// Gets the method or function.
+		/// </summary>
+		/// <typeparam name="TDelegate">The type of the delegate.</typeparam>
+		/// <param name="name">The name.</param>
+		/// <returns></returns>
+		public virtual TDelegate GetMethodOrFunction<TDelegate>(string name)
+		{
+			return (TDelegate)GetMethodOrFunction(name);
+		}
+
+		/// <summary>
+		/// Gets the method or function.
+		/// </summary>
+		/// <param name="name">The name.</param>
+		/// <returns></returns>
+		public abstract object GetMethodOrFunction(string name);
 
 		/// <summary>
 		/// Finds the service.

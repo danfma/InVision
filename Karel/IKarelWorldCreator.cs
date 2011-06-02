@@ -6,6 +6,6 @@
 		/// Creates this instance.
 		/// </summary>
 		/// <returns></returns>
-		KarelWorld Create();
+		World Create();
 	}
 }

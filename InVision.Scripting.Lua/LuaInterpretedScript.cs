@@ -76,6 +76,16 @@ namespace InVision.Scripting.Lua
 		}
 
 		/// <summary>
+		/// Gets the method or function.
+		/// </summary>
+		/// <param name="name">The name.</param>
+		/// <returns></returns>
+		public override object GetMethodOrFunction(string name)
+		{
+			throw new NotImplementedException();
+		}
+
+		/// <summary>
 		/// Finds the service.
 		/// </summary>
 		/// <typeparam name="T"></typeparam>

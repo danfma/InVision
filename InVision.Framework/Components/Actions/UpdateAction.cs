@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace InVision.Framework.Components.Actions
+﻿namespace InVision.Framework.Components.Actions
 {
 	public abstract class UpdateAction
 	{

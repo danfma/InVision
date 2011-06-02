@@ -30,6 +30,12 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+  <PropertyGroup>
+    <SignAssembly>true</SignAssembly>
+  </PropertyGroup>
+  <PropertyGroup>
+    <AssemblyOriginatorKeyFile>InVision.snk</AssemblyOriginatorKeyFile>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -42,19 +48,19 @@
   <ItemGroup>
     <Compile Include="Flow\KarelGameState.cs" />
     <Compile Include="IKarelWorldCreator.cs" />
-    <Compile Include="KarelBeeper.cs" />
-    <Compile Include="KarelBlock.cs" />
-    <Compile Include="KarelCheckPoint.cs" />
-    <Compile Include="KarelDeposit.cs" />
+    <Compile Include="Beeper.cs" />
+    <Compile Include="Block.cs" />
+    <Compile Include="CheckPoint.cs" />
+    <Compile Include="Deposit.cs" />
     <Compile Include="KarelDirection.cs" />
     <Compile Include="Flow\KarelGameFlow.cs" />
     <Compile Include="KarelRobot.cs" />
     <Compile Include="Flow\KarelStateConfigurator.cs" />
-    <Compile Include="KarelWorld.cs" />
-    <Compile Include="KarelWorldComponent.cs" />
+    <Compile Include="World.cs" />
+    <Compile Include="KarelComponent.cs" />
     <Compile Include="Controller\Karel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="WorldSpace.cs" />
+    <Compile Include="Space.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\InVision.FMod\InVision.FMod.csproj">
@@ -84,6 +90,7 @@
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
+    <None Include="InVision.snk" />
     <None Include="Samples\Answer1World1.boo" />
     <None Include="Samples\Answer2World1.boo" />
     <None Include="Samples\Answer3World1.boo" />

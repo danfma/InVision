@@ -1,0 +1,14 @@
+material Material
+{
+	receive_shadows off
+	technique
+	{
+		pass
+		{
+			ambient 0.185000 0.280000 0.305000 1.000000
+			diffuse 0.296000 0.448000 0.488000 1.000000
+			specular 0.345000 0.405000 0.285000 1.000000 12.500000
+			emissive 0.000000 0.000000 0.000000 1.000000
+		}
+	}
+}

@@ -596,6 +596,14 @@ namespace InVision.Ogre.Native
 			Handle self, 
 			float valueRadians);
 		
+		[DllImport(Library, EntryPoint = "camera_get_fov_y")]
+		public static extern float GetFovY(Handle self);
+		
+		[DllImport(Library, EntryPoint = "camera_set_fov_y")]
+		public static extern void SetFovY(
+			Handle self, 
+			float value);
+		
 		[DllImport(Library, EntryPoint = "camera_get_cast_shadows")]
 		public static extern bool GetCastShadows(Handle self);
 		

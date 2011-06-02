@@ -11,7 +11,7 @@ using System.Linq;
 
 namespace InVision.Scripting.IronRuby
 {
-	public class RubyInterpretedScript : Script
+	public class RubyInterpretedScript : DlrScript
 	{
 		private readonly RubyScriptManager _manager;
 		private ScriptScope _scope;
@@ -60,7 +60,7 @@ namespace InVision.Scripting.IronRuby
 		/// <summary>
 		/// Resets the scope.
 		/// </summary>
-		private void ResetScope()
+		protected override void ResetScope()
 		{
 			_scope = _manager.Engine.CreateScope();
 		}
@@ -81,7 +81,17 @@ namespace InVision.Scripting.IronRuby
 			file.Append(File.ReadAllText(Filename));
 
 			ScriptSource source = _manager.Engine.CreateScriptSourceFromString(file.ToString());
-			dynamic result = source.Compile().Execute(_scope);
+			source.Compile().Execute(_scope);
+		}
+
+		/// <summary>
+		/// Gets the method or function.
+		/// </summary>
+		/// <param name="name">The name.</param>
+		/// <returns></returns>
+		public override object GetMethodOrFunction(string name)
+		{
+			throw new NotImplementedException();
 		}
 
 		/// <summary>

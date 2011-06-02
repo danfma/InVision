@@ -59,5 +59,11 @@ namespace InVision.Ogre.Native
 
 		[Method(Implemented = true)]
 		void Pitch(float valueRadians);
+
+		[Method(Implemented = true)]
+		float GetFovY();
+
+		[Method(Implemented = true)]
+		void SetFovY(float value);
 	}
 }

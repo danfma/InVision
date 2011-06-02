@@ -39,8 +39,6 @@ namespace Tutano
 				errorFile.Flush();
 				errorFile.Close();
 			}
-
-			Environment.Exit(0);
 		}
 
 		/// <summary>

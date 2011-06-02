@@ -67,12 +67,14 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BooInterpretedScript.cs" />
+    <Compile Include="BooScript.cs" />
     <Compile Include="BooScriptManager.cs" />
     <Compile Include="BooCompiledScript.cs" />
     <Compile Include="IBooScript.cs" />
     <Compile Include="Reflection\DynamicDelegate.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Reflection\DynamicDelegateKey.cs" />
+    <Compile Include="ScriptableServiceFactory.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\InVision.Framework\InVision.Framework.csproj">

@@ -113,7 +113,7 @@ namespace ReverseGenerator.Cpp
 				_writer.WriteLine();
 
 				WriteFunctionProviders(functionProviders);
-				WriteWrappersMethods(wrapperTypes);
+				WriteWrappersMethods(wrapperTypes.OrderBy(x => x.Name));
 
 				_writer.Deindent();
 				_writer.WriteLine("}");

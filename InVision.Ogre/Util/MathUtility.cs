@@ -16,26 +16,5 @@ namespace InVision.Ogre.Util
 			get { throw new NotImplementedException(); }
 			set { throw new NotImplementedException(); }
 		}
-
-		/// <summary>
-		/// Radians to angle unit.
-		/// </summary>
-		/// <param name="radians">The radians.</param>
-		/// <returns></returns>
-		public static float RadianToAngleUnit(float radians)
-		{
-			throw new NotImplementedException();
-		}
-
-
-		/// <summary>
-		/// Degrees to angle unit.
-		/// </summary>
-		/// <param name="degrees">The degrees.</param>
-		/// <returns></returns>
-		public static float DegreeToAngleUnit(float degrees)
-		{
-			throw new NotImplementedException();
-		}
 	}
 }

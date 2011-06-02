@@ -31,18 +31,6 @@ namespace ReverseGenerator
 			};
 
 			optionSet.Parse(args);
-
-			bool generateNeeded = false;
-
-			foreach (var assembly in options.AssembliesToScan) {
-				var assemblyTime = File.GetLastWriteTime(assembly.Location);
-				var generatedFileTime = File.GetLastWriteTime(Path.Combine(options.CppOutputDir, options.ProjectName.ToLower() + ".h"));
-
-				if (assemblyTime > generatedFileTime)
-					generateNeeded = true;
-			}
-
-			//if (generateNeeded)
 			GenerateFiles(options);
 		}
 

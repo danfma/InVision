@@ -1,16 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using InVision.GameMath;
 
 namespace InVision.Extensions
 {
 	public static class NumberExtensions
 	{
-		/// <summary>
-		/// Ups to.
-		/// </summary>
-		/// <param name="start">The start.</param>
-		/// <param name="end">The end.</param>
-		/// <returns></returns>
 		public static IEnumerable<int> UpTo(this int start, int end)
 		{
 			for (int i = start; i < end; i++) {
@@ -18,14 +13,19 @@ namespace InVision.Extensions
 			}
 		}
 
-		/// <summary>
-		/// Secondses the specified value.
-		/// </summary>
-		/// <param name="value">The value.</param>
-		/// <returns></returns>
-		public static TimeSpan Seconds(this int value)
+		public static TimeSpan Second(this int value)
 		{
 			return new TimeSpan(0, 0, value);
+		}
+
+		public static Degree Degree(this float value)
+		{
+			return new Degree(value);
+		}
+
+		public static Radian Radian(this float value)
+		{
+			return new Radian(value);
 		}
 	}
 }

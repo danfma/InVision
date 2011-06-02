@@ -79,7 +79,7 @@ namespace InVision.Framework.States
 			foreach (var component in Components)
 			{
 				component.GameApplication = GameApplication;
-				component.GameVariables = GameApplication.GlobalVariables;
+				component.GameVariables = GameApplication.Variables;
 				component.StateVariables = StateVariables;
 				component.Initialize(GameApplication);
 			}

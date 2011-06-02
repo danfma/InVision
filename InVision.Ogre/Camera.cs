@@ -103,6 +103,16 @@ namespace InVision.Ogre
 		}
 
 		/// <summary>
+		/// Gets or sets the field of view.
+		/// </summary>
+		/// <value>The field of view.</value>
+		public Radian FieldOfView
+		{
+			get { return new Radian(Native.GetFovY()); }
+			set { Native.SetFovY(value.ValueRadians); }
+		}
+
+		/// <summary>
 		/// Looks at.
 		/// </summary>
 		/// <param name="target">The target.</param>

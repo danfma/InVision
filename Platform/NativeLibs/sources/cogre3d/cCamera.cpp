@@ -122,3 +122,14 @@ INV_CALL camera_pitch(InvHandle self, _float valueRadians)
 	asCamera(self)->pitch(Ogre::Radian(valueRadians));
 }
 
+INV_EXPORT _float
+INV_CALL camera_get_fov_y(InvHandle self)
+{
+	return asCamera(self)->getFOVy().valueRadians();
+}
+
+INV_EXPORT void
+INV_CALL camera_set_fov_y(InvHandle self, _float value)
+{
+	asCamera(self)->setFOVy(Ogre::Radian(value));
+}

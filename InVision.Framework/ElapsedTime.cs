@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
+using InVision.Ogre.Listeners;
 
 namespace InVision.Framework
 {
@@ -14,16 +15,10 @@ namespace InVision.Framework
 		public TimeSpan Elapsed { get; private set; }
 
 		/// <summary>
-		/// Gets or sets the frame processing.
+		/// Gets or sets from last event.
 		/// </summary>
-		/// <value>The frame processing.</value>
-		public TimeSpan FrameProcessing { get; private set; }
-
-		/// <summary>
-		/// Gets or sets the inter frame processing.
-		/// </summary>
-		/// <value>The inter frame processing.</value>
-		public TimeSpan InterFrameProcessing { get; private set; }
+		/// <value>From last event.</value>
+		public TimeSpan FromLastEvent { get; private set; }
 
 		/// <summary>
 		/// Gets a value indicating whether this instance is running.
@@ -42,9 +37,6 @@ namespace InVision.Framework
 		internal void Start()
 		{
 			Elapsed = new TimeSpan(0);
-			InterFrameProcessing = new TimeSpan(0);
-			FrameProcessing = new TimeSpan(0);
-
 			StopWatch.Start();
 		}
 
@@ -71,8 +63,6 @@ namespace InVision.Framework
 		internal void BeginFrame()
 		{
 			Elapsed = StopWatch.Elapsed;
-			InterFrameProcessing = StopWatch.Elapsed - FrameProcessing;
-
 			Restart();
 		}
 
@@ -81,7 +71,16 @@ namespace InVision.Framework
 		/// </summary>
 		internal void EndFrame()
 		{
-			FrameProcessing = StopWatch.Elapsed;
+		}
+
+		/// <summary>
+		/// Updates the by event.
+		/// </summary>
+		/// <param name="frameEvent">The frame event.</param>
+		public void UpdateByEvent(FrameEvent frameEvent)
+		{
+			Elapsed = TimeSpan.FromSeconds(frameEvent.TimeSinceLastFrame);
+			FromLastEvent = TimeSpan.FromSeconds(frameEvent.TimeSinceLastEvent);
 		}
 	}
 }

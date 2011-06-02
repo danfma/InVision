@@ -3,7 +3,7 @@ import InVision
 import InVision.GameMath
 import Karel
 
-world = KarelWorld(4, 4) // 4 x 4 units		
+world = World(4, 4)
 world.AddBlockAt(3, 1)
 world.AddBlockAt(2, 2)
 world.AddBlockAt(3, 2)

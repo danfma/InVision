@@ -35,6 +35,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Microsoft.Scripting">
+      <HintPath>..\Libs\IronRuby\Microsoft.Scripting.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -45,8 +48,16 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Components\Actions\ActionProcessor.cs" />
+    <Compile Include="Components\Actions\DelayedWorkUpdateAction.cs" />
     <Compile Include="Components\Actions\NothingAction.cs" />
     <Compile Include="Components\Actions\WaitTimeUpdateAction.cs" />
+    <Compile Include="Components\GameLogic.cs" />
+    <Compile Include="Components\GameObject.cs" />
+    <Compile Include="Components\IGameLogic.cs" />
+    <Compile Include="Components\IGameObject.cs" />
+    <Compile Include="Scripting\CliCompiledScript.cs" />
+    <Compile Include="Scripting\DlrScript.cs" />
+    <Compile Include="Scripting\IScriptable.cs" />
     <Compile Include="Config\CustomConfiguratorDispatcher.cs" />
     <Compile Include="Config\Configuration.cs" />
     <Compile Include="Config\CustomItem.cs" />
@@ -58,7 +69,6 @@
     <Compile Include="Config\PlatformIdentity.cs" />
     <Compile Include="Config\ScreenConfiguration.cs" />
     <Compile Include="Config\ScriptingConfiguration.cs" />
-    <Compile Include="ContentManager.cs" />
     <Compile Include="DefaultGameFlow.cs" />
     <Compile Include="GameApplication.cs" />
     <Compile Include="Components\GameComponent.cs" />

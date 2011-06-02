@@ -23,16 +23,17 @@
 		</plugins>
 	</ogre>
 
-	<scripting>
+	<scripting mode="Interpreted">
 		<script-managers>
 			<!-- Example of script manager -->
 			<script-manager>InVision.Scripting.Boo.BooScriptManager,InVision.Scripting.Boo</script-manager>
+			<script-manager>InVision.Scripting.IronRuby.RubyScriptManager,InVision.Scripting.IronRuby</script-manager>
 		</script-managers>
 	</scripting>
 
 	
 	<!-- KAREL -->
-	<game-flow-type>Karel.Flow.KarelGameFlow, Karel</game-flow-type>
+	<game-flow-type>Karel.Flow.KarelGameFlow,Karel</game-flow-type>
 
 	<custom-configuration>
 		<config name="Karel.Problem" value="Scripts/Worlds/World1" />
