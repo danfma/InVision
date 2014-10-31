@@ -1,6 +1,7 @@
 A mixed managed / unmanaged game framework for .net / mono
 
-There is a lot to do, but the first step is to create the wrappers and bindings.
+This project was part of a project of my master degree on Computer Science. Maybe I will check and update it with new visions.
+I am having good insights by now!
 
 Support for Windows, Linux, MacOSX, iOS and Android are aimed.
 
@@ -10,13 +11,10 @@ Support for Windows, Linux, MacOSX, iOS and Android are aimed.
 - OIS;
 - Bullet;
 
-# ASEMBLIES
+# ASSEMBLIES
 
 - InVision (common stuff and framework organization)
 - InVision.Ogre3D (bindings for the Ogre3D library by a wrapper called cOgre)
 - InVision.OIS (bindings for the OIS library by a wrapper called cOIS)
 - InVision.Bullet (bindings for the Bullet library by a wrapper called cBullet)
 - InVision.Collections (Native communication support for collections)
-
-# BUILD:
-
